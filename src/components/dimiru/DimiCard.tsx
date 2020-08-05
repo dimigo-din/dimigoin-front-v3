@@ -69,8 +69,8 @@ const Container = styled.div<ICardContainer>`
   position: relative;
   padding: 25px;
   background-color: #fff;
-  border-radius: 3.3rem;
-  box-shadow: 5px 5px 20px #d9d9d9, -10px -10px 14px #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 20px 0 rgba(146, 146, 146, 0.09);
 
   ${({ button = false }) => button
     && css`
@@ -90,7 +90,7 @@ const Container = styled.div<ICardContainer>`
   ${({ clickable = false }) => clickable
     && css`
       &:active {
-        box-shadow: inset 1px 1px 2px rgba(21, 19, 19, 0.15),
+        box-shadow: inset 1px 1px 2px #dadeeb,
           inset -1px -1px 2px #fff;
       }
     `};
