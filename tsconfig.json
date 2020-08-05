@@ -17,9 +17,17 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react",
+    "types": [
+      "@emotion/core",
+      "node"
+    ],
+    "typeRoots": [
+      "./src/customTypes"
+    ]
   },
   "include": [
-    "src"
+    "src",
+    "declares"
   ]
 }
