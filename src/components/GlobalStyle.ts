@@ -6,7 +6,6 @@ const GlobalStyle = createGlobalStyle`
 
   * {
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-    box-sizing: border-box;
     font-family: 'NanumSquareRound', -apple-system, BlinkMacSystemFont,
       'Segoe UI', Helvetica, Arial, sans-serif !important;
   }
