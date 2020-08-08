@@ -66,7 +66,7 @@ width: 100%;
   padding-top: 19px;
 }
 &>tr:last-of-type td {
-  padding-bottom: 19px;
+  padding-bottom: 26px;
 }
 `
 const Row = styled.tr`
