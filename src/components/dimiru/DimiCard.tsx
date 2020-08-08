@@ -5,7 +5,7 @@ import css from '@emotion/css';
 type MouseEventHandler = (event: React.MouseEvent<HTMLDivElement>) => void;
 type FocusEventHandler = (event: React.FocusEvent<HTMLDivElement>) => void;
 
-interface IDimiCard {
+export interface IDimiCard {
   className?: string;
   children?: React.ReactNode;
   button?: React.ReactNode;
@@ -75,6 +75,7 @@ const Container = styled.div<ICardContainer>`
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 0 20px 0 rgba(146, 146, 146, 0.09);
+  transition: 1s cubic-bezier(0,.46,.12,.98);
   ${({ leftBorder }) => leftBorder && css`
       border-left: 5px solid #3c70e8;
       border-top-left-radius: 0px;
