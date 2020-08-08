@@ -12,13 +12,13 @@ interface IProps {
   }
 }
 
-const CardGroup: React.FC<IProps> = ({
+const CardGroupHeader: React.FC<IProps> = ({
   title,
   subButton,
   withBubble,
 }) => {
   return (
-    <article>
+    <Wrapper>
       <Header>
         <Title withBubble={withBubble}>{title}</Title>
         {subButton ?
@@ -32,7 +32,7 @@ const CardGroup: React.FC<IProps> = ({
             </SubButton>
           : null}
       </Header>
-    </article>
+    </Wrapper>
   )
 }
 
@@ -65,5 +65,8 @@ const SubButton = styled.p`
   font-weight: 800;
   color: #8a8a8a;
 `
+const Wrapper = styled.section`
+  margin-bottom: 14px;
+`
 
-export default CardGroup
+export default CardGroupHeader
