@@ -3,7 +3,9 @@ import styledReset from 'styled-reset';
 
 const GlobalStyle = createGlobalStyle`
   ${styledReset}
+  @import url("https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css");
   @font-face { font-family: 'NanumSquareRound'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff') format('woff'); font-weight: normal; font-style: normal; }
+  
   * {
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
     font-family: 'NanumSquareRound', -apple-system, BlinkMacSystemFont,
