@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from '@emotion/styled';
-import css from '@emotion/css';
+import React from "react";
+import styled from "@emotion/styled";
+import css from "@emotion/css";
 
 type MouseEventHandler = (event: React.MouseEvent<HTMLDivElement>) => void;
 type FocusEventHandler = (event: React.FocusEvent<HTMLDivElement>) => void;
@@ -30,13 +30,13 @@ const DimiCard: React.FC<IDimiCard> = ({
   hover,
   clickable,
   cardRef,
-  className = '',
+  className = "",
   onClick,
   onMouseOver,
   onFocus,
   onMouseOut,
   onBlur,
-  leftBorder
+  leftBorder,
 }) => (
   <Container
     className={className}
@@ -75,32 +75,36 @@ const Container = styled.div<ICardContainer>`
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 0 20px 0 rgba(146, 146, 146, 0.09);
-  transition: 1s cubic-bezier(0,.46,.12,.98);
-  ${({ leftBorder }) => leftBorder && css`
+  transition: 1s cubic-bezier(0, 0.46, 0.12, 0.98);
+  ${({ leftBorder }) =>
+    leftBorder &&
+    css`
       border-left: 5px solid #3c70e8;
       border-top-left-radius: 0px;
       border-bottom-left-radius: 0px;
-  `}
-  ${({ button = false }) => button
-    && css`
+    `}
+  ${({ button = false }) =>
+    button &&
+    css`
       display: flex;
       flex-direction: column;
       padding-bottom: 0;
     `};
 
-  ${({ hover = false }) => hover
-    && css`
+  ${({ hover = false }) =>
+    hover &&
+    css`
       &:hover {
         z-index: 1;
         box-shadow: 2px 16px 36px rgba(21, 19, 19, 0.15), -5px -5px 10px #fff;
       }
     `};
 
-  ${({ clickable = false }) => clickable
-    && css`
+  ${({ clickable = false }) =>
+    clickable &&
+    css`
       &:active {
-        box-shadow: inset 1px 1px 2px #dadeeb,
-          inset -1px -1px 2px #fff;
+        box-shadow: inset 1px 1px 2px #dadeeb, inset -1px -1px 2px #fff;
       }
     `};
 `;
