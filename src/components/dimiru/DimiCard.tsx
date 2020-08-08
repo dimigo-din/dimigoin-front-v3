@@ -21,6 +21,7 @@ interface IDimiCard {
   onFocus?: FocusEventHandler;
   onMouseOut?: MouseEventHandler;
   onBlur?: FocusEventHandler;
+  leftBorder?: boolean;
 }
 
 const DimiCard: React.FC<IDimiCard> = ({
@@ -35,6 +36,7 @@ const DimiCard: React.FC<IDimiCard> = ({
   onFocus,
   onMouseOut,
   onBlur,
+  leftBorder
 }) => (
   <Container
     className={className}
@@ -47,6 +49,7 @@ const DimiCard: React.FC<IDimiCard> = ({
     onFocus={onFocus}
     onMouseOut={onMouseOut}
     onBlur={onBlur}
+    leftBorder={leftBorder}
   >
     {button ? <Content>{children}</Content> : children}
     {button && (
@@ -63,6 +66,7 @@ interface ICardContainer {
   button?: boolean;
   hover?: boolean;
   clickable?: boolean;
+  leftBorder?: boolean;
 }
 
 const Container = styled.div<ICardContainer>`
@@ -71,7 +75,11 @@ const Container = styled.div<ICardContainer>`
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 0 20px 0 rgba(146, 146, 146, 0.09);
-
+  ${({ leftBorder }) => leftBorder && css`
+      border-left: 5px solid #3c70e8;
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+  `}
   ${({ button = false }) => button
     && css`
       display: flex;
