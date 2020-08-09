@@ -16,9 +16,11 @@ const CardGroupHeader: React.FC<IProps> = ({
   subButton,
   withBubble,
   children,
+  ...props
 }) => {
+  console.log(props);
   return (
-    <Wrapper>
+    <Wrapper {...props}>
       <Header>
         <Title withBubble={withBubble}>{children}</Title>
         {subButton ? (
