@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
 import { Link } from "react-router-dom";
+import { ResponsiveWrapper, Divider } from "./grids/Cols";
 
 interface IProps {
   withBubble?: boolean;
@@ -18,10 +19,9 @@ const CardGroupHeader: React.FC<IProps> = ({
   children,
   ...props
 }) => {
-  console.log(props);
   return (
     <Wrapper {...props}>
-      <Header>
+      <ResponsiveWrapper>
         <Title withBubble={withBubble}>{children}</Title>
         {subButton ? (
           subButton.route ? (
@@ -32,7 +32,7 @@ const CardGroupHeader: React.FC<IProps> = ({
             <SubButton>{subButton.text}</SubButton>
           )
         ) : null}
-      </Header>
+      </ResponsiveWrapper>
     </Wrapper>
   );
 };
@@ -62,13 +62,16 @@ const Header = styled.div`
   display: flex;
 `;
 const SubButton = styled.p`
-  align-self: flex-end;
   margin-left: 15px;
+  align-self: flex-end;
   font-weight: 800;
   color: #8a8a8a;
 `;
 const Wrapper = styled.section`
   margin-bottom: 14px;
+  * + & {
+    margin-top: 54px;
+  }
 `;
 
 export default CardGroupHeader;
