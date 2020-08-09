@@ -127,3 +127,9 @@ const Button = styled.div`
     text-align: center;
   }
 `;
+export const CardTitle = styled.h1`
+  font-size: 20px;
+  font-weight: 900;
+  font-family: "NanumSquare", sans-serif;
+  margin-bottom: 12px;
+`;
