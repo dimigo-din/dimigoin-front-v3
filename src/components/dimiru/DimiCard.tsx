@@ -76,6 +76,9 @@ const Container = styled.div<ICardContainer>`
   border-radius: 5px;
   box-shadow: 0 0 20px 0 rgba(146, 146, 146, 0.09);
   transition: 1s cubic-bezier(0, 0.46, 0.12, 0.98);
+  & + & {
+    margin-top: 10px;
+  }
   ${({ leftBorder }) =>
     leftBorder &&
     css`
@@ -130,6 +133,5 @@ const Button = styled.div`
 export const CardTitle = styled.h1`
   font-size: 20px;
   font-weight: 900;
-  font-family: "NanumSquare", sans-serif;
   margin-bottom: 12px;
 `;
