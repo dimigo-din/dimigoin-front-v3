@@ -1,5 +1,5 @@
-import { createGlobalStyle } from 'styled-components';
-import styledReset from 'styled-reset';
+import { createGlobalStyle } from "styled-components";
+import styledReset from "styled-reset";
 
 const GlobalStyle = createGlobalStyle`
   ${styledReset}
@@ -8,7 +8,7 @@ const GlobalStyle = createGlobalStyle`
   
   * {
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-    font-family: 'NanumSquareRound', -apple-system, BlinkMacSystemFont,
+    font-family: 'NanumSquare', -apple-system, BlinkMacSystemFont,
       'Segoe UI', Helvetica, Arial, sans-serif !important;
   }
 
@@ -22,7 +22,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   #root {
-    font-family: 'NanumSquareRound', -apple-system, BlinkMacSystemFont,
+    font-family: 'NanumSquare', -apple-system, BlinkMacSystemFont,
       'Segoe UI', Helvetica, Arial, sans-serif;
     overflow-x: hidden;
   }
