@@ -1,10 +1,10 @@
-import React from "react";
-import CardGroupHeader from "./CardGroupHeader";
-import DimiCard from "./dimiru/DimiCard";
-import css from "@emotion/css";
-import { Col } from "./grids/Cols";
-import styled from "styled-components";
-import DimiButton from "./dimiru/DimiButton";
+import React from 'react';
+import CardGroupHeader from './CardGroupHeader';
+import DimiCard from './dimiru/DimiCard';
+import css from '@emotion/css';
+import { Col } from './grids/Cols';
+import styled from 'styled-components';
+import DimiButton from './dimiru/DimiButton';
 
 interface IProps {
   currentApplied: number;
@@ -78,17 +78,22 @@ const NumberName = styled.h2`
   font-size: 30px;
   ${NumberCommonStyle}
 `;
+
 const NumberDisplay = styled.h1`
   font-size: 50px;
   margin-top: 9px;
   ${NumberCommonStyle}
 `;
+
 const active = css`
+
   & > * {
     color: #3c70e8;
   }
 `;
+
 const disabled = css`
+
   & > * {
     color: #8a8a8a;
   }

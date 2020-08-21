@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "@emotion/styled";
-import css from "@emotion/css";
-import { Link } from "react-router-dom";
-import { ResponsiveWrapper, Divider } from "./grids/Cols";
+import React from 'react';
+import styled from '@emotion/styled';
+import css from '@emotion/css';
+import { Link } from 'react-router-dom';
+import { ResponsiveWrapper, Divider } from './grids/Cols';
 
 interface IProps {
   withBubble?: boolean;
@@ -58,17 +58,16 @@ const Title = styled.h1<{ withBubble?: boolean }>`
     `}
 `;
 
-const Header = styled.div`
-  display: flex;
-`;
 const SubButton = styled.p`
   margin-left: 15px;
   align-self: flex-end;
   font-weight: 800;
   color: #8a8a8a;
 `;
+
 const Wrapper = styled.section`
   margin-bottom: 14px;
+
   * + & {
     margin-top: 54px;
   }

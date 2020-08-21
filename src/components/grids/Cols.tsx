@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import css from "@emotion/css";
+import styled from '@emotion/styled';
+import css from '@emotion/css';
 
 export const Col = styled.div<{ width?: number }>`
   ${({ width }) =>

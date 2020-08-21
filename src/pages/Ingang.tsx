@@ -1,17 +1,17 @@
-import React, { useEffect } from "react";
-import styled from "@emotion/styled";
-import NavigationBar from "../components/NavigationBar";
-import CardGroupHeader from "../components/CardGroupHeader";
-import DimiCard, { CardTitle } from "../components/dimiru/DimiCard";
-import css from "@emotion/css";
+import React from 'react';
+import styled from '@emotion/styled';
+import NavigationBar from '../components/NavigationBar';
+import CardGroupHeader from '../components/CardGroupHeader';
+import DimiCard, { CardTitle } from '../components/dimiru/DimiCard';
+import css from '@emotion/css';
 import {
   Col,
   Divider,
   ResponsiveScreenWrapper,
   ResponsiveWrapper,
-} from "../components/grids/Cols";
-import TextCardGroup from "../components/TextCardGroup";
-import { IngansilStatus } from "../components/IngangsilStatus";
+} from '../components/grids/Cols';
+import TextCardGroup from '../components/TextCardGroup';
+import { IngansilStatus } from '../components/IngangsilStatus';
 
 export default () => {
   return (
@@ -174,10 +174,12 @@ const Container = styled.div`
   width: 90%;
   padding-top: 70px;
 `;
+
 const Row = styled.div`
   display: flex;
   font-size: 16px;
   color: #8a8a8a;
+
   & + div {
     margin-top: 24px;
   }
@@ -185,11 +187,14 @@ const Row = styled.div`
 
 const Desc = styled.div`
   margin-left: 12px;
+
   & b {
     font-weight: 800;
   }
 `;
+
 const Time = styled.i`
+
   & {
     box-sizing: border-box;
     position: relative;
@@ -202,6 +207,7 @@ const Time = styled.i`
     border: 2px solid transparent;
     box-shadow: 0 0 0 2px currentColor;
   }
+
   &::after {
     content: "";
     display: block;
@@ -215,7 +221,9 @@ const Time = styled.i`
     left: 5px;
   }
 `;
+
 const UserList = styled.i`
+
   & {
     display: block;
     transform: scale(var(--ggs, 0.8));
@@ -230,6 +238,7 @@ const UserList = styled.i`
       linear-gradient(to left, currentColor 8px, transparent 0) no-repeat 14px
         12px/6px 2px;
   }
+
   &::after,
   &::before {
     content: "";
@@ -238,6 +247,7 @@ const UserList = styled.i`
     position: absolute;
     border: 2px solid;
   }
+
   &::before {
     width: 8px;
     height: 8px;
@@ -245,6 +255,7 @@ const UserList = styled.i`
     top: 0;
     left: 2px;
   }
+
   &::after {
     width: 12px;
     height: 9px;
@@ -256,6 +267,7 @@ const UserList = styled.i`
 `;
 
 const DateIcon = styled.i`
+
   & {
     box-sizing: border-box;
     position: relative;
@@ -267,6 +279,7 @@ const DateIcon = styled.i`
     border: 2px solid;
     border-radius: 3px;
   }
+
   &::after,
   &::before {
     content: "";
@@ -277,12 +290,14 @@ const DateIcon = styled.i`
     height: 2px;
     left: 2px;
   }
+
   &::before {
     background: currentColor;
     width: 2px;
     box-shadow: 4px 0 0, 8px 0 0, 0 4px 0, 4px 4px 0, 8px 4px 0;
     top: 6px;
   }
+
   &::after {
     width: 10px;
     top: -4px;
@@ -291,6 +306,7 @@ const DateIcon = styled.i`
 `;
 
 const Ticket = styled.i`
+
   & {
     box-sizing: border-box;
     position: relative;
@@ -302,6 +318,7 @@ const Ticket = styled.i`
     border: 2px solid;
     border-radius: 3px;
   }
+
   &::after,
   &::before {
     content: "";
@@ -315,6 +332,7 @@ const Ticket = styled.i`
     top: -2px;
     background: currentColor;
   }
+
   &::after {
     width: 5px;
     height: 2px;
@@ -326,20 +344,25 @@ const Ticket = styled.i`
 
 const Info = styled.div`
   color: #8a8a8a;
+
   & p + p {
     margin-top: 12px;
   }
+
   & b {
     font-weight: 900;
   }
 `;
+
 const Inganger = styled.span`
   color: #8a8a8a;
   margin-left: 16px;
+
   h1 + & {
     margin-left: 32px;
   }
 `;
+
 const IngangTime = styled(CardTitle)`
   margin-bottom: 0px;
 `;

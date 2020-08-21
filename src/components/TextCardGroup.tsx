@@ -1,7 +1,7 @@
-import React, { Children, ReactNode } from "react";
-import Card, { IDimiCard } from "./dimiru/DimiCard";
-import styled from "@emotion/styled";
-import css from "@emotion/css";
+import React, { Children, ReactNode } from 'react';
+import Card, { IDimiCard } from './dimiru/DimiCard';
+import styled from '@emotion/styled';
+import css from '@emotion/css';
 
 interface IProps {
   content: (IDimiCard & {

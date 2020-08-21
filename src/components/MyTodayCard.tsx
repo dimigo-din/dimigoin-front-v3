@@ -1,7 +1,7 @@
-import React from "react";
-import css from "@emotion/css";
-import Card, { CardTitle } from "./dimiru/DimiCard";
-import styled from "@emotion/styled";
+import React from 'react';
+import css from '@emotion/css';
+import Card, { CardTitle } from './dimiru/DimiCard';
+import styled from '@emotion/styled';
 
 interface IProps {
   name: string;
@@ -32,6 +32,7 @@ const MyTodayCard: React.FC<IProps> = ({ name, location, time, className }) => {
 };
 
 const Time = styled.i`
+
   & {
     box-sizing: border-box;
     position: relative;
@@ -43,6 +44,7 @@ const Time = styled.i`
     border: 2px solid transparent;
     box-shadow: 0 0 0 2px currentColor;
   }
+
   &::after {
     content: "";
     display: block;
@@ -58,6 +60,7 @@ const Time = styled.i`
 `;
 
 const Pin = styled.i`
+
   & {
     box-sizing: border-box;
     position: relative;
@@ -69,6 +72,7 @@ const Pin = styled.i`
     border: 2px solid;
     margin-top: -1px;
   }
+
   &::before {
     content: "";
     display: block;
@@ -87,6 +91,7 @@ const Row = styled.div`
   display: flex;
   font-size: 16px;
   color: #8a8a8a;
+
   & + div {
     margin-top: 9px;
   }
