@@ -9,6 +9,7 @@ interface IDimiButton {
   small?: boolean;
   large?: boolean;
   text?: boolean;
+  disabled?: boolean;
   onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   children: React.ReactNode;
 }
@@ -20,7 +21,7 @@ const style = {
     overflow: hidden;
     align-items: center;
     justify-content: center;
-    padding: 18px 167px;
+    padding: 18px;
     appearance: none;
     background-color: #3c70e8;
     border-radius: 5px;
@@ -44,6 +45,9 @@ const style = {
   disableCurser: css`
     cursor: not-allowed;
   `,
+  disable: css`
+    background-color: #8a8a8a;
+  `,
   large: css`
     font-size: 24px;
   `,
@@ -60,6 +64,7 @@ const DimiButton: React.FC<IDimiButton> = ({
   small = false,
   large = false,
   text = false,
+  disabled = false,
   onClick,
   children,
   ...props
@@ -69,6 +74,7 @@ const DimiButton: React.FC<IDimiButton> = ({
     gray && style.gray,
     text && style.text,
     (loading || !active) && style.disableCurser,
+    disabled && style.disable,
     large && style.large,
     small && style.small,
   ].filter(Boolean);

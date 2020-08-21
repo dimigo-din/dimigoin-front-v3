@@ -1,0 +1,100 @@
+import React from 'react';
+import CardGroupHeader from './CardGroupHeader';
+import DimiCard from './dimiru/DimiCard';
+import css from '@emotion/css';
+import { Col } from './grids/Cols';
+import styled from 'styled-components';
+import DimiButton from './dimiru/DimiButton';
+
+interface IProps {
+  currentApplied: number;
+  max: number;
+  time: string;
+  isApplied: boolean;
+}
+
+export const IngansilStatus: React.FC<IProps> = (
+  { currentApplied, time, max, isApplied },
+  index
+) => {
+  const isRequestable =
+    //1. 신청 했고, 자리가 없을 때
+    currentApplied < max ||
+    //2. 자리가 남았을때
+    (isApplied && currentApplied >= max);
+  return (
+    <>
+      <CardGroupHeader
+        subButton={{
+          text: time,
+        }}
+      >
+        야간자율학습 {index + 1}타임
+      </CardGroupHeader>
+      <DimiCard>
+        <div
+          css={css`
+            display: flex;
+            /* max-width: 355px; */
+            justify-content: space-around;
+            flex-shrink: 3;
+            margin: 54px auto 24px;
+          `}
+        >
+          <Col css={currentApplied < max ? active : disabled}>
+            <NumberName>현원</NumberName>
+            <NumberDisplay>{currentApplied}</NumberDisplay>
+          </Col>
+          <Col>
+            <NumberName>총원</NumberName>
+            <NumberDisplay>{max}</NumberDisplay>
+          </Col>
+        </div>
+      </DimiCard>
+      <DimiButton
+        css={[
+          css`
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+          `,
+        ]}
+        disabled={!isRequestable}
+      >
+        {/* 신청했는지 판별하는 변수를 넣어주세요  */}
+        {isApplied ? "취소하기" : "신청하기"}
+      </DimiButton>
+    </>
+  );
+};
+
+const NumberCommonStyle = css`
+  color: #2d2d2d;
+  font-weight: 900;
+  text-align: center;
+`.styles;
+
+const NumberName = styled.h2`
+  font-size: 30px;
+  ${NumberCommonStyle}
+`;
+
+const NumberDisplay = styled.h1`
+  font-size: 50px;
+  margin-top: 9px;
+  ${NumberCommonStyle}
+`;
+
+const active = css`
+
+  & > * {
+    color: #3c70e8;
+  }
+`;
+
+const disabled = css`
+
+  & > * {
+    color: #8a8a8a;
+  }
+`;
