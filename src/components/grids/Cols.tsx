@@ -10,11 +10,13 @@ export const Col = styled.div<{ width?: number }>`
 `;
 export const Divider = styled.div<{ visible?: boolean; small?: boolean }>`
   margin: 0px 30px;
+
   ${({ small }) =>
     small &&
     css`
       margin: 0px 7.5px;
     `}
+
   ${({ visible }) =>
     visible &&
     css`
@@ -24,8 +26,10 @@ export const Divider = styled.div<{ visible?: boolean; small?: boolean }>`
 
 export const ResponsiveScreenWrapper = styled.div`
   display: flex;
+
   @media screen and (max-width: 760px) {
     flex-direction: column;
+
     & > [class*="Divider"] {
       margin: 30px 0px;
     }
@@ -34,8 +38,10 @@ export const ResponsiveScreenWrapper = styled.div`
 
 export const ResponsiveWrapper = styled.div`
   display: flex;
+
   @media screen and (max-width: 760px) {
     flex-direction: column;
+
     & > [class*="Divider"] {
       margin: 30px 0px;
     }

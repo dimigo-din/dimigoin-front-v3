@@ -127,8 +127,8 @@ export default () => {
                 `}
               >
                 <IngangTime>1타임</IngangTime>
-                {["손승욱", "강혁진", "이승민", "우상윤"].map((e) => (
-                  <Inganger>{e}</Inganger>
+                {['손승욱', '강혁진', '이승민', '우상윤'].map((name) => (
+                  <Inganger>{name}</Inganger>
                 ))}
               </div>
             </DimiCard>
@@ -139,8 +139,8 @@ export default () => {
                 `}
               >
                 <IngangTime>1타임</IngangTime>
-                {["손승욱", "강혁진", "이승민", "우상윤"].map((e) => (
-                  <Inganger>{e}</Inganger>
+                {['손승욱', '강혁진', '이승민', '우상윤'].map((name) => (
+                  <Inganger>{name}</Inganger>
                 ))}
               </div>
             </DimiCard>
@@ -151,13 +151,13 @@ export default () => {
               {
                 currentApplied: 8,
                 max: 8,
-                time: "19:50 - 21:10",
+                time: '19:50 - 21:10',
                 isApplied: false,
               },
               {
                 currentApplied: 2,
                 max: 8,
-                time: "21:10 - 22:30",
+                time: '21:10 - 22:30',
                 isApplied: true,
               },
             ].map(IngansilStatus)}
