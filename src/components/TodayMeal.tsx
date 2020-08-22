@@ -14,16 +14,22 @@ const MealItem: React.FC<IMealItem> = ({
   </MealItemContainer>
 );
 
+export interface IMeal {
+  name: string;
+  menu: string;
+  selected?: boolean;
+}
+
 interface IProps {
-  meals: {
-    name: string;
-    menu: string;
-    selected?: boolean;
-  }[];
+  meals: IMeal[];
 }
 
 const TodayMeal: React.FC<IProps> = ({ meals }) => (
-  <MealCard>{meals.map(MealItem)}</MealCard>
+  <MealCard>
+    {meals.map((meal) => (
+      <MealItem key={meal.name} {...meal} />
+    ))}
+  </MealCard>
 );
 
 interface IMealItemSelected {
@@ -36,7 +42,7 @@ interface IMealItem extends IMealItemSelected {
 }
 
 const MealCard = styled(DimiCard)`
-  height: 100%;
+  /* height: 100%; */
   padding: 0;
   display: flex;
   flex-direction: column;
