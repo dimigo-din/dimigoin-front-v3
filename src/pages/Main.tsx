@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 
 import NavigationBar from "../components/NavigationBar";
@@ -6,12 +6,35 @@ import CardGroupHeader from "../components/CardGroupHeader";
 import TextCardGroup from "../components/TextCardGroup";
 import TimeTable from "../components/dimiru/DimiTimeTable";
 import { ResponsiveWrapper, Col, Divider } from "../components/grids/Cols";
-import MyTodayCard from "../components/MyTodayCard";
-import TodayMeal from "../components/TodayMeal";
+import MyTodayCard, { IMyToday } from "../components/MyTodayCard";
+import TodayMeal, { IMeal } from "../components/TodayMeal";
 import css from "@emotion/css";
 import SelfStudyStatus from "../components/SelfStudyStatus";
 
 const Main: React.FC = () => {
+  const [notice, setNotice] = useState<string[]>();
+  const [myTodays, setMyTodays] = useState<IMyToday[]>();
+  const [meals, setMeals] = useState<IMeal[]>();
+  useEffect(() => {
+    setNotice([
+      "방과 후 수강신청 중 너무 많은 동시 접속자로 인해 잠시 서버가 다운되는 문제가 있었으나 방금 전 복구되었습니다. 스포츠를 제외한 방과 후 신청은 새로 일정을 공지해드릴 예정입니다.",
+      "디미고의 첫 온라인 입학설명회가 곧 시작합니다.",
+    ]);
+    setMyTodays([
+      {
+        location: "와동체육관",
+        name: "스포츠",
+        time: "2타임 ~ 3타임 배드민턴",
+      },
+    ]);
+    setMeals([
+      {
+        menu: "집가고싶을때하는밥",
+        name: "간식",
+        selected: true,
+      },
+    ]);
+  }, []);
   return (
     <>
       <NavigationBar />
@@ -26,20 +49,16 @@ const Main: React.FC = () => {
             >
               공지사항
             </CardGroupHeader>
-            <TextCardGroup
-              content={[
-                {
-                  leftBorder: true,
-                  text:
-                    "방과 후 수강신청 중 너무 많은 동시 접속자로 인해 잠시 서버가 다운되는 문제가 있었으나 방금 전 복구되었습니다. 스포츠를 제외한 방과 후 신청은 새로 일정을 공지해드릴 예정입니다.",
-                },
-                {
-                  leftBorder: true,
-                  text: "디미고의 첫 온라인 입학설명회가 곧 시작합니다.",
-                },
-              ]}
-              spaceBetweenCards
-            />
+            {notice ? (
+              <TextCardGroup
+                content={notice.map((e) => ({ text: e, leftBorder: true }))}
+                spaceBetweenCards
+              />
+            ) : (
+              <TextCardGroup
+                content={[{ text: "등록된 공지사항이 없습니다" }]}
+              />
+            )}
           </Col>
           <Divider />
           <Col width={5}>
@@ -56,21 +75,13 @@ const Main: React.FC = () => {
           <Divider />
           <Col width={3}>
             <CardGroupHeader>나의 신청현황</CardGroupHeader>
-            <MyTodayCard
-              location="와동 체육관"
-              time="1타임 ~ 2타임 배드민턴"
-              name="방과후"
-            />{" "}
-            <MyTodayCard
-              location="와동 체육관"
-              time="1타임 ~ 2타임 배드민턴"
-              name="방과후"
-            />{" "}
-            <MyTodayCard
-              location="와동 체육관"
-              time="1타임 ~ 2타임 배드민턴"
-              name="방과후"
-            />
+            {myTodays ? (
+              myTodays.map((myToday) => (
+                <MyTodayCard key={myToday.name} {...myToday} />
+              ))
+            ) : (
+              <TextCardGroup content={[{ text: "신청 현황이 없습니다" }]} />
+            )}
           </Col>
           <Divider />
           <Col width={4} css={fullHeight}>
@@ -81,26 +92,11 @@ const Main: React.FC = () => {
             >
               오늘의 급식
             </CardGroupHeader>
-            <TodayMeal
-              meals={[
-                {
-                  menu:
-                    "베이컨&소시지구이 | 치킨너겟 | 스트링치즈 | 잡곡밥 | 새우아욱국 | 모듬과일 | 포기김치 | 오이소박이 | 야채죽 | 시리얼 | 우유 또는 포도주스",
-                  name: "아침",
-                  selected: true,
-                },
-                {
-                  menu:
-                    "고추참치덮밥&계란후라이 | 우동장국 | 오지치즈후라이 | 숙주나물 | 총각김치 | 피크닉 | 석박지 | 콩나물무침 | 모듬과일 | 바이오거트",
-                  name: "점심",
-                },
-                {
-                  menu:
-                    "알떡고기완자조림 | 쌀밥 | 닭개장 | 연두부&양념장 | 석박지 | 콩나물무침 | 모듬과일 | 바이오거트 | 미니크라상&딸기잼",
-                  name: "저녁",
-                },
-              ]}
-            />
+            {meals ? (
+              <TodayMeal meals={meals} />
+            ) : (
+              <TextCardGroup content={[{ text: "급식 정보가 없습니다" }]} />
+            )}
           </Col>
         </ResponsiveWrapper>
       </Container>
