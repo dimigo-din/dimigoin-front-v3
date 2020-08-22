@@ -66,6 +66,7 @@ const WrapperCard = styled(Card)`
   font-family: NanumSquare;
   padding: 0px;
 `;
+
 const DaysHeader = styled.thead`
   border-bottom: 1px solid #d1d1d1;
   text-align: center;
@@ -73,6 +74,7 @@ const DaysHeader = styled.thead`
   font-weight: 700;
   padding: 0px 24px 0px;
 `;
+
 const Day = styled.td<{ colored?: boolean }>`
   padding: 24px 0px 18.5px;
   ${({ colored }) =>
@@ -84,6 +86,7 @@ const Day = styled.td<{ colored?: boolean }>`
       z-index: 10;
     `}
 `;
+
 const ContentWrapper = styled.tbody`
   width: 100%;
   & > tr:first-of-type td {
@@ -93,11 +96,13 @@ const ContentWrapper = styled.tbody`
     padding-bottom: 26px;
   }
 `;
+
 const Row = styled.tr`
   text-align: center;
   font-size: 18px;
   flex: 1;
 `;
+
 const Item = styled.td<{ colored?: boolean }>`
   padding: 10px;
   word-break: keep-all;
