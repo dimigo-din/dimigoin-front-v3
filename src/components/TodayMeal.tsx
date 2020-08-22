@@ -45,8 +45,7 @@ const MealItemContainer = styled.div<IMealItemSelected>`
   width: calc(100% - 78px);
   flex-grow: 1;
   border-left: 5px solid transparent;
-  padding-left: 34px;
-  padding-right: 39px;
+  padding: 24px 39px 24px 34px;
   display: flex;
   flex-direction: column;
   justify-content: center;
