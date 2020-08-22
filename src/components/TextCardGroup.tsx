@@ -1,7 +1,7 @@
-import React, { Children, ReactNode } from 'react';
-import Card, { IDimiCard } from './dimiru/DimiCard';
-import styled from '@emotion/styled';
-import css from '@emotion/css';
+import React, { Children, ReactNode } from "react";
+import Card, { IDimiCard } from "./dimiru/DimiCard";
+import styled from "@emotion/styled";
+import css from "@emotion/css";
 
 interface IProps {
   content: (IDimiCard & {
@@ -18,11 +18,20 @@ const TextCardGroup: React.FC<IProps> = ({
   return (
     <div css={spaceBetweenCards || shadow} {...props}>
       {content.map((i) => (
-        <Card children={i.text} css={spaceBetweenCards || cancelHover} {...i} />
+        <TextCard
+          children={i.text}
+          css={spaceBetweenCards || cancelHover}
+          {...i}
+        />
       ))}
     </div>
   );
 };
+
+const TextCard = styled(Card)`
+  font-weight: 400;
+  font-family: "NanumSquareR" !important;
+`;
 
 const shadow = css`
   box-shadow: 0 0 20px 0 rgba(146, 146, 146, 0.09);
