@@ -19,6 +19,7 @@ const TextCardGroup: React.FC<IProps> = ({
     <div css={spaceBetweenCards || shadow} {...props}>
       {content.map((i) => (
         <TextCard
+          key={i.text?.toString()}
           children={i.text}
           css={spaceBetweenCards || cancelHover}
           {...i}

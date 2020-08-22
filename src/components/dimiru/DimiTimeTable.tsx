@@ -40,7 +40,9 @@ const TimeTable: React.FC<IProps> = ({ ...props }) => {
           <DaysHeader>
             <tr>
               {days.map((day, index) => (
-                <Day colored={today === index}>{day}</Day>
+                <Day key={day} colored={today === index}>
+                  {day}
+                </Day>
               ))}
             </tr>
           </DaysHeader>
@@ -49,10 +51,14 @@ const TimeTable: React.FC<IProps> = ({ ...props }) => {
             추후에 수정해주세요! */}
 
             {TABLE.map((day) => (
-              <Row>
+              <Row key={day.join("")}>
                 {day.map(
                   (item, index) =>
-                    item && <Item colored={today === index}>{item}</Item>
+                    item && (
+                      <Item key={`${index}${item}`} colored={today === index}>
+                        {item}
+                      </Item>
+                    )
                 )}
               </Row>
             ))}
