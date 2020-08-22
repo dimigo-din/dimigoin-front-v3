@@ -30,8 +30,9 @@ const TextCardGroup: React.FC<IProps> = ({
 
 const TextCard = styled(Card)`
   font-weight: 400;
-  font-family: "NanumSquareR" !important;
-  line-height: 30px;
+  font-size: 18px;
+  font-family: "NanumSquare" !important;
+  line-height: 32px;
 `;
 
 const shadow = css`
