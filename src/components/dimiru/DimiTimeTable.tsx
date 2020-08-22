@@ -22,17 +22,19 @@ const TABLE = [
   ["컴시", "동아리", " ", "HR", "사회"],
 ];
 
-const TimeTable: React.FC<IProps> = ({ className }) => {
+const TimeTable: React.FC<IProps> = ({ ...props }) => {
   return (
-    <WrapperCard className={className}>
+    <WrapperCard {...props}>
       <div
         css={css`
           padding: 0px 24px 0px;
+          height: 100%;
         `}
       >
         <table
           css={css`
             width: 100%;
+            height: 100%;
           `}
         >
           <DaysHeader>
