@@ -5,29 +5,24 @@ import css from "@emotion/css";
 interface IProps {
   items: {
     name: string;
-    key: string;
+    key?: string;
   }[];
   placeholder: string;
   requireMessage?: string;
-  onChange?: (e: number) => any;
+  onChange?: (e: { target: { value: string | number } }) => any;
 }
 
-export default ({
-  items,
-  placeholder,
-  onChange,
-  requireMessage,
-}: IProps & React.DetailsHTMLAttributes<HTMLDivElement>) => {
+export default ({ items, placeholder, onChange, requireMessage }: IProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [opened, setOpened] = useState(false);
-  const [inited, setInited] = useState(true);
   useEffect(() => {
-    if (onChange) onChange(selectedIndex);
+    if (onChange) onChange({ target: { value: selectedIndex } });
   }, [selectedIndex]);
   return (
     <FixedHeightWrapper opened={opened}>
       <Wrapper
-        highlighted={opened || selectedIndex !== -1}
+        highlighted={opened}
+        blueBorder={opened || selectedIndex !== -1}
         onClick={() => setOpened((b) => !b)}
       >
         {[
@@ -66,7 +61,7 @@ const highlightedBorder = css`
   border-color: #3c70e8;
 `;
 
-const Wrapper = styled.div<{ highlighted?: boolean }>`
+const Wrapper = styled.div<{ highlighted?: boolean; blueBorder?: boolean }>`
   /* padding: 18px 16px; */
   border-radius: 6px;
   border: solid 1px #8a8a8a;
@@ -75,7 +70,16 @@ const Wrapper = styled.div<{ highlighted?: boolean }>`
   &:hover {
     ${highlightedBorder}
   }
-  ${({ highlighted }) => highlighted && highlightedBorder}
+  ${({ highlighted }) =>
+    highlighted &&
+    css`
+      box-shadow: 0 0 3px 0 rgba(60, 112, 232, 0.45);
+    `}
+  ${({ blueBorder }) =>
+    blueBorder &&
+    css`
+      border-color: #3c70e8;
+    `}
 `;
 
 const Item = styled.div<{ highlighted?: boolean; visible?: boolean }>`
