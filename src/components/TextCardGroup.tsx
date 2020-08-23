@@ -1,44 +1,48 @@
-import React, { Children } from 'react';
-import Card, {IDimiCard} from './dimiru/DimiCard'
-import styled from '@emotion/styled';
-import css from '@emotion/css';
+import React, { Children, ReactNode } from "react";
+import Card, { IDimiCard } from "./dimiru/DimiCard";
+import styled from "@emotion/styled";
+import css from "@emotion/css";
 
 interface IProps {
   content: (IDimiCard & {
-    text: string
-  })[],
-  spaceBetweenCards?: boolean
+    text: ReactNode;
+  })[];
+  spaceBetweenCards?: boolean;
 }
 
 const TextCardGroup: React.FC<IProps> = ({
   content,
-  spaceBetweenCards
+  spaceBetweenCards,
+  ...props
 }) => {
-  return <Wrapper spaceBetweenCards={spaceBetweenCards}>
-    {content.map(e => ({
-      ...e,
-      children: e.text, //text로 받아온 카드의 값을 children으로 덮어씌웁니다
+  return (
+    <div css={spaceBetweenCards || shadow} {...props}>
+      {content.map((i) => (
+        <TextCard
+          key={i.text?.toString()}
+          children={i.text}
+          css={spaceBetweenCards || cancelHover}
+          {...i}
+        />
+      ))}
+    </div>
+  );
+};
 
-      ...(!spaceBetweenCards && {
-        /* 카드 사이에 공간이 없게 한다면 호버효과를 강제로 끕니다
-          이 부분은 차후에 더 나은 코드로 수정해주세요.. */
-        hover: false
-      })
-    })).map(Card)}
-  </Wrapper>
-}
+const TextCard = styled(Card)`
+  font-weight: 400;
+  font-size: 18px;
+  font-family: "NanumSquare" !important;
+  line-height: 32px;
+`;
 
-const Wrapper = styled.section<{spaceBetweenCards?: boolean}>`
-  ${({ spaceBetweenCards }) => spaceBetweenCards ? css`
-      & div+div {
-        margin-top: 10px;
-      }
-  ` : css`
-      box-shadow: 0 0 20px 0 rgba(146, 146, 146, 0.09);
-      &>div {
-        box-shadow: none;
-      }
-    `}
-`
+const shadow = css`
+  box-shadow: 0 0 20px 0 rgba(146, 146, 146, 0.09);
+`;
 
-export default TextCardGroup
+const cancelHover = css`
+  box-shadow: none;
+  margin-top: 0px !important;
+`;
+
+export default TextCardGroup;

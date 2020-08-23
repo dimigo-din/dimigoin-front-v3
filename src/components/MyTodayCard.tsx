@@ -1,42 +1,37 @@
-import React from 'react';
-import css from '@emotion/css';
-import Card from './dimiru/DimiCard'
-import styled from '@emotion/styled';
+import React from "react";
+import css from "@emotion/css";
+import Card, { CardTitle } from "./dimiru/DimiCard";
+import styled from "@emotion/styled";
 
-interface IProps {
+export interface IMyToday {
   name: string;
   time: string;
   location: string;
+}
+interface IProps extends IMyToday {
   className?: string;
 }
 
-const MyTodayCard: React.FC<IProps> = ({
-  name,
-  location,
-  time,
-  className
-}) => {
-  return <Card leftBorder className={className}>
-    <Title>오늘의 {name}</Title>
-    {time && <Row>
-      <Time />
-      <Desc>{time}</Desc>
-    </Row>}
+const MyTodayCard: React.FC<IProps> = ({ name, location, time, className }) => {
+  return (
+    <Card leftBorder className={className}>
+      <CardTitle>오늘의 {name}</CardTitle>
+      {time && (
+        <Row>
+          <Time />
+          <Desc>{time}</Desc>
+        </Row>
+      )}
 
-    {location &&
-      <Row>
-        <Pin />
-        <Desc>{location}</Desc>
-      </Row>}
-  </Card>
-}
-
-const Title = styled.h1`
-  font-size: 20px;
-  font-weight: 900;
-  font-family: 'NanumSquare', sans-serif;
-  margin-bottom: 12px;
-`
+      {location && (
+        <Row>
+          <Pin />
+          <Desc>{location}</Desc>
+        </Row>
+      )}
+    </Card>
+  );
+};
 
 const Time = styled.i`
   & {
@@ -50,8 +45,9 @@ const Time = styled.i`
     border: 2px solid transparent;
     box-shadow: 0 0 0 2px currentColor;
   }
+
   &::after {
-    content: '';
+    content: "";
     display: block;
     box-sizing: border-box;
     position: absolute;
@@ -62,7 +58,7 @@ const Time = styled.i`
     top: 1px;
     left: 5px;
   }
-`
+`;
 
 const Pin = styled.i`
   & {
@@ -76,8 +72,9 @@ const Pin = styled.i`
     border: 2px solid;
     margin-top: -1px;
   }
+
   &::before {
-    content: '';
+    content: "";
     display: block;
     box-sizing: border-box;
     position: absolute;
@@ -88,19 +85,20 @@ const Pin = styled.i`
     left: 3px;
     border-radius: 40px;
   }
-`
+`;
 
 const Row = styled.div`
   display: flex;
   font-size: 16px;
   color: #8a8a8a;
-  &+div{
+
+  & + div {
     margin-top: 9px;
   }
-`
+`;
 
 const Desc = styled.div`
   margin-left: 12px;
-`
+`;
 
-export default MyTodayCard
+export default MyTodayCard;

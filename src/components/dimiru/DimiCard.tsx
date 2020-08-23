@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "@emotion/styled";
-import css from "@emotion/css";
+import React from 'react';
+import styled from '@emotion/styled';
+import css from '@emotion/css';
 
 type MouseEventHandler = (event: React.MouseEvent<HTMLDivElement>) => void;
 type FocusEventHandler = (event: React.FocusEvent<HTMLDivElement>) => void;
@@ -76,6 +76,11 @@ const Container = styled.div<ICardContainer>`
   border-radius: 5px;
   box-shadow: 0 0 20px 0 rgba(146, 146, 146, 0.09);
   transition: 1s cubic-bezier(0, 0.46, 0.12, 0.98);
+
+  & + & {
+    margin-top: 10px;
+  }
+
   ${({ leftBorder }) =>
     leftBorder &&
     css`
@@ -83,6 +88,7 @@ const Container = styled.div<ICardContainer>`
       border-top-left-radius: 0px;
       border-bottom-left-radius: 0px;
     `}
+
   ${({ button = false }) =>
     button &&
     css`
@@ -126,4 +132,10 @@ const Button = styled.div`
     font-weight: 600;
     text-align: center;
   }
+`;
+
+export const CardTitle = styled.h1`
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 12px;
 `;
