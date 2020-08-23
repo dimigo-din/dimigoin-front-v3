@@ -1,12 +1,14 @@
-import React from 'react';
-import css from '@emotion/css';
-import Card, { CardTitle } from './dimiru/DimiCard';
-import styled from '@emotion/styled';
+import React from "react";
+import css from "@emotion/css";
+import Card, { CardTitle } from "./dimiru/DimiCard";
+import styled from "@emotion/styled";
 
-interface IProps {
+export interface IMyToday {
   name: string;
   time: string;
   location: string;
+}
+interface IProps extends IMyToday {
   className?: string;
 }
 
@@ -32,7 +34,6 @@ const MyTodayCard: React.FC<IProps> = ({ name, location, time, className }) => {
 };
 
 const Time = styled.i`
-
   & {
     box-sizing: border-box;
     position: relative;
@@ -60,7 +61,6 @@ const Time = styled.i`
 `;
 
 const Pin = styled.i`
-
   & {
     box-sizing: border-box;
     position: relative;

@@ -22,23 +22,27 @@ const TABLE = [
   ["컴시", "동아리", " ", "HR", "사회"],
 ];
 
-const TimeTable: React.FC<IProps> = ({ className }) => {
+const TimeTable: React.FC<IProps> = ({ ...props }) => {
   return (
-    <WrapperCard className={className}>
+    <WrapperCard {...props}>
       <div
         css={css`
           padding: 0px 24px 0px;
+          height: 100%;
         `}
       >
         <table
           css={css`
             width: 100%;
+            height: 100%;
           `}
         >
           <DaysHeader>
             <tr>
               {days.map((day, index) => (
-                <Day colored={today === index}>{day}</Day>
+                <Day key={day} colored={today === index}>
+                  {day}
+                </Day>
               ))}
             </tr>
           </DaysHeader>
@@ -47,10 +51,14 @@ const TimeTable: React.FC<IProps> = ({ className }) => {
             추후에 수정해주세요! */}
 
             {TABLE.map((day) => (
-              <Row>
+              <Row key={day.join("")}>
                 {day.map(
                   (item, index) =>
-                    item && <Item colored={today === index}>{item}</Item>
+                    item && (
+                      <Item key={`${index}${item}`} colored={today === index}>
+                        {item}
+                      </Item>
+                    )
                 )}
               </Row>
             ))}

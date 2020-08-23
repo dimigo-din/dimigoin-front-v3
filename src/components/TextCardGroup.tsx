@@ -19,6 +19,7 @@ const TextCardGroup: React.FC<IProps> = ({
     <div css={spaceBetweenCards || shadow} {...props}>
       {content.map((i) => (
         <TextCard
+          key={i.text?.toString()}
           children={i.text}
           css={spaceBetweenCards || cancelHover}
           {...i}
@@ -30,7 +31,9 @@ const TextCardGroup: React.FC<IProps> = ({
 
 const TextCard = styled(Card)`
   font-weight: 400;
-  font-family: "NanumSquareR" !important;
+  font-size: 18px;
+  font-family: "NanumSquare" !important;
+  line-height: 32px;
 `;
 
 const shadow = css`

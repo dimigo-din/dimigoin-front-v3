@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import css from '@emotion/css';
+import styled from "@emotion/styled";
+import css from "@emotion/css";
 
 export const Col = styled.div<{ width?: number }>`
   ${({ width }) =>
@@ -8,9 +8,20 @@ export const Col = styled.div<{ width?: number }>`
       flex: ${width / 10};
     `}
 `;
-export const Divider = styled.div<{ visible?: boolean; small?: boolean }>`
-  margin: 0px 30px;
 
+interface IDividerProps {
+  visible?: boolean;
+  small?: boolean;
+  horizontal?: boolean;
+}
+
+export const Divider = styled.div<IDividerProps>`
+  margin: 0px 30px;
+  ${({ horizontal }) =>
+    horizontal &&
+    css`
+      margin: 30px 0px;
+    `}
   ${({ small }) =>
     small &&
     css`
@@ -36,10 +47,13 @@ export const ResponsiveScreenWrapper = styled.div`
   }
 `;
 
-export const ResponsiveWrapper = styled.div`
+export const ResponsiveWrapper = styled.div<{ threshold?: number }>`
   display: flex;
-
-  @media screen and (max-width: 760px) {
+  ${({ threshold }) => {
+    console.log(threshold);
+    return css``;
+  }}
+  @media screen and (max-width: ${({ threshold }) => threshold || 760}px) {
     flex-direction: column;
 
     & > [class*="Divider"] {
