@@ -1,17 +1,17 @@
-import React from 'react';
-import styled from '@emotion/styled';
-import NavigationBar from '../components/NavigationBar';
-import CardGroupHeader from '../components/CardGroupHeader';
-import DimiCard, { CardTitle } from '../components/dimiru/DimiCard';
-import css from '@emotion/css';
+import React, { Children } from "react";
+import styled from "@emotion/styled";
+import NavigationBar from "../components/NavigationBar";
+import CardGroupHeader from "../components/CardGroupHeader";
+import DimiCard, { CardTitle } from "../components/dimiru/DimiCard";
+import css from "@emotion/css";
 import {
   Col,
   Divider,
   ResponsiveScreenWrapper,
   ResponsiveWrapper,
-} from '../components/grids/Cols';
-import TextCardGroup from '../components/TextCardGroup';
-import { IngansilStatus } from '../components/IngangsilStatus';
+} from "../components/grids/Cols";
+import TextCardGroup from "../components/TextCardGroup";
+import { IngansilStatus } from "../components/IngangsilStatus";
 
 export default () => {
   return (
@@ -67,7 +67,7 @@ export default () => {
                       color: #3c70e8;
                     `}
                   >
-                    <Ticket />{" "}
+                    <Ticket />
                     <Desc>
                       남은 티켓 <b>1/4</b>
                     </Desc>
@@ -90,7 +90,8 @@ export default () => {
               spaceBetweenCards
               content={[
                 {
-                  text: (
+                  key: "notice1",
+                  children: (
                     <Info>
                       <p>
                         인강실에서는 인터넷 강의, 교과 과제, 프로그래밍 등{" "}
@@ -105,7 +106,8 @@ export default () => {
                   leftBorder: true,
                 },
                 {
-                  text: (
+                  key: "notice2",
+                  children: (
                     <Info>
                       <p>
                         쾌적한 인터넷 환경을 위해 과제와 관련 없는{" "}
@@ -127,8 +129,8 @@ export default () => {
                 `}
               >
                 <IngangTime>1타임</IngangTime>
-                {['손승욱', '강혁진', '이승민', '우상윤'].map((name) => (
-                  <Inganger>{name}</Inganger>
+                {["손승욱", "강혁진", "이승민", "우상윤"].map((name) => (
+                  <Inganger key={name}>{name}</Inganger>
                 ))}
               </div>
             </DimiCard>
@@ -139,8 +141,8 @@ export default () => {
                 `}
               >
                 <IngangTime>1타임</IngangTime>
-                {['손승욱', '강혁진', '이승민', '우상윤'].map((name) => (
-                  <Inganger>{name}</Inganger>
+                {["손승욱2", "강혁진2", "이승민2", "우상윤2"].map((name) => (
+                  <Inganger key={name}>{name}</Inganger>
                 ))}
               </div>
             </DimiCard>
@@ -151,16 +153,22 @@ export default () => {
               {
                 currentApplied: 8,
                 max: 8,
-                time: '19:50 - 21:10',
+                time: "19:50 - 21:10",
                 isApplied: false,
               },
               {
                 currentApplied: 2,
                 max: 8,
-                time: '21:10 - 22:30',
+                time: "21:10 - 22:30",
                 isApplied: true,
               },
-            ].map(IngansilStatus)}
+            ].map((status, index) => (
+              <IngansilStatus
+                key={status.time}
+                {...status}
+                name={`야간 자율학습 ${index + 1}타임`}
+              />
+            ))}
           </Col>
         </ResponsiveScreenWrapper>
       </Container>
@@ -194,7 +202,6 @@ const Desc = styled.div`
 `;
 
 const Time = styled.i`
-
   & {
     box-sizing: border-box;
     position: relative;
@@ -223,7 +230,6 @@ const Time = styled.i`
 `;
 
 const UserList = styled.i`
-
   & {
     display: block;
     transform: scale(var(--ggs, 0.8));
@@ -267,7 +273,6 @@ const UserList = styled.i`
 `;
 
 const DateIcon = styled.i`
-
   & {
     box-sizing: border-box;
     position: relative;
@@ -306,7 +311,6 @@ const DateIcon = styled.i`
 `;
 
 const Ticket = styled.i`
-
   & {
     box-sizing: border-box;
     position: relative;

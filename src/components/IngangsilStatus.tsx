@@ -1,22 +1,26 @@
-import React from 'react';
-import CardGroupHeader from './CardGroupHeader';
-import DimiCard from './dimiru/DimiCard';
-import css from '@emotion/css';
-import { Col } from './grids/Cols';
-import styled from 'styled-components';
-import DimiButton from './dimiru/DimiButton';
+import React from "react";
+import CardGroupHeader from "./CardGroupHeader";
+import DimiCard from "./dimiru/DimiCard";
+import css from "@emotion/css";
+import { Col } from "./grids/Cols";
+import styled from "styled-components";
+import DimiButton from "./dimiru/DimiButton";
 
 interface IProps {
   currentApplied: number;
   max: number;
   time: string;
   isApplied: boolean;
+  name: string;
 }
 
-export const IngansilStatus: React.FC<IProps> = (
-  { currentApplied, time, max, isApplied },
-  index
-) => {
+export const IngansilStatus: React.FC<IProps> = ({
+  currentApplied,
+  time,
+  max,
+  isApplied,
+  name,
+}) => {
   const isRequestable =
     //1. 신청 했고, 자리가 없을 때
     currentApplied < max ||
@@ -29,7 +33,7 @@ export const IngansilStatus: React.FC<IProps> = (
           text: time,
         }}
       >
-        야간자율학습 {index + 1}타임
+        {name}
       </CardGroupHeader>
       <DimiCard>
         <div
@@ -86,14 +90,12 @@ const NumberDisplay = styled.h1`
 `;
 
 const active = css`
-
   & > * {
     color: #3c70e8;
   }
 `;
 
 const disabled = css`
-
   & > * {
     color: #8a8a8a;
   }

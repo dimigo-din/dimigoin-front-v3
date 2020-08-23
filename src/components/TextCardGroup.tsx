@@ -5,7 +5,8 @@ import css from "@emotion/css";
 
 interface IProps {
   content: (IDimiCard & {
-    text: ReactNode;
+    text?: ReactNode;
+    key?: string;
   })[];
   spaceBetweenCards?: boolean;
 }
@@ -19,10 +20,10 @@ const TextCardGroup: React.FC<IProps> = ({
     <div css={spaceBetweenCards || shadow} {...props}>
       {content.map((i) => (
         <TextCard
-          key={i.text?.toString()}
-          children={i.text}
+          children={i?.text}
           css={spaceBetweenCards || cancelHover}
           {...i}
+          key={i.key || i.text?.toString()}
         />
       ))}
     </div>

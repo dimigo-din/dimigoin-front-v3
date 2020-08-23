@@ -49,10 +49,6 @@ export const ResponsiveScreenWrapper = styled.div`
 
 export const ResponsiveWrapper = styled.div<{ threshold?: number }>`
   display: flex;
-  ${({ threshold }) => {
-    console.log(threshold);
-    return css``;
-  }}
   @media screen and (max-width: ${({ threshold }) => threshold || 760}px) {
     flex-direction: column;
 

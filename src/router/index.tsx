@@ -1,15 +1,17 @@
-import * as React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import * as React from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 // import PrivateRoute from '../components/PrivateRoute';
 
-import { Main } from '../pages';
-import Auth from './Auth';
+import { Main } from "../pages";
+import Auth from "./Auth";
+import Ingangsil from "../pages/Ingangsil";
 
 const Router: React.FC = () => (
   <BrowserRouter>
     <Switch>
-      <Route path="/" component={Main} />
       <Route path="/auth" component={Auth} />
+      <Route path="/ingangsil" component={Ingangsil} />
+      <Route path="/" exact component={Main} />
     </Switch>
   </BrowserRouter>
 );
