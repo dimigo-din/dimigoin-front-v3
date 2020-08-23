@@ -32,7 +32,11 @@ const BUTTONS = [
   },
 ];
 
-const SelfStudyStatus: React.FC = () => {
+interface IProps {
+  onButtonPressed: (name: string) => void;
+}
+
+const SelfStudyStatus: React.FC<IProps> = ({ onButtonPressed }) => {
   return (
     <Card
       css={css`
@@ -44,7 +48,11 @@ const SelfStudyStatus: React.FC = () => {
       </Header>
       <ButtonsWrapper>
         {BUTTONS.map((status) => (
-          <Button selected={status.selected}>
+          <Button
+            selected={status.selected}
+            onMouseDown={() => onButtonPressed(status.name)}
+            key={status.name}
+          >
             <status.icon css={iconStyle} />
             <ButtonText>{status.name}</ButtonText>
           </Button>
@@ -87,6 +95,9 @@ const iconStyle = css`
 const Button = styled.div<{ selected?: boolean }>`
   color: #8a8a8a;
   text-align: center;
+  min-width: 100px;
+  margin-top: 24px;
+
   & svg path {
     fill: #8a8a8a;
   }
@@ -97,9 +108,12 @@ const Button = styled.div<{ selected?: boolean }>`
       & svg path {
         fill: #3c70e8;
       }
-    `}
-  min-width: 100px;
-  margin-top: 24px;
+    `}/* transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
+  &:active {
+    transform: scale(0.993);
+    filter: blur(0.7px);
+    opacity: 0.8;
+  } */
 `;
 const ButtonText = styled.div`
   font-size: 22px;

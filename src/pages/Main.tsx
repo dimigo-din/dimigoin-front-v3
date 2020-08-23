@@ -63,7 +63,7 @@ const Main: React.FC = () => {
           <Divider />
           <Col width={5}>
             <CardGroupHeader>자습 현황</CardGroupHeader>
-            <SelfStudyStatus />
+            <SelfStudyStatus onButtonPressed={alert} />
           </Col>
         </ResponsiveWrapper>
         <Divider horizontal />
