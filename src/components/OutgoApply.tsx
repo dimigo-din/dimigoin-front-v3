@@ -25,13 +25,6 @@ const OutgoApply = () => {
   }, [outgoType, applyType, approver, outgoReason]);
   return (
     <>
-      <CardGroupHeader
-        subButton={{
-          text: "평일(월~금) 15:00까지 신청 가능",
-        }}
-      >
-        신청하기
-      </CardGroupHeader>
       <Card leftBorder>
         <FormHeader>외출 유형</FormHeader>
         <RadioButton
