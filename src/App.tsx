@@ -1,23 +1,23 @@
-import React from 'react';
-import styled from '@emotion/styled';
+import React from "react";
+import styled from "@emotion/styled";
 
-import Router from './router';
-import GlobalStyle from './components/GlobalStyle';
+import Router from "./router";
+import GlobalStyle from "./components/GlobalStyle";
+import { ModalContainer } from "./components/DimiModal";
 
-import dimigoBackgroundImage from './assets/dimigo-background.svg';
+import dimigoBackgroundImage from "./assets/dimigo-background.svg";
 
 function App() {
   return (
     <>
       <GlobalStyle />
+      <ModalContainer />
       <Container>
         <TopLine />
         <RouterWrap>
           <Router />
         </RouterWrap>
-        <BottomImage
-          src={dimigoBackgroundImage}
-        />
+        <BottomImage src={dimigoBackgroundImage} />
       </Container>
     </>
   );

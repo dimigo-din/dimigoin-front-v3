@@ -1,8 +1,8 @@
-import React from 'react';
-import styled from '@emotion/styled';
-import css from '@emotion/css';
-import { Link } from 'react-router-dom';
-import { ResponsiveWrapper, Divider } from './grids/Cols';
+import React from "react";
+import styled from "@emotion/styled";
+import css from "@emotion/css";
+import { Link } from "react-router-dom";
+import { ResponsiveWrapper, Divider } from "./grids/Cols";
 
 interface IProps {
   withBubble?: boolean;
@@ -28,6 +28,8 @@ const CardGroupHeader: React.FC<IProps> = ({
             <Link to={subButton.route}>
               <SubButton>{subButton.text}</SubButton>
             </Link>
+          ) : subButton.action ? (
+            <SubButton onClick={subButton.action}>{subButton.text}</SubButton>
           ) : (
             <SubButton>{subButton.text}</SubButton>
           )
