@@ -13,6 +13,7 @@
     "@emotion/css": "^10.0.27",
     "@emotion/styled": "^10.0.27",
     "@loadable/component": "^5.13.1",
+    "dimigoincon": "^2.5.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
