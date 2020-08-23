@@ -67,6 +67,7 @@ const Header = styled.div`
   justify-content: space-around;
   border-bottom: 1px solid #e1e1e1;
 `;
+
 const Time = styled.h2<{ current?: boolean }>`
   font-size: 22px;
   font-weight: 900;
@@ -79,6 +80,7 @@ const Time = styled.h2<{ current?: boolean }>`
       border-bottom: 3px solid #3c70e8;
     `}
 `;
+
 const ButtonsWrapper = styled.div`
   display: flex;
   justify-content: space-around;
@@ -87,11 +89,13 @@ const ButtonsWrapper = styled.div`
   margin: -24px auto;
   flex-wrap: wrap;
 `;
+
 const iconStyle = css`
   height: 36px;
   width: 36px;
   fill: #8a8a8a;
 `;
+
 const Button = styled.div<{ selected?: boolean }>`
   color: #8a8a8a;
   text-align: center;
@@ -115,9 +119,11 @@ const Button = styled.div<{ selected?: boolean }>`
     opacity: 0.8;
   } */
 `;
+
 const ButtonText = styled.div`
   font-size: 22px;
   font-weight: 700;
   margin-top: 18px;
 `;
+
 export default SelfStudyStatus;

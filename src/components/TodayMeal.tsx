@@ -47,6 +47,7 @@ const MealCard = styled(DimiCard)`
   display: flex;
   flex-direction: column;
 `;
+
 const MealItemContainer = styled.div<IMealItemSelected>`
   width: calc(100% - 78px);
   flex-grow: 1;
