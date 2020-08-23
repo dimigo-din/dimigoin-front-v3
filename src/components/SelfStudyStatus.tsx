@@ -2,7 +2,35 @@ import React from "react";
 import styled from "@emotion/styled";
 import Card from "./dimiru/DimiCard";
 import css from "@emotion/css";
-import { ReactComponent as Headset } from "../assets/headset.svg";
+import { ReactComponent as IngangsilSvg } from "../assets/icons/ingangsil.svg";
+import { ReactComponent as HealingsilSvg } from "../assets/icons/healingsil.svg";
+import { ReactComponent as OtherSvg } from "../assets/icons/other.svg";
+import { ReactComponent as LaundrySvg } from "../assets/icons/laundry.svg";
+import { ReactComponent as CircleSvg } from "../assets/icons/circle.svg";
+
+const BUTTONS = [
+  {
+    name: "기타",
+    icon: OtherSvg,
+  },
+  {
+    name: "인강실",
+    icon: IngangsilSvg,
+  },
+  {
+    name: "안정실",
+    icon: HealingsilSvg,
+    selected: true,
+  },
+  {
+    name: "세탁",
+    icon: LaundrySvg,
+  },
+  {
+    name: "동아리",
+    icon: CircleSvg,
+  },
+];
 
 const SelfStudyStatus: React.FC = () => {
   return (
@@ -15,26 +43,12 @@ const SelfStudyStatus: React.FC = () => {
         <Time current>1타임</Time> <Time>2타임</Time>
       </Header>
       <ButtonsWrapper>
-        <Button selected>
-          <HeadsetIcon />
-          <ButtonText>인강실</ButtonText>
-        </Button>
-        <Button>
-          <HeadsetIcon />
-          <ButtonText>인강실</ButtonText>
-        </Button>
-        <Button>
-          <HeadsetIcon />
-          <ButtonText>인강실</ButtonText>
-        </Button>
-        <Button>
-          <HeadsetIcon />
-          <ButtonText>인강실</ButtonText>
-        </Button>
-        <Button>
-          <HeadsetIcon />
-          <ButtonText>인강실</ButtonText>
-        </Button>
+        {BUTTONS.map((status) => (
+          <Button selected={status.selected}>
+            <status.icon css={iconStyle} />
+            <ButtonText>{status.name}</ButtonText>
+          </Button>
+        ))}
       </ButtonsWrapper>
     </Card>
   );
@@ -70,16 +84,19 @@ const iconStyle = css`
   width: 36px;
   fill: #8a8a8a;
 `;
-const HeadsetIcon = styled(Headset)`
-  ${iconStyle}
-`;
 const Button = styled.div<{ selected?: boolean }>`
   color: #8a8a8a;
   text-align: center;
+  & svg path {
+    fill: #8a8a8a;
+  }
   ${({ selected }) =>
     selected &&
     css`
       color: #3c70e8;
+      & svg path {
+        fill: #3c70e8;
+      }
     `}
   min-width: 100px;
   margin-top: 24px;
