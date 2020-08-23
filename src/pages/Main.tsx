@@ -6,7 +6,7 @@ import CardGroupHeader from "../components/CardGroupHeader";
 import TextCardGroup from "../components/TextCardGroup";
 import TimeTable from "../components/dimiru/DimiTimeTable";
 import { ResponsiveWrapper, Col, Divider } from "../components/grids/Cols";
-import MyTodayCard, { IMyToday } from "../components/MyTodayCard";
+import MyTodayCard, { IMyToday } from "../components/ApplimentStatus";
 import TodayMeal, { IMeal } from "../components/TodayMeal";
 import css from "@emotion/css";
 import SelfStudyStatus from "../components/SelfStudyStatus";
