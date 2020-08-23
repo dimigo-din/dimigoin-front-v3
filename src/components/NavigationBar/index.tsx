@@ -1,24 +1,25 @@
-import React from 'react';
-import styled from '@emotion/styled';
+import React, { useState, useEffect } from "react";
+import styled from "@emotion/styled";
 
-import NavigationItem from './NavigationItem';
-import navigations from './navigations';
+import NavigationItem from "./NavigationItem";
+import navigations from "./navigations";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 
 interface ITopNavbar {}
 
-const TopNavbar: React.FC<ITopNavbar> = () => {
+const TopNavbar: React.FC<ITopNavbar & RouteComponentProps> = ({ history }) => {
   return (
     <Wrapper>
       <Container>
         <NavigationList>
-          {/* TODO: selected from current route */}
-          {navigations.map(({ title, image, selected }, index) => {
+          {navigations.map(({ title, image, route }) => {
             return (
               <NavigationItem
-                key={`navigation-item-${index}`}
+                key={`${route}${title}`}
                 title={title}
                 image={image}
-                selected={selected}
+                selected={history.location.pathname === route}
+                route={route}
               />
             );
           })}
@@ -32,7 +33,7 @@ const TopNavbar: React.FC<ITopNavbar> = () => {
   );
 };
 
-export default TopNavbar;
+export default withRouter(TopNavbar);
 
 const Wrapper = styled.div`
   width: 100%;
@@ -54,7 +55,6 @@ const Container = styled.div`
 
 const NavigationList = styled.div`
   display: flex;
-  align-items: flex-end;
 `;
 
 const ProfileContainer = styled.div`

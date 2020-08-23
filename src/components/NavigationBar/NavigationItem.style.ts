@@ -1,4 +1,5 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
+import css from "@emotion/css";
 
 export const NavigationContainer = styled.div`
   width: 89.9px;
@@ -15,10 +16,16 @@ export const NavigationContainer = styled.div`
   }
 `;
 
-export const NavigationTitle = styled.span`
+export const NavigationTitle = styled.span<{ selected?: boolean }>`
   font-size: 22px;
   line-height: 1.18;
   color: #d1d1d1;
+  ${({ selected }) =>
+    selected &&
+    css`
+      font-weight: 700;
+      color: #3c70e8;
+    `}
 `;
 
 export const NavigationImage = styled.img`
