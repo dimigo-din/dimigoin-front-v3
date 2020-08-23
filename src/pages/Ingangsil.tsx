@@ -12,6 +12,7 @@ import {
 } from "../components/grids/Cols";
 import TextCardGroup from "../components/TextCardGroup";
 import { IngansilStatus } from "../components/IngangsilStatus";
+import { ReactComponent as CircleSvg } from "../assets/icons/circle.svg";
 
 export default () => {
   return (
@@ -41,7 +42,7 @@ export default () => {
                     <Desc>07:00 ~ 08:15</Desc>
                   </Row>
                   <Row>
-                    <UserList />
+                    <People />
                     <Desc>
                       한 학급당 최대 <b>7명</b>
                     </Desc>
@@ -229,47 +230,10 @@ const Time = styled.i`
   }
 `;
 
-const UserList = styled.i`
-  & {
-    display: block;
-    transform: scale(var(--ggs, 0.8));
-    margin-top: -1px;
-    box-sizing: border-box;
-    width: 20px;
-    height: 18px;
-    background: linear-gradient(to left, currentColor 8px, transparent 0)
-        no-repeat 14px 4px/6px 2px,
-      linear-gradient(to left, currentColor 8px, transparent 0) no-repeat 14px
-        8px/6px 2px,
-      linear-gradient(to left, currentColor 8px, transparent 0) no-repeat 14px
-        12px/6px 2px;
-  }
-
-  &::after,
-  &::before {
-    content: "";
-    display: block;
-    box-sizing: border-box;
-    position: absolute;
-    border: 2px solid;
-  }
-
-  &::before {
-    width: 8px;
-    height: 8px;
-    border-radius: 30px;
-    top: 0;
-    left: 2px;
-  }
-
-  &::after {
-    width: 12px;
-    height: 9px;
-    border-bottom: 0;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-    top: 9px;
-  }
+const People = styled(CircleSvg)`
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
 `;
 
 const DateIcon = styled.i`
