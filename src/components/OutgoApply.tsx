@@ -2,17 +2,19 @@ import React, { useEffect } from "react";
 import CardGroupHeader from "../components/CardGroupHeader";
 import Card from "../components/dimiru/DimiCard";
 import { FormHeader } from "../components/Form";
-import RadioButton from "../components/dimiru/DimiRadioButton";
-import DimiDropdown from "../components/dimiru/DimiDropdown";
+import RadioButton, {
+  RadioButtonItem,
+} from "../components/dimiru/DimiRadioButton";
+import DimiDropdown, { IDropdownItem } from "../components/dimiru/DimiDropdown";
 import Textarea from "../components/dimiru/DimiTextarea";
 import useInput from "./hooks/useInput";
 
 const OutgoApply = () => {
-  const outgoType = useInput();
-  const applyType = useInput();
-  const outgoReason = useInput();
+  const outgoType = useInput<RadioButtonItem>();
+  const applyType = useInput<RadioButtonItem>();
+  const outgoReason = useInput<IDropdownItem>();
   const detailReason = useInput();
-  const approver = useInput();
+  const approver = useInput<IDropdownItem>();
 
   useEffect(() => {
     console.log({
