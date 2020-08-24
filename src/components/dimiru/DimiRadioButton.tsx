@@ -1,5 +1,6 @@
 import React, { FormEvent } from "react";
 import styled from "@emotion/styled";
+import { EventFunction } from "../hooks/useInput";
 
 interface RadioButtonProps {
   onChange?: (...p: any[]) => any;
@@ -51,11 +52,11 @@ const Wrapper = styled.label`
 `;
 
 export const RadioButton: React.FC<
-  RadioButtonProps & React.HTMLAttributes<HTMLDivElement>
+  React.HTMLAttributes<HTMLLabelElement> & RadioButtonProps
 > = ({ disabled, children, ...props }) => {
   if (disabled)
     return (
-      <Wrapper>
+      <Wrapper {...props}>
         <ButtonWrapper>
           <BlockedIcon></BlockedIcon>
         </ButtonWrapper>
@@ -63,8 +64,8 @@ export const RadioButton: React.FC<
       </Wrapper>
     );
   return (
-    <Wrapper>
-      <LogicalButton {...props} type="radio" />
+    <Wrapper {...props}>
+      <LogicalButton type="radio" />
       <ButtonWrapper>
         <CenterCircle />
       </ButtonWrapper>
@@ -73,15 +74,15 @@ export const RadioButton: React.FC<
   );
 };
 
-interface Item {
+export interface RadioButtonItem {
   name: string;
   key?: string;
 }
 
 interface IProps {
-  items: Item[];
+  items: RadioButtonItem[];
   name: string;
-  onChange?: (e: { target: { value: string | number } }) => any;
+  onChange: EventFunction<RadioButtonItem>;
 }
 
 const RadioButtonGroup: React.FC<IProps> = ({ items, name, onChange }) => {
@@ -92,7 +93,7 @@ const RadioButtonGroup: React.FC<IProps> = ({ items, name, onChange }) => {
           name={name}
           key={item.key}
           onClick={() =>
-            onChange && item.key && onChange({ target: { value: item.key } })
+            onChange && item.key && onChange({ target: { value: item } })
           }
         >
           {item.name}

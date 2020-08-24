@@ -1,23 +1,30 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
+import { EventFunction } from "../hooks/useInput";
 
+export interface IDropdownItem {
+  name: string;
+  key?: string;
+}
 interface IProps {
-  items: {
-    name: string;
-    key?: string;
-  }[];
+  items: IDropdownItem[];
   placeholder: string;
   requireMessage?: string;
-  onChange?: (e: { target: { value: string | number } }) => any;
+  onChange?: EventFunction<IDropdownItem>;
 }
 
 export default ({ items, placeholder, onChange, requireMessage }: IProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [opened, setOpened] = useState(false);
-  useEffect(() => {
-    if (onChange) onChange({ target: { value: selectedIndex } });
-  }, [selectedIndex]);
+  const clickHandler = ({
+    key,
+    name,
+    index,
+  }: IDropdownItem & { index: number }) => {
+    setSelectedIndex(index - 1);
+    onChange && onChange({ target: { value: { key, name } } });
+  };
   return (
     <FixedHeightWrapper opened={opened}>
       <Wrapper
@@ -34,7 +41,7 @@ export default ({ items, placeholder, onChange, requireMessage }: IProps) => {
         ].map(({ key, name }, index) => (
           <Item
             key={key}
-            onClick={() => setSelectedIndex(index - 1)}
+            onClick={() => clickHandler({ key, name, index })}
             highlighted={selectedIndex !== -1 && selectedIndex === index - 1}
             visible={selectedIndex === index - 1 || opened}
           >
