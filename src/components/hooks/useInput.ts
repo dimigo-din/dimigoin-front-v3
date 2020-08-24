@@ -1,14 +1,21 @@
 import { useState } from "react";
 
-const useInput = () => {
-  const [value, setValue] = useState<string | number>();
+export type EventFunction<T> = (e: { target: { value: T } }) => any;
+
+const useInput = <T = string>(
+  initValue?: any,
+  inputValidation?: (value: T) => boolean
+) => {
+  const [value, setValue] = useState<T>(initValue);
 
   const onChange = ({
     target: { value: willSetValue },
   }: {
-    target: { value: string | number };
+    target: { value: T };
   }) => {
-    setValue(willSetValue);
+    if (!inputValidation) setValue(willSetValue);
+    if (inputValidation && inputValidation(willSetValue))
+      setValue(willSetValue);
   };
   return { value, onChange };
 };
