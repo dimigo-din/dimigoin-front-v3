@@ -7,9 +7,21 @@ import RadioButton, {
 } from "../components/dimiru/DimiRadioButton";
 import DimiDropdown, { IDropdownItem } from "../components/dimiru/DimiDropdown";
 import Textarea from "../components/dimiru/DimiTextarea";
-import useInput from "./hooks/useInput";
+import useInput, { EventFunction } from "./hooks/useInput";
 
-const OutgoApply = () => {
+export interface OutgoApplyInput {
+  outgoType?: string;
+  applyType?: string;
+  outgoReason?: string;
+  detailReason?: string;
+  approver?: string;
+}
+
+interface IProps {
+  onChange?: EventFunction<OutgoApplyInput>;
+}
+
+const OutgoApply: React.FC<IProps> = ({ onChange, ...props }) => {
   const outgoType = useInput<RadioButtonItem>();
   const applyType = useInput<RadioButtonItem>();
   const outgoReason = useInput<IDropdownItem>();
@@ -17,14 +29,25 @@ const OutgoApply = () => {
   const approver = useInput<IDropdownItem>();
 
   useEffect(() => {
-    console.log({
-      outgoType: outgoType.value,
-      applyType: applyType.value,
-      outgoReason: outgoReason.value,
-      detailReason: outgoType.value,
-      approver: approver.value,
-    });
-  }, [outgoType, applyType, approver, outgoReason]);
+    onChange &&
+      onChange({
+        target: {
+          value: {
+            outgoType: outgoType?.value?.key,
+            applyType: applyType?.value?.key,
+            outgoReason: outgoReason?.value?.key,
+            detailReason: detailReason?.value,
+            approver: approver?.value?.key,
+          },
+        },
+      });
+  }, [
+    applyType.value,
+    approver.value,
+    detailReason.value,
+    outgoReason.value,
+    outgoType.value,
+  ]);
   return (
     <>
       <Card leftBorder>
@@ -63,12 +86,16 @@ const OutgoApply = () => {
           {...outgoReason}
           items={[
             {
-              name: "대충 어떤 사유",
-              key: "daechung",
+              name: "사유1",
+              key: "reason1",
             },
             {
-              name: "직접 입력",
-              key: "self_input",
+              name: "사유2",
+              key: "reason2",
+            },
+            {
+              name: "사유3",
+              key: "reason3",
             },
           ]}
           placeholder="선택 또는 직접 입력"
