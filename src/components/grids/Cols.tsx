@@ -2,6 +2,8 @@ import styled from "@emotion/styled";
 import css from "@emotion/css";
 
 export const Col = styled.div<{ width?: number }>`
+  display: flex;
+  flex-direction: column;
   ${({ width }) =>
     width &&
     css`
@@ -17,13 +19,27 @@ interface IDividerProps {
 
 export const Divider = styled.div<IDividerProps>`
   margin: 0px 30px;
-  ${({ horizontal }) =>
+  ${({ horizontal, small }) =>
     horizontal &&
+    !small &&
     css`
       margin: 30px 0px;
     `}
-  ${({ small }) =>
+    ${({ horizontal, small }) =>
+      !horizontal &&
+      !small &&
+      css`
+        margin: 0px 30px;
+      `}
+    ${({ horizontal, small }) =>
+      horizontal &&
+      small &&
+      css`
+        margin: 7.5px 0px;
+      `}
+  ${({ horizontal, small }) =>
     small &&
+    !horizontal &&
     css`
       margin: 0px 7.5px;
     `}
