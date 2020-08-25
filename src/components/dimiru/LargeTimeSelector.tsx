@@ -6,7 +6,7 @@ import useInput, { EventFunction } from "../hooks/useInput";
 interface ITimeProps {
   defaultHour?: number;
   defaultMinute?: number;
-  onChange?: (e: { hour: number; minute: number }) => any;
+  onChange?: EventFunction<ITime>;
 }
 
 const Time: React.FC<ITimeProps> = ({
@@ -20,10 +20,14 @@ const Time: React.FC<ITimeProps> = ({
   useEffect(() => {
     onChange &&
       onChange({
-        hour: +hourInput.value,
-        minute: +minuteInput.value,
+        target: {
+          value: {
+            hour: +hourInput.value,
+            minute: +minuteInput.value,
+          },
+        },
       });
-  }, [hourInput, minuteInput]);
+  }, [hourInput.value, minuteInput.value]);
   return (
     <TimeWrapper>
       <HalfDayWrapper>
@@ -47,7 +51,7 @@ const Time: React.FC<ITimeProps> = ({
   );
 };
 
-interface ITime {
+export interface ITime {
   hour: number;
   minute: number;
 }
@@ -58,10 +62,20 @@ interface IProps {
 }
 
 const LargeTimeSelector: React.FC<IProps> = ({ value, onChange, ...props }) => {
+  const fromInput = useInput<ITime>();
+  const toInput = useInput<ITime>();
+  useEffect(() => {
+    onChange &&
+      onChange({
+        target: {
+          value: [fromInput.value, toInput.value],
+        },
+      });
+  }, [fromInput.value, toInput.value]);
   return (
     <Wrapper {...props}>
-      <Time defaultHour={9} defaultMinute={30} onChange={console.log} />
-      <Time defaultHour={21} defaultMinute={30} />
+      <Time defaultHour={9} defaultMinute={30} {...fromInput} />
+      <Time defaultHour={21} defaultMinute={30} {...toInput} />
     </Wrapper>
   );
 };
@@ -78,6 +92,7 @@ const TimeWrapper = styled.div`
   width: 320px;
   justify-content: space-between;
   align-items: center;
+  margin: 0 auto;
   & + & {
     margin-top: 48px;
   }
