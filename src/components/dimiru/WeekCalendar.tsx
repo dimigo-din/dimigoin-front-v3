@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import css from "@emotion/css";
 import styled from "@emotion/styled";
+import { EventFunction } from "../hooks/useInput";
 
 interface IProps {
   date?: Date;
-  onChange?: (date: Date) => any;
+  onChange?: EventFunction<Date>;
 }
 
 const WeekCalendar: React.FC<IProps> = ({ date, onChange }) => {
@@ -21,7 +22,11 @@ const WeekCalendar: React.FC<IProps> = ({ date, onChange }) => {
     date.setMinutes(0);
     date.setSeconds(0);
     date.setMilliseconds(0);
-    onChange(date);
+    onChange({
+      target: {
+        value: date,
+      },
+    });
   }, [selectedDate]);
   return (
     <Wrapper>
