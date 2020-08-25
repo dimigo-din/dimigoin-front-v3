@@ -1,6 +1,8 @@
-import React, { FormEvent } from "react";
+import React from "react";
 import styled from "@emotion/styled";
 import { EventFunction } from "../hooks/useInput";
+import css from "@emotion/css";
+import { ResponsiveWrapper, Divider } from "../grids/Cols";
 
 interface RadioButtonProps {
   onChange?: (...p: any[]) => any;
@@ -46,26 +48,28 @@ const LogicalButton = styled.input`
 const Wrapper = styled.label`
   font-size: 20px;
   color: #8a8a8a;
-  & + & {
-    margin-left: 30px;
+  &:not(& + &) {
+    margin-right: 30px;
   }
 `;
 
 export const RadioButton: React.FC<
-  React.HTMLAttributes<HTMLLabelElement> & RadioButtonProps
+  React.HTMLAttributes<HTMLInputElement> & RadioButtonProps
 > = ({ disabled, children, ...props }) => {
   if (disabled)
     return (
-      <Wrapper {...props}>
-        <ButtonWrapper>
-          <BlockedIcon></BlockedIcon>
-        </ButtonWrapper>
-        {children}
-      </Wrapper>
+      <div>
+        <Wrapper>
+          <ButtonWrapper>
+            <BlockedIcon></BlockedIcon>
+          </ButtonWrapper>
+          {children}
+        </Wrapper>
+      </div>
     );
   return (
-    <Wrapper {...props}>
-      <LogicalButton type="radio" />
+    <Wrapper>
+      <LogicalButton type="radio" {...props} />
       <ButtonWrapper>
         <CenterCircle />
       </ButtonWrapper>
@@ -87,19 +91,27 @@ interface IProps {
 
 const RadioButtonGroup: React.FC<IProps> = ({ items, name, onChange }) => {
   return (
-    <>
+    <ResponsiveWrapper
+      css={css`
+        flex-wrap: wrap;
+        line-height: 36px;
+      `}
+    >
       {items.map((item) => (
-        <RadioButton
-          name={name}
-          key={item.key}
-          onClick={() =>
-            onChange && item.key && onChange({ target: { value: item } })
-          }
-        >
-          {item.name}
-        </RadioButton>
+        <>
+          <RadioButton
+            name={name}
+            key={item.key}
+            onClick={() =>
+              onChange && item.key && onChange({ target: { value: item } })
+            }
+          >
+            {item.name}
+          </RadioButton>
+          <Divider small />
+        </>
       ))}
-    </>
+    </ResponsiveWrapper>
   );
 };
 
