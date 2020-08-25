@@ -20,4 +20,13 @@ const useInput = <T = string>(
   return { value, onChange };
 };
 
+export const useCheckbox = (initValue?: boolean) => {
+  const [checked, setChecked] = useState(initValue || false);
+  return {
+    checked,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+      setChecked(e.target.checked),
+  };
+};
+
 export default useInput;
