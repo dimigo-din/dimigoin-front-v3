@@ -25,7 +25,7 @@ jobs:
 
       - name: Build                  
         env:
-          CI: true
+          CI: false
         run: yarn build
 
       - name: Deploy                 
