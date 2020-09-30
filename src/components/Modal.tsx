@@ -21,6 +21,7 @@ export const ModalContainer = () => {
   const [visible, setVisivility] = useState(false);
   const [disappearingAnimation, setDisappearingAnimation] = useState(false);
   const disappear = () => {
+    console.log('네')
     setDisappearingAnimation(true);
     setTimeout(() => setVisivility(false), 300);
   };
@@ -40,19 +41,20 @@ export const ModalContainer = () => {
       {...props?.backdropProps}
     >
       <Wrapper onClick={(e) => e.stopPropagation()} {...props?.wrapperProps}>
-        <Card {...props?.cardProps}>{ModalElement}</Card>
+        {ModalElement}
       </Wrapper>
     </Backdrop>
   ) : null;
 };
 
-const Backdrop = styled.div<{ visible: boolean }>`
-  position: absolute;
+export const Backdrop = styled.div<{ visible?: boolean }>`
+  position: fixed;
   width: 100vw;
   height: 100vh;
   z-index: 10;
-  display: flex;
-  justify-content: space-between;
+  top: 0px;
+  left: 0px;
+  overflow-y: scroll;
   backdrop-filter: blur(2px);
   animation: appear 300ms forwards;
 
@@ -84,10 +86,7 @@ const Backdrop = styled.div<{ visible: boolean }>`
   }
 `;
 const Wrapper = styled.div`
-  width: 720px;
-  margin: auto;
-`;
-const Card = styled(DimiCard)`
-  padding: 32px 45px 32px;
-  border-top: 5px solid #3c70e8;
+  /* width: 100%; */
+  margin: 0px auto;
+  box-sizing: border-box;
 `;
