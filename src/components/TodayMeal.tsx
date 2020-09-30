@@ -8,11 +8,11 @@ const MealItem: React.FC<IMealItem> = ({
   name = "",
   menu = "",
 }) => (
-  <MealItemContainer selected={selected}>
-    <MealNameText selected={selected}>{name}</MealNameText>
-    <MealMenuText selected={selected}>{menu}</MealMenuText>
-  </MealItemContainer>
-);
+    <MealItemContainer selected={selected}>
+      <MealNameText selected={selected}>{name}</MealNameText>
+      <MealMenuText selected={selected}>{menu}</MealMenuText>
+    </MealItemContainer>
+  );
 
 export interface IMeal {
   name: string;
@@ -78,7 +78,7 @@ const MealNameText = styled.span<IMealItemSelected>`
     `}
 `;
 
-const MealMenuText = styled.p<IMealItemSelected>`
+export const MealMenuText = styled.p<IMealItemSelected>`
   font-size: 16px;
   font-weight: bold;
   line-height: 1.38;

@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "@emotion/styled";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 import Router from "./router";
 import GlobalStyle from "./components/GlobalStyle";
-import { ModalContainer } from "./components/DimiModal";
+import { ModalContainer } from "./components/Modal";
 import "./webfont";
-
 import dimigoBackgroundImage from "./assets/dimigo-background.svg";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
     <>
       <GlobalStyle />
       <ModalContainer />
+      <ToastContainer />
       <Container>
         <TopLine />
         <RouterWrap>

@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import css from "@emotion/css";
 import { Link } from "react-router-dom";
 import { ResponsiveWrapper, Divider } from "./grids/Cols";
+import { UnstyledLink } from "./Atomics";
 
 interface IProps {
   withBubble?: boolean;
@@ -23,23 +24,24 @@ const CardGroupHeader: React.FC<IProps> = ({
     <Wrapper {...props}>
       <ResponsiveWrapper>
         <Title withBubble={withBubble}>{children}</Title>
-        {subButton ? (
+        {subButton && (
           subButton.route ? (
-            <Link to={subButton.route}>
-              <SubButton>{subButton.text}</SubButton>
-            </Link>
+            <SubButton>
+              <UnstyledLink to={subButton.route}>{subButton.text}
+              </UnstyledLink>
+            </SubButton>
           ) : subButton.action ? (
             <SubButton onClick={subButton.action}>{subButton.text}</SubButton>
           ) : (
-            <SubButton>{subButton.text}</SubButton>
-          )
-        ) : null}
+                <SubButton>{subButton.text}</SubButton>
+              )
+        )}
       </ResponsiveWrapper>
     </Wrapper>
   );
 };
 
-const Title = styled.h1<{ withBubble?: boolean }>`
+export const Title = styled.h1<{ withBubble?: boolean }>`
   font-size: 27px;
   font-weight: 900;
   font-family: "NanumSquare", sans-serif;
