@@ -41,9 +41,11 @@ const DateSelector: React.FC = () => {
 };
 
 const Outgo: React.FC = () => {
-  const submitHandler = () => {};
   const applyData = useInput<OutgoApplyInput>();
-  // const
+
+  const submitHandler = () => {
+    console.log(applyData.value)
+  };
   useEffect(() => {
     // console.log(applyData.value);
   }, [applyData.value]);
