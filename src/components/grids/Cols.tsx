@@ -13,17 +13,19 @@ export const Col = styled.div<{ width?: number }>`
 
 interface IDividerProps {
   visible?: boolean;
-  // small?: boolean;
+  small?: boolean;
   horizontal?: boolean;
 }
 
 export const Divider = styled.div<IDividerProps>`
-  margin: 0px 30px;
-  ${({ horizontal, small }) =>
-    horizontal &&
-    !small &&
+  --divider-width: 30px;
+  ${({ small }) => small && css`
+    --divider-width: 15px;
+  `}
+  margin: 0px var(--divider-width);
+  ${({ horizontal }) => horizontal &&
     css`
-      margin: 30px 0px;
+      margin: var(--divider-width) 0px;
     `}
   ${({ visible }) =>
     visible &&
@@ -32,9 +34,6 @@ export const Divider = styled.div<IDividerProps>`
     `}
 `;
 
-export const SmallDivider = styled.div`
-  margin: 0px 7.5px;
-`
 
 export const ResponsiveScreenWrapper = styled.div`
   display: flex;
@@ -43,7 +42,7 @@ export const ResponsiveScreenWrapper = styled.div`
     flex-direction: column;
 
     & > [class*="-Divider"] {
-      margin: 30px 0px;
+      margin: var(--divider-width) 0px;
     }
   }
 `;
@@ -53,11 +52,8 @@ export const ResponsiveWrapper = styled.div<{ threshold?: number }>`
   @media screen and (max-width: ${({ threshold }) => threshold || 760}px) {
     flex-direction: column;
 
-    & > [class*="-Divider"] {
-      margin: 30px 0px;
-    }
-    & > [class*="SmallDivider"] {
-      margin: 7.5px 0px;
+    & > [class*="Divider"] {
+      margin: var(--divider-width) 0px;
     }
   }
 `;
