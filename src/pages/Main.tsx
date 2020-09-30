@@ -10,6 +10,8 @@ import MyTodayCard, { IMyToday } from "../components/ApplimentStatus";
 import TodayMeal, { IMeal } from "../components/TodayMeal";
 import css from "@emotion/css";
 import SelfStudyStatus from "../components/SelfStudyStatus";
+import MealList from "../components/MealList";
+import { showCardModal } from "../components/DimiCardModal";
 
 const Main: React.FC = () => {
   const [notice, setNotice] = useState<string[]>();
@@ -55,15 +57,17 @@ const Main: React.FC = () => {
                 spaceBetweenCards
               />
             ) : (
-              <TextCardGroup
-                content={[{ text: "등록된 공지사항이 없습니다" }]}
-              />
-            )}
+                <TextCardGroup
+                  content={[{ text: "등록된 공지사항이 없습니다" }]}
+                />
+              )}
           </Col>
           <Divider />
           <Col width={5}>
             <CardGroupHeader>자습 현황</CardGroupHeader>
-            <SelfStudyStatus onButtonPressed={alert} />
+            <SelfStudyStatus onButtonPressed={(d) => {
+              showCardModal(<h1>{d}</h1>)
+            }} />
           </Col>
         </ResponsiveWrapper>
         <Divider horizontal />
@@ -80,14 +84,15 @@ const Main: React.FC = () => {
                 <MyTodayCard key={myToday.name} {...myToday} />
               ))
             ) : (
-              <TextCardGroup content={[{ text: "신청 현황이 없습니다" }]} />
-            )}
+                <TextCardGroup content={[{ text: "신청 현황이 없습니다" }]} />
+              )}
           </Col>
           <Divider />
           <Col width={4} css={fullHeight}>
             <CardGroupHeader
               subButton={{
                 text: "더보기",
+                route: "#meallist"
               }}
             >
               오늘의 급식
@@ -95,11 +100,12 @@ const Main: React.FC = () => {
             {meals ? (
               <TodayMeal meals={meals} />
             ) : (
-              <TextCardGroup content={[{ text: "급식 정보가 없습니다" }]} />
-            )}
+                <TextCardGroup content={[{ text: "급식 정보가 없습니다" }]} />
+              )}
           </Col>
         </ResponsiveWrapper>
       </Container>
+      <MealList />
     </>
   );
 };
