@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
 import Router from "./router";
 import GlobalStyle from "./components/GlobalStyle";
@@ -12,6 +14,7 @@ function App() {
     <>
       <GlobalStyle />
       <ModalContainer />
+      <ToastContainer />
       <Container>
         <TopLine />
         <RouterWrap>
