@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { EventFunction } from "../hooks/useInput";
 import css from "@emotion/css";
-import { ResponsiveWrapper, SmallDivider } from "../grids/Cols";
+import { ResponsiveWrapper, Divider } from "../grids/Cols";
 
 interface RadioButtonProps {
   onChange?: (...p: any[]) => any;
@@ -108,7 +108,7 @@ const RadioButtonGroup: React.FC<IProps> = ({ items, name, onChange }) => {
           >
             {item.name}
           </RadioButton>
-          <SmallDivider />
+          <Divider small />
         </>
       ))}
     </ResponsiveWrapper>

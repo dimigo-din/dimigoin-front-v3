@@ -8,7 +8,7 @@ import useConsole from '../hooks/useConsole'
 import { Horizontal } from './Atomics'
 import { Title as CardTitle } from './CardGroupHeader'
 import DimiCard from './dimiru/DimiCard'
-import { ResponsiveWrapper, SmallDivider } from './grids/Cols'
+import { Divider, ResponsiveWrapper } from './grids/Cols'
 
 export interface IDailyMealProps {
   header: string;
@@ -19,7 +19,7 @@ const DailyMeal: React.FC<IDailyMealProps> = ({ header, meals, highlighted }) =>
   <DailyMealHeader>{header}요일</DailyMealHeader>
   {meals.map(meal =>
     <>
-      <SmallDivider />
+      <Divider small />
       <DailyMealItem>
         {meal}
       </DailyMealItem>

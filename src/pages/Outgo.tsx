@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import css from "@emotion/css";
 import styled from "@emotion/styled";
 import NavigationBar from "../components/NavigationBar";
-import { ResponsiveWrapper, Col, Divider, SmallDivider } from "../components/grids/Cols";
+import { ResponsiveWrapper, Col, Divider } from "../components/grids/Cols";
 import OutgoApply, { OutgoApplyInput } from "../components/OutgoApply";
 import CardGroupHeader from "../components/CardGroupHeader";
 import OutgoApplier from "../components/OutgoApplier";
@@ -75,7 +75,7 @@ const Outgo: React.FC = () => {
           <Col width={6.5}>
             <CardGroupHeader>신청자</CardGroupHeader>
             <OutgoApplier />
-            <Divider horizontal small />
+            <Divider small horizontal />
             <ResponsiveWrapper threshold={1400}>
               <Col width={4}>
                 <CardGroupHeader>외출시간</CardGroupHeader>
@@ -83,7 +83,7 @@ const Outgo: React.FC = () => {
                   <DateSelector />
                 </Card>
               </Col>
-              <SmallDivider />
+              <Divider small />
               <Col width={6}>
                 <CardGroupHeader>주의사항</CardGroupHeader>
                 <Card
