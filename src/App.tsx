@@ -5,7 +5,6 @@ import Router from "./router";
 import GlobalStyle from "./components/GlobalStyle";
 import { ModalContainer } from "./components/Modal";
 import "./webfont";
-
 import dimigoBackgroundImage from "./assets/dimigo-background.svg";
 
 function App() {

@@ -52,10 +52,9 @@ export const Backdrop = styled.div<{ visible?: boolean }>`
   width: 100vw;
   height: 100vh;
   z-index: 10;
-  /* display: flex; */
   top: 0px;
   left: 0px;
-  /* justify-content: space-between; */
+  overflow-y: scroll;
   backdrop-filter: blur(2px);
   animation: appear 300ms forwards;
 

@@ -41,7 +41,7 @@ const CardGroupHeader: React.FC<IProps> = ({
   );
 };
 
-const Title = styled.h1<{ withBubble?: boolean }>`
+export const Title = styled.h1<{ withBubble?: boolean }>`
   font-size: 27px;
   font-weight: 900;
   font-family: "NanumSquare", sans-serif;
