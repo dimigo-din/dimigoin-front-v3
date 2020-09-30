@@ -93,7 +93,7 @@ const Main: React.FC = () => {
             <CardGroupHeader
               subButton={{
                 text: "더보기",
-                action: () => show(() => <MealList />, {
+                action: () => show((close) => <MealList goBack={close} />, {
                   wrapperProps: {
                     css: css`max-width: 1600px; padding: 60px 20px 20px;`
                   }

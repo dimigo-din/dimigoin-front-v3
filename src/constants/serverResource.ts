@@ -1,5 +1,5 @@
 export interface IMeal {
-  date: Date;
+  date: string;
   breakfast: string[];
   lunch: string[];
   dinner: string[];
