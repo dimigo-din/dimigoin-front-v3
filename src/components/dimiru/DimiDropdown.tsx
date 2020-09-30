@@ -1,33 +1,35 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
+import { EventFunction } from "../hooks/useInput";
 
+export interface IDropdownItem {
+  name: string;
+  key?: string;
+}
 interface IProps {
-  items: {
-    name: string;
-    key: string;
-  }[];
+  items: IDropdownItem[];
   placeholder: string;
   requireMessage?: string;
-  onChange?: (e: number) => any;
+  onChange?: EventFunction<IDropdownItem>;
 }
 
-export default ({
-  items,
-  placeholder,
-  onChange,
-  requireMessage,
-}: IProps & React.DetailsHTMLAttributes<HTMLDivElement>) => {
+export default ({ items, placeholder, onChange, requireMessage }: IProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [opened, setOpened] = useState(false);
-  const [inited, setInited] = useState(true);
-  useEffect(() => {
-    if (onChange) onChange(selectedIndex);
-  }, [selectedIndex]);
+  const clickHandler = ({
+    key,
+    name,
+    index,
+  }: IDropdownItem & { index: number }) => {
+    setSelectedIndex(index - 1);
+    onChange && onChange({ target: { value: { key, name } } });
+  };
   return (
     <FixedHeightWrapper opened={opened}>
       <Wrapper
-        highlighted={opened || selectedIndex !== -1}
+        highlighted={opened}
+        blueBorder={opened || selectedIndex !== -1}
         onClick={() => setOpened((b) => !b)}
       >
         {[
@@ -39,7 +41,7 @@ export default ({
         ].map(({ key, name }, index) => (
           <Item
             key={key}
-            onClick={() => setSelectedIndex(index - 1)}
+            onClick={() => clickHandler({ key, name, index })}
             highlighted={selectedIndex !== -1 && selectedIndex === index - 1}
             visible={selectedIndex === index - 1 || opened}
           >
@@ -66,7 +68,7 @@ const highlightedBorder = css`
   border-color: #3c70e8;
 `;
 
-const Wrapper = styled.div<{ highlighted?: boolean }>`
+const Wrapper = styled.div<{ highlighted?: boolean; blueBorder?: boolean }>`
   /* padding: 18px 16px; */
   border-radius: 6px;
   border: solid 1px #8a8a8a;
@@ -75,7 +77,16 @@ const Wrapper = styled.div<{ highlighted?: boolean }>`
   &:hover {
     ${highlightedBorder}
   }
-  ${({ highlighted }) => highlighted && highlightedBorder}
+  ${({ highlighted }) =>
+    highlighted &&
+    css`
+      box-shadow: 0 0 3px 0 rgba(60, 112, 232, 0.45);
+    `}
+  ${({ blueBorder }) =>
+    blueBorder &&
+    css`
+      border-color: #3c70e8;
+    `}
 `;
 
 const Item = styled.div<{ highlighted?: boolean; visible?: boolean }>`
