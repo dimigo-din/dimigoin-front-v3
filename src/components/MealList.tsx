@@ -1,14 +1,16 @@
 import css from '@emotion/css'
 import React, { useEffect, useState } from 'react'
-// import { Backdrop } from './DimiCardModal'
+import DimiCard from './dimiru/DimiCard'
 
 const MealList: React.FC = () => {
-  // return <Backdrop>
-  //   <div css={css`
+  return <DimiCard css={css`
+    border-top: 5px solid #3c70e8;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    /* width: 100%; */
+  `}>
 
-  //   `}></div>
-  // </Backdrop>
-  return <></>
+  </DimiCard>
 }
 
 export default MealList

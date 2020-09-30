@@ -12,6 +12,7 @@ import css from "@emotion/css";
 import SelfStudyStatus from "../components/SelfStudyStatus";
 import MealList from "../components/MealList";
 import { showCardModal } from "../components/DimiCardModal";
+import { show } from "../components/Modal";
 
 const Main: React.FC = () => {
   const [notice, setNotice] = useState<string[]>();
@@ -66,7 +67,7 @@ const Main: React.FC = () => {
           <Col width={5}>
             <CardGroupHeader>자습 현황</CardGroupHeader>
             <SelfStudyStatus onButtonPressed={(d) => {
-              showCardModal(<h1>{d}</h1>)
+              showCardModal(() => <h1>{d}</h1>)
             }} />
           </Col>
         </ResponsiveWrapper>
@@ -92,7 +93,11 @@ const Main: React.FC = () => {
             <CardGroupHeader
               subButton={{
                 text: "더보기",
-                route: "#meallist"
+                action: () => show(() => <MealList />, {
+                  wrapperProps: {
+                    css: css`max-width: 1600px; padding: 60px 20px 20px;`
+                  }
+                })
               }}
             >
               오늘의 급식
@@ -105,7 +110,6 @@ const Main: React.FC = () => {
           </Col>
         </ResponsiveWrapper>
       </Container>
-      <MealList />
     </>
   );
 };
