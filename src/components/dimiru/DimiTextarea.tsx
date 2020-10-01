@@ -4,7 +4,7 @@ import css from "@emotion/css";
 
 export default styled.textarea`
   border-radius: 6px;
-  border: solid 1px #8a8a8a;
+  border: solid 1px #D1D1D1;
   width: 100%;
   resize: vertical;
   box-sizing: border-box;
@@ -12,6 +12,6 @@ export default styled.textarea`
   padding: 18px 16px;
   font-size: 18px;
   &::placeholder {
-    color: #8a8a8a;
+    color: #D1D1D1;
   }
 `;

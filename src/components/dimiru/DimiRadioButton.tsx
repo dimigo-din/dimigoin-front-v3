@@ -10,70 +10,41 @@ interface RadioButtonProps {
   disabled?: boolean;
   children: string;
 }
-const ButtonWrapper = styled.div`
-  vertical-align: middle;
-  border: solid 1.5px #8a8a8a;
+const Circle = styled.div<{ disabled?: boolean }>`
   width: 26px;
   height: 26px;
-  border-radius: 26px;
-  display: inline-grid;
-  transition: 200ms cubic-bezier(0, 0.59, 0.12, 0.98);
-  margin-right: 16px;
-  place-items: center;
-`;
-const CenterCircle = styled.div`
-  opacity: 0;
-  width: 12px;
-  height: 12px;
-  border-radius: 12px;
-  transition: 200ms cubic-bezier(0, 0.59, 0.12, 0.98);
-`;
-const BlockedIcon = styled.div`
-  width: 10px;
-  height: 10px;
-  transform: translate(50%, 50%);
-  border: 1px solid red;
+  border: 1.5px solid #8A8A8A;
+  border-radius: 13px;
+  box-sizing: border-box;
+  transition: 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
 `;
 const LogicalButton = styled.input`
   display: none;
-  &:checked + div {
-    border: solid 1.5px var(--main-theme-accent);
-  }
-  &:checked + div div {
-    opacity: 1;
-    background-color: var(--main-theme-accent);
+  &:checked+div {
+    border-width: 7px;
+    border-color: var(--main-theme-accent);
   }
 `;
 
 const Wrapper = styled.label`
-  font-size: 20px;
-  color: #8a8a8a;
-  &:not(& + &) {
-    margin-right: 30px;
-  }
+  display: flex;
+  align-items: center;
 `;
+
+const Label = styled.p`
+  font-size: 20px;
+  margin-left: 15px;
+  color: #8A8A8A;
+`
 
 export const RadioButton: React.FC<
   React.HTMLAttributes<HTMLInputElement> & RadioButtonProps
 > = ({ disabled, children, ...props }) => {
-  if (disabled)
-    return (
-      <div>
-        <Wrapper>
-          <ButtonWrapper>
-            <BlockedIcon></BlockedIcon>
-          </ButtonWrapper>
-          {children}
-        </Wrapper>
-      </div>
-    );
   return (
     <Wrapper>
-      <LogicalButton type="radio" {...props} />
-      <ButtonWrapper>
-        <CenterCircle />
-      </ButtonWrapper>
-      {children}
+      <LogicalButton type="radio" {...props} disabled={disabled} />
+      <Circle disabled={disabled} />
+      <Label>{children}</Label>
     </Wrapper>
   );
 };
@@ -81,6 +52,7 @@ export const RadioButton: React.FC<
 export interface RadioButtonItem {
   name: string;
   key?: string;
+  disabled?: boolean;
 }
 
 interface IProps {
@@ -102,6 +74,7 @@ const RadioButtonGroup: React.FC<IProps> = ({ items, name, onChange }) => {
           <RadioButton
             name={name}
             key={item.key}
+            disabled={item.disabled}
             onClick={() =>
               onChange && item.key && onChange({ target: { value: item } })
             }
