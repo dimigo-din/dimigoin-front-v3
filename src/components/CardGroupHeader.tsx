@@ -71,10 +71,6 @@ const SubButton = styled.p`
 
 const Wrapper = styled.section`
   margin-bottom: 14px;
-
-  * + & {
-    margin-top: 54px;
-  }
 `;
 
 export default CardGroupHeader;

@@ -54,7 +54,7 @@ export default () => {
                     </Desc>
                   </Row>
                 </Col>
-                <Divider visible />
+                <Divider data-divider visible />
                 <Col width={10}>
                   <CardTitle
                     css={css`
@@ -121,7 +121,7 @@ export default () => {
                 },
               ]}
             />
-
+            <Divider horizontal small data-divider />
             <CardGroupHeader withBubble>우리반 신청자</CardGroupHeader>
             <DimiCard leftBorder>
               <div
@@ -148,7 +148,7 @@ export default () => {
               </div>
             </DimiCard>
           </Col>
-          <Divider />
+          <Divider data-divider />
           <Col width={5.5}>
             {[
               {
@@ -163,12 +163,13 @@ export default () => {
                 time: "21:10 - 22:30",
                 isApplied: true,
               },
-            ].map((status, index) => (
+            ].map((status, index) => (<>
+              {index !== 0 && <Divider horizontal small data-divider />}
               <IngansilStatus
                 key={status.time}
                 {...status}
                 name={`야간 자율학습 ${index + 1}타임`}
-              />
+              /></>
             ))}
           </Col>
         </ResponsiveWrapper>

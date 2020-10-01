@@ -43,7 +43,7 @@ const Time: React.FC<ITimeProps> = ({
       </HalfDayWrapper>
       <IndicatorWrapper>
         <Indicator {...hourInput} />
-        <Divider>:</Divider>
+        <Divider data-divider>:</Divider>
         <Indicator {...minuteInput} />
       </IndicatorWrapper>
       <FromUntil>부터</FromUntil>
