@@ -10,6 +10,16 @@ export const Horizontal = styled.div`
   display: flex;
 `
 
+export const Description = styled.div`
+  margin-left: 12px;
+`;
+
+export const HeaderIconWrapper = styled.div`
+  flex: 1;
+  text-align: right;
+  color: #8a8a8a;
+`
+
 // export const Highlighted = styled.div`
 //   background-color: rgba(60, 112, 232, 0.07);
 // `

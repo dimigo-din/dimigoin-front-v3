@@ -14,6 +14,7 @@ export const Col = styled.div<{ width?: number }>`
 interface IDividerProps {
   visible?: boolean;
   small?: boolean;
+  size?: number;
   horizontal?: boolean;
 }
 
@@ -21,6 +22,9 @@ export const Divider = styled.div<IDividerProps>`
   --divider-width: 30px;
   ${({ small }) => small && css`
     --divider-width: 15px;
+  `}
+  ${({ size }) => size && css`
+    --divider-width: ${size}px;
   `}
   margin: 0px var(--divider-width);
   ${({ horizontal }) => horizontal &&

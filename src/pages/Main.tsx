@@ -13,6 +13,7 @@ import SelfStudyStatus from "../components/SelfStudyStatus";
 import MealList from "../components/MealList";
 import { showCardModal } from "../components/DimiCardModal";
 import { show } from "../components/Modal";
+import PageWrapper from "../components/grids/PageWrapper";
 
 const Main: React.FC = () => {
   const [notice, setNotice] = useState<string[]>();
@@ -41,13 +42,14 @@ const Main: React.FC = () => {
   return (
     <>
       <NavigationBar />
-      <Container>
+      <PageWrapper>
         <ResponsiveWrapper>
           <Col width={5}>
             <CardGroupHeader
               withBubble
               subButton={{
                 text: "더보기",
+                route: '/notices'
               }}
             >
               공지사항
@@ -109,17 +111,11 @@ const Main: React.FC = () => {
               )}
           </Col>
         </ResponsiveWrapper>
-      </Container>
+      </PageWrapper>
     </>
   );
 };
 
-const Container = styled.div`
-  max-width: 1560px;
-  margin: 0 auto;
-  width: 90%;
-  padding-top: 70px;
-`;
 
 const fullHeight = css`
   display: flex;
@@ -127,5 +123,3 @@ const fullHeight = css`
 `;
 
 export default Main;
-
-// const Container = styled(NaiveContainer)``;

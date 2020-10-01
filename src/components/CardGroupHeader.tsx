@@ -45,6 +45,7 @@ export const Title = styled.h1<{ withBubble?: boolean }>`
   font-size: 27px;
   font-weight: 900;
   font-family: "NanumSquare", sans-serif;
+  color: #333333;
   ${({ withBubble }) =>
     withBubble &&
     css`
@@ -54,7 +55,7 @@ export const Title = styled.h1<{ withBubble?: boolean }>`
         width: 8px;
         height: 8px;
         border-radius: 4px;
-        background-color: #ff6359;
+        background-color: #E83C77;
         content: " ";
         margin-left: 4px;
         margin-top: -3px;
