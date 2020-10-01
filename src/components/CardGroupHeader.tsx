@@ -1,9 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
-import { Link } from "react-router-dom";
-import { ResponsiveWrapper, Divider } from "./grids/Cols";
-import { UnstyledLink } from "./Atomics";
+import { Horizontal, UnstyledLink } from "./Atomics";
 
 interface IProps {
   withBubble?: boolean;
@@ -22,7 +20,7 @@ const CardGroupHeader: React.FC<IProps> = ({
 }) => {
   return (
     <Wrapper {...props}>
-      <ResponsiveWrapper>
+      <Horizontal>
         <Title withBubble={withBubble}>{children}</Title>
         {subButton && (
           subButton.route ? (
@@ -36,7 +34,7 @@ const CardGroupHeader: React.FC<IProps> = ({
                 <SubButton>{subButton.text}</SubButton>
               )
         )}
-      </ResponsiveWrapper>
+      </Horizontal>
     </Wrapper>
   );
 };

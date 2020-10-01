@@ -14,6 +14,7 @@ import TextCardGroup from "../components/TextCardGroup";
 import { IngansilStatus } from "../components/IngangsilStatus";
 import { ReactComponent as CircleSvg } from "../assets/icons/circle.svg";
 import Container from "../components/grids/PageWrapper";
+import { Horizontal } from "../components/Atomics";
 
 export default () => {
   return (
@@ -125,28 +126,15 @@ export default () => {
             <Divider horizontal small data-divider />
             <CardGroupHeader withBubble>우리반 신청자</CardGroupHeader>
             <DimiCard leftBorder>
-              <div
-                css={css`
-                  display: flex;
-                `}
-              >
+              <ResponsiveWrapper>
                 <IngangTime>1타임</IngangTime>
-                {["손승욱", "강혁진", "이승민", "우상윤"].map((name) => (
-                  <Inganger key={name}>{name}</Inganger>
-                ))}
-              </div>
-            </DimiCard>
-            <DimiCard leftBorder>
-              <div
-                css={css`
-                  display: flex;
-                `}
-              >
-                <IngangTime>1타임</IngangTime>
-                {["손승욱2", "강혁진2", "이승민2", "우상윤2"].map((name) => (
-                  <Inganger key={name}>{name}</Inganger>
-                ))}
-              </div>
+                <Divider small data-divider />
+                <IngangerWrapper>
+                  {["손승욱", "강혁진", "이승민", "우상윤", "주의점은", "위", "속성은", "웹킷엔진을", "사용하지", "않는", "브라우저에서는", "정상적으로", "노출이", "안되기때문에", "height값을", "줘야하는데"].map((name) => (
+                    <Inganger key={name}>{name}</Inganger>
+                  ))}
+                </IngangerWrapper>
+              </ResponsiveWrapper>
             </DimiCard>
           </Col>
           <Divider data-divider />
@@ -307,7 +295,7 @@ const Ticket = styled.i`
 
 const Info = styled.div`
   color: #8a8a8a;
-
+  line-height: 24px;
   & p + p {
     margin-top: 12px;
   }
@@ -317,15 +305,22 @@ const Info = styled.div`
   }
 `;
 
-const Inganger = styled.span`
+const Inganger = styled.div`
   color: #8a8a8a;
-  margin-left: 16px;
-
-  h1 + & {
-    margin-left: 32px;
+  margin: 8px;
+  &{
+    
   }
 `;
 
 const IngangTime = styled(CardTitle)`
   margin-bottom: 0px;
+  flex-basis: 1;
+  flex-shrink: 0;
 `;
+
+const IngangerWrapper = styled.div`
+  margin: -8px;
+  display: flex;
+  flex-wrap: wrap;
+`
