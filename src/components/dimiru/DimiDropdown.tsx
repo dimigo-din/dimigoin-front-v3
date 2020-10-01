@@ -64,14 +64,13 @@ const FixedHeightWrapper = styled.div<{ opened?: boolean }>`
 `;
 
 const highlightedBorder = css`
-  box-shadow: 0 0 3px 0 rgba(60, 112, 232, 0.45);
+  box-shadow: 0 0 6px 0 #F8C5D7;
   border-color: var(--main-theme-accent);
 `;
 
 const Wrapper = styled.div<{ highlighted?: boolean; blueBorder?: boolean }>`
-  /* padding: 18px 16px; */
   border-radius: 6px;
-  border: solid 1px #8a8a8a;
+  border: solid 1px #D1D1D1;
   transition: 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
   background-color: white;
   &:hover {
@@ -80,7 +79,7 @@ const Wrapper = styled.div<{ highlighted?: boolean; blueBorder?: boolean }>`
   ${({ highlighted }) =>
     highlighted &&
     css`
-      box-shadow: 0 0 3px 0 rgba(60, 112, 232, 0.45);
+      box-shadow: 0 0 6px 0 #F8C5D7;
     `}
   ${({ blueBorder }) =>
     blueBorder &&
@@ -90,7 +89,7 @@ const Wrapper = styled.div<{ highlighted?: boolean; blueBorder?: boolean }>`
 `;
 
 const Item = styled.div<{ highlighted?: boolean; visible?: boolean }>`
-  color: #8a8a8a;
+  color: #8A8A8A;
   padding: 18px 16px;
   font-size: 18px;
 
