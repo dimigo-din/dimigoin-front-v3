@@ -9,10 +9,10 @@ const Card = styled(DimiCard)`
   border-top: 5px solid var(--main-theme-accent);
 `;
 
-export const showCardModal = (el: (close: () => void) => JSX.Element) => {
+export const showCardModal = (el: (close: () => void) => JSX.Element, onClose?: () => void) => {
   show((close) => <Card css={css`
     width: 720px;
   `}>
     {el(close)}
-  </Card>)
+  </Card>, undefined, onClose)
 }

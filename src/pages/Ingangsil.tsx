@@ -13,6 +13,7 @@ import {
 import TextCardGroup from "../components/TextCardGroup";
 import { IngansilStatus } from "../components/IngangsilStatus";
 import { ReactComponent as CircleSvg } from "../assets/icons/circle.svg";
+import Container from "../components/grids/PageWrapper";
 
 export default () => {
   return (
@@ -177,13 +178,6 @@ export default () => {
     </>
   );
 };
-
-const Container = styled.div`
-  max-width: 1560px;
-  margin: 0 auto;
-  width: 90%;
-  padding-top: 70px;
-`;
 
 const Row = styled.div`
   display: flex;

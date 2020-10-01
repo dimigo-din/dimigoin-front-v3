@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { ReactComponent as CloseSvg } from '../assets/icons/close.svg'
 import getMeals from '../functions/getMeals'
 import useConsole from '../hooks/useConsole'
-import { Horizontal } from './Atomics'
+import { HeaderIconWrapper, Horizontal } from './Atomics'
 import { Title as CardTitle } from './CardGroupHeader'
 import DimiCard from './dimiru/DimiCard'
 import { Divider, ResponsiveWrapper } from './grids/Cols'
@@ -86,17 +86,11 @@ const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
     <Horizontal css={css`margin: 36px 72px 24px;`}>
       <CardTitle>주간 급식표</CardTitle>
       <CardTitle css={css`font-weight: 400; margin-left: 24px;`}>{date.getMonth() + 1}월 {getThisWeek(date)}째 주</CardTitle>
-      {goBack && <CloseWrapper><CloseSvg onClick={goBack} /></CloseWrapper>}
+      {goBack && <HeaderIconWrapper><CloseSvg onClick={goBack} /></HeaderIconWrapper>}
     </Horizontal>
     {meals?.map(meal => <DailyMeal {...meal} />)}
 
   </DimiCard>
 }
-
-const CloseWrapper = styled.div`
-  flex: 1;
-  text-align: right;
-  color: #8a8a8a;
-`
 
 export default MealList

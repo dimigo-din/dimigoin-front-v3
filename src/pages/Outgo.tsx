@@ -14,6 +14,7 @@ import LargeTimeSelector, {
 import Checkbox from "../components/dimiru/DimiCheckbox";
 import Button from "../components/dimiru/DimiButton";
 import useInput from "../components/hooks/useInput";
+import PageWrapper from "../components/grids/PageWrapper";
 
 const DateSelector: React.FC = () => {
   const dayInput = useInput<Date>();
@@ -52,7 +53,7 @@ const Outgo: React.FC = () => {
   return (
     <>
       <NavigationBar />
-      <Container>
+      <PageWrapper>
         <ResponsiveWrapper threshold={1200}>
           <Col width={3.5}>
             <CardGroupHeader
@@ -129,18 +130,11 @@ const Outgo: React.FC = () => {
             </ResponsiveWrapper>
           </Col>
         </ResponsiveWrapper>
-      </Container>
+      </PageWrapper>
     </>
   );
 };
 export default Outgo;
-const Container = styled.div`
-  max-width: 1560px;
-  margin: 0 auto;
-  width: 90%;
-  padding-top: 70px;
-`;
-
 const Info = styled.div`
   font-size: 20px;
   font-weight: 700;

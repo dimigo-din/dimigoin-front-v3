@@ -1,11 +1,11 @@
 import * as React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-// import PrivateRoute from '../components/PrivateRoute';
 
 import { Main } from "../pages";
 import Auth from "./Auth";
 import Ingangsil from "../pages/Ingangsil";
 import Outgo from "../pages/Outgo";
+import Notices from "../pages/Notices";
 
 const Router: React.FC = () => (
   <BrowserRouter>
@@ -13,6 +13,8 @@ const Router: React.FC = () => (
       <Route path="/auth" component={Auth} />
       <Route path="/ingangsil" component={Ingangsil} />
       <Route path="/outgo" component={Outgo} />
+      <Route path="/notices/:articleId" component={Notices} />
+      <Route path="/notices" component={Notices} />
       <Route path="/" exact component={Main} />
     </Switch>
   </BrowserRouter>

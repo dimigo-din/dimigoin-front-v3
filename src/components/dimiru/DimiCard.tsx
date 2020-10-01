@@ -5,7 +5,7 @@ import css from '@emotion/css';
 type MouseEventHandler = (event: React.MouseEvent<HTMLDivElement>) => void;
 type FocusEventHandler = (event: React.FocusEvent<HTMLDivElement>) => void;
 
-export interface IDimiCard {
+export interface IDimiCard extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
   children?: React.ReactNode;
   button?: React.ReactNode;
@@ -37,6 +37,7 @@ const DimiCard: React.FC<IDimiCard> = ({
   onMouseOut,
   onBlur,
   leftBorder,
+  ...props
 }) => (
     <Container
       className={className}
@@ -50,6 +51,7 @@ const DimiCard: React.FC<IDimiCard> = ({
       onMouseOut={onMouseOut}
       onBlur={onBlur}
       leftBorder={leftBorder}
+      {...props}
     >
       {button ? <Content>{children}</Content> : children}
       {button && (

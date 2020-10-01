@@ -2,6 +2,7 @@ import React from "react";
 import css from "@emotion/css";
 import Card, { CardTitle } from "./dimiru/DimiCard";
 import styled from "@emotion/styled";
+import { Description } from "./Atomics";
 
 export interface IMyToday {
   name: string;
@@ -19,14 +20,14 @@ const MyTodayCard: React.FC<IProps> = ({ name, location, time, className }) => {
       {time && (
         <Row>
           <Time />
-          <Desc>{time}</Desc>
+          <Description>{time}</Description>
         </Row>
       )}
 
       {location && (
         <Row>
           <Pin />
-          <Desc>{location}</Desc>
+          <Description>{location}</Description>
         </Row>
       )}
     </Card>
@@ -95,10 +96,6 @@ const Row = styled.div`
   & + div {
     margin-top: 9px;
   }
-`;
-
-const Desc = styled.div`
-  margin-left: 12px;
 `;
 
 export default MyTodayCard;
