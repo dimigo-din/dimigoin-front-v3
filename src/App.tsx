@@ -46,10 +46,11 @@ const TopLine = styled.div`
 
 const RouterWrap = styled.main`
   flex: 1 0 auto;
+  padding-bottom: 20px;
 `;
 
 const BottomImage = styled.img`
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
