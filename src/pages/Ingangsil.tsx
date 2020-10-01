@@ -19,7 +19,7 @@ export default () => {
     <>
       <NavigationBar />
       <Container>
-        <ResponsiveScreenWrapper>
+        <ResponsiveWrapper threshold={1100}>
           <Col width={4.5}>
             <CardGroupHeader>신청안내</CardGroupHeader>
             <DimiCard
@@ -65,7 +65,7 @@ export default () => {
                   </CardTitle>
                   <Row
                     css={css`
-                      color: #3c70e8;
+                      color: var(--main-theme-accent);
                     `}
                   >
                     <Ticket />
@@ -171,7 +171,7 @@ export default () => {
               />
             ))}
           </Col>
-        </ResponsiveScreenWrapper>
+        </ResponsiveWrapper>
       </Container>
     </>
   );

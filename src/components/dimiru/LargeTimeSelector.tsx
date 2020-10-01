@@ -107,7 +107,7 @@ const HalfDay = styled.div<{ selected?: boolean }>`
   ${({ selected }) =>
     selected &&
     css`
-      color: #3c70e8;
+      color: var(--main-theme-accent);
     `}
 `;
 

@@ -23,7 +23,7 @@ const style = {
     justify-content: center;
     padding: 18px;
     appearance: none;
-    background-color: #3c70e8;
+    background-color: var(--main-theme-accent);
     border-radius: 5px;
     color: #fff;
     cursor: pointer;

@@ -2,7 +2,6 @@ import css from '@emotion/css'
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { ReactComponent as CloseSvg } from '../assets/icons/close.svg'
-import { HIGHLIGHTED_BACKGROUND_COLOR } from '../constants'
 import getMeals from '../functions/getMeals'
 import useConsole from '../hooks/useConsole'
 import { Horizontal } from './Atomics'
@@ -39,9 +38,9 @@ const DailyMealWrapper = styled(ResponsiveWrapper) <{ highlighted?: boolean }>`
     align-items: unset;
   }
   ${({ highlighted }) => highlighted && css`
-    background-color: ${HIGHLIGHTED_BACKGROUND_COLOR};
+    background-color: var(--main-theme-accent-background);
     & h2 {
-      color: #3c70e8;
+      color: var(--main-theme-accent);
     }
     & p {
       color: #333333;
@@ -79,7 +78,7 @@ const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
   useConsole('meals', meals)
   if (!meals) return <></>
   return <DimiCard css={css`
-    border-top: 5px solid #3c70e8;
+    border-top: 5px solid var(--main-theme-accent);
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     padding: 0px;

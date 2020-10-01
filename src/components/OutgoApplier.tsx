@@ -48,8 +48,8 @@ const InputChip = styled.input`
   width: 86px;
   text-align: center;
   background-color: transparent;
-  border: solid 2px #3c70e8;
-  color: #3c70e8;
+  border: solid 2px var(--main-theme-accent);
+  color: var(--main-theme-accent);
   border-radius: 36px;
   font-size: 16px;
   padding: 0px 24px;
@@ -59,7 +59,7 @@ const InputChip = styled.input`
   line-height: 48px;
   font-weight: 700;
   &::placeholder {
-    color: #3c70e8;
+    color: var(--main-theme-accent);
   }
 `;
 

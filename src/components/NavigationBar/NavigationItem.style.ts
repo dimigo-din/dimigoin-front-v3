@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import css from "@emotion/css";
 
 export const NavigationContainer = styled.div`
-  width: 89.9px;
+  padding: 0px 2vw;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -24,7 +24,7 @@ export const NavigationTitle = styled.span<{ selected?: boolean }>`
     selected &&
     css`
       font-weight: 700;
-      color: #3c70e8;
+      color: var(--main-theme-accent);
     `}
 `;
 
@@ -38,7 +38,7 @@ export const NavigationBottomBar = styled.div`
   width: 100%;
   height: 5px;
   border-radius: 2px;
-  background-color: #3c70e8;
+  background-color: var(--main-theme-accent);
   position: absolute;
   left: 0;
   right: 0;

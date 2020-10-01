@@ -65,7 +65,7 @@ const FixedHeightWrapper = styled.div<{ opened?: boolean }>`
 
 const highlightedBorder = css`
   box-shadow: 0 0 3px 0 rgba(60, 112, 232, 0.45);
-  border-color: #3c70e8;
+  border-color: var(--main-theme-accent);
 `;
 
 const Wrapper = styled.div<{ highlighted?: boolean; blueBorder?: boolean }>`
@@ -85,7 +85,7 @@ const Wrapper = styled.div<{ highlighted?: boolean; blueBorder?: boolean }>`
   ${({ blueBorder }) =>
     blueBorder &&
     css`
-      border-color: #3c70e8;
+      border-color: var(--main-theme-accent);
     `}
 `;
 
@@ -97,7 +97,7 @@ const Item = styled.div<{ highlighted?: boolean; visible?: boolean }>`
   ${({ highlighted }) =>
     highlighted &&
     css`
-      color: #3c70e8;
+      color: var(--main-theme-accent);
     `}
 
   /* Belows are property for animating */

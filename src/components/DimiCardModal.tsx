@@ -6,7 +6,7 @@ import { show } from './Modal'
 
 const Card = styled(DimiCard)`
   padding: 32px 45px 32px;
-  border-top: 5px solid #3c70e8;
+  border-top: 5px solid var(--main-theme-accent);
 `;
 
 export const showCardModal = (el: (close: () => void) => JSX.Element) => {

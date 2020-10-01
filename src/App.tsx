@@ -37,7 +37,7 @@ const Container = styled.div`
 const TopLine = styled.div`
   width: 100%;
   height: 12px;
-  background-color: #3c70e8;
+  background-color: var(--main-theme-accent);
   position: absolute;
   top: 0;
   left: 0;
@@ -46,10 +46,11 @@ const TopLine = styled.div`
 
 const RouterWrap = styled.main`
   flex: 1 0 auto;
+  padding-bottom: 20px;
 `;
 
 const BottomImage = styled.img`
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;

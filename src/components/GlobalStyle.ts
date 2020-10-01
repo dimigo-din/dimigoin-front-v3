@@ -4,7 +4,10 @@ import styledReset from "styled-reset";
 const GlobalStyle = createGlobalStyle`
   ${styledReset}
   @font-face { font-family: 'NanumSquareRound'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff') format('woff'); font-weight: normal; font-style: normal; }
-
+  :root {
+    --main-theme-accent: #E83C77;
+    --main-theme-accent-background: #FFFBFC;
+  }
   * {
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
     font-family: 'NanumSquare', -apple-system, BlinkMacSystemFont,

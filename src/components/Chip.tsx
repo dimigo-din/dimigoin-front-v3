@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 const Chip = styled.span`
   font-size: 16px;
   padding: 9px 24px;
-  background-color: #3c70e8;
+  background-color: var(--main-theme-accent);
   color: white;
   font-weight: 700;
   border-radius: 36px;

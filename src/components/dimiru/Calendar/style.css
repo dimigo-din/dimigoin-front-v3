@@ -65,7 +65,7 @@
 }
 
 .react-calendar__tile--active {
-  background-color: #3c70e8;
+  background-color: var(--main-theme-accent);
   color: white;
   border-radius: 5px;
 }
@@ -74,7 +74,7 @@
   color: #ff4a4a;
 }
 .react-calendar__month-view__weekdays__weekday:nth-child(7) {
-  color: #3c70e8;
+  color: var(--main-theme-accent);
 }
 .react-calendar__month-view__days__day--neighboringMonth {
   color: #cfcfcf;

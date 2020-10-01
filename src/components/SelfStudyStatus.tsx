@@ -76,8 +76,8 @@ const Time = styled.h2<{ current?: boolean }>`
   ${({ current }) =>
     current &&
     css`
-      color: #3c70e8;
-      border-bottom: 3px solid #3c70e8;
+      color: var(--main-theme-accent);
+      border-bottom: 3px solid var(--main-theme-accent);
     `}
 `;
 
@@ -108,9 +108,9 @@ const Button = styled.div<{ selected?: boolean }>`
   ${({ selected }) =>
     selected &&
     css`
-      color: #3c70e8;
+      color: var(--main-theme-accent);
       & svg path {
-        fill: #3c70e8;
+        fill: var(--main-theme-accent);
       }
     `}/* transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
   &:active {
