@@ -1,7 +1,6 @@
-import React from "react";
 import styled from "@emotion/styled";
 
-const Chip = styled.span`
+const Chip = styled.div`
   font-size: 16px;
   padding: 9px 24px;
   background-color: var(--main-theme-accent);
@@ -10,7 +9,7 @@ const Chip = styled.span`
   border-radius: 36px;
   display: inline-block;
   & + & {
-    margin-left: 12px;
+    /* margin-left: 12px; */
   }
 `;
 

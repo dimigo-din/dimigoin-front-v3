@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
 import { Horizontal, UnstyledLink } from "./Atomics";
+import { Divider } from "./grids/Cols";
 
 interface IProps {
   withBubble?: boolean;
@@ -20,8 +21,11 @@ const CardGroupHeader: React.FC<IProps> = ({
 }) => {
   return (
     <Wrapper {...props}>
-      <Horizontal>
+      <Horizontal css={css`
+        flex-wrap: wrap;
+      `}>
         <Title withBubble={withBubble}>{children}</Title>
+        <Divider small />
         {subButton && (
           subButton.route ? (
             <SubButton>
@@ -44,6 +48,8 @@ export const Title = styled.h1<{ withBubble?: boolean }>`
   font-weight: 900;
   font-family: "NanumSquare", sans-serif;
   color: #333333;
+  flex-basis: 1;
+  flex-shrink: 0;
   ${({ withBubble }) =>
     withBubble &&
     css`
@@ -62,10 +68,12 @@ export const Title = styled.h1<{ withBubble?: boolean }>`
 `;
 
 const SubButton = styled.p`
-  margin-left: 15px;
   align-self: flex-end;
   font-weight: 800;
   color: #E83C77;
+  margin-top: 12px;
+  flex-basis: 1;
+  flex-shrink: 0;
 `;
 
 const Wrapper = styled.section`
