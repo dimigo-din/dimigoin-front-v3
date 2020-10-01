@@ -91,7 +91,7 @@ const NumberDisplay = styled.h1`
 
 const active = css`
   & > * {
-    color: #3c70e8;
+    color: var(--main-theme-accent);
   }
 `;
 

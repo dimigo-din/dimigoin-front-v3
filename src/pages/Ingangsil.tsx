@@ -65,7 +65,7 @@ export default () => {
                   </CardTitle>
                   <Row
                     css={css`
-                      color: #3c70e8;
+                      color: var(--main-theme-accent);
                     `}
                   >
                     <Ticket />

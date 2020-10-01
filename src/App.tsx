@@ -37,7 +37,7 @@ const Container = styled.div`
 const TopLine = styled.div`
   width: 100%;
   height: 12px;
-  background-color: #3c70e8;
+  background-color: var(--main-theme-accent);
   position: absolute;
   top: 0;
   left: 0;

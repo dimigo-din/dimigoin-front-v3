@@ -61,7 +61,7 @@ const MealItemContainer = styled.div<IMealItemSelected>`
     selected &&
     css`
       background-color: rgba(60, 112, 232, 0.04);
-      border-left-color: #3c70e8;
+      border-left-color: var(--main-theme-accent);
     `}
 `;
 
@@ -74,7 +74,7 @@ const MealNameText = styled.span<IMealItemSelected>`
   ${({ selected = false }) =>
     selected &&
     css`
-      color: #3c70e8;
+      color: var(--main-theme-accent);
     `}
 `;
 

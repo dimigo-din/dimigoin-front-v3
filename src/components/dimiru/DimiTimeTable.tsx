@@ -88,9 +88,9 @@ const Day = styled.td<{ colored?: boolean }>`
   ${({ colored }) =>
     colored &&
     css`
-      color: #3c70e8;
+      color: var(--main-theme-accent);
       background-color: rgba(60, 112, 232, 0.04);
-      border-bottom: 3px solid #3c70e8;
+      border-bottom: 3px solid var(--main-theme-accent);
       z-index: 10;
     `}
 `;

@@ -41,7 +41,7 @@ const DailyMealWrapper = styled(ResponsiveWrapper) <{ highlighted?: boolean }>`
   ${({ highlighted }) => highlighted && css`
     background-color: ${HIGHLIGHTED_BACKGROUND_COLOR};
     & h2 {
-      color: #3c70e8;
+      color: var(--main-theme-accent);
     }
     & p {
       color: #333333;
@@ -79,7 +79,7 @@ const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
   useConsole('meals', meals)
   if (!meals) return <></>
   return <DimiCard css={css`
-    border-top: 5px solid #3c70e8;
+    border-top: 5px solid var(--main-theme-accent);
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     padding: 0px;

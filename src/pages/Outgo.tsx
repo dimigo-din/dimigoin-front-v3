@@ -149,7 +149,7 @@ const Info = styled.div`
 
 const DateHighlight = styled.span`
   font-weight: 900;
-  color: #3c70e8;
+  color: var(--main-theme-accent);
 `;
 
 const Explain = styled.div`

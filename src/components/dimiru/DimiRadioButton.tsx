@@ -37,11 +37,11 @@ const BlockedIcon = styled.div`
 const LogicalButton = styled.input`
   display: none;
   &:checked + div {
-    border: solid 1.5px #3c70e8;
+    border: solid 1.5px var(--main-theme-accent);
   }
   &:checked + div div {
     opacity: 1;
-    background-color: #3c70e8;
+    background-color: var(--main-theme-accent);
   }
 `;
 

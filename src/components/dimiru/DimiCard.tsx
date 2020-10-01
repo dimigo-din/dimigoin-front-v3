@@ -12,10 +12,10 @@ export interface IDimiCard {
   hover?: boolean;
   clickable?: boolean;
   cardRef?:
-    | string
-    | ((instance: HTMLDivElement | null) => void)
-    | React.RefObject<HTMLDivElement>
-    | null;
+  | string
+  | ((instance: HTMLDivElement | null) => void)
+  | React.RefObject<HTMLDivElement>
+  | null;
   onClick?: MouseEventHandler;
   onMouseOver?: MouseEventHandler;
   onFocus?: FocusEventHandler;
@@ -38,27 +38,27 @@ const DimiCard: React.FC<IDimiCard> = ({
   onBlur,
   leftBorder,
 }) => (
-  <Container
-    className={className}
-    hover={hover}
-    clickable={clickable}
-    button={!!button}
-    ref={cardRef}
-    onClick={onClick}
-    onMouseOver={onMouseOver}
-    onFocus={onFocus}
-    onMouseOut={onMouseOut}
-    onBlur={onBlur}
-    leftBorder={leftBorder}
-  >
-    {button ? <Content>{children}</Content> : children}
-    {button && (
-      <>
-        <Button>{button}</Button>
-      </>
-    )}
-  </Container>
-);
+    <Container
+      className={className}
+      hover={hover}
+      clickable={clickable}
+      button={!!button}
+      ref={cardRef}
+      onClick={onClick}
+      onMouseOver={onMouseOver}
+      onFocus={onFocus}
+      onMouseOut={onMouseOut}
+      onBlur={onBlur}
+      leftBorder={leftBorder}
+    >
+      {button ? <Content>{children}</Content> : children}
+      {button && (
+        <>
+          <Button>{button}</Button>
+        </>
+      )}
+    </Container>
+  );
 
 export default DimiCard;
 
@@ -84,7 +84,7 @@ const Container = styled.div<ICardContainer>`
   ${({ leftBorder }) =>
     leftBorder &&
     css`
-      border-left: 5px solid #3c70e8;
+      border-left: 5px solid var(--main-theme-accent);
       border-top-left-radius: 0px;
       border-bottom-left-radius: 0px;
     `}

@@ -5,7 +5,7 @@ import NavigationItem from "./NavigationItem";
 import navigations from "./navigations";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 
-interface ITopNavbar {}
+interface ITopNavbar { }
 
 const TopNavbar: React.FC<ITopNavbar & RouteComponentProps> = ({ history }) => {
   return (
@@ -66,7 +66,7 @@ const ProfileImage = styled.img`
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  border: solid 2px #3c70e8;
+  border: solid 2px var(--main-theme-accent);
   margin-right: 38.2px;
 `;
 

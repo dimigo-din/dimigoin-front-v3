@@ -24,7 +24,7 @@ export const NavigationTitle = styled.span<{ selected?: boolean }>`
     selected &&
     css`
       font-weight: 700;
-      color: #3c70e8;
+      color: var(--main-theme-accent);
     `}
 `;
 
@@ -38,7 +38,7 @@ export const NavigationBottomBar = styled.div`
   width: 100%;
   height: 5px;
   border-radius: 2px;
-  background-color: #3c70e8;
+  background-color: var(--main-theme-accent);
   position: absolute;
   left: 0;
   right: 0;

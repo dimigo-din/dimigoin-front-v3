@@ -49,7 +49,7 @@ const WeekCalendar: React.FC<IProps> = ({ date, onChange }) => {
           <DayHeader>금</DayHeader>
           <DayHeader
             css={css`
-              color: #3c70e8;
+              color: var(--main-theme-accent);
             `}
           >
             토
@@ -134,7 +134,7 @@ const Day = styled.div<{ selected: boolean }>`
   ${({ selected }) =>
     selected &&
     css`
-      background-color: #3c70e8;
+      background-color: var(--main-theme-accent);
       color: white;
       border-radius: 24px;
     `}
