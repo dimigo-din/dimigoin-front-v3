@@ -29,6 +29,9 @@ const TimeTable: React.FC<IProps> = ({ ...props }) => {
         css={css`
           padding: 0px 24px 0px;
           height: 100%;
+          @media screen and (max-width: 450px) {
+            padding: 0px 12px 0px;
+          }
         `}
       >
         <table
@@ -47,6 +50,7 @@ const TimeTable: React.FC<IProps> = ({ ...props }) => {
             </tr>
           </DaysHeader>
           <ContentWrapper>
+
             {/* 서버에서 어떤 응답을 줄지 몰라서 일단은 이렇게 하드코딩으로 박아놓았습니다.
             추후에 수정해주세요! */}
 
@@ -81,6 +85,9 @@ const DaysHeader = styled.thead`
   font-size: 20px;
   font-weight: 700;
   padding: 0px 24px 0px;
+  @media screen and (max-width: 450px) {
+    font-size: 15px;
+  }
 `;
 
 const Day = styled.td<{ colored?: boolean }>`
@@ -109,6 +116,10 @@ const Row = styled.tr`
   text-align: center;
   font-size: 18px;
   flex: 1;
+
+  @media screen and (max-width: 450px) {
+    font-size: 15px;
+  }
 `;
 
 const Item = styled.td<{ colored?: boolean }>`
@@ -121,6 +132,10 @@ const Item = styled.td<{ colored?: boolean }>`
       background-color: var(--main-theme-accent-background);
       color: black;
     `}
+
+    @media screen and (max-width: 450px) {
+      padding: 10px 6px;
+    }
 `;
 
 export default TimeTable;
