@@ -85,6 +85,7 @@ const ButtonsWrapper = styled.div`
   display: flex;
   justify-content: space-around;
   max-width: 720px;
+  margin: 0px auto;
   flex-wrap: wrap;
   padding: 12px;
 `;
