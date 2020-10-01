@@ -21,7 +21,11 @@ export default () => {
     <>
       <NavigationBar />
       <Container>
-        <ResponsiveWrapper threshold={1100}>
+        <ResponsiveWrapper threshold={1100} css={css`
+          @media screen and (max-width: 1100px) {
+            flex-direction: column-reverse;
+          }
+        `}>
           <Col width={4.5}>
             <CardGroupHeader>신청안내</CardGroupHeader>
             <DimiCard
