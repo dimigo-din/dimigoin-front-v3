@@ -19,7 +19,7 @@ export default () => {
     <>
       <NavigationBar />
       <Container>
-        <ResponsiveScreenWrapper>
+        <ResponsiveWrapper threshold={1100}>
           <Col width={4.5}>
             <CardGroupHeader>신청안내</CardGroupHeader>
             <DimiCard
@@ -171,7 +171,7 @@ export default () => {
               />
             ))}
           </Col>
-        </ResponsiveScreenWrapper>
+        </ResponsiveWrapper>
       </Container>
     </>
   );
