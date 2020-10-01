@@ -63,7 +63,7 @@ const Main: React.FC = () => {
                 />
               )}
           </Col>
-          <Divider />
+          <Divider data-divider />
           <Col width={5}>
             <CardGroupHeader>자습 현황</CardGroupHeader>
             <SelfStudyStatus onButtonPressed={(d) => {
@@ -71,13 +71,13 @@ const Main: React.FC = () => {
             }} />
           </Col>
         </ResponsiveWrapper>
-        <Divider horizontal />
+        <Divider data-divider horizontal />
         <ResponsiveWrapper threshold={1200}>
           <Col width={3} css={fullHeight}>
             <CardGroupHeader>시간표</CardGroupHeader>
             <TimeTable />
           </Col>
-          <Divider />
+          <Divider data-divider />
           <Col width={3}>
             <CardGroupHeader>나의 신청현황</CardGroupHeader>
             {myTodays ? (
@@ -88,7 +88,7 @@ const Main: React.FC = () => {
                 <TextCardGroup content={[{ text: "신청 현황이 없습니다" }]} />
               )}
           </Col>
-          <Divider />
+          <Divider data-divider />
           <Col width={4} css={fullHeight}>
             <CardGroupHeader
               subButton={{

@@ -53,7 +53,7 @@ const Outgo: React.FC = () => {
     <>
       <NavigationBar />
       <Container>
-        <ResponsiveWrapper>
+        <ResponsiveWrapper threshold={1200}>
           <Col width={3.5}>
             <CardGroupHeader
               subButton={{
@@ -71,11 +71,11 @@ const Outgo: React.FC = () => {
               {...applyData}
             />
           </Col>
-          <Divider />
+          <Divider data-divider />
           <Col width={6.5}>
             <CardGroupHeader>신청자</CardGroupHeader>
             <OutgoApplier />
-            <Divider small horizontal />
+            <Divider data-divider small horizontal />
             <ResponsiveWrapper threshold={1400}>
               <Col width={4}>
                 <CardGroupHeader>외출시간</CardGroupHeader>
@@ -83,7 +83,7 @@ const Outgo: React.FC = () => {
                   <DateSelector />
                 </Card>
               </Col>
-              <Divider small />
+              <Divider data-divider small />
               <Col width={6}>
                 <CardGroupHeader>주의사항</CardGroupHeader>
                 <Card

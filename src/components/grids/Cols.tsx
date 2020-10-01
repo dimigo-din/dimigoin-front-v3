@@ -41,7 +41,7 @@ export const ResponsiveScreenWrapper = styled.div`
   @media screen and (max-width: 760px) {
     flex-direction: column;
 
-    & > [class*="-Divider"] {
+    & > [data-divider] {
       margin: var(--divider-width) 0px;
     }
   }
@@ -51,9 +51,8 @@ export const ResponsiveWrapper = styled.div<{ threshold?: number }>`
   display: flex;
   @media screen and (max-width: ${({ threshold }) => threshold || 760}px) {
     flex-direction: column;
-
-    & > [class*="Divider"] {
-      margin: var(--divider-width) 0px;
+    & > [data-divider] {
+      margin: 15px 0px;
     }
   }
 `;

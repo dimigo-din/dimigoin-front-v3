@@ -108,7 +108,7 @@ const RadioButtonGroup: React.FC<IProps> = ({ items, name, onChange }) => {
           >
             {item.name}
           </RadioButton>
-          <Divider small />
+          <Divider data-divider small />
         </>
       ))}
     </ResponsiveWrapper>

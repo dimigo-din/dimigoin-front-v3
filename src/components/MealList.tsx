@@ -18,7 +18,7 @@ const DailyMeal: React.FC<IDailyMealProps> = ({ header, meals, highlighted }) =>
   <DailyMealHeader>{header}요일</DailyMealHeader>
   {meals.map(meal =>
     <>
-      <Divider small />
+      <Divider data-divider small />
       <DailyMealItem>
         {meal}
       </DailyMealItem>
