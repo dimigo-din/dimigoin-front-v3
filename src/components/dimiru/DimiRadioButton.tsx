@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { EventFunction } from "../hooks/useInput";
 import css from "@emotion/css";
 import { ResponsiveWrapper, Divider } from "../grids/Cols";
+import { Horizontal } from "../Atomics";
 
 interface RadioButtonProps {
   onChange?: (...p: any[]) => any;
@@ -35,6 +36,7 @@ const Label = styled.p`
   font-size: 20px;
   margin-left: 15px;
   color: #8A8A8A;
+  white-space: pre;
 `
 
 export const RadioButton: React.FC<
@@ -63,14 +65,14 @@ interface IProps {
 
 const RadioButtonGroup: React.FC<IProps> = ({ items, name, onChange }) => {
   return (
-    <ResponsiveWrapper
+    <Horizontal
       css={css`
         flex-wrap: wrap;
         line-height: 36px;
       `}
     >
       {items.map((item) => (
-        <>
+        <div css={css`flex: 1;`}>
           <RadioButton
             name={name}
             key={item.key}
@@ -81,10 +83,9 @@ const RadioButtonGroup: React.FC<IProps> = ({ items, name, onChange }) => {
           >
             {item.name}
           </RadioButton>
-          <Divider data-divider small />
-        </>
+        </div>
       ))}
-    </ResponsiveWrapper>
+    </Horizontal>
   );
 };
 

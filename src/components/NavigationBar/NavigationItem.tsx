@@ -3,40 +3,52 @@ import {
   NavigationContainer,
   NavigationTitle,
   NavigationImage,
-  NavigationBottomBar,
+  BottomBar
 } from "./NavigationItem.style";
 import { Link } from "react-router-dom";
 import css from "@emotion/css";
+import { UnstyledLink } from "../Atomics";
 
 export interface INavigationItem {
   title?: string;
   image?: string;
   selected?: boolean;
   route: string;
+
 }
 
-const NavigationItem: React.FC<INavigationItem> = ({
+const NavigationItem: React.FC<INavigationItem & {
+  onLinkClicked(offset: number): void;
+}> = ({
   title,
   image,
   selected = false,
   route,
+  onLinkClicked
 }) => {
-  return (
-    <Link
-      to={route}
-      css={css`
-        text-decoration: none;
+    return (
+      <UnstyledLink
+        to={route}
+        onClick={(e) => {
+          const target = (e.target as HTMLAnchorElement)
+          onLinkClicked(target.offsetLeft - 89)
+          // target.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+        }}
+        css={css`
+        display: inline-block;    
+        margin-left: 32px;
+        line-height: 90px;
+        height: 90px;
+        overflow: hidden;
+        flex-basis: 1;
+        flex-shrink: 0;
       `}
-    >
-      <NavigationContainer>
-        {title && (
-          <NavigationTitle selected={selected}>{title}</NavigationTitle>
-        )}
-        {image && <NavigationImage src={image} />}
-        {selected && <NavigationBottomBar />}
-      </NavigationContainer>
-    </Link>
-  );
-};
+      >
+        <NavigationTitle selected={selected}>{title}
+          {selected && <BottomBar />}
+        </NavigationTitle>
+      </UnstyledLink>
+    );
+  };
 
 export default NavigationItem;

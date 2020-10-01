@@ -127,10 +127,10 @@ const Day = styled.div<{ selected: boolean }>`
   text-align: center;
   padding: 12px;
   line-height: 24px;
-
   background-color: white;
   transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
   border-radius: 15px;
+  
   ${({ selected }) =>
     selected &&
     css`
@@ -138,6 +138,11 @@ const Day = styled.div<{ selected: boolean }>`
       color: white;
       border-radius: 24px;
     `}
+
+    @media screen and (max-width: 500px) {
+      padding: 3px;
+      font-size: 16px;
+    }
 `;
 
 export default WeekCalendar;

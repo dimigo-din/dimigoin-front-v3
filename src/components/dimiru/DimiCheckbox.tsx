@@ -16,7 +16,10 @@ const Checkbox: React.FC<IProps> = ({ text, ...props }) => {
         <InvisibleCheck {...check} />
         <Check visible={check.checked} />
       </CheckWrapper>
-      {text}
+      <span css={css`
+  vertical-align: middle;`}>
+        {text}
+      </span>
     </Wrapper>
   );
 };
@@ -43,6 +46,7 @@ const CheckWrapper = styled.div<{ checked: boolean }>`
   transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
   border-color: #8a8a8a;
   margin-right: 16px;
+  vertical-align: middle;
   ${({ checked }) =>
     checked &&
     css`

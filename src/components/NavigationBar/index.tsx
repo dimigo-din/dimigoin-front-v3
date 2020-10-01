@@ -1,32 +1,50 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "@emotion/styled";
+import { ReactComponent as IconLogo } from '../../assets/brand.svg'
+import { ReactComponent as LogoutLogo } from '../../assets/icons/logout.svg'
 
 import NavigationItem from "./NavigationItem";
 import navigations from "./navigations";
 import { withRouter, RouteComponentProps } from "react-router-dom";
+import { NavigationContainer } from "./NavigationItem.style";
+import { UnstyledLink } from "../Atomics";
+import css from "@emotion/css";
 
 interface ITopNavbar { }
 
 const TopNavbar: React.FC<ITopNavbar & RouteComponentProps> = ({ history }) => {
+  const scrollerRef = useRef<HTMLDivElement>(null)
+  const scrollToClicked = useCallback(
+    (offset: number) => {
+      if (scrollerRef.current)
+        scrollerRef.current.scrollTo({
+          left: offset,
+          behavior: 'smooth'
+        })
+    },
+    [scrollerRef],
+  )
   return (
     <Wrapper>
       <Container>
-        <NavigationList>
-          {navigations.map(({ title, image, route }) => {
-            return (
-              <NavigationItem
-                key={`${route}${title}`}
-                title={title}
-                image={image}
-                selected={history.location.pathname === route}
-                route={route}
-              />
-            );
-          })}
-        </NavigationList>
+        <UnstyledLink to="/">
+          <IconLogo height={37} width={32} />
+        </UnstyledLink>
+        <Scroller ref={scrollerRef}>
+          {navigations.map(({ title, image, route }) =>
+            <NavigationItem
+              key={`${route}${title}`}
+              title={title}
+              image={image}
+              selected={history.location.pathname === route}
+              route={route}
+              onLinkClicked={scrollToClicked}
+            />
+          )}
+        </Scroller>
         <ProfileContainer>
           <ProfileImage />
-          <LogoutButton></LogoutButton>
+          <LogoutLogo height={26.5} width={26.5} />
         </ProfileContainer>
       </Container>
     </Wrapper>
@@ -37,29 +55,24 @@ export default withRouter(TopNavbar);
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 90px;
   box-shadow: 0 0 20px 0 rgba(146, 146, 146, 0.09);
   background-color: #ffffff;
-  margin-top: 12px;
   display: flex;
 `;
 
 const Container = styled.div`
   max-width: 1560px;
   width: 90%;
-  height: 100%;
-  margin: 0 auto;
+  margin: 0px auto;
   display: flex;
-  justify-content: space-between;
-`;
-
-const NavigationList = styled.div`
-  display: flex;
+  align-items: center;
 `;
 
 const ProfileContainer = styled.div`
   display: flex;
-  align-items: center;
+  flex: 1;
+  justify-content: flex-end;
+  margin-left: 20px;
 `;
 
 const ProfileImage = styled.img`
@@ -70,9 +83,8 @@ const ProfileImage = styled.img`
   margin-right: 38.2px;
 `;
 
-const LogoutButton = styled.button`
-  width: 26.5px;
-  height: 26.5px;
-  background-color: transparent;
-  border: none;
-`;
+const Scroller = styled.div`
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+`

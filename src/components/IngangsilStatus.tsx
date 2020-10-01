@@ -39,20 +39,20 @@ export const IngansilStatus: React.FC<IProps> = ({
         <div
           css={css`
             display: flex;
-            /* max-width: 355px; */
             justify-content: space-around;
             flex-shrink: 3;
-            margin: 54px auto 24px;
+            /* margin: 54px auto 24px; */
+            padding: 3vw 0px 2vw;
           `}
         >
-          <Col css={currentApplied < max ? active : disabled}>
+          <div css={currentApplied < max ? active : disabled}>
             <NumberName>현원</NumberName>
             <NumberDisplay>{currentApplied}</NumberDisplay>
-          </Col>
-          <Col>
+          </div>
+          <div>
             <NumberName>총원</NumberName>
             <NumberDisplay>{max}</NumberDisplay>
-          </Col>
+          </div>
         </div>
       </DimiCard>
       <DimiButton

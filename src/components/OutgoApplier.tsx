@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Chip from "./Chip";
 import Card from "./dimiru/DimiCard";
 import styled from "@emotion/styled";
+import css from "@emotion/css";
 
 interface Applier {
   name: string;
@@ -25,18 +26,17 @@ const OutgoApplier: React.FC = () => {
     }
   };
   return (
-    <Card leftBorder>
+    <Card css={css`padding: -6px;`} leftBorder>
       {appliers &&
         appliers.map((applier) => (
-          <Chip key={applier.studentId}>
+          <Chip css={css`margin: 6px;`} key={applier.studentId}>
             {applier.studentId} {applier.name}
           </Chip>
         ))}
       <InputChip
         placeholder="+"
         onKeyDown={(e) =>
-          // @ts-ignore
-          e.key === "Enter" ? addPerson(e.target) : console.log(e.key)
+          e.key === "Enter" ? addPerson(e.target as HTMLInputElement) : console.log(e.key)
         }
       />
     </Card>
@@ -44,7 +44,7 @@ const OutgoApplier: React.FC = () => {
 };
 
 const InputChip = styled.input`
-  margin-left: 12px;
+  margin: 6px;
   width: 86px;
   text-align: center;
   background-color: transparent;

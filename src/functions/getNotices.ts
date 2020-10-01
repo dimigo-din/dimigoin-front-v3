@@ -44,7 +44,7 @@ export const getNotice = async (id: string): Promise<INoticeItem> => {
     ...
     
     업계 관계자는 "올해 4분기 BOE와 한국 업체들의 희비는 결국 애플 물량을 수주하느냐 못하느냐에 따라 갈렸다"며 "BOE로선 오포나 비보 같은 중국 업체들의 물량을 늘리며 장기적으로는 대형 공급사인 애플과 거래를 성사하는 데 사활을 걸 것으로 보인다"고 말했다. `,
-    title: '화웨이 제재에 LGD 스마트폰 OLED 中BOE 넘는다',
+    title: '화웨이 제재에 LGD 스마트폰 OLED BOE 넘는다',
     _id: '1',
     postedDate: new Date(),
     viewers: 273,
@@ -61,7 +61,7 @@ export const getNotice = async (id: string): Promise<INoticeItem> => {
 const getNoticesList = async (): Promise<INoticeItem[]> => {
   return [{
     content: '1일 시장조사업체 옴디아에 따르면 올 4분기 전 세계 스마트폰용 OLED 시장에서 BOE는 점유율(매출 기준) 6.9%를 기록할 것으로 예상된다. BOE는 지난 2분기와 3분기 각각 17.1%, 13.7%의 높은 점유율을 보였는데, 4분기엔 절반 수준으로 추락하는 셈이다.',
-    title: '화웨이 제재에 LGD 스마트폰 OLED 中BOE 넘는다',
+    title: '화웨이 제재에 LGD 스마트폰 OLED BOE 넘는다',
     _id: '1'
   }, {
     title: '도시바, 시스템LSI 사업 철수',

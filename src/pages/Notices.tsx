@@ -3,10 +3,10 @@ import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { HeaderIconWrapper, Horizontal, UnstyledLink } from '../components/Atomics'
-import CardGroupHeader from '../components/CardGroupHeader'
+import CardGroupHeader, { Title } from '../components/CardGroupHeader'
 import { ReactComponent as CloseSvg } from '../assets/icons/close.svg'
 import DimiCard from '../components/dimiru/DimiCard'
-import { Divider } from '../components/grids/Cols'
+import { Divider, ResponsiveWrapper } from '../components/grids/Cols'
 import PageWrapper from '../components/grids/PageWrapper'
 import { show } from '../components/Modal'
 import NavigationBar from '../components/NavigationBar'
@@ -19,6 +19,7 @@ const BriefNoticeTitle = styled.h2`
   color: #8A8A8A;
   flex-basis: 1;
   flex-shrink: 0;
+  
 `
 
 const BriefNoticeContent = styled.p`
@@ -28,6 +29,16 @@ const BriefNoticeContent = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  @media screen and (max-width: 720px) {
+    margin-left: 0px;
+  
+    /* styled for multiline ellipsis */
+    white-space: inherit;
+    display:-webkit-box; 
+    word-wrap:break-word; 
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+  }
 `
 
 const Content = styled.p`
@@ -40,16 +51,16 @@ const Content = styled.p`
 `
 
 const Info = styled.p`
-      margin: 12px 6px;
-      color: #D1D1D1;
-      font-size: 18px;
+  margin: 12px 6px;
+  color: #D1D1D1;
+  font-size: 18px;
 `
 
 
-const NoticeListItem: React.FC<INoticeItem> = ({ content, title }) => <Horizontal>
+const NoticeListItem: React.FC<INoticeItem> = ({ content, title }) => <ResponsiveWrapper threshold={720}>
   <BriefNoticeTitle>{title}</BriefNoticeTitle>
   <BriefNoticeContent>{content}</BriefNoticeContent>
-</Horizontal>
+</ResponsiveWrapper>
 
 const Article: React.FC<{ articleId: string, goBack(): void }> = ({ articleId, goBack }) => {
   const [articleData, setArticleData] = useState<INoticeItem>()
@@ -65,20 +76,25 @@ const Article: React.FC<{ articleId: string, goBack(): void }> = ({ articleId, g
   border-top-right-radius: 0px;
   `}>
     <Horizontal>
-      <CardGroupHeader>{articleData?.title}</CardGroupHeader>
+      <Title css={css`
+        word-break: break-all;
+        flex-shrink: 1;
+      `}>{articleData?.title}</Title>
       <HeaderIconWrapper><CloseSvg onClick={goBack} /></HeaderIconWrapper>
     </Horizontal>
     <div css={css`padding: 12px 0px;`}>
       <Divider visible horizontal size={7} />
-      {articleData.postedDate && <Horizontal>
-        <Info>
-          {articleData.postedDate.getFullYear()}년{` `}
-          {articleData.postedDate.getMonth() + 1}월{` `}
-          {articleData.postedDate.getDate()}일{` `}
-          {articleData.postedDate.toLocaleTimeString().slice(0, -3)}{` `}
-          {articleData.viewers && `· ${articleData.viewers} 읽음`}
-        </Info>
-        <Horizontal css={css`flex: 1; justify-content: flex-end;`}>
+      {articleData.postedDate && <Horizontal css={css`flex-wrap: wrap;`}>
+        <Horizontal css={css`flex-wrap: wrap;`}>
+          <Info css={css`flex-shrink: 0; flex-basis: 1;`}>
+            {articleData.postedDate.getFullYear()}년{` `}
+            {articleData.postedDate.getMonth() + 1}월{` `}
+            {articleData.postedDate.getDate()}일{` `}
+            {articleData.postedDate.toLocaleTimeString().slice(0, -3)}
+          </Info>
+          {articleData.viewers && <Info css={css`flex-shrink: 0; flex-basis: 1;`}>· {articleData.viewers} 읽음</Info>}
+        </Horizontal>
+        <Horizontal css={css`flex-wrap: wrap;`}>
           <Info>{articleData.author}</Info>
         </Horizontal>
       </Horizontal>}

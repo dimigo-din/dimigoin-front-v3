@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
-import { Link } from "react-router-dom";
-import { ResponsiveWrapper, Divider } from "./grids/Cols";
-import { UnstyledLink } from "./Atomics";
+import { Horizontal, UnstyledLink } from "./Atomics";
+import { Divider } from "./grids/Cols";
 
 interface IProps {
   withBubble?: boolean;
@@ -22,8 +21,11 @@ const CardGroupHeader: React.FC<IProps> = ({
 }) => {
   return (
     <Wrapper {...props}>
-      <ResponsiveWrapper>
+      <Horizontal css={css`
+        flex-wrap: wrap;
+      `}>
         <Title withBubble={withBubble}>{children}</Title>
+        <Divider small />
         {subButton && (
           subButton.route ? (
             <SubButton>
@@ -36,7 +38,7 @@ const CardGroupHeader: React.FC<IProps> = ({
                 <SubButton>{subButton.text}</SubButton>
               )
         )}
-      </ResponsiveWrapper>
+      </Horizontal>
     </Wrapper>
   );
 };
@@ -46,6 +48,8 @@ export const Title = styled.h1<{ withBubble?: boolean }>`
   font-weight: 900;
   font-family: "NanumSquare", sans-serif;
   color: #333333;
+  flex-basis: 1;
+  flex-shrink: 0;
   ${({ withBubble }) =>
     withBubble &&
     css`
@@ -64,10 +68,12 @@ export const Title = styled.h1<{ withBubble?: boolean }>`
 `;
 
 const SubButton = styled.p`
-  margin-left: 15px;
   align-self: flex-end;
   font-weight: 800;
   color: #E83C77;
+  margin-top: 12px;
+  flex-basis: 1;
+  flex-shrink: 0;
 `;
 
 const Wrapper = styled.section`

@@ -43,7 +43,7 @@ const Time: React.FC<ITimeProps> = ({
       </HalfDayWrapper>
       <IndicatorWrapper>
         <Indicator {...hourInput} />
-        <Divider data-divider>:</Divider>
+        <Divider data-divider >:</Divider>
         <Indicator {...minuteInput} />
       </IndicatorWrapper>
       <FromUntil>부터</FromUntil>
@@ -89,7 +89,7 @@ const Wrapper = styled.div`
 
 const TimeWrapper = styled.div`
   display: flex;
-  width: 320px;
+  max-width: 320px;
   justify-content: space-between;
   align-items: center;
   margin: 0 auto;
@@ -98,7 +98,12 @@ const TimeWrapper = styled.div`
   }
 `;
 
-const HalfDayWrapper = styled.div``;
+const HalfDayWrapper = styled.div`
+
+@media screen and (max-width: 400px) {
+    display: none;
+  }
+`;
 
 const HalfDay = styled.div<{ selected?: boolean }>`
   font-size: 20px;
@@ -116,10 +121,16 @@ const IndicatorWrapper = styled.div`
   font-weight: 900;
   display: flex;
   align-items: center;
+  @media screen and (max-width: 500px) {
+    font-size: 24px;
+  }
 `;
 
 const Divider = styled.div`
   margin: 0px 12px;
+  @media screen and (max-width: 500px) {
+    margin: 0px 6px;
+  }
 `;
 
 const Indicator = styled.input`
@@ -129,11 +140,18 @@ const Indicator = styled.input`
   width: 60px;
   text-align: center;
   font: inherit;
+  @media screen and (max-width: 500px) {
+    padding: 4px 6px;
+    width: 40px;
+  }
 `;
 
 const FromUntil = styled.div`
   font-size: 20px;
   color: #8a8a8a;
+  @media screen and (max-width: 500px) {
+    font-size: 16px;
+  }
 `;
 
 export default LargeTimeSelector;
