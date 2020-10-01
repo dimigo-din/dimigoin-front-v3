@@ -86,5 +86,5 @@ const ProfileImage = styled.img`
 const Scroller = styled.div`
   display: flex;
   align-items: center;
-  overflow-x: scroll;
+  overflow-x: auto;
 `
