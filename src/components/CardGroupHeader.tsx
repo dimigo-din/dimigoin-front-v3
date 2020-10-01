@@ -57,7 +57,7 @@ export const Title = styled.h1<{ withBubble?: boolean }>`
         background-color: #ff6359;
         content: " ";
         margin-left: 4px;
-        margin-top: 3px;
+        margin-top: -3px;
       }
     `}
 `;
@@ -66,7 +66,7 @@ const SubButton = styled.p`
   margin-left: 15px;
   align-self: flex-end;
   font-weight: 800;
-  color: #8a8a8a;
+  color: #E83C77;
 `;
 
 const Wrapper = styled.section`
