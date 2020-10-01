@@ -43,7 +43,7 @@ const Main: React.FC = () => {
     <>
       <NavigationBar />
       <PageWrapper>
-        <ResponsiveWrapper>
+        <ResponsiveWrapper threshold={960}>
           <Col width={5}>
             <CardGroupHeader
               withBubble

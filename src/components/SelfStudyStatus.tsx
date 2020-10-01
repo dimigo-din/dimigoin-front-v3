@@ -84,10 +84,10 @@ const Time = styled.h2<{ current?: boolean }>`
 const ButtonsWrapper = styled.div`
   display: flex;
   justify-content: space-around;
-  padding: 36px 0px;
   max-width: 720px;
-  margin: -24px auto;
+  margin: 0px auto;
   flex-wrap: wrap;
+  padding: 12px;
 `;
 
 const iconStyle = css`
@@ -100,7 +100,7 @@ const Button = styled.div<{ selected?: boolean }>`
   color: #8a8a8a;
   text-align: center;
   min-width: 100px;
-  margin-top: 24px;
+  margin: 12px;
 
   & svg path {
     fill: #8a8a8a;
