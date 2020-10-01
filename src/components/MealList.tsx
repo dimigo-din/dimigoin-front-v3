@@ -18,7 +18,12 @@ const DailyMeal: React.FC<IDailyMealProps> = ({ header, meals, highlighted }) =>
   <DailyMealHeader>{header}요일</DailyMealHeader>
   {meals.map(meal =>
     <>
-      <Divider data-divider small />
+      <div css={css`
+      margin: 0px 15px;
+      @media screen and (max-width: 960px) {
+        margin: 6px 0px;
+      }
+      `} />
       <DailyMealItem>
         {meal}
       </DailyMealItem>
@@ -36,6 +41,7 @@ const DailyMealWrapper = styled(ResponsiveWrapper) <{ highlighted?: boolean }>`
   }
   @media screen and (max-width: 960px) {
     align-items: unset;
+    padding: 12px 36px;
   }
   ${({ highlighted }) => highlighted && css`
     background-color: var(--main-theme-accent-background);
@@ -83,14 +89,29 @@ const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
     border-top-right-radius: 0px;
     padding: 0px;
   `}>
-    <Horizontal css={css`margin: 36px 72px 24px;`}>
+    <HeaderWrapper>
       <CardTitle>주간 급식표</CardTitle>
-      <CardTitle css={css`font-weight: 400; margin-left: 24px;`}>{date.getMonth() + 1}월 {getThisWeek(date)}째 주</CardTitle>
+      <ThisWeek>{date.getMonth() + 1}월 {getThisWeek(date)}째 주</ThisWeek>
       {goBack && <HeaderIconWrapper><CloseSvg onClick={goBack} /></HeaderIconWrapper>}
-    </Horizontal>
+    </HeaderWrapper>
     {meals?.map(meal => <DailyMeal {...meal} />)}
 
   </DimiCard>
 }
+
+const HeaderWrapper = styled(Horizontal)`
+  margin: 36px 72px 24px;
+  @media screen and (max-width: 960px) {
+    margin: 24px 36px 18px;
+  }
+`
+
+const ThisWeek = styled(CardTitle)`
+  font-weight: 400;
+  margin-left: 24px;
+  @media screen and (max-width: 540px) {
+    display: none;
+  }
+`
 
 export default MealList
