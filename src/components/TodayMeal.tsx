@@ -60,7 +60,7 @@ const MealItemContainer = styled.div<IMealItemSelected>`
   ${({ selected = false }) =>
     selected &&
     css`
-      background-color: rgba(60, 112, 232, 0.04);
+      background-color: var(--main-theme-accent-background);
       border-left-color: var(--main-theme-accent);
     `}
 `;

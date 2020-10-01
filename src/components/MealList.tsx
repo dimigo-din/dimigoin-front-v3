@@ -2,7 +2,6 @@ import css from '@emotion/css'
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { ReactComponent as CloseSvg } from '../assets/icons/close.svg'
-import { HIGHLIGHTED_BACKGROUND_COLOR } from '../constants'
 import getMeals from '../functions/getMeals'
 import useConsole from '../hooks/useConsole'
 import { Horizontal } from './Atomics'
@@ -39,7 +38,7 @@ const DailyMealWrapper = styled(ResponsiveWrapper) <{ highlighted?: boolean }>`
     align-items: unset;
   }
   ${({ highlighted }) => highlighted && css`
-    background-color: ${HIGHLIGHTED_BACKGROUND_COLOR};
+    background-color: var(--main-theme-accent-background);
     & h2 {
       color: var(--main-theme-accent);
     }

@@ -89,7 +89,7 @@ const Day = styled.td<{ colored?: boolean }>`
     colored &&
     css`
       color: var(--main-theme-accent);
-      background-color: rgba(60, 112, 232, 0.04);
+      background-color: var(--main-theme-accent-background);
       border-bottom: 3px solid var(--main-theme-accent);
       z-index: 10;
     `}
@@ -118,7 +118,7 @@ const Item = styled.td<{ colored?: boolean }>`
   ${({ colored }) =>
     colored &&
     css`
-      background-color: rgba(60, 112, 232, 0.04);
+      background-color: var(--main-theme-accent-background);
       color: black;
     `}
 `;
