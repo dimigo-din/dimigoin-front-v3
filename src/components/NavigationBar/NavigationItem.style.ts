@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import css from "@emotion/css";
 
 export const NavigationContainer = styled.div`
-  width: 89.9px;
+  padding: 0px 2vw;
   height: 100%;
   display: flex;
   flex-direction: column;
