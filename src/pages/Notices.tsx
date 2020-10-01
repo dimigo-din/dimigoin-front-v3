@@ -6,7 +6,7 @@ import { HeaderIconWrapper, Horizontal, UnstyledLink } from '../components/Atomi
 import CardGroupHeader from '../components/CardGroupHeader'
 import { ReactComponent as CloseSvg } from '../assets/icons/close.svg'
 import DimiCard from '../components/dimiru/DimiCard'
-import { Divider } from '../components/grids/Cols'
+import { Divider, ResponsiveWrapper } from '../components/grids/Cols'
 import PageWrapper from '../components/grids/PageWrapper'
 import { show } from '../components/Modal'
 import NavigationBar from '../components/NavigationBar'
@@ -28,6 +28,16 @@ const BriefNoticeContent = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  @media screen and (max-width: 720px) {
+    margin-left: 0px;
+  
+    /* styled for multiline ellipsis */
+    white-space: inherit;
+    display:-webkit-box; 
+    word-wrap:break-word; 
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+  }
 `
 
 const Content = styled.p`
@@ -40,16 +50,16 @@ const Content = styled.p`
 `
 
 const Info = styled.p`
-      margin: 12px 6px;
-      color: #D1D1D1;
-      font-size: 18px;
+  margin: 12px 6px;
+  color: #D1D1D1;
+  font-size: 18px;
 `
 
 
-const NoticeListItem: React.FC<INoticeItem> = ({ content, title }) => <Horizontal>
+const NoticeListItem: React.FC<INoticeItem> = ({ content, title }) => <ResponsiveWrapper threshold={720}>
   <BriefNoticeTitle>{title}</BriefNoticeTitle>
   <BriefNoticeContent>{content}</BriefNoticeContent>
-</Horizontal>
+</ResponsiveWrapper>
 
 const Article: React.FC<{ articleId: string, goBack(): void }> = ({ articleId, goBack }) => {
   const [articleData, setArticleData] = useState<INoticeItem>()
