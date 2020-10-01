@@ -2,29 +2,23 @@ import styled from "@emotion/styled";
 import css from "@emotion/css";
 
 export const NavigationContainer = styled.div`
-  padding: 0px 2vw;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
   cursor: pointer;
-
-  &:not(:last-child) {
-    margin-right: 30.15px;
-  }
 `;
 
 export const NavigationTitle = styled.span<{ selected?: boolean }>`
   font-size: 22px;
   line-height: 1.18;
   color: #d1d1d1;
+  position: relative;
+  height: 100%;
+  &+& {
+    margin-left: 32px;
+  }
   ${({ selected }) =>
     selected &&
     css`
-      font-weight: 700;
-      color: var(--main-theme-accent);
+    color: var(--main-theme-accent);
+    font-weight: 700;
     `}
 `;
 
@@ -34,13 +28,12 @@ export const NavigationImage = styled.img`
   object-fit: contain;
 `;
 
-export const NavigationBottomBar = styled.div`
-  width: 100%;
-  height: 5px;
-  border-radius: 2px;
-  background-color: var(--main-theme-accent);
+export const BottomBar = styled.div<{ selected?: boolean }>`
   position: absolute;
+  bottom: -34px;
   left: 0;
   right: 0;
-  bottom: 0;
+  background-color: #E83C77;
+  height: 5px;
+  border-radius: 10px;
 `;

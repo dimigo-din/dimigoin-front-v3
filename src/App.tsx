@@ -38,10 +38,6 @@ const TopLine = styled.div`
   width: 100%;
   height: 12px;
   background-color: var(--main-theme-accent);
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
 `;
 
 const RouterWrap = styled.main`

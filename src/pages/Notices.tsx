@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { HeaderIconWrapper, Horizontal, UnstyledLink } from '../components/Atomics'
-import CardGroupHeader from '../components/CardGroupHeader'
+import CardGroupHeader, { Title } from '../components/CardGroupHeader'
 import { ReactComponent as CloseSvg } from '../assets/icons/close.svg'
 import DimiCard from '../components/dimiru/DimiCard'
 import { Divider, ResponsiveWrapper } from '../components/grids/Cols'
@@ -19,6 +19,7 @@ const BriefNoticeTitle = styled.h2`
   color: #8A8A8A;
   flex-basis: 1;
   flex-shrink: 0;
+  
 `
 
 const BriefNoticeContent = styled.p`
@@ -75,20 +76,25 @@ const Article: React.FC<{ articleId: string, goBack(): void }> = ({ articleId, g
   border-top-right-radius: 0px;
   `}>
     <Horizontal>
-      <CardGroupHeader>{articleData?.title}</CardGroupHeader>
+      <Title css={css`
+        word-break: break-all;
+        flex-shrink: 1;
+      `}>{articleData?.title}</Title>
       <HeaderIconWrapper><CloseSvg onClick={goBack} /></HeaderIconWrapper>
     </Horizontal>
     <div css={css`padding: 12px 0px;`}>
       <Divider visible horizontal size={7} />
-      {articleData.postedDate && <Horizontal>
-        <Info>
-          {articleData.postedDate.getFullYear()}년{` `}
-          {articleData.postedDate.getMonth() + 1}월{` `}
-          {articleData.postedDate.getDate()}일{` `}
-          {articleData.postedDate.toLocaleTimeString().slice(0, -3)}{` `}
-          {articleData.viewers && `· ${articleData.viewers} 읽음`}
-        </Info>
-        <Horizontal css={css`flex: 1; justify-content: flex-end;`}>
+      {articleData.postedDate && <Horizontal css={css`flex-wrap: wrap;`}>
+        <Horizontal css={css`flex-wrap: wrap;`}>
+          <Info css={css`flex-shrink: 0; flex-basis: 1;`}>
+            {articleData.postedDate.getFullYear()}년{` `}
+            {articleData.postedDate.getMonth() + 1}월{` `}
+            {articleData.postedDate.getDate()}일{` `}
+            {articleData.postedDate.toLocaleTimeString().slice(0, -3)}
+          </Info>
+          {articleData.viewers && <Info css={css`flex-shrink: 0; flex-basis: 1;`}>· {articleData.viewers} 읽음</Info>}
+        </Horizontal>
+        <Horizontal css={css`flex-wrap: wrap;`}>
           <Info>{articleData.author}</Info>
         </Horizontal>
       </Horizontal>}
