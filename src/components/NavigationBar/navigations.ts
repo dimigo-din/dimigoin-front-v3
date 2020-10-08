@@ -1,5 +1,4 @@
 import { INavigationItem } from "./NavigationItem";
-import brandImage from "../../assets/brand.svg";
 
 const navigations: INavigationItem[] = [
   { title: "인강실", route: "/ingangsil" },

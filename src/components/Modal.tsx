@@ -20,20 +20,26 @@ export const ModalContainer = () => {
   const [ModalElement, setModalElement] = useState<ReactNode>();
   const [props, setProps] = useState<IModalProps>();
   const [visible, setVisivility] = useState(false);
-  const [onClose, setOnClose] = useState<() => void>()
+  const [onClose, setOnClose] = useState<() => void>();
   const [disappearingAnimation, setDisappearingAnimation] = useState(false);
   const disappear = () => {
-    onClose && onClose()
+    onClose && onClose();
     setDisappearingAnimation(true);
     setTimeout(() => setVisivility(false), 300);
   };
   useEffect(() => {
-    show = (el: (close: () => void) => ReactNode, props?: IModalProps, onCloseListener?) => {
-      if (onCloseListener) setOnClose(() => onCloseListener)
-      else setOnClose(undefined)
-      setModalElement(el(() => {
-        disappear()
-      }));
+    show = (
+      el: (close: () => void) => ReactNode,
+      props?: IModalProps,
+      onCloseListener?
+    ) => {
+      if (onCloseListener) setOnClose(() => onCloseListener);
+      else setOnClose(undefined);
+      setModalElement(
+        el(() => {
+          disappear();
+        })
+      );
       setVisivility(true);
       setDisappearingAnimation(false);
       if (props) setProps(props);

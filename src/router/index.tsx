@@ -6,6 +6,7 @@ import Auth from "./Auth";
 import Ingangsil from "../pages/Ingangsil";
 import Outgo from "../pages/Outgo";
 import Notices from "../pages/Notices";
+import SelfStudyDisplay from "../pages/SelfStudyDisplay";
 
 const Router: React.FC = () => (
   <BrowserRouter>
@@ -15,6 +16,7 @@ const Router: React.FC = () => (
       <Route path="/outgo" component={Outgo} />
       <Route path="/notices/:articleId" component={Notices} />
       <Route path="/notices" component={Notices} />
+      <Route path="/selfstudydisplay" component={SelfStudyDisplay} />
       <Route path="/" exact component={Main} />
     </Switch>
   </BrowserRouter>
