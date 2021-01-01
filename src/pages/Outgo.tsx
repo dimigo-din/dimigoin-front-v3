@@ -15,6 +15,7 @@ import Checkbox from "../components/dimiru/DimiCheckbox";
 import Button from "../components/dimiru/DimiButton";
 import useInput from "../components/hooks/useInput";
 import PageWrapper from "../components/grids/PageWrapper";
+import { CardExplainContent } from "../components/Atomics";
 
 const DateSelector: React.FC = () => {
   const dayInput = useInput<Date>();
@@ -101,16 +102,15 @@ const Outgo: React.FC = () => {
                     <DateHighlight>13시 30분</DateHighlight> 까지
                     <br /> 외출을 신청합니다
                   </Info>
-                  <Explain>
+                  <CardExplainContent css={css`margin-top: 36px;`}>
                     <h2>이용방법</h2>
-                    외출시, 정문 외출 인식기에 외출시간을 입력합니다. 귀교시,
-                    정문 외출 인식기에 귀교시간을 입력합니다.
-                  </Explain>
-                  <Explain>
+                    <p>외출시, 정문 외출 인식기에 외출시간을 입력합니다.</p>
+                    <p>귀교시, 정문 외출 인식기에 귀교시간을 입력합니다.</p>
+                    
                     <h2>주의사항</h2>
-                    신청 전, 모든 내용이 올바르게 기재되었는지 확인해주세요.
-                    허위 기재된 내용이 있다면 불이익을 받을 수 있습니다.
-                  </Explain>
+                    <p>신청 전, 모든 내용이 올바르게 기재되었는지 확인해주세요.</p>
+                    <p>허위 기재된 내용이 있다면 불이익을 받을 수 있습니다.</p>
+                  </CardExplainContent>
                   <Checkbox
                     css={css`
                       margin-top: 12px;
@@ -135,24 +135,14 @@ const Outgo: React.FC = () => {
   );
 };
 export default Outgo;
-const Info = styled.div`
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 30px;
-`;
 
 const DateHighlight = styled.span`
   font-weight: 900;
   color: var(--main-theme-accent);
 `;
 
-const Explain = styled.div`
-  color: #8a8a8a;
-  font-size: 16px;
+export const Info = styled.div`
+  font-size: 20px;
+  font-weight: 700;
   line-height: 30px;
-
-  margin-top: 36px;
-  & h2 {
-    font-weight: 900;
-  }
 `;
