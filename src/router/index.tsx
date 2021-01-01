@@ -7,6 +7,7 @@ import Ingangsil from "../pages/Ingangsil";
 import Outgo from "../pages/Outgo";
 import Notices from "../pages/Notices";
 import Council from "../pages/Council";
+import Mentoring from "../pages/Mentoring";
 
 const Router: React.FC = () => (
   <BrowserRouter>
@@ -17,6 +18,7 @@ const Router: React.FC = () => (
       <Route path="/notices/:articleId" component={Notices} />
       <Route path="/notices" component={Notices} />
       <Route path="/council" component={Council} />
+      <Route path="/mentoring" component={Mentoring} />
       <Route path="/" exact component={Main} />
     </Switch>
   </BrowserRouter>
