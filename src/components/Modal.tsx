@@ -3,10 +3,7 @@ import styled from "@emotion/styled";
 import DimiCard, { IDimiCard } from "./dimiru/DimiCard";
 import css, { SerializedStyles } from "@emotion/css";
 
-interface IModalProps {
-  cardProps?: IDimiCard & {
-    css?: SerializedStyles;
-  };
+export interface IModalProps {
   wrapperProps?: React.HTMLAttributes<HTMLDivElement>;
   backdropProps?: React.HTMLAttributes<HTMLDivElement>;
 }
