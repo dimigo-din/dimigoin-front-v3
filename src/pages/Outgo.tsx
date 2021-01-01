@@ -22,7 +22,7 @@ const DateSelector: React.FC = () => {
   useEffect(() => {
     const from = dayInput.value;
     const to = dayInput.value;
-    if (!(from && to)) return;
+    if (!(from && to && timeInput.value)) return;
     from.setHours(timeInput.value[0]?.hour);
     to.setHours(timeInput.value[1]?.hour);
 

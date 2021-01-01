@@ -6,7 +6,7 @@ const useInput = <T = string>(
   initValue?: any,
   inputValidation?: (value: T) => boolean
 ) => {
-  const [value, setValue] = useState<T>(initValue);
+  const [value, setValue] = useState<T | undefined>(initValue);
 
   const onChange = ({
     target: { value: willSetValue },

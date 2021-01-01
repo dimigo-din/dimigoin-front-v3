@@ -3,10 +3,7 @@ import styled from "@emotion/styled";
 import DimiCard, { IDimiCard } from "./dimiru/DimiCard";
 import css, { SerializedStyles } from "@emotion/css";
 
-interface IModalProps {
-  cardProps?: IDimiCard & {
-    css?: SerializedStyles;
-  };
+export interface IModalProps {
   wrapperProps?: React.HTMLAttributes<HTMLDivElement>;
   backdropProps?: React.HTMLAttributes<HTMLDivElement>;
 }
@@ -63,6 +60,8 @@ export const Backdrop = styled.div<{ visible?: boolean }>`
   overflow-y: scroll;
   backdrop-filter: blur(2px);
   animation: appear 300ms forwards;
+  display: grid;
+  place-items: center;
 
   ${({ visible }) =>
     visible &&
@@ -92,7 +91,5 @@ export const Backdrop = styled.div<{ visible?: boolean }>`
   }
 `;
 const Wrapper = styled.div`
-  /* width: 100%; */
-  margin: 0px auto;
   box-sizing: border-box;
 `;
