@@ -63,6 +63,8 @@ export const Backdrop = styled.div<{ visible?: boolean }>`
   overflow-y: scroll;
   backdrop-filter: blur(2px);
   animation: appear 300ms forwards;
+  display: grid;
+  place-items: center;
 
   ${({ visible }) =>
     visible &&
@@ -92,7 +94,5 @@ export const Backdrop = styled.div<{ visible?: boolean }>`
   }
 `;
 const Wrapper = styled.div`
-  /* width: 100%; */
-  margin: 0px auto;
   box-sizing: border-box;
 `;
