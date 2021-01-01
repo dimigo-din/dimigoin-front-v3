@@ -33,6 +33,7 @@ const style = {
     transition: all 0.2s ease-in-out, 0.5s background-color ease;
     user-select: none;
     white-space: nowrap;
+    box-sizing: border-box;
   `,
   gray: css`
     background-color: #f3f3f3;
