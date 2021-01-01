@@ -7,14 +7,15 @@ export interface IDropdownItem {
   name: string;
   key?: string;
 }
+
 interface IProps {
-  items: IDropdownItem[];
+  items?: IDropdownItem[];
   placeholder: string;
   requireMessage?: string;
   onChange?: EventFunction<IDropdownItem>;
 }
 
-export default ({ items, placeholder, onChange, requireMessage }: IProps) => {
+export default ({ items, placeholder, onChange, requireMessage, ...props }: IProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [opened, setOpened] = useState(false);
   const clickHandler = ({
@@ -26,13 +27,15 @@ export default ({ items, placeholder, onChange, requireMessage }: IProps) => {
     onChange && onChange({ target: { value: { key, name } } });
   };
   return (
-    <FixedHeightWrapper opened={opened}>
+    <FixedHeightWrapper opened={opened} {...props}>
       <Wrapper
         highlighted={opened}
         blueBorder={opened || selectedIndex !== -1}
-        onClick={() => setOpened((b) => !b)}
+        onClick={() => items && setOpened((b) => !b)}
+        disabled={!!items}
       >
-        {[
+        {items ? 
+        [
           {
             name: placeholder,
             key: "SELECTONE",
@@ -47,7 +50,13 @@ export default ({ items, placeholder, onChange, requireMessage }: IProps) => {
           >
             {name}
           </Item>
-        ))}
+        )) :
+        <Item
+        highlighted={false}
+        visible
+      >
+        {placeholder}
+      </Item>}
       </Wrapper>
     </FixedHeightWrapper>
   );
@@ -68,14 +77,16 @@ const highlightedBorder = css`
   border-color: var(--main-theme-accent);
 `;
 
-const Wrapper = styled.div<{ highlighted?: boolean; blueBorder?: boolean }>`
+const Wrapper = styled.div<{ highlighted?: boolean; blueBorder?: boolean; disabled?: boolean }>`
   border-radius: 6px;
   border: solid 1px #D1D1D1;
   transition: 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
   background-color: white;
-  &:hover {
-    ${highlightedBorder}
-  }
+  ${({disabled}) => disabled && css`
+    &:hover {
+      ${highlightedBorder}
+    }
+  `}
   ${({ highlighted }) =>
     highlighted &&
     css`
