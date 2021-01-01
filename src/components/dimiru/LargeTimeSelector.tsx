@@ -22,8 +22,8 @@ const Time: React.FC<ITimeProps> = ({
       onChange({
         target: {
           value: {
-            hour: +hourInput.value,
-            minute: +minuteInput.value,
+            hour: +hourInput.value!!,
+            minute: +minuteInput.value!!,
           },
         },
       });
@@ -31,9 +31,9 @@ const Time: React.FC<ITimeProps> = ({
   return (
     <TimeWrapper>
       <HalfDayWrapper>
-        <HalfDay selected={+hourInput.value < 12}>오전</HalfDay>
+        <HalfDay selected={+hourInput?.value!! < 12}>오전</HalfDay>
         <HalfDay
-          selected={!(+hourInput.value < 12)}
+          selected={!(+hourInput.value!! < 12)}
           css={css`
             margin-top: 12px;
           `}
@@ -65,7 +65,7 @@ const LargeTimeSelector: React.FC<IProps> = ({ value, onChange, ...props }) => {
   const fromInput = useInput<ITime>();
   const toInput = useInput<ITime>();
   useEffect(() => {
-    onChange &&
+    onChange && fromInput.value && toInput.value &&
       onChange({
         target: {
           value: [fromInput.value, toInput.value],
