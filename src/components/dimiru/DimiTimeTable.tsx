@@ -2,8 +2,8 @@ import React from "react";
 import styled from "@emotion/styled";
 import Card from "./DimiCard";
 import css from "@emotion/css";
+import { days } from "../../constants";
 
-const days = ["월", "화", "수", "목", "금"];
 const today = 2;
 
 interface IProps {
