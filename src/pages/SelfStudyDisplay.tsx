@@ -24,18 +24,6 @@ const NavBar: React.FC<INavBarProps> = ({ className, jaseupName }) => (
   </Horizontal>
 );
 
-const ClassName = styled.h1`
-  font-size: 34px;
-  font-family: "NanumSquare";
-  font-weight: 900;
-  margin-left: 20px;
-`;
-
-const JaseupName = styled.h2`
-  font-size: 26px;
-  margin-left: 20px;
-`;
-
 interface ILabelCardProps {
   title: string;
   contentCss?: SerializedStyles;
@@ -55,55 +43,9 @@ const LabelCard: React.FC<ILabelCardProps> = ({
   </LabelWrapper>
 );
 
-const LabelWrapper = styled.div<{ width?: number }>`
-  margin-left: 15px;
-  display: flex;
-  flex-direction: column;
-  margin-top: 15px;
-  ${({ width }) =>
-    width &&
-    css`
-      width: ${width}px;
-    `}
-`;
-
-const LabelTitle = styled.h3`
-  color: white;
-  background-color: var(--row-color);
-  padding: 8px;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 18px;
-`;
-const ContentWrapper = styled.div`
-  border: 1px solid var(--row-color);
-  padding: 14px;
-  color: var(--row-color);
-  font-size: 23px;
-  font-weight: 700;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
-  background-color: white;
-
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-`;
-
 const Student: React.FC = ({ children }) => (
   <StudentWrapper>{children}</StudentWrapper>
 );
-
-const StudentWrapper = styled.h3`
-  padding: 20px;
-  color: var(--row-color);
-  font-size: 23px;
-  font-weight: 700;
-`;
 
 interface ISelfStudyStatus {
   label: string;
@@ -135,7 +77,7 @@ const SelfStudyDisplay: React.FC = () => {
         type: "AVAILABLE",
         labels: [
           {
-            icon: <DeskIcon />,
+            icon: <DeskIcon css={iconStyle} />,
             label: "교실",
             students: [
               {
@@ -145,7 +87,7 @@ const SelfStudyDisplay: React.FC = () => {
             ],
           },
           {
-            icon: <DeskIcon />,
+            icon: <DeskIcon css={iconStyle}  />,
             label: "이동반",
             students: [
               {
@@ -161,7 +103,7 @@ const SelfStudyDisplay: React.FC = () => {
         type: "NOTAVAILABLE",
         labels: [
           {
-            icon: <LaundryIcon />,
+            icon: <LaundryIcon  css={iconStyle} />,
             label: "세탁",
             students: [
               {
@@ -202,7 +144,8 @@ const SelfStudyDisplay: React.FC = () => {
                 >
                   {row.labels.map((label) => (
                     <Horizontal>
-                      <LabelCard title="위치" width={125} css={noBreak}>
+                      <LabelCard title="위치" width={125} css={noBreak} contentCss={locationLabelStyle}>
+                        {label.icon}
                         {label.label}
                       </LabelCard>
                       <LabelCard title="인원" width={70}>
@@ -256,5 +199,73 @@ const RowLable1 = styled.div`
   display: flex;
   align-items: center;
 `;
+
+const LabelWrapper = styled.div<{ width?: number }>`
+  margin-left: 15px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+  ${({ width }) =>
+    width &&
+    css`
+      width: ${width}px;
+    `}
+`;
+
+const LabelTitle = styled.h3`
+  color: white;
+  background-color: var(--row-color);
+  padding: 8px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 18px;
+`;
+
+const ContentWrapper = styled.div`
+  border: 1px solid var(--row-color);
+  padding: 14px;
+  color: var(--row-color);
+  font-size: 23px;
+  font-weight: 700;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  background-color: white;
+
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const ClassName = styled.h1`
+  font-size: 34px;
+  font-family: "NanumSquare";
+  font-weight: 900;
+  margin-left: 20px;
+`;
+
+const JaseupName = styled.h2`
+  font-size: 26px;
+  margin-left: 20px;
+`;
+
+const StudentWrapper = styled.h3`
+  padding: 20px;
+  color: var(--row-color);
+  font-size: 23px;
+  font-weight: 700;
+`;
+
+const iconStyle = css`
+  width: 24px;
+`
+
+const locationLabelStyle = css`
+  flex-direction: row;
+  justify-content: space-between;
+`
 
 export default SelfStudyDisplay;
