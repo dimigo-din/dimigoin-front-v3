@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ClassAttributes, RefObject, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { ReactComponent as IconLogo } from "../assets/brand.svg";
 import PageWrapper from "../components/grids/PageWrapper";
@@ -6,6 +6,8 @@ import { Horizontal, noBreak } from "../components/Atomics";
 import { ReactComponent as DeskIcon } from "../assets/icons/desk.svg";
 import { ReactComponent as LaundryIcon } from "../assets/icons/laundry.svg";
 import css, { SerializedStyles } from "@emotion/css";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend"
 
 interface INavBarProps {
   className: string;
@@ -28,24 +30,39 @@ interface ILabelCardProps {
   title: string;
   contentCss?: SerializedStyles;
   width?: number;
+  ref?: ((instance: HTMLDivElement | null) => void) | RefObject<HTMLDivElement> | null;
 }
 
-const LabelCard: React.FC<ILabelCardProps> = ({
+const LabelCard: React.FC<ILabelCardProps> = React.forwardRef(({
   children,
   title,
   contentCss,
   width,
   ...props
-}) => (
-  <LabelWrapper {...props} width={width}>
-    <LabelTitle>{title}</LabelTitle>
-    <ContentWrapper css={contentCss}>{children}</ContentWrapper>
-  </LabelWrapper>
-);
+}, ref) => {
+  return (
+    <LabelWrapper {...props} width={width} ref={ref}>
+      <LabelTitle>{title}</LabelTitle>
+      <ContentWrapper css={contentCss}>{children}</ContentWrapper>
+    </LabelWrapper>
+  )
+});
 
-const Student: React.FC = ({ children }) => (
-  <StudentWrapper>{children}</StudentWrapper>
-);
+const Student: React.FC = ({ children }) => {
+  const [_, draggable] = useDrag({
+    item: {
+      type: "STUDENT"
+    },
+    collect: state => ({
+      isDragging: state.isDragging()
+    })
+  })
+  return (
+    <StudentWrapper>
+      <p ref={draggable}>{children}</p>
+    </StudentWrapper>
+  )
+};
 
 interface ISelfStudyStatus {
   label: string;
@@ -61,6 +78,40 @@ const ROW_COLOR = {
   NOTAVAILABLE: "#B8B8B8",
 };
 
+const StudentList: React.FC<{
+  students: ISelfStudyStatus['students']
+}> = ({
+  students
+}) => {
+  const [_, droppable] = useDrop({
+    accept: 'STUDENT'
+  })
+  return (
+    <LabelCard
+      title="이름"
+      css={css`
+        flex: 1;
+      `}
+      contentCss={css`
+        align-items: flex-start;
+      `}
+      ref={droppable}
+    >
+      <Horizontal
+        css={css`
+          margin: -20px;
+          flex-wrap: wrap;
+        `}
+      >
+        {students.map((student) => (
+          <Student key={student.number}>
+            {student.number} {student.name}
+          </Student>
+        ))}
+      </Horizontal>
+    </LabelCard>)
+}
+
 const SelfStudyDisplay: React.FC = () => {
   const [selfStudyData, setSelfStudyData] = useState<
     {
@@ -69,7 +120,6 @@ const SelfStudyDisplay: React.FC = () => {
       labels: ISelfStudyStatus[];
     }[]
   >();
-
   useEffect(() => {
     setSelfStudyData(() => [
       {
@@ -87,7 +137,7 @@ const SelfStudyDisplay: React.FC = () => {
             ],
           },
           {
-            icon: <DeskIcon css={iconStyle}  />,
+            icon: <DeskIcon css={iconStyle} />,
             label: "이동반",
             students: [
               {
@@ -103,7 +153,7 @@ const SelfStudyDisplay: React.FC = () => {
         type: "NOTAVAILABLE",
         labels: [
           {
-            icon: <LaundryIcon  css={iconStyle} />,
+            icon: <LaundryIcon css={iconStyle} />,
             label: "세탁",
             students: [
               {
@@ -116,8 +166,9 @@ const SelfStudyDisplay: React.FC = () => {
       },
     ]);
   }, []);
+
   return (
-    <>
+    <DndProvider backend={HTML5Backend}>
       <PageWrapper
         css={css`
           padding-top: 40px;
@@ -133,6 +184,7 @@ const SelfStudyDisplay: React.FC = () => {
                   --row-color: ${ROW_COLOR[row.type]};
                   margin-top: 20px;
                 `}
+                key={row.name}
               >
                 <RowLable1 css={noBreak}>{row.name}</RowLable1>
 
@@ -143,36 +195,17 @@ const SelfStudyDisplay: React.FC = () => {
                   `}
                 >
                   {row.labels.map((label) => (
-                    <Horizontal>
+                    <Horizontal key={label.label}>
                       <LabelCard title="위치" width={125} css={noBreak} contentCss={locationLabelStyle}>
                         {label.icon}
-                        {label.label}
+                        <LocationLabelText>
+                          {label.label}
+                        </LocationLabelText>
                       </LabelCard>
                       <LabelCard title="인원" width={70}>
                         {label.students.length}
                       </LabelCard>
-                      <LabelCard
-                        title="이름"
-                        css={css`
-                          flex: 1;
-                        `}
-                        contentCss={css`
-                          align-items: flex-start;
-                        `}
-                      >
-                        <Horizontal
-                          css={css`
-                            margin: -20px;
-                            flex-wrap: wrap;
-                          `}
-                        >
-                          {label.students.map((student) => (
-                            <Student>
-                              {student.number} {student.name}
-                            </Student>
-                          ))}
-                        </Horizontal>
-                      </LabelCard>
+                      <StudentList students={label.students} />
                     </Horizontal>
                   ))}
                 </div>
@@ -181,7 +214,7 @@ const SelfStudyDisplay: React.FC = () => {
           </div>
         </TableWrapper>
       </PageWrapper>
-    </>
+    </DndProvider>
   );
 };
 
@@ -265,7 +298,11 @@ const iconStyle = css`
 
 const locationLabelStyle = css`
   flex-direction: row;
-  justify-content: space-between;
+`
+
+const LocationLabelText = styled.p`
+  flex: 1;
+  text-align: center; 
 `
 
 export default SelfStudyDisplay;
