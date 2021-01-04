@@ -1,4 +1,4 @@
-import React, { ClassAttributes, RefObject, useEffect, useState } from "react";
+import React, { RefObject, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { ReactComponent as IconLogo } from "../assets/brand.svg";
 import PageWrapper from "../components/grids/PageWrapper";
@@ -8,6 +8,7 @@ import { ReactComponent as LaundryIcon } from "../assets/icons/laundry.svg";
 import css, { SerializedStyles } from "@emotion/css";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend"
+import SelfStudyStatus from "../components/SelfStudyStatus";
 
 interface INavBarProps {
   className: string;
@@ -49,7 +50,7 @@ const LabelCard: React.FC<ILabelCardProps> = React.forwardRef(({
 });
 
 const Student: React.FC = ({ children }) => {
-  const [_, draggable] = useDrag({
+  const [, draggable] = useDrag({
     item: {
       type: "STUDENT"
     },
@@ -73,58 +74,68 @@ interface ISelfStudyStatus {
   }[];
 }
 
-const ROW_COLOR = {
-  AVAILABLE: "var(--main-theme-accent)",
-  NOTAVAILABLE: "#B8B8B8",
-};
 
 const StudentList: React.FC<{
   students: ISelfStudyStatus['students']
 }> = ({
   students
 }) => {
-  const [_, droppable] = useDrop({
-    accept: 'STUDENT'
-  })
-  return (
-    <LabelCard
-      title="이름"
-      css={css`
+    const [, droppable] = useDrop({
+      accept: 'STUDENT'
+    })
+    return (
+      <LabelCard
+        title="이름"
+        css={css`
         flex: 1;
       `}
-      contentCss={css`
+        contentCss={css`
         align-items: flex-start;
       `}
-      ref={droppable}
-    >
-      <Horizontal
-        css={css`
+        ref={droppable}
+      >
+        <Horizontal
+          css={css`
           margin: -20px;
           flex-wrap: wrap;
         `}
-      >
-        {students.map((student) => (
-          <Student key={student.number}>
-            {student.number} {student.name}
-          </Student>
-        ))}
-      </Horizontal>
-    </LabelCard>)
+        >
+          {students.map((student) => (
+            <Student key={student.number}>
+              {student.number} {student.name}
+            </Student>
+          ))}
+        </Horizontal>
+      </LabelCard>
+  )
+}
+
+enum SelfStudyPlaceState {
+  AVAILABLE="AVAILABLE",
+  NOTAVAILABLE="NOTAVAILABLE"
+}
+
+const ROW_COLOR = {
+  [SelfStudyPlaceState.AVAILABLE]: "var(--main-theme-accent)",
+  [SelfStudyPlaceState.NOTAVAILABLE]: "#B8B8B8",
+};
+
+interface SelfStudy {
+  type: SelfStudyPlaceState;
+  name: string;
+  labels: ISelfStudyStatus[];
 }
 
 const SelfStudyDisplay: React.FC = () => {
-  const [selfStudyData, setSelfStudyData] = useState<
-    {
-      type: "AVAILABLE" | "NOTAVAILABLE";
-      name: string;
-      labels: ISelfStudyStatus[];
-    }[]
-  >();
+  const [selfStudyData, setSelfStudyData] = useState<SelfStudy[]>();
+  const [currentStudentQuentity, setCurrentStudentQuentity] = useState<{
+    [key in keyof typeof SelfStudyPlaceState]: number
+  }>()
   useEffect(() => {
     setSelfStudyData(() => [
       {
         name: "현원",
-        type: "AVAILABLE",
+        type: SelfStudyPlaceState.AVAILABLE,
         labels: [
           {
             icon: <DeskIcon css={iconStyle} />,
@@ -150,7 +161,7 @@ const SelfStudyDisplay: React.FC = () => {
       },
       {
         name: "결원",
-        type: "NOTAVAILABLE",
+        type: SelfStudyPlaceState.NOTAVAILABLE,
         labels: [
           {
             icon: <LaundryIcon css={iconStyle} />,
@@ -166,6 +177,14 @@ const SelfStudyDisplay: React.FC = () => {
       },
     ]);
   }, []);
+  useEffect(() => {
+    if(!selfStudyData) return
+    const [available, notAvailable] = (selfStudyData.map(status => status.labels.reduce((acc, place) => place.students.length + acc, 0)))
+    setCurrentStudentQuentity(() => ({
+      AVAILABLE: available,
+      NOTAVAILABLE: notAvailable
+    }))
+  }, [selfStudyData])
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -186,7 +205,7 @@ const SelfStudyDisplay: React.FC = () => {
                 `}
                 key={row.name}
               >
-                <RowLable1 css={noBreak}>{row.name}</RowLable1>
+                <RowLable css={noBreak}>{row.name}</RowLable>
 
                 <div
                   css={css`
@@ -195,7 +214,9 @@ const SelfStudyDisplay: React.FC = () => {
                   `}
                 >
                   {row.labels.map((label) => (
-                    <Horizontal key={label.label}>
+                    <Horizontal key={label.label} css={css`
+                      &>*{margin-left: 15px;}`
+                    }>
                       <LabelCard title="위치" width={125} css={noBreak} contentCss={locationLabelStyle}>
                         {label.icon}
                         <LocationLabelText>
@@ -213,6 +234,27 @@ const SelfStudyDisplay: React.FC = () => {
             ))}
           </div>
         </TableWrapper>
+
+        {currentStudentQuentity && <Horizontal
+          css={css`
+            align-items: stretch;
+            --row-color: ${ROW_COLOR.AVAILABLE};
+            margin-top: 20px;
+            &>*+*{
+              margin-left: 10px;
+            }
+          `}
+        >
+          <LabelCard title="총원" width={70}>
+            {currentStudentQuentity.AVAILABLE + currentStudentQuentity.NOTAVAILABLE}
+          </LabelCard>
+          <LabelCard title="현원" width={70}>
+            {currentStudentQuentity?.AVAILABLE}
+          </LabelCard>
+          <LabelCard title="결원" width={70} css={css`--row-color: ${ROW_COLOR.NOTAVAILABLE};`}>
+            {currentStudentQuentity?.NOTAVAILABLE}
+          </LabelCard>
+        </Horizontal>}
       </PageWrapper>
     </DndProvider>
   );
@@ -222,7 +264,7 @@ const TableWrapper = styled.div`
   margin-top: 45px;
 `;
 
-const RowLable1 = styled.div`
+const RowLable = styled.div`
   padding: 10px;
   background-color: var(--row-color);
   color: white;
@@ -234,7 +276,7 @@ const RowLable1 = styled.div`
 `;
 
 const LabelWrapper = styled.div<{ width?: number }>`
-  margin-left: 15px;
+  /* margin-left: 15px; */
   display: flex;
   flex-direction: column;
   margin-top: 15px;
