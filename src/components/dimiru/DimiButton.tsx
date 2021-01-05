@@ -1,7 +1,7 @@
 import React from 'react';
 import css from '@emotion/css';
 
-interface IDimiButton {
+export interface IDimiButton {
   gray?: boolean;
   active?: boolean;
   loading?: boolean;
