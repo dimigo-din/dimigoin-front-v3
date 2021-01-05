@@ -1,14 +1,18 @@
-import React, { RefObject, useEffect, useState } from "react";
+import React, { RefObject, useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { ReactComponent as IconLogo } from "../assets/brand.svg";
-import PageWrapper from "../components/grids/PageWrapper";
-import { Horizontal, noBreak } from "../components/Atomics";
-import { ReactComponent as DeskIcon } from "../assets/icons/desk.svg";
-import { ReactComponent as LaundryIcon } from "../assets/icons/laundry.svg";
 import css, { SerializedStyles } from "@emotion/css";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend"
-import SelfStudyStatus from "../components/SelfStudyStatus";
+import { ReactComponent as DeskIcon } from "../../assets/icons/desk.svg";
+import { ReactComponent as LaundryIcon } from "../../assets/icons/laundry.svg";
+import { ReactComponent as RefreshIcon } from "../../assets/icons/refresh.svg";
+import { ReactComponent as HistoryIcon } from "../../assets/icons/history.svg";
+import { ReactComponent as IconLogo } from "../../assets/brand.svg";
+import PageWrapper from "../../components/grids/PageWrapper";
+import { Horizontal, noBreak } from "../../components/Atomics";
+import DimiButton, { IDimiButton } from "../../components/dimiru/DimiButton";
+import { showCardModal } from "../../components/DimiCardModal";
+import { Timeline } from "./Timeline";
 
 interface INavBarProps {
   className: string;
@@ -107,12 +111,12 @@ const StudentList: React.FC<{
           ))}
         </Horizontal>
       </LabelCard>
-  )
-}
+    )
+  }
 
 enum SelfStudyPlaceState {
-  AVAILABLE="AVAILABLE",
-  NOTAVAILABLE="NOTAVAILABLE"
+  AVAILABLE = "AVAILABLE",
+  NOTAVAILABLE = "NOTAVAILABLE"
 }
 
 const ROW_COLOR = {
@@ -124,6 +128,19 @@ interface SelfStudy {
   type: SelfStudyPlaceState;
   name: string;
   labels: ISelfStudyStatus[];
+}
+
+const ButtonWithIcon: React.FC<Partial<IDimiButton> & {
+  icon: React.FunctionComponent;
+  label: string;
+}> = ({ icon: Icon, label, ...props }) => {
+  return (<DimiButton {...props}>
+      <Icon css={[iconStyle, css`
+        fill: white;
+        margin-right: 6px;
+      `]} />
+      {label}
+    </DimiButton>)
 }
 
 const SelfStudyDisplay: React.FC = () => {
@@ -178,13 +195,25 @@ const SelfStudyDisplay: React.FC = () => {
     ]);
   }, []);
   useEffect(() => {
-    if(!selfStudyData) return
+    if (!selfStudyData) return
     const [available, notAvailable] = (selfStudyData.map(status => status.labels.reduce((acc, place) => place.students.length + acc, 0)))
     setCurrentStudentQuentity(() => ({
       AVAILABLE: available,
       NOTAVAILABLE: notAvailable
     }))
   }, [selfStudyData])
+
+  const openMoveClassDisplay = useCallback(() => {
+      showCardModal(() => <Timeline />, undefined, {
+        cardProps: {
+          css: css`
+            border-top: none;
+            width: 720px;
+            padding: 0px;
+          `
+        }
+      })
+  }, [])
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -235,26 +264,43 @@ const SelfStudyDisplay: React.FC = () => {
           </div>
         </TableWrapper>
 
-        {currentStudentQuentity && <Horizontal
-          css={css`
-            align-items: stretch;
-            --row-color: ${ROW_COLOR.AVAILABLE};
-            margin-top: 20px;
-            &>*+*{
-              margin-left: 10px;
+        <Horizontal css={css`
+          margin-top: 20px;
+          align-items: flex-start;
+        `}>
+          {currentStudentQuentity && <Horizontal
+            css={css`
+              align-items: stretch;
+              --row-color: ${ROW_COLOR.AVAILABLE};
+              flex: 1;
+              &>*+*{
+                margin-left: 10px;
+              }
+              &>div {
+                margin-top: 0px;
+              }
+            `}
+          >
+            <LabelCard title="총원" width={70}>
+              {currentStudentQuentity.AVAILABLE + currentStudentQuentity.NOTAVAILABLE}
+            </LabelCard>
+            <LabelCard title="현원" width={70}>
+              {currentStudentQuentity?.AVAILABLE}
+            </LabelCard>
+            <LabelCard title="결원" width={70} css={css`--row-color: ${ROW_COLOR.NOTAVAILABLE};`}>
+              {currentStudentQuentity?.NOTAVAILABLE}
+            </LabelCard>
+          </Horizontal>}
+          <Horizontal css={css`
+            &>*+* {
+              margin-left: 12px;
             }
-          `}
-        >
-          <LabelCard title="총원" width={70}>
-            {currentStudentQuentity.AVAILABLE + currentStudentQuentity.NOTAVAILABLE}
-          </LabelCard>
-          <LabelCard title="현원" width={70}>
-            {currentStudentQuentity?.AVAILABLE}
-          </LabelCard>
-          <LabelCard title="결원" width={70} css={css`--row-color: ${ROW_COLOR.NOTAVAILABLE};`}>
-            {currentStudentQuentity?.NOTAVAILABLE}
-          </LabelCard>
-        </Horizontal>}
+          `}>
+            <ButtonWithIcon icon={RefreshIcon} label="새로고침" disabled />
+            <ButtonWithIcon icon={DeskIcon} label="이동반" onClick={openMoveClassDisplay} />
+            <ButtonWithIcon icon={HistoryIcon} label="히스토리" />
+          </Horizontal>
+        </Horizontal>
       </PageWrapper>
     </DndProvider>
   );
@@ -336,6 +382,7 @@ const StudentWrapper = styled.h3`
 
 const iconStyle = css`
   width: 24px;
+  fill: var(--row-color);
 `
 
 const locationLabelStyle = css`
