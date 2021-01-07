@@ -206,20 +206,36 @@ const SelfStudyDisplay: React.FC = () => {
   }, [selfStudyData])
 
   const openMoveClassDisplay = useCallback(() => {
-      show(() => <NamedSection sections={[{
-        name: "1타임",
-        component: <Timeline />
-      }, {
-        name: "2타임",
-        component: <div>
-          대충2번정보
-        </div>
-      }]} />, {
-        wrapperProps: {
-          css: css`max-width: 1080px; padding: 60px 20px 20px; width: 100%;`
-        }
-      })
-  }, [])
+    // show(() => <NamedSection sections={[{
+    //   name: "1타임",
+    //   component: <Timeline />
+    // }, {
+    //   name: "2타임",
+    //   component: <div>
+    //     대충2번정보
+    //   </div>
+    // }]} />, {
+    //   wrapperProps: {
+    //     css: css`max-width: 1080px; padding: 60px 20px 20px; width: 100%;`
+    //   }
+    // })
+}, [])
+
+const openTimeline = useCallback(() => {
+  show(() => <NamedSection sections={[{
+    name: "1타임",
+    component: <Timeline />
+  }, {
+    name: "2타임",
+    component: <div>
+      대충2번정보
+    </div>
+  }]} />, {
+    wrapperProps: {
+      css: css`max-width: 1080px; padding: 60px 20px 20px; width: 100%;`
+    }
+  })
+}, [])
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -303,7 +319,7 @@ const SelfStudyDisplay: React.FC = () => {
             }
           `}>
             <ButtonWithIcon icon={RefreshIcon} label="새로고침" disabled />
-            <ButtonWithIcon icon={DeskIcon} label="이동반" onClick={openMoveClassDisplay} />
+            <ButtonWithIcon icon={DeskIcon} label="이동반" onClick={openTimeline} />
             <ButtonWithIcon icon={HistoryIcon} label="히스토리" />
           </Horizontal>
         </Horizontal>
