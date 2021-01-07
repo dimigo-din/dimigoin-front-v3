@@ -13,6 +13,8 @@ import { Horizontal, noBreak } from "../../components/Atomics";
 import DimiButton, { IDimiButton } from "../../components/dimiru/DimiButton";
 import { showCardModal } from "../../components/DimiCardModal";
 import { Timeline } from "./Timeline";
+import NamedSection from "../../components/NamedSection";
+import { show } from "../../components/Modal";
 
 interface INavBarProps {
   className: string;
@@ -204,13 +206,17 @@ const SelfStudyDisplay: React.FC = () => {
   }, [selfStudyData])
 
   const openMoveClassDisplay = useCallback(() => {
-      showCardModal(() => <Timeline />, undefined, {
-        cardProps: {
-          css: css`
-            border-top: none;
-            width: 720px;
-            padding: 0px;
-          `
+      show(() => <NamedSection sections={[{
+        name: "1타임",
+        component: <Timeline />
+      }, {
+        name: "2타임",
+        component: <div>
+          대충2번정보
+        </div>
+      }]} />, {
+        wrapperProps: {
+          css: css`max-width: 1080px; padding: 60px 20px 20px; width: 100%;`
         }
       })
   }, [])
