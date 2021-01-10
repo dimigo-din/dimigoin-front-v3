@@ -93,6 +93,7 @@ const OutgoApplier: React.FC = () => {
 const InputChip = styled.div`
   margin: 6px;
   width: 138px;
+  display: inline-block;
   text-align: center;
   background-color: transparent;
   border: solid 2px var(--main-theme-accent);
@@ -100,9 +101,9 @@ const InputChip = styled.div`
   border-radius: 36px;
   font-size: 24px;
   vertical-align: middle;
-  outline: none;
-  height: 36px;
-  line-height: 36px;
+  height: 34px;
+  box-sizing: border-box;
+  line-height: 30px;
   font-weight: 700;
   &::placeholder {
     color: var(--main-theme-accent);
