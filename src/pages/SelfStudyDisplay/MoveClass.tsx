@@ -1,7 +1,6 @@
 import css from '@emotion/css';
 import styled from '@emotion/styled';
-import React, { useEffect, useState } from 'react'
-// import { Student } from '../../constants/types';
+import React from 'react'
 
 const MoveClass: React.FC = () => {
     return <Wrapper>

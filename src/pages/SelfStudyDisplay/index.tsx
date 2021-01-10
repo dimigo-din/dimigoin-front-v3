@@ -11,7 +11,6 @@ import { ReactComponent as IconLogo } from "../../assets/brand.svg";
 import PageWrapper from "../../components/grids/PageWrapper";
 import { Horizontal, noBreak } from "../../components/Atomics";
 import DimiButton, { IDimiButton } from "../../components/dimiru/DimiButton";
-import { showCardModal } from "../../components/DimiCardModal";
 import { Timeline } from "./Timeline";
 import NamedSection from "../../components/NamedSection";
 import { show } from "../../components/Modal";
