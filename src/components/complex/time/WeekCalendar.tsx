@@ -8,7 +8,7 @@ interface WeekCalendarProps {
   onChange?: EventFunction<Date>;
 }
 
-const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange }) => {
+export const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange }) => {
   const now = date || new Date();
   const days = new Array(7)
     .fill(0)
@@ -144,5 +144,3 @@ const Day = styled.div<{ selected: boolean }>`
       font-size: 16px;
     }
 `;
-
-export default WeekCalendar;

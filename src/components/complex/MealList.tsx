@@ -6,7 +6,7 @@ import getMeals from '../../functions/getMeals'
 import useConsole from '../../hooks/useConsole'
 import { HeaderIconWrapper, Horizontal } from '../basic/Atomics'
 import { Title as CardTitle } from '../basic/CardGroupHeader'
-import DimiCard from '../basic/Card'
+import Card from '../basic/Card'
 import { ResponsiveWrapper } from '../layout/Cols'
 
 export interface DailyMealProps {
@@ -73,7 +73,7 @@ const DailyMealItem = styled.p`
 
 const getThisWeek = (date: Date) => Math.ceil((date.getDate() - date.getDay() + 4) / 7)
 
-const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
+export const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
   const [meals, setMeals] = useState<DailyMealProps[]>();
   const date = new Date()
   useEffect(() => {
@@ -83,7 +83,7 @@ const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
   }, [ date, goBack ])
   useConsole('meals', meals)
   if (!meals) return <></>
-  return <DimiCard css={css`
+  return <Card css={css`
     border-top: 5px solid var(--main-theme-accent);
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
@@ -96,7 +96,7 @@ const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
     </HeaderWrapper>
     {meals?.map(meal => <DailyMeal {...meal} />)}
 
-  </DimiCard>
+  </Card>
 }
 
 const HeaderWrapper = styled(Horizontal)`

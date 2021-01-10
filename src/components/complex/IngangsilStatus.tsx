@@ -2,8 +2,8 @@ import React from "react";
 import css from "@emotion/css";
 import styled from '@emotion/styled'
 import CardGroupHeader from "../basic/CardGroupHeader";
-import DimiCard from "../basic/Card";
-import DimiButton from "../basic/Button";
+import Card from "../basic/Card";
+import Button from "../basic/Button";
 
 interface IngangsilStatusProps {
   currentApplied: number;
@@ -34,7 +34,7 @@ export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
       >
         {name}
       </CardGroupHeader>
-      <DimiCard>
+      <Card>
         <div
           css={css`
             display: flex;
@@ -53,8 +53,8 @@ export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
             <NumberDisplay>{max}</NumberDisplay>
           </div>
         </div>
-      </DimiCard>
-      <DimiButton
+      </Card>
+      <Button
         css={[
           css`
             display: block;
@@ -66,7 +66,7 @@ export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
       >
         {/* 신청했는지 판별하는 변수를 넣어주세요  */}
         {isApplied ? "취소하기" : "신청하기"}
-      </DimiButton>
+      </Button>
     </>
   );
 };

@@ -7,7 +7,7 @@ interface InputProps {
   error?: boolean;
 }
 
-const DimiInput: React.FC<
+export const Input: React.FC<
   InputProps &
     React.DetailedHTMLProps<
       React.InputHTMLAttributes<HTMLInputElement>,
@@ -65,4 +65,4 @@ const ErrorMessage = styled.p`
   font-size: 12px;
 `;
 
-export default DimiInput;
+export default Input;

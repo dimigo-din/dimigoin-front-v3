@@ -2,7 +2,7 @@ import css from '@emotion/css'
 import React, { useState } from 'react'
 import styled from "@emotion/styled";
 
-const NamedSection: React.FC<{
+export const NamedSection: React.FC<{
     sections: {
         name: string;
         component: JSX.Element

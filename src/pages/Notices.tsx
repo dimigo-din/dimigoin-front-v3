@@ -2,16 +2,11 @@ import css from '@emotion/css'
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import { HeaderIconWrapper, Horizontal, UnstyledLink } from '../components/basic/Atomics'
-import CardGroupHeader, { Title } from '../components/basic/CardGroupHeader'
-import { ReactComponent as CloseSvg } from '../assets/icons/close.svg'
-import DimiCard from '../components/basic/Card'
-import { Divider, ResponsiveWrapper } from '../components/layout/Cols'
-import PageWrapper from '../components/layout/PageWrapper'
-import { show } from '../components/complex/modal/Modal'
-import NavigationBar from '../components/complex/NavigationBar'
-import TextCardGroup from '../components/basic/TextCardGroup'
+import { Card, CardGroupHeader, Divider, HeaderIconWrapper, Horizontal,
+        NavigationBar, PageWrapper, ResponsiveWrapper, showModal, TextCardGroup,
+        Title, UnstyledLink } from '../components'
 import getNoticesList, { INoticeItem, getNotice } from '../functions/getNotices'
+import { ReactComponent as CloseSvg } from '../assets/icons/close.svg'
 
 const BriefNoticeTitle = styled.h2`
   font-weight: 800;
@@ -70,7 +65,7 @@ const Article: React.FC<{ articleId: string, goBack(): void }> = ({ articleId, g
     })
   }, [ articleId, goBack ])
   if (!articleData) return <></>
-  return (<DimiCard css={css`
+  return (<Card css={css`
   border-top: 5px solid var(--main-theme-accent);
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
@@ -101,7 +96,7 @@ const Article: React.FC<{ articleId: string, goBack(): void }> = ({ articleId, g
       <Divider visible horizontal size={7} />
     </div>
     {articleData.content.split('\n').map(e => <Content>{e}</Content>)}
-  </DimiCard>)
+  </Card>)
 }
 
 const Notices: React.FC<RouteComponentProps<{
@@ -114,7 +109,7 @@ const Notices: React.FC<RouteComponentProps<{
     getNoticesList().then(setNoticesData)
   }, [])
   useEffect(() => {
-    articleId && show((close) => <Article goBack={() => {
+    articleId && showModal((close) => <Article goBack={() => {
       history.goBack()
       close()
     }} articleId={articleId} />, {

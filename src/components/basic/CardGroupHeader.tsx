@@ -13,7 +13,7 @@ interface CardGroupheaderProps {
   };
 }
 
-const CardGroupHeader: React.FC<CardGroupheaderProps> = ({
+export const CardGroupHeader: React.FC<CardGroupheaderProps> = ({
   subButton,
   withBubble,
   children,

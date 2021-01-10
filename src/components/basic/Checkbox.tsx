@@ -8,7 +8,7 @@ interface CheckboxProps {
   text?: string;
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ text, ...props }) => {
+export const Checkbox: React.FC<CheckboxProps> = ({ text, ...props }) => {
   const check = useCheckbox(false);
   return (
     <Wrapper {...props}>

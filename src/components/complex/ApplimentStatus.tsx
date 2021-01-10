@@ -12,7 +12,7 @@ interface ApplimentStatusProps extends ApplimentStatus {
   className?: string;
 }
 
-const MyTodayCard: React.FC<ApplimentStatusProps> = ({ name, location, time, className }) => {
+export const ApplimentStatus: React.FC<ApplimentStatusProps> = ({ name, location, time, className }) => {
   return (
     <Card leftBorder className={className}>
       <CardTitle>오늘의 {name}</CardTitle>
@@ -97,4 +97,4 @@ const DetailRow = styled.div`
   }
 `;
 
-export default MyTodayCard;
+export default ApplimentStatus;

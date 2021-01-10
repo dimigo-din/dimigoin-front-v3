@@ -1,21 +1,10 @@
 import React, { useEffect } from "react";
 import css from "@emotion/css";
 import styled from "@emotion/styled";
-import NavigationBar from "../components/complex/NavigationBar";
-import { ResponsiveWrapper, Col, Divider } from "../components/layout/Cols";
-import OutgoApplyForm, { OutgoApplyInput } from "../components/complex/OutgoApplyForm";
-import CardGroupHeader from "../components/basic/CardGroupHeader";
-import OutgoApplier from "../components/complex/OutgoApplier";
-import WeekCalendar from "../components/complex/time/WeekCalendar";
-import Card from "../components/basic/Card";
-import LargeTimeSelector, {
-  SelectingTime,
-} from "../components/complex/time/LargeTimeSelector";
-import Checkbox from "../components/basic/Checkbox";
-import Button from "../components/basic/Button";
+import { CardExplainContent, OutgoApplyInput, WeekCalendar, LargeTimeSelector,
+        SelectingTime, NavigationBar, PageWrapper, ResponsiveWrapper, Col,
+        CardGroupHeader, OutgoApplyForm, Divider, OutgoApplier, Card, Checkbox, Button } from "../components";
 import useInput from "../hooks/useInput";
-import PageWrapper from "../components/layout/PageWrapper";
-import { CardExplainContent } from "../components/basic/Atomics";
 
 const DateSelector: React.FC = () => {
   const dayInput = useInput<Date>();

@@ -7,7 +7,7 @@ export interface ModalOption {
   backdropProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
-export let show: (
+export let showModal: (
   el: (close: () => void) => ReactNode,
   props?: ModalOption,
   onClose?: () => void
@@ -24,7 +24,7 @@ export const ModalContainer = () => {
     setTimeout(() => setVisivility(false), 300);
   }, [ onClose ]);
   useEffect(() => {
-    show = (
+    showModal = (
       el: (close: () => void) => ReactNode,
       props?: ModalOption,
       onCloseListener?

@@ -8,7 +8,7 @@ import { Title } from "../basic/CardGroupHeader";
 import { ReactComponent as CloseSvg } from '../../assets/icons/close.svg'
 import DimiDropdown, { DropdownItem } from "../basic/Dropdown";
 import { Horizontal } from "../basic/Atomics";
-import DimiButton from "../basic/Button";
+import Button from "../basic/Button";
 import useInput from "../../hooks/useInput";
 import useConsole from "../../hooks/useConsole";
 import { Student } from "../../constants/types";
@@ -61,7 +61,7 @@ const AddApplierModal: React.FC<{
  
 }
 
-const OutgoApplier: React.FC = () => {
+export const OutgoApplier: React.FC = () => {
   const [appliers, setAppliers] = useState<Student[]>([]);
   const addApplier = () => {
     showCardModal((close) => <AddApplierModal register={(applier) => {
@@ -130,7 +130,7 @@ const FormModalWrapper = styled.div`
   padding: 32px 45px 32px;
 `
 
-const FormModalButton = styled(DimiButton)`
+const FormModalButton = styled(Button)`
   width: 100%;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;

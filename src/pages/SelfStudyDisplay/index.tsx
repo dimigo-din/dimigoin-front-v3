@@ -8,12 +8,9 @@ import { ReactComponent as LaundryIcon } from "../../assets/icons/laundry.svg";
 import { ReactComponent as RefreshIcon } from "../../assets/icons/refresh.svg";
 import { ReactComponent as HistoryIcon } from "../../assets/icons/history.svg";
 import { ReactComponent as IconLogo } from "../../assets/brand.svg";
-import PageWrapper from "../../components/layout/PageWrapper";
-import { Horizontal, noBreak } from "../../components/basic/Atomics";
-import DimiButton, { ButtonProps } from "../../components/basic/Button";
+import { Button, ButtonProps, Horizontal, noBreak,
+        PageWrapper, showModal, NamedSection } from "../../components";
 import { Timeline } from "./Timeline";
-import NamedSection from "../../components/basic/NamedSection";
-import { show } from "../../components/complex/modal/Modal";
 import MoveClass from "./MoveClass";
 
 interface TopBarProps {
@@ -137,13 +134,13 @@ const ButtonWithIcon: React.FC<Partial<ButtonProps> & {
   icon: React.FunctionComponent;
   label: string;
 }> = ({ icon: Icon, label, ...props }) => {
-  return (<DimiButton {...props}>
+  return (<Button {...props}>
     <Icon css={[iconStyle, css`
         fill: white;
         margin-right: 6px;
       `]} />
     {label}
-  </DimiButton>)
+  </Button>)
 }
 
 const SelfStudyDisplay: React.FC = () => {
@@ -207,7 +204,7 @@ const SelfStudyDisplay: React.FC = () => {
   }, [selfStudyData])
 
   const openMoveClassDisplay = useCallback(() => {
-    show(() => <NamedSection css={css`
+    showModal(() => <NamedSection css={css`
       padding: 20px;
     `} sections={[{
         name: "방과후 1실",
@@ -225,7 +222,7 @@ const SelfStudyDisplay: React.FC = () => {
   }, [])
 
   const openTimeline = useCallback(() => {
-    show(() => <NamedSection sections={[{
+    showModal(() => <NamedSection sections={[{
       name: "1타임",
       component: <Timeline />
     }, {

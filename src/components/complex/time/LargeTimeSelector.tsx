@@ -61,7 +61,7 @@ interface LargeTimeSelectorProps {
   onChange?: EventFunction<SelectingTime[]>;
 }
 
-const LargeTimeSelector: React.FC<LargeTimeSelectorProps> = ({ value, onChange, ...props }) => {
+export const LargeTimeSelector: React.FC<LargeTimeSelectorProps> = ({ value, onChange, ...props }) => {
   const fromInput = useInput<SelectingTime>();
   const toInput = useInput<SelectingTime>();
   useEffect(() => {
@@ -153,5 +153,3 @@ const FromUntil = styled.div`
     font-size: 16px;
   }
 `;
-
-export default LargeTimeSelector;

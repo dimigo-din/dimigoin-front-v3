@@ -24,7 +24,7 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   leftBorder?: boolean;
 }
 
-const DimiCard: React.FC<CardProps> = ({
+export const Card: React.FC<CardProps> = ({
   children,
   button,
   hover,
@@ -62,7 +62,7 @@ const DimiCard: React.FC<CardProps> = ({
     </Container>
   );
 
-export default DimiCard;
+export default Card;
 
 interface CardContainerProps {
   button?: boolean;

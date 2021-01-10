@@ -57,7 +57,7 @@ const style = {
   `,
 };
 
-const DimiButton: React.FC<ButtonProps> = ({
+export const Button: React.FC<ButtonProps> = ({
   gray = false,
   active = true,
   loading = false,
@@ -91,4 +91,4 @@ const DimiButton: React.FC<ButtonProps> = ({
   );
 };
 
-export default DimiButton;
+export default Button;

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
-import DimiCard from "../basic/Card";
+import Card from "../basic/Card";
 
 const MealItem: React.FC<MealItem> = ({
   selected = false,
@@ -24,7 +24,7 @@ interface TodayMealProps {
   meals: Meal[];
 }
 
-const TodayMeal: React.FC<TodayMealProps> = ({ meals }) => (
+export const TodayMeal: React.FC<TodayMealProps> = ({ meals }) => (
   <MealCard>
     {meals.map((meal) => (
       <MealItem key={meal.name} {...meal} />
@@ -41,7 +41,7 @@ interface MealItem extends MealItemSelected {
   menu?: string;
 }
 
-const MealCard = styled(DimiCard)`
+const MealCard = styled(Card)`
   /* height: 100%; */
   padding: 0;
   display: flex;

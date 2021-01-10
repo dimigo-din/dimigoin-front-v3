@@ -20,7 +20,7 @@ interface OutgoApplyProps {
   onChange?: EventFunction<OutgoApplyInput>;
 }
 
-const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }) => {
+export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }) => {
   const outgoType = useInput<RadioButtonItem>();
   const applyType = useInput<RadioButtonItem>();
   const outgoReason = useInput<DropdownItem>();

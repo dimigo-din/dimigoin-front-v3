@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from "react";
 import css from "@emotion/css";
 
-import NavigationBar from "../components/complex/NavigationBar";
-import CardGroupHeader from "../components/basic/CardGroupHeader";
-import TextCardGroup from "../components/basic/TextCardGroup";
-import TimeTable from "../components/complex/TimeTable";
-import { ResponsiveWrapper, Col, Divider } from "../components/layout/Cols";
-import MyTodayCard, { ApplimentStatus } from "../components/complex/ApplimentStatus";
-import TodayMeal, { Meal } from "../components/complex/TodayMeal";
-import SelfStudyStatus from "../components/complex/SelfStudyStatus";
-import MealList from "../components/complex/MealList";
-import { showCardModal } from "../components/complex/modal/CardModal";
-import { show } from "../components/complex/modal/Modal";
-import PageWrapper from "../components/layout/PageWrapper";
+import {  ApplimentStatus, CardGroupHeader, Col, Divider, Meal,
+          MealList, NavigationBar, PageWrapper, ResponsiveWrapper,
+          SelfStudyStatus, showModal, showCardModal, TextCardGroup, TimeTable,
+          TodayMeal } from "../components";
 
 const Main: React.FC = () => {
   const [notice, setNotice] = useState<string[]>();
@@ -83,7 +75,7 @@ const Main: React.FC = () => {
             <CardGroupHeader>나의 신청현황</CardGroupHeader>
             {myTodays ? (
               myTodays.map((myToday) => (
-                <MyTodayCard key={myToday.name} {...myToday} />
+                <ApplimentStatus key={myToday.name} {...myToday} />
               ))
             ) : (
                 <TextCardGroup content={[{ text: "신청 현황이 없습니다" }]} />
@@ -94,7 +86,7 @@ const Main: React.FC = () => {
             <CardGroupHeader
               subButton={{
                 text: "더보기",
-                action: () => show((close) => <MealList goBack={close} />, {
+                action: () => showModal((close) => <MealList goBack={close} />, {
                   wrapperProps: {
                     css: css`
                       max-width: 1600px;

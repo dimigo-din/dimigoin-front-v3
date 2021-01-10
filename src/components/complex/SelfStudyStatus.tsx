@@ -36,7 +36,7 @@ interface SelfStudyStatusProps {
   onButtonPressed: (name: string) => void;
 }
 
-const SelfStudyStatus: React.FC<SelfStudyStatusProps> = ({ onButtonPressed }) => {
+export const SelfStudyStatus: React.FC<SelfStudyStatusProps> = ({ onButtonPressed }) => {
   return (
     <Card
       css={css`

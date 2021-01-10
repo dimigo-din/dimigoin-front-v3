@@ -1,13 +1,8 @@
 import css from '@emotion/css'
 import React, { useEffect, useState } from 'react'
-import { Horizontal } from '../components/basic/Atomics'
-import CardGroupHeader from '../components/basic/CardGroupHeader'
-import DimiButton from '../components/basic/Button'
-import DimiCard from '../components/basic/Card'
-import { Col, Divider } from '../components/layout/Cols'
-import PageWrapper from '../components/layout/PageWrapper'
-import NavigationBar from '../components/complex/NavigationBar'
-import { Data, HeadData, HeadRow, Row, Table } from '../components/basic/Table'
+import { Button, Card, CardGroupHeader, Col, Data, Divider,
+        HeadData, HeadRow, Horizontal, NavigationBar, PageWrapper,
+        Row, Table } from '../components'
 import makeAlert from '../functions/makeAlert'
 
 interface MentoringSchedule {
@@ -51,9 +46,9 @@ const Mentoring: React.FC = () => {
                         <CardGroupHeader>
                             멘토링
                         </CardGroupHeader>
-                        <DimiCard leftBorder>
+                        <Card leftBorder>
                             멘토링은 웅앵
-                        </DimiCard>
+                        </Card>
                     </Col>
                     <Divider />
                     <Col width={7}>
@@ -87,14 +82,14 @@ const Mentoring: React.FC = () => {
                                 {mentoringSchedule.time[1].getHours()}시 {mentoringSchedule.time[1].getMinutes()}분</Data>
                                 <Data>{mentoringSchedule.location}</Data>
                                 <Data>
-                                    <DimiButton css={css`
+                                    <Button css={css`
                                         padding: 8px 12px;
                                         border-radius: 16px;
                                         ${mentoringSchedule.state === "COMPLETE" && css`
                                             text-decoration: none;
                                             background-color: #E6E6E6;
                                         `}
-                                    `}>신청하기</DimiButton>
+                                    `}>신청하기</Button>
                                 </Data>
                             </Row>)}
                         </Table>

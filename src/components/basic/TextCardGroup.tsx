@@ -11,7 +11,7 @@ interface TextCardGroupProps {
   spaceBetweenCards?: boolean;
 }
 
-const TextCardGroup: React.FC<TextCardGroupProps> = ({
+export const TextCardGroup: React.FC<TextCardGroupProps> = ({
   content,
   spaceBetweenCards,
   ...props

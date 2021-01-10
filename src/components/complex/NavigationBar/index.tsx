@@ -47,7 +47,8 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
   );
 };
 
-export default withRouter(TopNavbar);
+export const NavigationBar = withRouter(TopNavbar);
+export default NavigationBar
 
 const Wrapper = styled.div`
   width: 100%;
