@@ -6,7 +6,7 @@ import css from "@emotion/css";
 import { showCardModal } from "./modal/CardModal";
 import { Title } from "../basic/CardGroupHeader";
 import { ReactComponent as CloseSvg } from '../../assets/icons/close.svg'
-import DimiDropdown, { DropdownItem } from "../basic/Dropdown";
+import _Dropdown, { DropdownItem } from "../basic/Dropdown";
 import { Horizontal } from "../basic/Atomics";
 import Button from "../basic/Button";
 import useInput from "../../hooks/useInput";
@@ -122,7 +122,7 @@ const FormItem = styled.div`
   margin-top: 20px;
 `
 
-const Dropdown= styled(DimiDropdown)`
+const Dropdown= styled(_Dropdown)`
   flex: 1;
 `
 

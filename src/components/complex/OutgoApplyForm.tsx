@@ -4,7 +4,7 @@ import { FormHeader } from "../basic/Form";
 import RadioButton, {
   RadioButtonItem,
 } from "../basic/RadioButton";
-import DimiDropdown, { DropdownItem } from "../basic/Dropdown";
+import Dropdown, { DropdownItem } from "../basic/Dropdown";
 import Textarea from "../basic/Textarea";
 import useInput, { EventFunction } from "../../hooks/useInput";
 
@@ -82,7 +82,7 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }
           ]}
         />
         <FormHeader>외출 사유</FormHeader>
-        <DimiDropdown
+        <Dropdown
           {...outgoReason}
           items={[
             {
@@ -103,7 +103,7 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }
         <FormHeader>상세 사유</FormHeader>
         <Textarea {...detailReason} placeholder="이 곳을 눌러 입력하세요" />
         <FormHeader>승인 교사</FormHeader>
-        <DimiDropdown
+        <Dropdown
           {...approver}
           items={[
             {
