@@ -2,7 +2,6 @@ import React from "react";
 import styled from "@emotion/styled";
 import { EventFunction } from "../hooks/useInput";
 import css from "@emotion/css";
-import { ResponsiveWrapper, Divider } from "../grids/Cols";
 import { Horizontal } from "../Atomics";
 
 interface RadioButtonProps {

@@ -7,7 +7,7 @@ import useConsole from '../hooks/useConsole'
 import { HeaderIconWrapper, Horizontal } from './Atomics'
 import { Title as CardTitle } from './CardGroupHeader'
 import DimiCard from './dimiru/DimiCard'
-import { Divider, ResponsiveWrapper } from './grids/Cols'
+import { ResponsiveWrapper } from './grids/Cols'
 
 export interface IDailyMealProps {
   header: string;
@@ -80,7 +80,7 @@ const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
     getMeals(date)
       .then(setMeals)
       .catch(goBack)
-  }, [])
+  }, [ date, goBack ])
   useConsole('meals', meals)
   if (!meals) return <></>
   return <DimiCard css={css`

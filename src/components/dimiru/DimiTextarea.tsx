@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
-import css from "@emotion/css";
 
 export default styled.textarea`
   border-radius: 6px;

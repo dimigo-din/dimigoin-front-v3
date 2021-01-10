@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  NavigationContainer,
-  NavigationTitle,
-  NavigationImage,
-  BottomBar
-} from "./NavigationItem.style";
-import { Link } from "react-router-dom";
+import { NavigationTitle, BottomBar } from "./NavigationItem.style";
 import css from "@emotion/css";
 import { UnstyledLink } from "../Atomics";
 
@@ -21,7 +15,6 @@ const NavigationItem: React.FC<INavigationItem & {
   onLinkClicked(offset: number): void;
 }> = ({
   title,
-  image,
   selected = false,
   route,
   onLinkClicked
@@ -32,7 +25,6 @@ const NavigationItem: React.FC<INavigationItem & {
         onClick={(e) => {
           const target = (e.target as HTMLAnchorElement)
           onLinkClicked(target.offsetLeft - 89)
-          // target.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
         }}
         css={css`
         display: inline-block;    

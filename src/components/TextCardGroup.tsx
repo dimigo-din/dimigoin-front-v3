@@ -1,4 +1,4 @@
-import React, { Children, ReactNode } from "react";
+import React, { ReactNode } from "react";
 import Card, { IDimiCard } from "./dimiru/DimiCard";
 import styled from "@emotion/styled";
 import css from "@emotion/css";

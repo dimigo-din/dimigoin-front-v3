@@ -68,7 +68,7 @@ const Article: React.FC<{ articleId: string, goBack(): void }> = ({ articleId, g
     getNotice(articleId).then(setArticleData).catch(() => {
       goBack()
     })
-  })
+  }, [ articleId, goBack ])
   if (!articleData) return <></>
   return (<DimiCard css={css`
   border-top: 5px solid var(--main-theme-accent);
@@ -122,7 +122,7 @@ const Notices: React.FC<RouteComponentProps<{
         css: css`max-width: 1080px; padding: 60px 20px 20px;`
       }
     }, () => history.push('/notices'))
-  }, [articleId])
+  }, [ articleId, history ])
   return <>
     <NavigationBar />
     <PageWrapper>

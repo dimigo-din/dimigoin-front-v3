@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import styled from "@emotion/styled";
 import css, { SerializedStyles } from "@emotion/css";
 import auth from "../utils/auth";
-
 import DimiInput from "../components/dimiru/DimiInput";
 import DimiButton from "../components/dimiru/DimiButton";
-
 import { ReactComponent as BrandWithTextImage } from "../assets/brand-with-text.svg";
 import TodayMeal from "../components/TodayMeal";
 
@@ -101,8 +98,6 @@ const Content = styled.div`
 `;
 
 export default () => {
-  const history = useHistory();
-
   const [info, setInfo] = useState({ username: "", password: "" });
   const [active, setActive] = useState<boolean>(true);
 

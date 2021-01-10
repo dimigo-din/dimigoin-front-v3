@@ -1,7 +1,6 @@
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, useEffect, ReactNode, useCallback } from "react";
 import styled from "@emotion/styled";
-import DimiCard, { IDimiCard } from "./dimiru/DimiCard";
-import css, { SerializedStyles } from "@emotion/css";
+import css from "@emotion/css";
 
 export interface IModalProps {
   wrapperProps?: React.HTMLAttributes<HTMLDivElement>;
@@ -19,11 +18,11 @@ export const ModalContainer = () => {
   const [visible, setVisivility] = useState(false);
   const [onClose, setOnClose] = useState<() => void>();
   const [disappearingAnimation, setDisappearingAnimation] = useState(false);
-  const disappear = () => {
+  const disappear = useCallback(() => {
     onClose && onClose();
     setDisappearingAnimation(true);
     setTimeout(() => setVisivility(false), 300);
-  };
+  }, [ onClose ]);
   useEffect(() => {
     show = (
       el: (close: () => void) => ReactNode,
@@ -42,7 +41,7 @@ export const ModalContainer = () => {
       if (props) setProps(props);
       console.log(props);
     };
-  }, []);
+  }, [ disappear ]);
   return visible && ModalElement ? (
     <Backdrop
       onClick={disappear}
