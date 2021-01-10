@@ -1,25 +1,14 @@
 import React, { useEffect } from "react";
 import css from "@emotion/css";
 import styled from "@emotion/styled";
-import NavigationBar from "../components/NavigationBar";
-import { ResponsiveWrapper, Col, Divider } from "../components/grids/Cols";
-import OutgoApply, { OutgoApplyInput } from "../components/OutgoApply";
-import CardGroupHeader from "../components/CardGroupHeader";
-import OutgoApplier from "../components/OutgoApplier";
-import WeekCalendar from "../components/dimiru/WeekCalendar";
-import Card from "../components/dimiru/DimiCard";
-import LargeTimeSelector, {
-  ITime,
-} from "../components/dimiru/LargeTimeSelector";
-import Checkbox from "../components/dimiru/DimiCheckbox";
-import Button from "../components/dimiru/DimiButton";
-import useInput from "../components/hooks/useInput";
-import PageWrapper from "../components/grids/PageWrapper";
-import { CardExplainContent } from "../components/Atomics";
+import { CardExplainContent, OutgoApplyInput, WeekCalendar, LargeTimeSelector,
+        SelectingTime, NavigationBar, PageWrapper, ResponsiveWrapper, Col,
+        CardGroupHeader, OutgoApplyForm, Divider, OutgoApplier, Card, Checkbox, Button } from "../components";
+import useInput from "../hooks/useInput";
 
 const DateSelector: React.FC = () => {
   const dayInput = useInput<Date>();
-  const timeInput = useInput<ITime[]>();
+  const timeInput = useInput<SelectingTime[]>();
   useEffect(() => {
     const from = dayInput.value;
     const to = dayInput.value;
@@ -64,7 +53,7 @@ const Outgo: React.FC = () => {
             >
               신청하기
             </CardGroupHeader>
-            <OutgoApply
+            <OutgoApplyForm
               css={css`
                 flex: 1;
                 display: flex;

@@ -2,12 +2,12 @@ import React from 'react';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
 import auth from '../utils/auth';
 
-interface IProps extends RouteProps {
+interface PrivateRouterProps extends RouteProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   component: React.ComponentType<any>;
 }
 
-const PrivateRoute = ({ component: Component, ...rest }: IProps) => (
+const PrivateRoute = ({ component: Component, ...rest }: PrivateRouterProps) => (
   <Route
     {...rest}
     render={(props) => (auth.getToken() ? (

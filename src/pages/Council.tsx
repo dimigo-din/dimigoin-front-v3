@@ -1,13 +1,8 @@
 import css from '@emotion/css'
 import React, { useEffect, useState } from 'react'
-import { CardExplainContent, DescriptionText, Horizontal, Outlink } from '../components/Atomics'
-import CardGroupHeader from '../components/CardGroupHeader'
-import DimiCard from '../components/dimiru/DimiCard'
-import { RadioButton } from '../components/dimiru/DimiRadioButton'
-import { Col, Divider } from '../components/grids/Cols'
-import PageWrapper from '../components/grids/PageWrapper'
-import NavigationBar from '../components/NavigationBar'
-import { Data, HeadData, HeadRow, Row, Table } from '../components/Table'
+import { Card, CardExplainContent, CardGroupHeader, Col, Data,
+        DescriptionText, Divider, HeadData, HeadRow, Horizontal,
+        NavigationBar, Outlink, PageWrapper, RadioButton, Row, Table } from '../components'
 import makeAlert from '../functions/makeAlert'
 
 interface CouncilSchedule {
@@ -48,7 +43,7 @@ const Council: React.FC = () => {
         <Horizontal>
         <Col width={5}>
             <CardGroupHeader>Wee 클래스 상담</CardGroupHeader>
-            <DimiCard leftBorder>
+            <Card leftBorder>
                 <CardExplainContent>
                     <h2>Wee 클래스 상담이란?</h2>
                     <p>
@@ -74,12 +69,12 @@ const Council: React.FC = () => {
                         ※ 상담 신청과 상담 내용을 비롯한 상담 관련 정보는 모두 비밀 엄수를 보장합니다
                     </DescriptionText>
                 </CardExplainContent>
-            </DimiCard>
+            </Card>
         </Col>
         <Divider />
         <Col width={5}>
             <CardGroupHeader>취업 상담</CardGroupHeader>
-            <DimiCard leftBorder>
+            <Card leftBorder>
                 <CardExplainContent>
                     <h2>취업상담이란?</h2>
                     <p>
@@ -96,7 +91,7 @@ const Council: React.FC = () => {
                         soon040821@naver.com &gt;
                     </Outlink>
                 </CardExplainContent>
-            </DimiCard>
+            </Card>
             <Table css={css`margin-top: 12px;`}>
                 <HeadRow>
                     <HeadData>선택</HeadData>

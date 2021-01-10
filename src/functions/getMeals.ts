@@ -1,11 +1,11 @@
-import { IDailyMealProps } from "../components/MealList"
+import { DailyMealProps } from "../components/complex/MealList"
 import { IMeal } from "../constants/serverResource"
 import api from "./api"
 import { toast } from 'react-toastify'
 
 const DAYS = ['월', '화', '수', '목', '금', '토', '일']
 
-const getMeals = async (date: Date): Promise<IDailyMealProps[]> => {
+const getMeals = async (date: Date): Promise<DailyMealProps[]> => {
   const { data } = (await api.get<IMeal[]>(`meal/${date.toISOString().substr(0, 10)}`))
   try {
     return data.map(e => {

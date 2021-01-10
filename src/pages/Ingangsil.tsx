@@ -1,24 +1,16 @@
 import React from "react";
 import styled from "@emotion/styled";
-import NavigationBar from "../components/NavigationBar";
-import CardGroupHeader from "../components/CardGroupHeader";
-import DimiCard, { CardTitle } from "../components/dimiru/DimiCard";
+import NavigationBar from "../components/complex/NavigationBar";
 import css from "@emotion/css";
-import {
-  Col,
-  Divider,
-  ResponsiveWrapper,
-} from "../components/grids/Cols";
-import TextCardGroup from "../components/TextCardGroup";
-import { IngansilStatus } from "../components/IngangsilStatus";
+import { PageWrapper, ResponsiveWrapper, Col, CardGroupHeader, Card,
+        CardTitle, Divider, IngansilStatus, TextCardGroup } from "../components";
 import { ReactComponent as CircleSvg } from "../assets/icons/circle.svg";
-import Container from "../components/grids/PageWrapper";
 
 export default () => {
   return (
     <>
       <NavigationBar />
-      <Container>
+      <PageWrapper>
         <ResponsiveWrapper threshold={1100} css={css`
           @media screen and (max-width: 1100px) {
             flex-direction: column-reverse;
@@ -26,7 +18,7 @@ export default () => {
         `}>
           <Col width={4.5}>
             <CardGroupHeader>신청안내</CardGroupHeader>
-            <DimiCard
+            <Card
               css={css`
                 padding: 36px;
               `}
@@ -87,7 +79,7 @@ export default () => {
                   </Row>
                 </Col>
               </ResponsiveWrapper>
-            </DimiCard>
+            </Card>
             <TextCardGroup
               css={css`
                 margin-top: 10px;
@@ -127,7 +119,7 @@ export default () => {
             />
             <Divider horizontal small data-divider />
             <CardGroupHeader withBubble>우리반 신청자</CardGroupHeader>
-            <DimiCard leftBorder>
+            <Card leftBorder>
               <ResponsiveWrapper>
                 <IngangTime>1타임</IngangTime>
                 <Divider small data-divider />
@@ -137,7 +129,7 @@ export default () => {
                   ))}
                 </IngangerWrapper>
               </ResponsiveWrapper>
-            </DimiCard>
+            </Card>
           </Col>
           <Divider data-divider />
           <Col width={5.5}>
@@ -164,7 +156,7 @@ export default () => {
             ))}
           </Col>
         </ResponsiveWrapper>
-      </Container>
+      </PageWrapper>
     </>
   );
 };

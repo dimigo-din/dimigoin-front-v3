@@ -1,22 +1,15 @@
 import React, { useState, useEffect } from "react";
-import NavigationBar from "../components/NavigationBar";
-import CardGroupHeader from "../components/CardGroupHeader";
-import TextCardGroup from "../components/TextCardGroup";
-import TimeTable from "../components/dimiru/DimiTimeTable";
-import { ResponsiveWrapper, Col, Divider } from "../components/grids/Cols";
-import MyTodayCard, { IMyToday } from "../components/ApplimentStatus";
-import TodayMeal, { IMeal } from "../components/TodayMeal";
 import css from "@emotion/css";
-import SelfStudyStatus from "../components/SelfStudyStatus";
-import MealList from "../components/MealList";
-import { showCardModal } from "../components/DimiCardModal";
-import { show } from "../components/Modal";
-import PageWrapper from "../components/grids/PageWrapper";
+
+import {  ApplimentStatus, CardGroupHeader, Col, Divider, Meal,
+          MealList, NavigationBar, PageWrapper, ResponsiveWrapper,
+          SelfStudyStatus, showModal, showCardModal, TextCardGroup, TimeTable,
+          TodayMeal } from "../components";
 
 const Main: React.FC = () => {
   const [notice, setNotice] = useState<string[]>();
-  const [myTodays, setMyTodays] = useState<IMyToday[]>();
-  const [meals, setMeals] = useState<IMeal[]>();
+  const [myTodays, setMyTodays] = useState<ApplimentStatus[]>();
+  const [meals, setMeals] = useState<Meal[]>();
   useEffect(() => {
     setNotice([
       "방과 후 수강신청 중 너무 많은 동시 접속자로 인해 잠시 서버가 다운되는 문제가 있었으나 방금 전 복구되었습니다. 스포츠를 제외한 방과 후 신청은 새로 일정을 공지해드릴 예정입니다.",
@@ -82,7 +75,7 @@ const Main: React.FC = () => {
             <CardGroupHeader>나의 신청현황</CardGroupHeader>
             {myTodays ? (
               myTodays.map((myToday) => (
-                <MyTodayCard key={myToday.name} {...myToday} />
+                <ApplimentStatus key={myToday.name} {...myToday} />
               ))
             ) : (
                 <TextCardGroup content={[{ text: "신청 현황이 없습니다" }]} />
@@ -93,7 +86,7 @@ const Main: React.FC = () => {
             <CardGroupHeader
               subButton={{
                 text: "더보기",
-                action: () => show((close) => <MealList goBack={close} />, {
+                action: () => showModal((close) => <MealList goBack={close} />, {
                   wrapperProps: {
                     css: css`
                       max-width: 1600px;

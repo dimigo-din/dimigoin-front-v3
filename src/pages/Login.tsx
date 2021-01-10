@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import css, { SerializedStyles } from "@emotion/css";
 import auth from "../utils/auth";
-import DimiInput from "../components/dimiru/DimiInput";
-import DimiButton from "../components/dimiru/DimiButton";
 import { ReactComponent as BrandWithTextImage } from "../assets/brand-with-text.svg";
-import TodayMeal from "../components/TodayMeal";
+import { Button, TodayMeal, Input } from "../components";
 
 type TStyleByDeviceWidth = {
   [key in "tablet" | "desktop"]: SerializedStyles;
@@ -124,7 +122,7 @@ export default () => {
                 setActive(false);
               }}
             >
-              <DimiInput
+              <Input
                 css={FirstLoginInput}
                 placeholder="아이디"
                 type="text"
@@ -137,7 +135,7 @@ export default () => {
                   }));
                 }}
               />
-              <DimiInput
+              <Input
                 placeholder="비밀번호"
                 type="password"
                 value={info.password}
@@ -154,7 +152,7 @@ export default () => {
                   }
                 }}
               />
-              <DimiButton
+              <Button
                 css={SubmitButton}
                 active={active}
                 onClick={() => {
@@ -162,7 +160,7 @@ export default () => {
                 }}
               >
                 로그인
-              </DimiButton>
+              </Button>
             </Form>
           </Content>
         </Section>
