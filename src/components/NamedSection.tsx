@@ -7,7 +7,7 @@ const NamedSection: React.FC<{
         name: string;
         component: JSX.Element
     }[]
-}> = ({ sections }) => {
+}> = ({ sections, ...props }) => {
     const [ selectedIndex, selectIndex ] = useState(0)
     return <Wrapper>
         <Header>
@@ -20,7 +20,7 @@ const NamedSection: React.FC<{
                 </SectionName>
             )}
         </Header>
-        <ContentWrapper>
+        <ContentWrapper {...props}>
             {sections[selectedIndex].component
         }
         </ContentWrapper>
