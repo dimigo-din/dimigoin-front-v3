@@ -13,7 +13,7 @@ import { Horizontal, noBreak } from "../../components/basic/Atomics";
 import DimiButton, { ButtonProps } from "../../components/basic/Button";
 import { Timeline } from "./Timeline";
 import NamedSection from "../../components/basic/NamedSection";
-import { show } from "../../components/complex/Modal";
+import { show } from "../../components/complex/modal/Modal";
 import MoveClass from "./MoveClass";
 
 interface TopBarProps {

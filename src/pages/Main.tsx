@@ -10,8 +10,8 @@ import MyTodayCard, { ApplimentStatus } from "../components/complex/ApplimentSta
 import TodayMeal, { Meal } from "../components/complex/TodayMeal";
 import SelfStudyStatus from "../components/complex/SelfStudyStatus";
 import MealList from "../components/complex/MealList";
-import { showCardModal } from "../components/complex/CardModal";
-import { show } from "../components/complex/Modal";
+import { showCardModal } from "../components/complex/modal/CardModal";
+import { show } from "../components/complex/modal/Modal";
 import PageWrapper from "../components/layout/PageWrapper";
 
 const Main: React.FC = () => {

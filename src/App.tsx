@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 
 import Router from "./router";
 import GlobalStyle from "./components/GlobalStyle";
-import { ModalContainer } from "./components/complex/Modal";
+import { ModalContainer } from "./components/complex/modal/Modal";
 import "./webfont";
 import dimigoBackgroundImage from "./assets/dimigo-background.svg";
 

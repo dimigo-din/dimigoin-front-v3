@@ -3,7 +3,7 @@ import Chip from "../basic/Chip";
 import Card from "../basic/Card";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
-import { showCardModal } from "./CardModal";
+import { showCardModal } from "./modal/CardModal";
 import { Title } from "../basic/CardGroupHeader";
 import { ReactComponent as CloseSvg } from '../../assets/icons/close.svg'
 import DimiDropdown, { DropdownItem } from "../basic/Dropdown";
