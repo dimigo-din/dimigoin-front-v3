@@ -319,8 +319,8 @@ const openTimeline = useCallback(() => {
             }
           `}>
             <ButtonWithIcon icon={RefreshIcon} label="새로고침" disabled />
-            <ButtonWithIcon icon={DeskIcon} label="이동반" onClick={openTimeline} />
-            <ButtonWithIcon icon={HistoryIcon} label="히스토리" />
+            <ButtonWithIcon icon={DeskIcon} label="이동반" />
+            <ButtonWithIcon icon={HistoryIcon} label="히스토리" onClick={openTimeline} />
           </Horizontal>
         </Horizontal>
       </PageWrapper>
