@@ -1,6 +1,6 @@
-import { INavigationItem } from "./NavigationItem";
+import { NavigationItem } from "./NavigationItem";
 
-const navigations: INavigationItem[] = [
+const navigations: NavigationItem[] = [
   { title: "인강실", route: "/ingangsil" },
   { title: "외출", route: "/outgo" },
   { title: "상담", route: "/council" },

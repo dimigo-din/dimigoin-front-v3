@@ -1,7 +1,7 @@
 import React from 'react';
 import css from '@emotion/css';
 
-export interface IDimiButton {
+export interface ButtonProps {
   gray?: boolean;
   active?: boolean;
   loading?: boolean;
@@ -57,7 +57,7 @@ const style = {
   `,
 };
 
-const DimiButton: React.FC<IDimiButton> = ({
+const DimiButton: React.FC<ButtonProps> = ({
   gray = false,
   active = true,
   loading = false,

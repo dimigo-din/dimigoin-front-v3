@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import css from "@emotion/css";
 import DimiCard from "../basic/Card";
 
-const MealItem: React.FC<IMealItem> = ({
+const MealItem: React.FC<MealItem> = ({
   selected = false,
   name = "",
   menu = "",
@@ -14,17 +14,17 @@ const MealItem: React.FC<IMealItem> = ({
     </MealItemContainer>
   );
 
-export interface IMeal {
+export interface Meal {
   name: string;
   menu: string;
   selected?: boolean;
 }
 
-interface IProps {
-  meals: IMeal[];
+interface TodayMealProps {
+  meals: Meal[];
 }
 
-const TodayMeal: React.FC<IProps> = ({ meals }) => (
+const TodayMeal: React.FC<TodayMealProps> = ({ meals }) => (
   <MealCard>
     {meals.map((meal) => (
       <MealItem key={meal.name} {...meal} />
@@ -32,11 +32,11 @@ const TodayMeal: React.FC<IProps> = ({ meals }) => (
   </MealCard>
 );
 
-interface IMealItemSelected {
+interface MealItemSelected {
   selected?: boolean;
 }
 
-interface IMealItem extends IMealItemSelected {
+interface MealItem extends MealItemSelected {
   name?: string;
   menu?: string;
 }
@@ -48,7 +48,7 @@ const MealCard = styled(DimiCard)`
   flex-direction: column;
 `;
 
-const MealItemContainer = styled.div<IMealItemSelected>`
+const MealItemContainer = styled.div<MealItemSelected>`
   width: calc(100% - 78px);
   flex-grow: 1;
   border-left: 5px solid transparent;
@@ -65,7 +65,7 @@ const MealItemContainer = styled.div<IMealItemSelected>`
     `}
 `;
 
-const MealNameText = styled.span<IMealItemSelected>`
+const MealNameText = styled.span<MealItemSelected>`
   font-size: 18px;
   font-weight: bold;
   line-height: 1.17;
@@ -78,7 +78,7 @@ const MealNameText = styled.span<IMealItemSelected>`
     `}
 `;
 
-export const MealMenuText = styled.p<IMealItemSelected>`
+export const MealMenuText = styled.p<MealItemSelected>`
   font-size: 16px;
   font-weight: bold;
   line-height: 1.38;

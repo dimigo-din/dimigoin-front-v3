@@ -1,16 +1,16 @@
 import css, { SerializedStyles } from '@emotion/css';
 import styled from '@emotion/styled';
 import React from 'react';
-import DimiCard, { IDimiCard } from '../basic/Card';
-import { IModalProps, show } from './Modal';
+import DimiCard, { CardProps } from '../basic/Card';
+import { ModalOption, show } from './Modal';
 
 const Card = styled(DimiCard)`
   padding: 32px 45px 32px;
   border-top: 5px solid var(--main-theme-accent);
 `;
 
-export const showCardModal = (el: (close: () => void) => JSX.Element, onClose?: () => void, props?: IModalProps & {
-  cardProps?: IDimiCard & {
+export const showCardModal = (el: (close: () => void) => JSX.Element, onClose?: () => void, props?: ModalOption & {
+  cardProps?: CardProps & {
     css?: SerializedStyles;
   }
 }) => {

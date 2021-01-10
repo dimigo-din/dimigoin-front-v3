@@ -3,26 +3,26 @@ import styled from "@emotion/styled";
 import css from "@emotion/css";
 import { EventFunction } from "../../hooks/useInput";
 
-export interface IDropdownItem {
+export interface DropdownItem {
   name: string;
   key?: string;
 }
 
-interface IProps {
-  items?: IDropdownItem[];
+interface DropdownProps {
+  items?: DropdownItem[];
   placeholder: string;
   requireMessage?: string;
-  onChange?: EventFunction<IDropdownItem>;
+  onChange?: EventFunction<DropdownItem>;
 }
 
-export default ({ items, placeholder, onChange, requireMessage, ...props }: IProps) => {
+export default ({ items, placeholder, onChange, requireMessage, ...props }: DropdownProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [opened, setOpened] = useState(false);
   const clickHandler = ({
     key,
     name,
     index,
-  }: IDropdownItem & { index: number }) => {
+  }: DropdownItem & { index: number }) => {
     setSelectedIndex(index - 1);
     onChange && onChange({ target: { value: { key, name } } });
   };

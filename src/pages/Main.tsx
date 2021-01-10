@@ -6,8 +6,8 @@ import CardGroupHeader from "../components/basic/CardGroupHeader";
 import TextCardGroup from "../components/basic/TextCardGroup";
 import TimeTable from "../components/complex/TimeTable";
 import { ResponsiveWrapper, Col, Divider } from "../components/layout/Cols";
-import MyTodayCard, { IMyToday } from "../components/complex/ApplimentStatus";
-import TodayMeal, { IMeal } from "../components/complex/TodayMeal";
+import MyTodayCard, { ApplimentStatus } from "../components/complex/ApplimentStatus";
+import TodayMeal, { Meal } from "../components/complex/TodayMeal";
 import SelfStudyStatus from "../components/complex/SelfStudyStatus";
 import MealList from "../components/complex/MealList";
 import { showCardModal } from "../components/complex/CardModal";
@@ -16,8 +16,8 @@ import PageWrapper from "../components/layout/PageWrapper";
 
 const Main: React.FC = () => {
   const [notice, setNotice] = useState<string[]>();
-  const [myTodays, setMyTodays] = useState<IMyToday[]>();
-  const [meals, setMeals] = useState<IMeal[]>();
+  const [myTodays, setMyTodays] = useState<ApplimentStatus[]>();
+  const [meals, setMeals] = useState<Meal[]>();
   useEffect(() => {
     setNotice([
       "방과 후 수강신청 중 너무 많은 동시 접속자로 인해 잠시 서버가 다운되는 문제가 있었으나 방금 전 복구되었습니다. 스포츠를 제외한 방과 후 신청은 새로 일정을 공지해드릴 예정입니다.",

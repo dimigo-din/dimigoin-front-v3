@@ -32,11 +32,11 @@ const BUTTONS = [
   },
 ];
 
-interface IProps {
+interface SelfStudyStatusProps {
   onButtonPressed: (name: string) => void;
 }
 
-const SelfStudyStatus: React.FC<IProps> = ({ onButtonPressed }) => {
+const SelfStudyStatus: React.FC<SelfStudyStatusProps> = ({ onButtonPressed }) => {
   return (
     <Card
       css={css`

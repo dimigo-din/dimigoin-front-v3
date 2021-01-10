@@ -5,7 +5,7 @@ import CardGroupHeader from "../basic/CardGroupHeader";
 import DimiCard from "../basic/Card";
 import DimiButton from "../basic/Button";
 
-interface IProps {
+interface IngangsilStatusProps {
   currentApplied: number;
   max: number;
   time: string;
@@ -13,7 +13,7 @@ interface IProps {
   name: string;
 }
 
-export const IngansilStatus: React.FC<IProps> = ({
+export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
   currentApplied,
   time,
   max,

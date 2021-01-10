@@ -4,7 +4,7 @@ import css from "@emotion/css";
 import { Horizontal, UnstyledLink } from "./Atomics";
 import { Divider } from "../layout/Cols";
 
-interface IProps {
+interface CardGroupheaderProps {
   withBubble?: boolean;
   subButton?: {
     text: string;
@@ -13,7 +13,7 @@ interface IProps {
   };
 }
 
-const CardGroupHeader: React.FC<IProps> = ({
+const CardGroupHeader: React.FC<CardGroupheaderProps> = ({
   subButton,
   withBubble,
   children,

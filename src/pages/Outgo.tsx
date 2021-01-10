@@ -3,13 +3,13 @@ import css from "@emotion/css";
 import styled from "@emotion/styled";
 import NavigationBar from "../components/complex/NavigationBar";
 import { ResponsiveWrapper, Col, Divider } from "../components/layout/Cols";
-import OutgoApply, { OutgoApplyInput } from "../components/complex/OutgoApply";
+import OutgoApplyForm, { OutgoApplyInput } from "../components/complex/OutgoApplyForm";
 import CardGroupHeader from "../components/basic/CardGroupHeader";
 import OutgoApplier from "../components/complex/OutgoApplier";
 import WeekCalendar from "../components/complex/WeekCalendar";
 import Card from "../components/basic/Card";
 import LargeTimeSelector, {
-  ITime,
+  SelectingTime,
 } from "../components/complex/LargeTimeSelector";
 import Checkbox from "../components/basic/Checkbox";
 import Button from "../components/basic/Button";
@@ -19,7 +19,7 @@ import { CardExplainContent } from "../components/basic/Atomics";
 
 const DateSelector: React.FC = () => {
   const dayInput = useInput<Date>();
-  const timeInput = useInput<ITime[]>();
+  const timeInput = useInput<SelectingTime[]>();
   useEffect(() => {
     const from = dayInput.value;
     const to = dayInput.value;
@@ -64,7 +64,7 @@ const Outgo: React.FC = () => {
             >
               신청하기
             </CardGroupHeader>
-            <OutgoApply
+            <OutgoApplyForm
               css={css`
                 flex: 1;
                 display: flex;

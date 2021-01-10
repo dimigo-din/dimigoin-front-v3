@@ -3,13 +3,13 @@ import css from "@emotion/css";
 import styled from "@emotion/styled";
 import useInput, { EventFunction } from "../../hooks/useInput";
 
-interface ITimeProps {
+interface TimeSelectorProps {
   defaultHour?: number;
   defaultMinute?: number;
-  onChange?: EventFunction<ITime>;
+  onChange?: EventFunction<SelectingTime>;
 }
 
-const Time: React.FC<ITimeProps> = ({
+const TimeSelector: React.FC<TimeSelectorProps> = ({
   defaultHour = 9,
   defaultMinute = 30,
   onChange,
@@ -51,19 +51,19 @@ const Time: React.FC<ITimeProps> = ({
   );
 };
 
-export interface ITime {
+export interface SelectingTime {
   hour: number;
   minute: number;
 }
 
-interface IProps {
-  value?: ITime[];
-  onChange?: EventFunction<ITime[]>;
+interface LargeTimeSelectorProps {
+  value?: SelectingTime[];
+  onChange?: EventFunction<SelectingTime[]>;
 }
 
-const LargeTimeSelector: React.FC<IProps> = ({ value, onChange, ...props }) => {
-  const fromInput = useInput<ITime>();
-  const toInput = useInput<ITime>();
+const LargeTimeSelector: React.FC<LargeTimeSelectorProps> = ({ value, onChange, ...props }) => {
+  const fromInput = useInput<SelectingTime>();
+  const toInput = useInput<SelectingTime>();
   useEffect(() => {
     onChange && fromInput.value && toInput.value &&
       onChange({
@@ -74,8 +74,8 @@ const LargeTimeSelector: React.FC<IProps> = ({ value, onChange, ...props }) => {
   }, [ fromInput.value, toInput.value, onChange ]);
   return (
     <Wrapper {...props}>
-      <Time defaultHour={9} defaultMinute={30} {...fromInput} />
-      <Time defaultHour={21} defaultMinute={30} {...toInput} />
+      <TimeSelector defaultHour={9} defaultMinute={30} {...fromInput} />
+      <TimeSelector defaultHour={21} defaultMinute={30} {...toInput} />
     </Wrapper>
   );
 };

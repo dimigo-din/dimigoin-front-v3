@@ -4,11 +4,11 @@ import { useCheckbox } from "../../hooks/useInput";
 import css from "@emotion/css";
 import Dimigoincon from "./Dimigoincon";
 
-interface IProps {
+interface CheckboxProps {
   text?: string;
 }
 
-const Checkbox: React.FC<IProps> = ({ text, ...props }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ text, ...props }) => {
   const check = useCheckbox(false);
   return (
     <Wrapper {...props}>

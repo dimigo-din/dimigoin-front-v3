@@ -3,12 +3,12 @@ import css from "@emotion/css";
 import styled from "@emotion/styled";
 import { EventFunction } from "../../hooks/useInput";
 
-interface IProps {
+interface WeekCalendarProps {
   date?: Date;
   onChange?: EventFunction<Date>;
 }
 
-const WeekCalendar: React.FC<IProps> = ({ date, onChange }) => {
+const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange }) => {
   const now = date || new Date();
   const days = new Array(7)
     .fill(0)

@@ -4,7 +4,7 @@ import { FormHeader } from "../basic/Form";
 import RadioButton, {
   RadioButtonItem,
 } from "../basic/RadioButton";
-import DimiDropdown, { IDropdownItem } from "../basic/Dropdown";
+import DimiDropdown, { DropdownItem } from "../basic/Dropdown";
 import Textarea from "../basic/Textarea";
 import useInput, { EventFunction } from "../../hooks/useInput";
 
@@ -16,16 +16,16 @@ export interface OutgoApplyInput {
   approver?: string;
 }
 
-interface IProps {
+interface OutgoApplyProps {
   onChange?: EventFunction<OutgoApplyInput>;
 }
 
-const OutgoApply: React.FC<IProps> = ({ onChange, ...props }) => {
+const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }) => {
   const outgoType = useInput<RadioButtonItem>();
   const applyType = useInput<RadioButtonItem>();
-  const outgoReason = useInput<IDropdownItem>();
+  const outgoReason = useInput<DropdownItem>();
   const detailReason = useInput();
-  const approver = useInput<IDropdownItem>();
+  const approver = useInput<DropdownItem>();
 
   useEffect(() => {
     onChange &&
@@ -122,4 +122,4 @@ const OutgoApply: React.FC<IProps> = ({ onChange, ...props }) => {
   );
 };
 
-export default OutgoApply;
+export default OutgoApplyForm;

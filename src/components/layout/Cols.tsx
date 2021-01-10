@@ -11,14 +11,14 @@ export const Col = styled.div<{ width?: number }>`
     `}
 `;
 
-interface IDividerProps {
+interface DividerProps {
   visible?: boolean;
   small?: boolean;
   size?: number;
   horizontal?: boolean;
 }
 
-export const Divider = styled.div<IDividerProps>`
+export const Divider = styled.div<DividerProps>`
   --divider-width: 30px;
   ${({ small }) => small && css`
     --divider-width: 15px;

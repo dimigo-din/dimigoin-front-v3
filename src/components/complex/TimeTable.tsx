@@ -6,7 +6,7 @@ import { days } from "../../constants";
 
 const today = 2;
 
-interface IProps {
+interface TimeTableProps {
   className?: string;
 }
 
@@ -22,7 +22,7 @@ const TABLE = [
   ["컴시", "동아리", " ", "HR", "사회"],
 ];
 
-const TimeTable: React.FC<IProps> = ({ ...props }) => {
+const TimeTable: React.FC<TimeTableProps> = ({ ...props }) => {
   return (
     <WrapperCard {...props}>
       <div

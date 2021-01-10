@@ -9,12 +9,12 @@ import { Title as CardTitle } from '../basic/CardGroupHeader'
 import DimiCard from '../basic/Card'
 import { ResponsiveWrapper } from '../layout/Cols'
 
-export interface IDailyMealProps {
+export interface DailyMealProps {
   header: string;
   meals: string[];
   highlighted?: boolean;
 }
-const DailyMeal: React.FC<IDailyMealProps> = ({ header, meals, highlighted }) => <DailyMealWrapper highlighted={highlighted} threshold={960}>
+const DailyMeal: React.FC<DailyMealProps> = ({ header, meals, highlighted }) => <DailyMealWrapper highlighted={highlighted} threshold={960}>
   <DailyMealHeader>{header}요일</DailyMealHeader>
   {meals.map(meal =>
     <>
@@ -74,7 +74,7 @@ const DailyMealItem = styled.p`
 const getThisWeek = (date: Date) => Math.ceil((date.getDate() - date.getDay() + 4) / 7)
 
 const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
-  const [meals, setMeals] = useState<IDailyMealProps[]>();
+  const [meals, setMeals] = useState<DailyMealProps[]>();
   const date = new Date()
   useEffect(() => {
     getMeals(date)

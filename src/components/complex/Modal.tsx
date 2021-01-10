@@ -2,19 +2,19 @@ import React, { useState, useEffect, ReactNode, useCallback } from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
 
-export interface IModalProps {
+export interface ModalOption {
   wrapperProps?: React.HTMLAttributes<HTMLDivElement>;
   backdropProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
 export let show: (
   el: (close: () => void) => ReactNode,
-  props?: IModalProps,
+  props?: ModalOption,
   onClose?: () => void
 ) => void;
 export const ModalContainer = () => {
   const [ModalElement, setModalElement] = useState<ReactNode>();
-  const [props, setProps] = useState<IModalProps>();
+  const [props, setProps] = useState<ModalOption>();
   const [visible, setVisivility] = useState(false);
   const [onClose, setOnClose] = useState<() => void>();
   const [disappearingAnimation, setDisappearingAnimation] = useState(false);
@@ -26,7 +26,7 @@ export const ModalContainer = () => {
   useEffect(() => {
     show = (
       el: (close: () => void) => ReactNode,
-      props?: IModalProps,
+      props?: ModalOption,
       onCloseListener?
     ) => {
       if (onCloseListener) setOnClose(() => onCloseListener);

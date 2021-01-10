@@ -3,15 +3,14 @@ import { NavigationTitle, BottomBar } from "./NavigationItem.style";
 import css from "@emotion/css";
 import { UnstyledLink } from "../../basic/Atomics";
 
-export interface INavigationItem {
+export interface NavigationItem {
   title?: string;
   image?: string;
   selected?: boolean;
   route: string;
-
 }
 
-const NavigationItem: React.FC<INavigationItem & {
+const NavigationItem: React.FC<NavigationItem & {
   onLinkClicked(offset: number): void;
 }> = ({
   title,

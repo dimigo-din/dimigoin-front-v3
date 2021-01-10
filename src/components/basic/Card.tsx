@@ -5,7 +5,7 @@ import css from '@emotion/css';
 type MouseEventHandler = (event: React.MouseEvent<HTMLDivElement>) => void;
 type FocusEventHandler = (event: React.FocusEvent<HTMLDivElement>) => void;
 
-export interface IDimiCard extends React.HTMLAttributes<HTMLDivElement> {
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
   children?: React.ReactNode;
   button?: React.ReactNode;
@@ -24,7 +24,7 @@ export interface IDimiCard extends React.HTMLAttributes<HTMLDivElement> {
   leftBorder?: boolean;
 }
 
-const DimiCard: React.FC<IDimiCard> = ({
+const DimiCard: React.FC<CardProps> = ({
   children,
   button,
   hover,
@@ -64,14 +64,14 @@ const DimiCard: React.FC<IDimiCard> = ({
 
 export default DimiCard;
 
-interface ICardContainer {
+interface CardContainerProps {
   button?: boolean;
   hover?: boolean;
   clickable?: boolean;
   leftBorder?: boolean;
 }
 
-const Container = styled.div<ICardContainer>`
+const Container = styled.div<CardContainerProps>`
   position: relative;
   padding: 25px;
   background-color: #fff;

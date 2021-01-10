@@ -1,17 +1,17 @@
 import React, { ReactNode } from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
-import Card, { IDimiCard } from "./Card";
+import Card, { CardProps } from "./Card";
 
-interface IProps {
-  content: (IDimiCard & {
+interface TextCardGroupProps {
+  content: (CardProps & {
     text?: ReactNode;
     key?: string;
   })[];
   spaceBetweenCards?: boolean;
 }
 
-const TextCardGroup: React.FC<IProps> = ({
+const TextCardGroup: React.FC<TextCardGroupProps> = ({
   content,
   spaceBetweenCards,
   ...props

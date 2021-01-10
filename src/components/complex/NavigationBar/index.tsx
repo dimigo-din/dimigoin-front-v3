@@ -8,9 +8,7 @@ import navigations from "./navigations";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { UnstyledLink } from "../../basic/Atomics";
 
-interface ITopNavbar { }
-
-const TopNavbar: React.FC<ITopNavbar & RouteComponentProps> = ({ history }) => {
+const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
   const scrollerRef = useRef<HTMLDivElement>(null)
   const scrollToClicked = useCallback(
     (offset: number) => {

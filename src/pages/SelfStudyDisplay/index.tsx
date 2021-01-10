@@ -10,18 +10,50 @@ import { ReactComponent as HistoryIcon } from "../../assets/icons/history.svg";
 import { ReactComponent as IconLogo } from "../../assets/brand.svg";
 import PageWrapper from "../../components/layout/PageWrapper";
 import { Horizontal, noBreak } from "../../components/basic/Atomics";
-import DimiButton, { IDimiButton } from "../../components/basic/Button";
+import DimiButton, { ButtonProps } from "../../components/basic/Button";
 import { Timeline } from "./Timeline";
 import NamedSection from "../../components/basic/NamedSection";
 import { show } from "../../components/complex/Modal";
 import MoveClass from "./MoveClass";
 
-interface INavBarProps {
+interface TopBarProps {
   klassName: string;
   jaseupName: string;
 }
 
-const TopBar: React.FC<INavBarProps> = ({ klassName, jaseupName }) => (
+interface LabelCardProps {
+  title: string;
+  contentCss?: SerializedStyles;
+  width?: number;
+  ref?: ((instance: HTMLDivElement | null) => void) | RefObject<HTMLDivElement> | null;
+}
+
+interface SelfStudyStatusByLabel {
+  label: string;
+  icon: JSX.Element;
+  students: {
+    name: string;
+    number: string;
+  }[];
+}
+
+interface ClassSelfStudyData {
+  type: SelfStudyPlaceState;
+  name: string;
+  labels: SelfStudyStatusByLabel[];
+}
+
+enum SelfStudyPlaceState {
+  AVAILABLE = "AVAILABLE",
+  NOTAVAILABLE = "NOTAVAILABLE"
+}
+
+const ROW_COLOR = {
+  [SelfStudyPlaceState.AVAILABLE]: "var(--main-theme-accent)",
+  [SelfStudyPlaceState.NOTAVAILABLE]: "#B8B8B8",
+};
+
+const TopBar: React.FC<TopBarProps> = ({ klassName, jaseupName }) => (
   <Horizontal
     css={css`
       align-items: center;
@@ -33,14 +65,7 @@ const TopBar: React.FC<INavBarProps> = ({ klassName, jaseupName }) => (
   </Horizontal>
 );
 
-interface ILabelCardProps {
-  title: string;
-  contentCss?: SerializedStyles;
-  width?: number;
-  ref?: ((instance: HTMLDivElement | null) => void) | RefObject<HTMLDivElement> | null;
-}
-
-const LabelCard: React.FC<ILabelCardProps> = React.forwardRef(({
+const LabelCard: React.FC<LabelCardProps> = React.forwardRef(({
   children,
   title,
   contentCss,
@@ -55,7 +80,7 @@ const LabelCard: React.FC<ILabelCardProps> = React.forwardRef(({
   )
 });
 
-const Student: React.FC = ({ children }) => {
+const StudentName: React.FC = ({ children }) => {
   const [, draggable] = useDrag({
     item: {
       type: "STUDENT"
@@ -71,18 +96,10 @@ const Student: React.FC = ({ children }) => {
   )
 };
 
-interface ISelfStudyStatus {
-  label: string;
-  icon: JSX.Element;
-  students: {
-    name: string;
-    number: string;
-  }[];
-}
 
 
 const StudentList: React.FC<{
-  students: ISelfStudyStatus['students']
+  students: SelfStudyStatusByLabel['students']
 }> = ({
   students
 }) => {
@@ -107,46 +124,30 @@ const StudentList: React.FC<{
         `}
         >
           {students.map((student) => (
-            <Student key={student.number}>
+            <StudentName key={student.number}>
               {student.number} {student.name}
-            </Student>
+            </StudentName>
           ))}
         </Horizontal>
       </LabelCard>
     )
   }
 
-enum SelfStudyPlaceState {
-  AVAILABLE = "AVAILABLE",
-  NOTAVAILABLE = "NOTAVAILABLE"
-}
-
-const ROW_COLOR = {
-  [SelfStudyPlaceState.AVAILABLE]: "var(--main-theme-accent)",
-  [SelfStudyPlaceState.NOTAVAILABLE]: "#B8B8B8",
-};
-
-interface SelfStudy {
-  type: SelfStudyPlaceState;
-  name: string;
-  labels: ISelfStudyStatus[];
-}
-
-const ButtonWithIcon: React.FC<Partial<IDimiButton> & {
+const ButtonWithIcon: React.FC<Partial<ButtonProps> & {
   icon: React.FunctionComponent;
   label: string;
 }> = ({ icon: Icon, label, ...props }) => {
   return (<DimiButton {...props}>
-      <Icon css={[iconStyle, css`
+    <Icon css={[iconStyle, css`
         fill: white;
         margin-right: 6px;
       `]} />
-      {label}
-    </DimiButton>)
+    {label}
+  </DimiButton>)
 }
 
 const SelfStudyDisplay: React.FC = () => {
-  const [selfStudyData, setSelfStudyData] = useState<SelfStudy[]>();
+  const [selfStudyData, setSelfStudyData] = useState<ClassSelfStudyData[]>();
   const [currentStudentQuentity, setCurrentStudentQuentity] = useState<{
     [key in keyof typeof SelfStudyPlaceState]: number
   }>()
@@ -209,35 +210,35 @@ const SelfStudyDisplay: React.FC = () => {
     show(() => <NamedSection css={css`
       padding: 20px;
     `} sections={[{
-      name: "방과후 1실",
-      component: <MoveClass />
+        name: "방과후 1실",
+        component: <MoveClass />
+      }, {
+        name: "방과후 2실",
+        component: <div>
+          대충2번정보
+      </div>
+      }]} />, {
+      wrapperProps: {
+        css: css`max-width: 1080px; padding: 60px 20px 20px; width: 100%;`
+      }
+    })
+  }, [])
+
+  const openTimeline = useCallback(() => {
+    show(() => <NamedSection sections={[{
+      name: "1타임",
+      component: <Timeline />
     }, {
-      name: "방과후 2실",
+      name: "2타임",
       component: <div>
         대충2번정보
-      </div>
+    </div>
     }]} />, {
       wrapperProps: {
         css: css`max-width: 1080px; padding: 60px 20px 20px; width: 100%;`
       }
     })
-}, [])
-
-const openTimeline = useCallback(() => {
-  show(() => <NamedSection sections={[{
-    name: "1타임",
-    component: <Timeline />
-  }, {
-    name: "2타임",
-    component: <div>
-      대충2번정보
-    </div>
-  }]} />, {
-    wrapperProps: {
-      css: css`max-width: 1080px; padding: 60px 20px 20px; width: 100%;`
-    }
-  })
-}, [])
+  }, [])
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -346,7 +347,6 @@ const RowLable = styled.div`
 `;
 
 const LabelWrapper = styled.div<{ width?: number }>`
-  /* margin-left: 15px; */
   display: flex;
   flex-direction: column;
   margin-top: 15px;

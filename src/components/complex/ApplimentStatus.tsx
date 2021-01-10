@@ -3,16 +3,16 @@ import Card, { CardTitle } from "../basic/Card";
 import styled from "@emotion/styled";
 import { MyTodayDetail as Detail } from "../basic/Atomics";
 
-export interface IMyToday {
+export interface ApplimentStatus {
   name: string;
   time: string;
   location: string;
 }
-interface IProps extends IMyToday {
+interface ApplimentStatusProps extends ApplimentStatus {
   className?: string;
 }
 
-const MyTodayCard: React.FC<IProps> = ({ name, location, time, className }) => {
+const MyTodayCard: React.FC<ApplimentStatusProps> = ({ name, location, time, className }) => {
   return (
     <Card leftBorder className={className}>
       <CardTitle>오늘의 {name}</CardTitle>

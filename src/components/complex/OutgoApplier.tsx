@@ -6,7 +6,7 @@ import css from "@emotion/css";
 import { showCardModal } from "./CardModal";
 import { Title } from "../basic/CardGroupHeader";
 import { ReactComponent as CloseSvg } from '../../assets/icons/close.svg'
-import DimiDropdown, { IDropdownItem } from "../basic/Dropdown";
+import DimiDropdown, { DropdownItem } from "../basic/Dropdown";
 import { Horizontal } from "../basic/Atomics";
 import DimiButton from "../basic/Button";
 import useInput from "../../hooks/useInput";
@@ -23,8 +23,8 @@ const AddApplierModal: React.FC<{
   close: () => void;
   register: (applier: Student) => void;
 }> = ({ close, register }) => {
-  const classDropdown = useInput<IDropdownItem>();
-  const studentDropdown = useInput<IDropdownItem>();
+  const classDropdown = useInput<DropdownItem>();
+  const studentDropdown = useInput<DropdownItem>();
   const [studentList, setStudentList] = useState<Student[]>();
   useEffect(() => {
     console.log(classDropdown.value)

@@ -56,13 +56,13 @@ export interface RadioButtonItem {
   disabled?: boolean;
 }
 
-interface IProps {
+interface RadioButtonsGroupProps {
   items: RadioButtonItem[];
   name: string;
   onChange: EventFunction<RadioButtonItem>;
 }
 
-const RadioButtonGroup: React.FC<IProps> = ({ items, name, onChange }) => {
+const RadioButtonGroup: React.FC<RadioButtonsGroupProps> = ({ items, name, onChange }) => {
   return (
     <Horizontal
       css={css`

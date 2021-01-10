@@ -2,20 +2,20 @@ import React from 'react';
 import styled from '@emotion/styled';
 import css from '@emotion/css';
 
-interface IDimiInput {
+interface InputProps {
   errorMessage?: string;
   error?: boolean;
 }
 
 const DimiInput: React.FC<
-  IDimiInput &
+  InputProps &
     React.DetailedHTMLProps<
       React.InputHTMLAttributes<HTMLInputElement>,
       HTMLInputElement
     >
 > = ({ errorMessage = '', error, ...props }) => (
   <Wrapper>
-    <Input error={error} {...props} />
+    <LogicalInput error={error} {...props} />
     {error && <ErrorMessage>{errorMessage}</ErrorMessage>}
   </Wrapper>
 );
@@ -25,11 +25,11 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 
-interface IInputProps {
+interface LogicalInputProps {
   error?: boolean;
 }
 
-const Input = styled.input<IInputProps>`
+const LogicalInput = styled.input<LogicalInputProps>`
   width: 100%;
   box-sizing: border-box;
   padding: 19px 23px;
