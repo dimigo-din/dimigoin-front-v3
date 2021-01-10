@@ -15,6 +15,7 @@ import { showCardModal } from "../../components/DimiCardModal";
 import { Timeline } from "./Timeline";
 import NamedSection from "../../components/NamedSection";
 import { show } from "../../components/Modal";
+import MoveClass from "./MoveClass";
 
 interface INavBarProps {
   className: string;
@@ -206,19 +207,21 @@ const SelfStudyDisplay: React.FC = () => {
   }, [selfStudyData])
 
   const openMoveClassDisplay = useCallback(() => {
-    // show(() => <NamedSection sections={[{
-    //   name: "1타임",
-    //   component: <Timeline />
-    // }, {
-    //   name: "2타임",
-    //   component: <div>
-    //     대충2번정보
-    //   </div>
-    // }]} />, {
-    //   wrapperProps: {
-    //     css: css`max-width: 1080px; padding: 60px 20px 20px; width: 100%;`
-    //   }
-    // })
+    show(() => <NamedSection css={css`
+      padding: 20px;
+    `} sections={[{
+      name: "방과후 1실",
+      component: <MoveClass />
+    }, {
+      name: "방과후 2실",
+      component: <div>
+        대충2번정보
+      </div>
+    }]} />, {
+      wrapperProps: {
+        css: css`max-width: 1080px; padding: 60px 20px 20px; width: 100%;`
+      }
+    })
 }, [])
 
 const openTimeline = useCallback(() => {
@@ -319,7 +322,7 @@ const openTimeline = useCallback(() => {
             }
           `}>
             <ButtonWithIcon icon={RefreshIcon} label="새로고침" disabled />
-            <ButtonWithIcon icon={DeskIcon} label="이동반" />
+            <ButtonWithIcon icon={DeskIcon} label="이동반" onClick={openMoveClassDisplay} />
             <ButtonWithIcon icon={HistoryIcon} label="히스토리" onClick={openTimeline} />
           </Horizontal>
         </Horizontal>
