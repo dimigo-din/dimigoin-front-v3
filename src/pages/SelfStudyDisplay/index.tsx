@@ -17,18 +17,18 @@ import { show } from "../../components/Modal";
 import MoveClass from "./MoveClass";
 
 interface INavBarProps {
-  className: string;
+  klassName: string;
   jaseupName: string;
 }
 
-const NavBar: React.FC<INavBarProps> = ({ className, jaseupName }) => (
+const TopBar: React.FC<INavBarProps> = ({ klassName, jaseupName }) => (
   <Horizontal
     css={css`
       align-items: center;
     `}
   >
     <IconLogo height={48} width={32} />
-    <ClassName>{className}</ClassName>
+    <ClassName>{klassName}</ClassName>
     <JaseupName>{jaseupName}</JaseupName>
   </Horizontal>
 );
@@ -246,7 +246,7 @@ const openTimeline = useCallback(() => {
           padding-top: 40px;
         `}
       >
-        <NavBar className="1학년 3반" jaseupName="방과후 자율학습 1타임" />
+        <TopBar klassName="1학년 3반" jaseupName="방과후 자율학습 1타임" />
         <TableWrapper>
           <div>
             {selfStudyData?.map((row) => (
