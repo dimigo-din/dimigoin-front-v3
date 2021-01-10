@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { EventFunction } from "../hooks/useInput";
+import { EventFunction } from "../../hooks/useInput";
 import css from "@emotion/css";
-import { Horizontal } from "../Atomics";
+import { Horizontal } from "./Atomics";
 
 interface RadioButtonProps {
   onChange?: (...p: any[]) => any;

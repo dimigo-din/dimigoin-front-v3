@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import css from "@emotion/css";
 import styled from "@emotion/styled";
-import { EventFunction } from "../hooks/useInput";
+import { EventFunction } from "../../hooks/useInput";
 
 interface IProps {
   date?: Date;

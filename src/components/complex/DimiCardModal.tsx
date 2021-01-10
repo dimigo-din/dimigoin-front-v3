@@ -1,8 +1,8 @@
 import css, { SerializedStyles } from '@emotion/css';
 import styled from '@emotion/styled';
 import React from 'react';
-import DimiCard, { IDimiCard } from './dimiru/DimiCard';
-import { IModalProps, show } from './Modal'
+import DimiCard, { IDimiCard } from '../basic/DimiCard';
+import { IModalProps, show } from './Modal';
 
 const Card = styled(DimiCard)`
   padding: 32px 45px 32px;

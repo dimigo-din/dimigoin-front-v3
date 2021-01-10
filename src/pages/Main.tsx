@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
-import NavigationBar from "../components/NavigationBar";
-import CardGroupHeader from "../components/CardGroupHeader";
-import TextCardGroup from "../components/TextCardGroup";
-import TimeTable from "../components/dimiru/DimiTimeTable";
-import { ResponsiveWrapper, Col, Divider } from "../components/grids/Cols";
-import MyTodayCard, { IMyToday } from "../components/ApplimentStatus";
-import TodayMeal, { IMeal } from "../components/TodayMeal";
 import css from "@emotion/css";
-import SelfStudyStatus from "../components/SelfStudyStatus";
-import MealList from "../components/MealList";
-import { showCardModal } from "../components/DimiCardModal";
-import { show } from "../components/Modal";
-import PageWrapper from "../components/grids/PageWrapper";
+
+import NavigationBar from "../components/complex/NavigationBar";
+import CardGroupHeader from "../components/basic/CardGroupHeader";
+import TextCardGroup from "../components/basic/TextCardGroup";
+import TimeTable from "../components/complex/DimiTimeTable";
+import { ResponsiveWrapper, Col, Divider } from "../components/layout/Cols";
+import MyTodayCard, { IMyToday } from "../components/complex/ApplimentStatus";
+import TodayMeal, { IMeal } from "../components/complex/TodayMeal";
+import SelfStudyStatus from "../components/complex/SelfStudyStatus";
+import MealList from "../components/complex/MealList";
+import { showCardModal } from "../components/complex/DimiCardModal";
+import { show } from "../components/complex/Modal";
+import PageWrapper from "../components/layout/PageWrapper";
 
 const Main: React.FC = () => {
   const [notice, setNotice] = useState<string[]>();

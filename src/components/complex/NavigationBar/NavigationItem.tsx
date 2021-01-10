@@ -1,7 +1,7 @@
 import React from "react";
 import { NavigationTitle, BottomBar } from "./NavigationItem.style";
 import css from "@emotion/css";
-import { UnstyledLink } from "../Atomics";
+import { UnstyledLink } from "../../basic/Atomics";
 
 export interface INavigationItem {
   title?: string;

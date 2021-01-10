@@ -8,12 +8,12 @@ import { ReactComponent as LaundryIcon } from "../../assets/icons/laundry.svg";
 import { ReactComponent as RefreshIcon } from "../../assets/icons/refresh.svg";
 import { ReactComponent as HistoryIcon } from "../../assets/icons/history.svg";
 import { ReactComponent as IconLogo } from "../../assets/brand.svg";
-import PageWrapper from "../../components/grids/PageWrapper";
-import { Horizontal, noBreak } from "../../components/Atomics";
-import DimiButton, { IDimiButton } from "../../components/dimiru/DimiButton";
+import PageWrapper from "../../components/layout/PageWrapper";
+import { Horizontal, noBreak } from "../../components/basic/Atomics";
+import DimiButton, { IDimiButton } from "../../components/basic/DimiButton";
 import { Timeline } from "./Timeline";
-import NamedSection from "../../components/NamedSection";
-import { show } from "../../components/Modal";
+import NamedSection from "../../components/basic/NamedSection";
+import { show } from "../../components/complex/Modal";
 import MoveClass from "./MoveClass";
 
 interface INavBarProps {

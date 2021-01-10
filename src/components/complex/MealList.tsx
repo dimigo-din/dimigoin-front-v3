@@ -1,13 +1,13 @@
 import css from '@emotion/css'
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
-import { ReactComponent as CloseSvg } from '../assets/icons/close.svg'
-import getMeals from '../functions/getMeals'
-import useConsole from '../hooks/useConsole'
-import { HeaderIconWrapper, Horizontal } from './Atomics'
-import { Title as CardTitle } from './CardGroupHeader'
-import DimiCard from './dimiru/DimiCard'
-import { ResponsiveWrapper } from './grids/Cols'
+import { ReactComponent as CloseSvg } from '../../assets/icons/close.svg'
+import getMeals from '../../functions/getMeals'
+import useConsole from '../../hooks/useConsole'
+import { HeaderIconWrapper, Horizontal } from '../basic/Atomics'
+import { Title as CardTitle } from '../basic/CardGroupHeader'
+import DimiCard from '../basic/DimiCard'
+import { ResponsiveWrapper } from '../layout/Cols'
 
 export interface IDailyMealProps {
   header: string;

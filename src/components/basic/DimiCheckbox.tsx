@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { useCheckbox } from "../hooks/useInput";
+import { useCheckbox } from "../../hooks/useInput";
 import css from "@emotion/css";
-import Dimigoincon from "../Dimigoincon";
+import Dimigoincon from "./Dimigoincon";
 
 interface IProps {
   text?: string;

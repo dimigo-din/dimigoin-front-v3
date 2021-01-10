@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import Card from "./DimiCard";
+import Card from "../basic/DimiCard";
 import css from "@emotion/css";
 import { days } from "../../constants";
 

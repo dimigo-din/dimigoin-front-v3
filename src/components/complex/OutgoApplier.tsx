@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import Chip from "./Chip";
-import Card from "./dimiru/DimiCard";
+import Chip from "../basic/Chip";
+import Card from "../basic/DimiCard";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
 import { showCardModal } from "./DimiCardModal";
-import { Title } from "./CardGroupHeader";
-import { ReactComponent as CloseSvg } from '../assets/icons/close.svg'
-import DimiDropdown, { IDropdownItem } from "./dimiru/DimiDropdown";
-import { Horizontal } from "./Atomics";
-import DimiButton from "./dimiru/DimiButton";
-import useInput from "./hooks/useInput";
-import useConsole from "../hooks/useConsole";
-import { Student } from "../constants/types";
+import { Title } from "../basic/CardGroupHeader";
+import { ReactComponent as CloseSvg } from '../../assets/icons/close.svg'
+import DimiDropdown, { IDropdownItem } from "../basic/DimiDropdown";
+import { Horizontal } from "../basic/Atomics";
+import DimiButton from "../basic/DimiButton";
+import useInput from "../../hooks/useInput";
+import useConsole from "../../hooks/useConsole";
+import { Student } from "../../constants/types";
 
 const getClassInfo = () => [...Array(3)].map((_, grade) => [...Array(6)].map((_, clas) => [grade + 1, clas + 1])).flat()
 const getStudentIinfoByClass = (clas: string): Student[] => [...Array(10)].map(() => ({

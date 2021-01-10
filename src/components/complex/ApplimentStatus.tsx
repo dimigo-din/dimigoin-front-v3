@@ -1,7 +1,7 @@
 import React from "react";
-import Card, { CardTitle } from "./dimiru/DimiCard";
+import Card, { CardTitle } from "../basic/DimiCard";
 import styled from "@emotion/styled";
-import { MyTodayDetail as Detail } from "./Atomics";
+import { MyTodayDetail as Detail } from "../basic/Atomics";
 
 export interface IMyToday {
   name: string;

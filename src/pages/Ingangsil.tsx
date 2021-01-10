@@ -1,18 +1,18 @@
 import React from "react";
 import styled from "@emotion/styled";
-import NavigationBar from "../components/NavigationBar";
-import CardGroupHeader from "../components/CardGroupHeader";
-import DimiCard, { CardTitle } from "../components/dimiru/DimiCard";
+import NavigationBar from "../components/complex/NavigationBar";
+import CardGroupHeader from "../components/basic/CardGroupHeader";
+import DimiCard, { CardTitle } from "../components/basic/DimiCard";
 import css from "@emotion/css";
 import {
   Col,
   Divider,
   ResponsiveWrapper,
-} from "../components/grids/Cols";
-import TextCardGroup from "../components/TextCardGroup";
-import { IngansilStatus } from "../components/IngangsilStatus";
+} from "../components/layout/Cols";
+import TextCardGroup from "../components/basic/TextCardGroup";
+import { IngansilStatus } from "../components/complex/IngangsilStatus";
 import { ReactComponent as CircleSvg } from "../assets/icons/circle.svg";
-import Container from "../components/grids/PageWrapper";
+import Container from "../components/layout/PageWrapper";
 
 export default () => {
   return (

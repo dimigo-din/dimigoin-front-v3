@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import Card, { IDimiCard } from "./dimiru/DimiCard";
+import Card, { IDimiCard } from "./DimiCard";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
 

@@ -1,4 +1,4 @@
-import { IDailyMealProps } from "../components/MealList"
+import { IDailyMealProps } from "../components/complex/MealList"
 import { IMeal } from "../constants/serverResource"
 import api from "./api"
 import { toast } from 'react-toastify'

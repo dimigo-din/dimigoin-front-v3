@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import css, { SerializedStyles } from "@emotion/css";
 import auth from "../utils/auth";
-import DimiInput from "../components/dimiru/DimiInput";
-import DimiButton from "../components/dimiru/DimiButton";
+import DimiInput from "../components/basic/DimiInput";
+import DimiButton from "../components/basic/DimiButton";
 import { ReactComponent as BrandWithTextImage } from "../assets/brand-with-text.svg";
-import TodayMeal from "../components/TodayMeal";
+import TodayMeal from "../components/complex/TodayMeal";
 
 type TStyleByDeviceWidth = {
   [key in "tablet" | "desktop"]: SerializedStyles;

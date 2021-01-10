@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import css from "@emotion/css";
 import styled from "@emotion/styled";
-import useInput, { EventFunction } from "../hooks/useInput";
+import useInput, { EventFunction } from "../../hooks/useInput";
 
 interface ITimeProps {
   defaultHour?: number;

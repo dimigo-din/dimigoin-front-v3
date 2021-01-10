@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "@emotion/styled";
-import Card from "./dimiru/DimiCard";
+import Card from "../basic/DimiCard";
 import css from "@emotion/css";
-import { ReactComponent as IngangsilSvg } from "../assets/icons/ingangsil.svg";
-import { ReactComponent as HealingsilSvg } from "../assets/icons/healingsil.svg";
-import { ReactComponent as OtherSvg } from "../assets/icons/other.svg";
-import { ReactComponent as LaundrySvg } from "../assets/icons/laundry.svg";
-import { ReactComponent as CircleSvg } from "../assets/icons/circle.svg";
+import { ReactComponent as IngangsilSvg } from "../../assets/icons/ingangsil.svg";
+import { ReactComponent as HealingsilSvg } from "../../assets/icons/healingsil.svg";
+import { ReactComponent as OtherSvg } from "../../assets/icons/other.svg";
+import { ReactComponent as LaundrySvg } from "../../assets/icons/laundry.svg";
+import { ReactComponent as CircleSvg } from "../../assets/icons/circle.svg";
 
 const BUTTONS = [
   {

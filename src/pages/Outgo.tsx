@@ -1,21 +1,21 @@
 import React, { useEffect } from "react";
 import css from "@emotion/css";
 import styled from "@emotion/styled";
-import NavigationBar from "../components/NavigationBar";
-import { ResponsiveWrapper, Col, Divider } from "../components/grids/Cols";
-import OutgoApply, { OutgoApplyInput } from "../components/OutgoApply";
-import CardGroupHeader from "../components/CardGroupHeader";
-import OutgoApplier from "../components/OutgoApplier";
-import WeekCalendar from "../components/dimiru/WeekCalendar";
-import Card from "../components/dimiru/DimiCard";
+import NavigationBar from "../components/complex/NavigationBar";
+import { ResponsiveWrapper, Col, Divider } from "../components/layout/Cols";
+import OutgoApply, { OutgoApplyInput } from "../components/complex/OutgoApply";
+import CardGroupHeader from "../components/basic/CardGroupHeader";
+import OutgoApplier from "../components/complex/OutgoApplier";
+import WeekCalendar from "../components/complex/WeekCalendar";
+import Card from "../components/basic/DimiCard";
 import LargeTimeSelector, {
   ITime,
-} from "../components/dimiru/LargeTimeSelector";
-import Checkbox from "../components/dimiru/DimiCheckbox";
-import Button from "../components/dimiru/DimiButton";
-import useInput from "../components/hooks/useInput";
-import PageWrapper from "../components/grids/PageWrapper";
-import { CardExplainContent } from "../components/Atomics";
+} from "../components/complex/LargeTimeSelector";
+import Checkbox from "../components/basic/DimiCheckbox";
+import Button from "../components/basic/DimiButton";
+import useInput from "../hooks/useInput";
+import PageWrapper from "../components/layout/PageWrapper";
+import { CardExplainContent } from "../components/basic/Atomics";
 
 const DateSelector: React.FC = () => {
   const dayInput = useInput<Date>();

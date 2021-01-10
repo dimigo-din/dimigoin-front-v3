@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
 import { Horizontal, UnstyledLink } from "./Atomics";
-import { Divider } from "./grids/Cols";
+import { Divider } from "../layout/Cols";
 
 interface IProps {
   withBubble?: boolean;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
-import { EventFunction } from "../hooks/useInput";
+import { EventFunction } from "../../hooks/useInput";
 
 export interface IDropdownItem {
   name: string;

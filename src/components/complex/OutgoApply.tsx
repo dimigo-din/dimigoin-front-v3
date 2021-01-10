@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
-import Card from "../components/dimiru/DimiCard";
-import { FormHeader } from "../components/Form";
+import Card from "../basic/DimiCard";
+import { FormHeader } from "../basic/Form";
 import RadioButton, {
   RadioButtonItem,
-} from "../components/dimiru/DimiRadioButton";
-import DimiDropdown, { IDropdownItem } from "../components/dimiru/DimiDropdown";
-import Textarea from "../components/dimiru/DimiTextarea";
-import useInput, { EventFunction } from "./hooks/useInput";
+} from "../basic/DimiRadioButton";
+import DimiDropdown, { IDropdownItem } from "../basic/DimiDropdown";
+import Textarea from "../basic/DimiTextarea";
+import useInput, { EventFunction } from "../../hooks/useInput";
 
 export interface OutgoApplyInput {
   outgoType?: string;
