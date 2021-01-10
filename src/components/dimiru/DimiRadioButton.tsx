@@ -9,7 +9,7 @@ interface RadioButtonProps {
   onChange?: (...p: any[]) => any;
   name?: string;
   disabled?: boolean;
-  children: string;
+  // children: string;
 }
 const Circle = styled.div<{ disabled?: boolean }>`
   width: 26px;
@@ -41,12 +41,12 @@ const Label = styled.p`
 
 export const RadioButton: React.FC<
   React.HTMLAttributes<HTMLInputElement> & RadioButtonProps
-> = ({ disabled, children, ...props }) => {
+> = ({ disabled, children, id, ...props }) => {
   return (
     <Wrapper>
-      <LogicalButton type="radio" {...props} disabled={disabled} />
+      <LogicalButton type="radio" {...props} disabled={disabled} id={id} />
       <Circle disabled={disabled} />
-      <Label>{children}</Label>
+      {children && <Label>{children}</Label>} 
     </Wrapper>
   );
 };

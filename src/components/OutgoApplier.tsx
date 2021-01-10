@@ -61,6 +61,54 @@ const AddApplierModal: React.FC<{
  
 }
 
+const getClassInfo = () => [...Array(3)].map((_, grade) => [...Array(6)].map((_, clas) => [grade + 1, clas + 1])).flat()
+const getStudentIinfoByClass = (clas: string): Applier[] => [...Array(10)].map(() => ({
+  studentId: Math.floor(Math.random() * 2000) + 1000 + '',
+  name: "테스트유저"
+}))
+
+const AddApplierModal: React.FC<{
+  close: () => void;
+  register: (applier: Applier) => void;
+}> = ({ close, register }) => {
+  const classDropdown = useInput<IDropdownItem>();
+  const studentDropdown = useInput<IDropdownItem>();
+  const [studentList, setStudentList] = useState<Applier[]>();
+  useEffect(() => {
+    console.log(classDropdown.value)
+    if(classDropdown.value?.key) setStudentList(getStudentIinfoByClass(classDropdown.value.key))
+  }, [classDropdown.value])
+  useConsole('SELECTED_STUDENT', studentDropdown.value)
+  return <>
+  <FormModalWrapper>
+    <Horizontal css={css`justify-content: space-between;`}>
+    <Title>
+      외출 인원 추가
+    </Title>
+    <CloseSvg onClick={close} />
+    </Horizontal>
+    <FormItem>
+      <InputLabel>학급</InputLabel>
+      <Dropdown placeholder="학급 선택" items={getClassInfo().map(clas => ({
+        name: `${clas[0]}학년 ${clas[1]}반`
+      }))} {...classDropdown} />
+    </FormItem>
+    <FormItem>
+      <InputLabel>학급</InputLabel>
+      <Dropdown placeholder="반을 먼저 선택해주세요" items={studentList?.map(e => ({
+        name: e.name,
+        key: e.studentId
+      }))} {...studentDropdown} />
+    </FormItem>
+  </FormModalWrapper>
+  <FormModalButton onClick={() => studentDropdown.value?.key && studentDropdown.value?.name && register({
+    name: studentDropdown.value.name,
+    studentId: studentDropdown.value.key
+  })}>완료</FormModalButton>
+  </>
+ 
+}
+
 const OutgoApplier: React.FC = () => {
   const [appliers, setAppliers] = useState<Student[]>([]);
   const addApplier = () => {

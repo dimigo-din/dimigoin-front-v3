@@ -1,8 +1,7 @@
 import React from "react";
-import css from "@emotion/css";
 import Card, { CardTitle } from "./dimiru/DimiCard";
 import styled from "@emotion/styled";
-import { Description } from "./Atomics";
+import { MyTodayDetail as Detail } from "./Atomics";
 
 export interface IMyToday {
   name: string;
@@ -18,17 +17,17 @@ const MyTodayCard: React.FC<IProps> = ({ name, location, time, className }) => {
     <Card leftBorder className={className}>
       <CardTitle>오늘의 {name}</CardTitle>
       {time && (
-        <Row>
+        <DetailRow>
           <Time />
-          <Description>{time}</Description>
-        </Row>
+          <Detail>{time}</Detail>
+        </DetailRow>
       )}
 
       {location && (
-        <Row>
+        <DetailRow>
           <Pin />
-          <Description>{location}</Description>
-        </Row>
+          <Detail>{location}</Detail>
+        </DetailRow>
       )}
     </Card>
   );
@@ -88,7 +87,7 @@ const Pin = styled.i`
   }
 `;
 
-const Row = styled.div`
+const DetailRow = styled.div`
   display: flex;
   font-size: 16px;
   color: #8a8a8a;

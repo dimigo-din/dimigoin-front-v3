@@ -1,8 +1,12 @@
+import { toast } from "react-toastify"
+
 const makeAlert = () => {
 
 }
 export default {
   error(message: string) {
-    alert(message)
+    toast(message, {
+      type: 'error'
+    })
   }
 }
