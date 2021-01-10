@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useRef, useCallback } from "react";
 import styled from "@emotion/styled";
 import { ReactComponent as IconLogo } from '../../assets/brand.svg'
 import { ReactComponent as LogoutLogo } from '../../assets/icons/logout.svg'
@@ -6,9 +6,7 @@ import { ReactComponent as LogoutLogo } from '../../assets/icons/logout.svg'
 import NavigationItem from "./NavigationItem";
 import navigations from "./navigations";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { NavigationContainer } from "./NavigationItem.style";
 import { UnstyledLink } from "../Atomics";
-import css from "@emotion/css";
 
 interface ITopNavbar { }
 

@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import CardGroupHeader from "../components/CardGroupHeader";
 import Card from "../components/dimiru/DimiCard";
 import { FormHeader } from "../components/Form";
 import RadioButton, {
@@ -42,11 +41,12 @@ const OutgoApply: React.FC<IProps> = ({ onChange, ...props }) => {
         },
       });
   }, [
-    applyType.value,
-    approver.value,
-    detailReason.value,
-    outgoReason.value,
-    outgoType.value,
+    applyType,
+    detailReason,
+    approver,
+    onChange,
+    outgoReason,
+    outgoType
   ]);
   return (
     <>

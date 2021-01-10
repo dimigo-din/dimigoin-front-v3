@@ -27,7 +27,7 @@ const Time: React.FC<ITimeProps> = ({
           },
         },
       });
-  }, [hourInput.value, minuteInput.value]);
+  }, [ hourInput.value, minuteInput.value, onChange ]);
   return (
     <TimeWrapper>
       <HalfDayWrapper>
@@ -71,7 +71,7 @@ const LargeTimeSelector: React.FC<IProps> = ({ value, onChange, ...props }) => {
           value: [fromInput.value, toInput.value],
         },
       });
-  }, [fromInput.value, toInput.value]);
+  }, [ fromInput.value, toInput.value, onChange ]);
   return (
     <Wrapper {...props}>
       <Time defaultHour={9} defaultMinute={30} {...fromInput} />

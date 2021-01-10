@@ -1,9 +1,8 @@
 import React from "react";
+import css from "@emotion/css";
+import styled from '@emotion/styled'
 import CardGroupHeader from "./CardGroupHeader";
 import DimiCard from "./dimiru/DimiCard";
-import css from "@emotion/css";
-import { Col } from "./grids/Cols";
-import styled from "styled-components";
 import DimiButton from "./dimiru/DimiButton";
 
 interface IProps {

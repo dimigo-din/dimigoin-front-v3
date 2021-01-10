@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import styled from "@emotion/styled";
-
 import NavigationBar from "../components/NavigationBar";
 import CardGroupHeader from "../components/CardGroupHeader";
 import TextCardGroup from "../components/TextCardGroup";

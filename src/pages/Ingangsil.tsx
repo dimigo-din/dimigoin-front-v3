@@ -1,4 +1,4 @@
-import React, { Children } from "react";
+import React from "react";
 import styled from "@emotion/styled";
 import NavigationBar from "../components/NavigationBar";
 import CardGroupHeader from "../components/CardGroupHeader";
@@ -7,14 +7,12 @@ import css from "@emotion/css";
 import {
   Col,
   Divider,
-  ResponsiveScreenWrapper,
   ResponsiveWrapper,
 } from "../components/grids/Cols";
 import TextCardGroup from "../components/TextCardGroup";
 import { IngansilStatus } from "../components/IngangsilStatus";
 import { ReactComponent as CircleSvg } from "../assets/icons/circle.svg";
 import Container from "../components/grids/PageWrapper";
-import { Horizontal } from "../components/Atomics";
 
 export default () => {
   return (

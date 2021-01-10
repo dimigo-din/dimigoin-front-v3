@@ -27,7 +27,7 @@ const WeekCalendar: React.FC<IProps> = ({ date, onChange }) => {
         value: date,
       },
     });
-  }, [selectedDate]);
+  }, [ selectedDate, onChange ]);
   return (
     <Wrapper>
       <HeaderWrapper>
