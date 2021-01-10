@@ -46,7 +46,7 @@ const AddApplierModal: React.FC<{
       }))} {...classDropdown} />
     </FormItem>
     <FormItem>
-      <InputLabel>학급</InputLabel>
+      <InputLabel>이름</InputLabel>
       <Dropdown placeholder="반을 먼저 선택해주세요" items={studentList?.map(e => ({
         name: e.name,
         key: e.studentId
