@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
-import Card, { IDimiCard } from "./DimiCard";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
+import Card, { IDimiCard } from "./Card";
 
 interface IProps {
   content: (IDimiCard & {

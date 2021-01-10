@@ -2,8 +2,8 @@ import React from "react";
 import css from "@emotion/css";
 import styled from '@emotion/styled'
 import CardGroupHeader from "../basic/CardGroupHeader";
-import DimiCard from "../basic/DimiCard";
-import DimiButton from "../basic/DimiButton";
+import DimiCard from "../basic/Card";
+import DimiButton from "../basic/Button";
 
 interface IProps {
   currentApplied: number;

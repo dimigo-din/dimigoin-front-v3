@@ -6,7 +6,7 @@ import getMeals from '../../functions/getMeals'
 import useConsole from '../../hooks/useConsole'
 import { HeaderIconWrapper, Horizontal } from '../basic/Atomics'
 import { Title as CardTitle } from '../basic/CardGroupHeader'
-import DimiCard from '../basic/DimiCard'
+import DimiCard from '../basic/Card'
 import { ResponsiveWrapper } from '../layout/Cols'
 
 export interface IDailyMealProps {

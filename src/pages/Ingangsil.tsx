@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import NavigationBar from "../components/complex/NavigationBar";
 import CardGroupHeader from "../components/basic/CardGroupHeader";
-import DimiCard, { CardTitle } from "../components/basic/DimiCard";
+import DimiCard, { CardTitle } from "../components/basic/Card";
 import css from "@emotion/css";
 import {
   Col,

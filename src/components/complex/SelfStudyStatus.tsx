@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import Card from "../basic/DimiCard";
+import Card from "../basic/Card";
 import css from "@emotion/css";
 import { ReactComponent as IngangsilSvg } from "../../assets/icons/ingangsil.svg";
 import { ReactComponent as HealingsilSvg } from "../../assets/icons/healingsil.svg";

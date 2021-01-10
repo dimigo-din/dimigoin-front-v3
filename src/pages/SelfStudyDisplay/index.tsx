@@ -10,7 +10,7 @@ import { ReactComponent as HistoryIcon } from "../../assets/icons/history.svg";
 import { ReactComponent as IconLogo } from "../../assets/brand.svg";
 import PageWrapper from "../../components/layout/PageWrapper";
 import { Horizontal, noBreak } from "../../components/basic/Atomics";
-import DimiButton, { IDimiButton } from "../../components/basic/DimiButton";
+import DimiButton, { IDimiButton } from "../../components/basic/Button";
 import { Timeline } from "./Timeline";
 import NamedSection from "../../components/basic/NamedSection";
 import { show } from "../../components/complex/Modal";

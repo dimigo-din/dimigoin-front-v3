@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Chip from "../basic/Chip";
-import Card from "../basic/DimiCard";
+import Card from "../basic/Card";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
-import { showCardModal } from "./DimiCardModal";
+import { showCardModal } from "./CardModal";
 import { Title } from "../basic/CardGroupHeader";
 import { ReactComponent as CloseSvg } from '../../assets/icons/close.svg'
-import DimiDropdown, { IDropdownItem } from "../basic/DimiDropdown";
+import DimiDropdown, { IDropdownItem } from "../basic/Dropdown";
 import { Horizontal } from "../basic/Atomics";
-import DimiButton from "../basic/DimiButton";
+import DimiButton from "../basic/Button";
 import useInput from "../../hooks/useInput";
 import useConsole from "../../hooks/useConsole";
 import { Student } from "../../constants/types";

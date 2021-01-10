@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import css, { SerializedStyles } from "@emotion/css";
 import auth from "../utils/auth";
-import DimiInput from "../components/basic/DimiInput";
-import DimiButton from "../components/basic/DimiButton";
+import DimiInput from "../components/basic/Input";
+import DimiButton from "../components/basic/Button";
 import { ReactComponent as BrandWithTextImage } from "../assets/brand-with-text.svg";
 import TodayMeal from "../components/complex/TodayMeal";
 

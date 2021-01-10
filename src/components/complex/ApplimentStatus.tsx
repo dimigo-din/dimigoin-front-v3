@@ -1,5 +1,5 @@
 import React from "react";
-import Card, { CardTitle } from "../basic/DimiCard";
+import Card, { CardTitle } from "../basic/Card";
 import styled from "@emotion/styled";
 import { MyTodayDetail as Detail } from "../basic/Atomics";
 

@@ -4,13 +4,13 @@ import css from "@emotion/css";
 import NavigationBar from "../components/complex/NavigationBar";
 import CardGroupHeader from "../components/basic/CardGroupHeader";
 import TextCardGroup from "../components/basic/TextCardGroup";
-import TimeTable from "../components/complex/DimiTimeTable";
+import TimeTable from "../components/complex/TimeTable";
 import { ResponsiveWrapper, Col, Divider } from "../components/layout/Cols";
 import MyTodayCard, { IMyToday } from "../components/complex/ApplimentStatus";
 import TodayMeal, { IMeal } from "../components/complex/TodayMeal";
 import SelfStudyStatus from "../components/complex/SelfStudyStatus";
 import MealList from "../components/complex/MealList";
-import { showCardModal } from "../components/complex/DimiCardModal";
+import { showCardModal } from "../components/complex/CardModal";
 import { show } from "../components/complex/Modal";
 import PageWrapper from "../components/layout/PageWrapper";
 

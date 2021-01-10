@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
-import DimiCard from "../basic/DimiCard";
+import DimiCard from "../basic/Card";
 
 const MealItem: React.FC<IMealItem> = ({
   selected = false,

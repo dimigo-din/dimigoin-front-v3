@@ -7,12 +7,12 @@ import OutgoApply, { OutgoApplyInput } from "../components/complex/OutgoApply";
 import CardGroupHeader from "../components/basic/CardGroupHeader";
 import OutgoApplier from "../components/complex/OutgoApplier";
 import WeekCalendar from "../components/complex/WeekCalendar";
-import Card from "../components/basic/DimiCard";
+import Card from "../components/basic/Card";
 import LargeTimeSelector, {
   ITime,
 } from "../components/complex/LargeTimeSelector";
-import Checkbox from "../components/basic/DimiCheckbox";
-import Button from "../components/basic/DimiButton";
+import Checkbox from "../components/basic/Checkbox";
+import Button from "../components/basic/Button";
 import useInput from "../hooks/useInput";
 import PageWrapper from "../components/layout/PageWrapper";
 import { CardExplainContent } from "../components/basic/Atomics";

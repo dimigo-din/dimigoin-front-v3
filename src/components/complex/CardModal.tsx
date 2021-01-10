@@ -1,7 +1,7 @@
 import css, { SerializedStyles } from '@emotion/css';
 import styled from '@emotion/styled';
 import React from 'react';
-import DimiCard, { IDimiCard } from '../basic/DimiCard';
+import DimiCard, { IDimiCard } from '../basic/Card';
 import { IModalProps, show } from './Modal';
 
 const Card = styled(DimiCard)`
