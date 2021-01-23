@@ -72,10 +72,10 @@ const LogicalInput = styled.input<LogicalInputProps>`
 
 const ErrorMessage = styled.p`
   /* position: absolute; */
-  padding-left: 1em;
-  margin-top: 0.375em;
+  /* padding-left: 1em; */
+  margin-top: 12px;
   color: #e83c3d;
-  font-size: 12px;
+  font-size: 16px;
 `;
 
 export default Input;
