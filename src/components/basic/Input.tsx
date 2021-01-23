@@ -32,17 +32,21 @@ interface LogicalInputProps {
 const LogicalInput = styled.input<LogicalInputProps>`
   width: 100%;
   box-sizing: border-box;
-  padding: 19px 23px;
-  border: solid 1px #d8d8d8;
+  padding: 20px 24px;
+  border: none;
+  /*
+    Animating Frame 이슈때문에 border가 아니라
+    box-shadow로 테두리 색을 처리했습니다.
+  */
+  box-shadow: inset 0px 0px 0px 1px #D8D8D8;
   appearance: none;
   background-color: #ffffff;
   font-family: 'NanumSquareRound', sans-serif;
   font-size: 17px;
-  transition: all 0.2s ease-in-out;
+  transition: 300ms;
 
   &:focus {
-    box-shadow: inset 1px 1px 16px #dadeeb,
-      inset -2px -2px 3px #fff;
+    box-shadow: inset 0px 0px 0px 2px var(--main-theme-accent);
   }
 
   &::placeholder {
