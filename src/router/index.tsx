@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, withRouter, Redirect } from "react-router-dom";
 
 import { Main } from "../pages";
 import Auth from "./Auth";
@@ -9,6 +9,15 @@ import Notices from "../pages/Notices";
 import SelfStudyDisplay from "../pages/SelfStudyDisplay";
 import Council from "../pages/Council";
 import Mentoring from "../pages/Mentoring";
+import { LoadableComponent } from "@loadable/component";
+import { getToken } from "../api/auth";
+
+const needAuth = (Component: LoadableComponent<{}>) => {
+  return (params => {
+    if(!getToken()) return <Redirect to="/auth/login" />
+    return <Component {...params} />
+  }) as React.FC
+}
 
 const Router: React.FC = () => (
   <BrowserRouter>
@@ -21,7 +30,7 @@ const Router: React.FC = () => (
       <Route path="/selfstudydisplay" component={SelfStudyDisplay} />
       <Route path="/council" component={Council} />
       <Route path="/mentoring" component={Mentoring} />
-      <Route path="/" exact component={Main} />
+      <Route path="/" exact component={needAuth(Main)} />
     </Switch>
   </BrowserRouter>
 );

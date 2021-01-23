@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import css, { SerializedStyles } from "@emotion/css";
-import auth from "../utils/auth";
 import { ReactComponent as BrandWithTextImage } from "../assets/brand-with-text.svg";
 import { Button, TodayMeal, Input } from "../components";
 
@@ -100,7 +99,7 @@ export default () => {
   const [active, setActive] = useState<boolean>(true);
 
   useEffect(() => {
-    auth.clearAppStorage();
+    // auth.clearAppStorage();
   }, []);
 
   return (
@@ -113,7 +112,6 @@ export default () => {
     >
       <CLogin>
         <Section className="section">
-          {/* <SectionTitle className="section__title">로그인</SectionTitle> */}
           <BrandWithTextImage css={BrandLogo} />
           <Content css={ContentMT}>
             <Form
