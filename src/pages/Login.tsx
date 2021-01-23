@@ -1,190 +1,88 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import styled from "@emotion/styled";
-import css, { SerializedStyles } from "@emotion/css";
-import { ReactComponent as BrandWithTextImage } from "../assets/brand-with-text.svg";
-import { Button, TodayMeal, Input } from "../components";
+import { ReactComponent as _BrandWithText } from "../assets/brand-with-text.svg";
+import { Button, Input, ResponsiveWrapper, TodayMeal } from "../components";
+import css from "@emotion/css";
+import { useMeal } from "../hooks/api";
+import useInput from "../hooks/useInput";
 
-type TStyleByDeviceWidth = {
-  [key in "tablet" | "desktop"]: SerializedStyles;
-};
+const SMALL_SCREEN_THRESHOLD = 840
 
-const until = (device: "tablet" | "desktop", style: string) =>
-  (({
-    tablet: css`
-      @media only screen and (max-width: 769px) {
-        ${style}
-      }
-    `,
-    desktop: css`
-      @media only screen and (max-width: 769px) {
-        ${style}
-      }
-    `,
-  } as TStyleByDeviceWidth)[device]);
+const Login: React.FC = () => {
+  const todayMeal = useMeal()
+  const usernameInput = useInput()
+  const passwordInput = useInput()
+  const login = useCallback(() => {
+    console.log(usernameInput.value, passwordInput.value)
+  }, [usernameInput.value, passwordInput.value])
+  return <Wrapper>
+    <SameHeightHorizontal threshold={SMALL_SCREEN_THRESHOLD}>
+      <InputContainer>
+        <BrandWithText />
+        <Input css={ css`margin-top: 36px;` } placeholder="아이디" {...usernameInput} />
+        <Input css={ css`margin-top: 12px;` } type="password" placeholder="비밀번호" {...passwordInput} />
+        <LoginButton onClick={login}>
+          로그인
+        </LoginButton>
+      </InputContainer>
+      <MealDisplay meals={todayMeal} />
+    </SameHeightHorizontal>
+  </Wrapper>
+}
 
-const ContentMT = css`
-  ${until("tablet", "margin-top: 1.5em")}
-`;
+export default Login
 
-const FirstLoginInput = css`
-  margin-bottom: 1rem;
-`;
-
-const Container = styled.div`
-  display: flex;
-  height: 100vh;
-  align-items: center;
-  ${until(
-    "tablet",
-    `
-    width: unset;
-    display: block;
-    height: unset;
-    padding: 12px;
-  `
-  )}
-  width: calc(100vw - 360px);
-`;
-
-const CLogin = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  ${until(
-    "tablet",
-    `display: block;
-      width: unset;`
-  )}
-
-  .section:first-of-type {
-    width: 381px;
+const BrandWithText = styled(_BrandWithText)`
+  width: 216px;
+  height: 60px;
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    width: 160px;
   }
-`;
+`
 
-const Section = styled.div`
+const Wrapper = styled.div`
+  height: 100vh;
+  border-top: 12px solid var(--main-theme-accent);
+  box-sizing: border-box;
   display: flex;
-  width: 50%;
-  flex-direction: column;
-  ${until("tablet", "width: unset")}
-`;
-
-const BrandLogo = css`
-  height: 69px;
-  width: 253px;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const SubmitButton = css`
-  align-self: center;
-  margin-top: 42px;
-  font-weight: 800;
-  ${until("tablet", "margin-top: 0.8rem")}
-`;
-
-const Content = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
-  margin-top: 42px;
-`;
+  align-items: center;
+  @media screen and (max-height: 720px) {
+    align-items: flex-start;
+  }
+`
 
-export default () => {
-  const [info, setInfo] = useState({ username: "", password: "" });
-  const [active, setActive] = useState<boolean>(true);
+const SameHeightHorizontal = styled(ResponsiveWrapper)`
+  display: flex;
+  align-items: stretch;
+  flex: 0.6;
+  justify-content: space-between;
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    flex: 1;
+    padding: 36px 18px;
+  }
+`
 
-  useEffect(() => {
-    // auth.clearAppStorage();
-  }, []);
+const InputContainer = styled.div`
+  flex: 0.4;
+  @media screen and (max-width: 1280px) {
+    flex: 1;
+  }
+`
 
-  return (
-    <Container
-      css={css`
-        padding: 0 0.5rem;
-        margin-right: auto;
-        margin-left: auto;
-      `}
-    >
-      <CLogin>
-        <Section className="section">
-          <BrandWithTextImage css={BrandLogo} />
-          <Content css={ContentMT}>
-            <Form
-              onSubmit={(e) => {
-                e.preventDefault();
-                setActive(false);
-              }}
-            >
-              <Input
-                css={FirstLoginInput}
-                placeholder="아이디"
-                type="text"
-                value={info.username}
-                onChange={(e) => {
-                  e.persist();
-                  setInfo((prevState) => ({
-                    ...prevState,
-                    username: e.target.value,
-                  }));
-                }}
-              />
-              <Input
-                placeholder="비밀번호"
-                type="password"
-                value={info.password}
-                onChange={(e) => {
-                  e.persist();
-                  setInfo((prevState) => ({
-                    ...prevState,
-                    password: e.target.value,
-                  }));
-                }}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    setActive(false);
-                  }
-                }}
-              />
-              <Button
-                css={SubmitButton}
-                active={active}
-                onClick={() => {
-                  setActive(false);
-                }}
-              >
-                로그인
-              </Button>
-            </Form>
-          </Content>
-        </Section>
-        <Section className="section">
-          <TodayMeal
-            meals={[
-              {
-                menu:
-                  "베이컨&소시지구이 | 치킨너겟 | 스트링치즈 | 잡곡밥 | 새우아욱국 | 모듬과일 | 포기김치 | 오이소박이 | 야채죽 | 시리얼 | 우유 또는 포도주스",
-                name: "아침",
-                selected: true,
-              },
-              {
-                menu:
-                  "고추참치덮밥&계란후라이 | 우동장국 | 오지치즈후라이 | 숙주나물 | 총각김치 | 피크닉 | 석박지 | 콩나물무침 | 모듬과일 | 바이오거트",
-                name: "점심",
-              },
-              {
-                menu:
-                  "알떡고기완자조림 | 쌀밥 | 닭개장 | 연두부&양념장 | 석박지 | 콩나물무침 | 모듬과일 | 바이오거트 | 미니크라상&딸기잼",
-                name: "저녁",
-              },
-            ]}
-          />
-        </Section>
-      </CLogin>
-    </Container>
-  );
-};
+const LoginButton = styled(Button)`
+  display: flex;
+  margin-top: 48px;
+`
+
+const MealDisplay = styled(TodayMeal)`
+  flex: 0.5;
+  margin-left: 24px;
+  @media screen and (max-width: 1280px) {
+    flex: 1;
+  }
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    margin-left: 0px;
+    margin-top: 24px;
+  }
+`

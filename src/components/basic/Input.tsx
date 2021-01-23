@@ -15,7 +15,7 @@ export const Input: React.FC<
     >
 > = ({ errorMessage = '', error, ...props }) => (
   <Wrapper>
-    <LogicalInput error={error} {...props} />
+    <LogicalInput error={error} {...props} isSecret={props.type === 'password'} />
     {error && <ErrorMessage>{errorMessage}</ErrorMessage>}
   </Wrapper>
 );
@@ -27,6 +27,7 @@ const Wrapper = styled.div`
 
 interface LogicalInputProps {
   error?: boolean;
+  isSecret?: boolean;
 }
 
 const LogicalInput = styled.input<LogicalInputProps>`
@@ -40,11 +41,12 @@ const LogicalInput = styled.input<LogicalInputProps>`
     box-shadow로 테두리 색을 처리했습니다.
   */
   box-shadow: inset 0px 0px 0px 1px #EEEEEE;
-  appearance: none;
+  /* appearance: none; */
   background-color: #ffffff;
   font-family: 'NanumSquare', sans-serif;
   font-size: 17px;
   transition: 300ms;
+  color: red;
 
   &:hover {
     box-shadow: inset 0px 0px 0px 2px #D1D1D1;
@@ -62,12 +64,14 @@ const LogicalInput = styled.input<LogicalInputProps>`
     && css`
       background-color: lighten(#e83c3d, 35%);
     `};
-
+  ${({ isSecret }) => isSecret && css`
+    font-family: pass;
+  `}
   outline: 0;
 `;
 
 const ErrorMessage = styled.p`
-  position: absolute;
+  /* position: absolute; */
   padding-left: 1em;
   margin-top: 0.375em;
   color: #e83c3d;

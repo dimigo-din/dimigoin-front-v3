@@ -11,7 +11,7 @@ const GlobalStyle = createGlobalStyle`
   * {
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
     font-family: 'NanumSquare', -apple-system, BlinkMacSystemFont,
-      'Segoe UI', Helvetica, Arial, sans-serif !important;
+      'Segoe UI', Helvetica, Arial, sans-serif;
   }
 
   html {
