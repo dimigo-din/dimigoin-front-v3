@@ -1,14 +1,16 @@
+export interface AuthTokens {
+    accessToken: string;
+    refreshToken: string;
+}
+
 interface Login {
     method: 'POST';
-    endpoint: 'login',
+    endpoint: '/auth',
     req: {
         username: string;
         password: string;
     }
-    res: {
-        accessToken: string;
-        refreshToken: string;
-    }
+    res: AuthTokens
 }
 
 export interface DailyMeal {
