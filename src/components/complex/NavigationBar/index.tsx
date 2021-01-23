@@ -70,6 +70,7 @@ const ProfileContainer = styled.div`
   flex: 1;
   justify-content: flex-end;
   margin-left: 20px;
+  align-items: center;
 `;
 
 const ProfileImage = styled.img`
