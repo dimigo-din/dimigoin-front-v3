@@ -14,18 +14,21 @@ export const apiWithoutAuth = axios.create({
 })
 
 request.interceptors.response.use(undefined, (error) => {
-  const errorMessage = error.response?.body?.message || ({
+  const errorMessage = error.response?.data?.message || ({
     404: '리소스를 찾을 수 없습니다',
     500: '알 수 없는 서버 오류입니다.',
-    403: '로그인 후 다시 시도해주세요',
+    403: '접근 권한이 없습니다',
+    502: '서버가 작동하지 않습니다'
+    // 401: ''
   })[error.response.status as | 404 | 500 | 403]
+  // console.log(error.response)
   toast(errorMessage, {
     type: 'error'
   })
   return Promise.reject(error);
 })
 
-export const post = async <T extends keyof PostResource>(endpoint: PostResource[T]['endpoint'] | string, param?: PostResource[T]['req']) => {
+export const post = async <T extends keyof PostResource>(endpoint: PostResource[T]['endpoint'], param?: PostResource[T]['req']) => {
   return (await request(endpoint, {
     data: param,
     method: 'POST',
