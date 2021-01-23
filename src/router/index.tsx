@@ -15,7 +15,8 @@ import styled from "@emotion/styled";
 
 const needAuth = (Component: LoadableComponent<{}>) => {
   return (params => {
-    if(!getToken()) return <Redirect to="/auth/login" />
+    if(!getToken()) 
+      return <Redirect to="/auth/login" />
     return <Component {...params} />
   }) as React.FC
 }

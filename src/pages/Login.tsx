@@ -1,20 +1,33 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import styled from "@emotion/styled";
 import { ReactComponent as _BrandWithText } from "../assets/brand-with-text.svg";
 import { Button, Input, ResponsiveWrapper, TodayMeal } from "../components";
 import css from "@emotion/css";
 import { useMeal } from "../hooks/api";
-import useInput from "../hooks/useInput";
+import { useTextInput } from "../hooks/useInput";
+import { clearTokens, loginWithInfo } from "../api";
+import { useHistory, withRouter } from "react-router-dom";
 
 const SMALL_SCREEN_THRESHOLD = 840
 
 const Login: React.FC = () => {
   const todayMeal = useMeal()
-  const usernameInput = useInput()
-  const passwordInput = useInput()
-  const login = useCallback(() => {
-    console.log(usernameInput.value, passwordInput.value)
-  }, [usernameInput.value, passwordInput.value])
+  const [ usernameInput, setUsernameError ] = useTextInput();
+  const [ passwordInput, setPasswordError] = useTextInput()
+  const history = useHistory()
+  useEffect(() => clearTokens(), [])
+  const login = useCallback(async () => {
+    if(!usernameInput.value) setUsernameError("올바른 사용자 이름을 입력해주세요")
+    if(!passwordInput.value) setPasswordError("올바른 비밀번호를 입력해주세요")
+    if(!usernameInput.value || !passwordInput.value) return
+
+    if(await loginWithInfo({
+      username: usernameInput.value,
+      password: passwordInput.value
+    })) {
+      history.push('/')
+    }
+  }, [usernameInput.value, passwordInput.value, setPasswordError, setUsernameError, history])
   return <Wrapper>
     <SameHeightHorizontal threshold={SMALL_SCREEN_THRESHOLD}>
       <InputContainer>
