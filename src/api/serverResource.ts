@@ -11,7 +11,7 @@ interface Login {
     }
 }
 
-interface Meal {
+export interface DailyMeal {
     breakfast: string[];
     lunch: string[];
     dinner: string[];
@@ -21,19 +21,29 @@ interface Meal {
 interface AllMeal {
     method: 'GET';
     endpoint: '/meal';
+    needAuth: false;
     req: {};
     res: {
-        meals: Meal[]
+        meals: DailyMeal[]
     }
 }
 
-interface DailyMeal {
+interface GetDailyMeal {
     method: 'GET';
     endpoint: string;
+    needAuth: false;
     req: {};
     res: {
-        meal: Meal;
+        meal: DailyMeal;
     }
+}
+
+interface Dummy {
+    method: 'GET';
+    endpoint: '/dummy';
+    needAuth: true;
+    req: {};
+    res: {};
 }
 
 export interface PostResource {
@@ -42,5 +52,6 @@ export interface PostResource {
 
 export interface GetResource {
     allMeal: AllMeal;
-    dailyMeal: DailyMeal;
+    dailyMeal: GetDailyMeal;
+    dummy: Dummy;
 }

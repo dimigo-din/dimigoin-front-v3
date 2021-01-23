@@ -1,12 +1,12 @@
 import { DailyMealProps } from "../components/complex/MealList"
 import { IMeal } from "../constants/serverResource"
-import api from "./api"
+import { get, request } from "./api"
 import { toast } from 'react-toastify'
 
 const DAYS = ['월', '화', '수', '목', '금', '토', '일']
 
 export const getWeeklyMeals = async (date: Date): Promise<DailyMealProps[]> => {
-  const { data } = (await api.get<IMeal[]>(`meal/${date.toISOString().substr(0, 10)}`))
+  const { data } = (await request.get<IMeal[]>(`meal/${date.toISOString().substr(0, 10)}`))
   try {
     return data.map(e => {
       const parsedDay = new Date(e.date).getDay()
@@ -22,4 +22,8 @@ export const getWeeklyMeals = async (date: Date): Promise<DailyMealProps[]> => {
     })
     throw e
   }
+}
+
+export const getDailyMeal = (date: Date = new Date()) => {
+    return get<"dailyMeal">(`/meal/${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate()}`, false).then(e => e.meal)
 }

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
 import Card from "../basic/Card";
+import { DailyMeal } from "../../api/serverResource";
 
 const MealItem: React.FC<MealItem> = ({
   selected = false,
@@ -14,21 +15,15 @@ const MealItem: React.FC<MealItem> = ({
     </MealItemContainer>
   );
 
-export interface Meal {
-  name: string;
-  menu: string;
-  selected?: boolean;
-}
-
 interface TodayMealProps {
-  meals: Meal[];
+  meals: DailyMeal | null;
 }
 
-export const TodayMeal: React.FC<TodayMealProps> = ({ meals }) => (
-  <MealCard>
-    {meals.map((meal) => (
-      <MealItem key={meal.name} {...meal} />
-    ))}
+export const TodayMeal: React.FC<TodayMealProps> = ({ meals, ...props }) => (
+  <MealCard {...props}>
+    <MealItem name="아침" menu={meals?.breakfast.join(', ')} />
+    <MealItem name="점심" menu={meals?.lunch.join(', ')} />
+    <MealItem name="저녁" menu={meals?.dinner.join(', ')} />
   </MealCard>
 );
 
