@@ -10,7 +10,7 @@ import SelfStudyDisplay from "../pages/SelfStudyDisplay";
 import Council from "../pages/Council";
 import Mentoring from "../pages/Mentoring";
 import { LoadableComponent } from "@loadable/component";
-import { getToken } from "../api/auth";
+import { getToken } from "../api";
 import styled from "@emotion/styled";
 
 const needAuth = (Component: LoadableComponent<{}>) => {

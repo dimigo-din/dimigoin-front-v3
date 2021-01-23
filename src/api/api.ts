@@ -2,7 +2,7 @@ import axios from 'axios'
 import makeAlert from '../functions/makeAlert';
 import { toast } from 'react-toastify'
 import { getToken } from './auth';
-import { PostResource } from './serverResource';
+import { GetResource, PostResource } from './serverResource';
 
 if (!process.env.REACT_APP_API_URI) makeAlert.error("서버 정보를 불러오는데 실패했습니다")
 const api = axios.create({
@@ -27,10 +27,18 @@ api.interceptors.response.use(undefined, (error) => {
   return Promise.reject(error);
 })
 
-export const post = async <T extends keyof PostResource>(endpoint: PostResource[T]['endpoint'], param?: PostResource[T]['req']) => {
+export const post = async <T extends keyof PostResource>(endpoint: PostResource[T]['endpoint'] | string, param?: PostResource[T]['req']) => {
   return (await api(endpoint, {
-    data: param
+    data: param,
+    method: 'POST'
   })).data as PostResource[T]['res']
+}
+
+export const get = async <T extends keyof GetResource>(endpoint: GetResource[T]['endpoint'], param?: GetResource[T]['req']) => {
+  return (await api(endpoint, {
+    data: param,
+    method: 'GET'
+  })).data as GetResource[T]['res']
 }
 
 export default api

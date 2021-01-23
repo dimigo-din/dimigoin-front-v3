@@ -34,23 +34,28 @@ const LogicalInput = styled.input<LogicalInputProps>`
   box-sizing: border-box;
   padding: 20px 24px;
   border: none;
+  border-radius: 6px;
   /*
     Animating Frame 이슈때문에 border가 아니라
     box-shadow로 테두리 색을 처리했습니다.
   */
-  box-shadow: inset 0px 0px 0px 1px #D8D8D8;
+  box-shadow: inset 0px 0px 0px 1px #EEEEEE;
   appearance: none;
   background-color: #ffffff;
-  font-family: 'NanumSquareRound', sans-serif;
+  font-family: 'NanumSquare', sans-serif;
   font-size: 17px;
   transition: 300ms;
+
+  &:hover {
+    box-shadow: inset 0px 0px 0px 2px #D1D1D1;
+  }
 
   &:focus {
     box-shadow: inset 0px 0px 0px 2px var(--main-theme-accent);
   }
 
   &::placeholder {
-    color: #d8d8d8;
+    color: #EEEEEE;
   }
 
   ${({ error = false }) => error
