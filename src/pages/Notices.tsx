@@ -14,7 +14,6 @@ const BriefNoticeTitle = styled.h2`
   color: #8A8A8A;
   flex-basis: 1;
   flex-shrink: 0;
-  
 `
 
 const BriefNoticeContent = styled.p`
