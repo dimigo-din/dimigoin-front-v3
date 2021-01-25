@@ -1,44 +1,4 @@
-export interface AuthTokens {
-    accessToken: string;
-    refreshToken: string;
-}
-
-interface Login {
-    method: 'POST';
-    endpoint: '/auth',
-    req: {
-        username: string;
-        password: string;
-    }
-    res: AuthTokens
-}
-
-export interface DailyMeal {
-    breakfast: string[];
-    lunch: string[];
-    dinner: string[];
-    date: string;
-}
-
-interface AllMeal {
-    method: 'GET';
-    endpoint: '/meal';
-    needAuth: false;
-    req: {};
-    res: {
-        meals: DailyMeal[]
-    }
-}
-
-interface GetDailyMeal {
-    method: 'GET';
-    endpoint: string;
-    needAuth: false;
-    req: {};
-    res: {
-        meal: DailyMeal;
-    }
-}
+import { AllMeal, GetDailyMeal, Login } from "./interfaces";
 
 interface Dummy {
     method: 'GET';

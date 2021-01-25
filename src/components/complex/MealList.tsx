@@ -7,7 +7,7 @@ import { HeaderIconWrapper, Horizontal } from '../basic/Atomics'
 import { Title as CardTitle } from '../basic/CardGroupHeader'
 import Card from '../basic/Card'
 import { ResponsiveWrapper } from '../layout/Cols'
-import { getWeeklyMeals } from '../../api'
+// import { getWeeklyMeals } from '../../api'
 
 export interface DailyMealProps {
   header: string;
@@ -77,9 +77,9 @@ export const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
   const [meals, setMeals] = useState<DailyMealProps[]>();
   const date = new Date()
   useEffect(() => {
-    getWeeklyMeals(date)
-      .then(setMeals)
-      .catch(goBack)
+    // getWeeklyMeals(date)
+    //   .then(setMeals)
+    //   .catch(goBack)
   }, [ date, goBack ])
   useConsole('meals', meals)
   if (!meals) return <></>

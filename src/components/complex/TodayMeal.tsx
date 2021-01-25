@@ -2,8 +2,8 @@ import React from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
 import Card from "../basic/Card";
-import { DailyMeal } from "../../api/serverResource";
 import { DAILY_TIME_PERIOD, getTimePeriod } from "../../utils";
+import { DailyMeal } from "../../api";
 
 const MealItem: React.FC<MealItemSelected> = ({
   highlight: selected = false,
@@ -17,7 +17,7 @@ const MealItem: React.FC<MealItemSelected> = ({
 );
 
 interface TodayMealProps {
-  meals: DailyMeal | null;
+  meals?: DailyMeal | null;
 }
 
 const NO_MEAL_DATA = "급식 정보가 없습니다"

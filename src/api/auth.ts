@@ -1,6 +1,7 @@
 import Cookies from 'universal-cookie';
+import { AuthTokens } from '../constants/types';
 import { post } from './api';
-import { AuthTokens, PostResource } from './serverResource';
+import { PostResource } from './serverResource';
 const cookieStorage = new Cookies()
 
 enum STORAGE_KEY {
