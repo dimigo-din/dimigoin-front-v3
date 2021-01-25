@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import { DailyMeal, getDailyMeal } from "../../api"
 
 export const useMeal = (date?: Date) => {

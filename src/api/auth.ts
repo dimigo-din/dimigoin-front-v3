@@ -1,4 +1,3 @@
-import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
 import { post } from './api';
 import { AuthTokens, PostResource } from './serverResource';
