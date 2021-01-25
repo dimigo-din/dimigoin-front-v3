@@ -45,7 +45,7 @@ export const loginWithInfo = async ({
 export const loginWithRefreshToken = async (refreshToken: string) => {
     try {
         const res = await api<"loginWithRefreshToken">("POST", "/auth/refresh", {
-            withAuth: false
+            withoutAuth: true
         }, {
             Authorization: `Bearer ${refreshToken}`
         })

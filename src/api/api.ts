@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import makeAlert from '../functions/makeAlert';
 import { toast } from 'react-toastify'
-import { getToken } from './auth';
+import { getAccessToken } from './auth';
 import { APIResource } from './serverResource';
 
 if (!process.env.REACT_APP_API_URI) makeAlert.error("서버 정보를 불러오는데 실패했습니다")
@@ -27,15 +27,18 @@ request.interceptors.response.use(undefined, (error) => {
   return Promise.reject(error);
 })
 
-export const api = async <T extends keyof APIResource>(method: AxiosRequestConfig['method'], endpoint: string, param?: APIResource[T]['req']) => {
-  const token = getToken()
+export const api = async <T extends keyof APIResource>(method: AxiosRequestConfig['method'], endpoint: APIResource[T]['endpoint'] | string, param?: APIResource[T]['req'] & {
+  withoutAuth?: boolean
+}, headers?: any) => {
+  const token = getAccessToken()
   return (await request(endpoint, {
     data: param,
     method,
-    ...(token && {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+    headers: {
+      ...(!param?.withoutAuth && token && ({
+        Authorization: `Bearer ${token}`,
+      })),
+      ...headers,
+    }
   })).data as APIResource[T]['res']
 }

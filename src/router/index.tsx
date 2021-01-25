@@ -1,8 +1,7 @@
 import * as React from "react";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect, withRouter } from "react-router-dom";
 
 import { Main } from "../pages";
-import Auth from "./Auth";
 import Ingangsil from "../pages/Ingangsil";
 import Outgo from "../pages/Outgo";
 import Notices from "../pages/Notices";
@@ -10,21 +9,30 @@ import SelfStudyDisplay from "../pages/SelfStudyDisplay";
 import Council from "../pages/Council";
 import Mentoring from "../pages/Mentoring";
 import { LoadableComponent } from "@loadable/component";
-import { getToken } from "../api";
+import { getAccessToken, getRefreshToken, loginWithRefreshToken } from "../api";
 import styled from "@emotion/styled";
+import Login from "../pages/Login";
 
 const needAuth = (Component: LoadableComponent<{}>) => {
   return (params => {
-    if(!getToken()) 
+    try {
+      const accessToken = getAccessToken()
+      if (!accessToken) throw new Error("Cannot find access token")
+
+      const refreshToken = getRefreshToken()
+      if (!refreshToken || !loginWithRefreshToken(refreshToken)) throw new Error("Cannot login with refresh token")
+
+      return <Component {...params} />
+    } catch {
       return <Redirect to="/auth/login" />
-    return <Component {...params} />
+    }
   }) as React.FC
 }
 
 const Router: React.FC = () => (
   <BrowserRouter>
     <Switch>
-      <Route path="/auth" component={Auth} />
+      <Route path="/auth/login" component={Login} />
       <Container>
         <TopLine />
         <Route path="/ingangsil" component={Ingangsil} />
@@ -34,7 +42,7 @@ const Router: React.FC = () => (
         <Route path="/selfstudydisplay" component={SelfStudyDisplay} />
         <Route path="/council" component={Council} />
         <Route path="/mentoring" component={Mentoring} />
-        <Route path="/" exact component={needAuth(Main)} />
+        <Route path="/" exact component={withRouter(needAuth(Main))} />
       </Container>
     </Switch>
   </BrowserRouter>
