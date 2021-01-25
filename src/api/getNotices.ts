@@ -58,7 +58,7 @@ export const getNotice = async (id: string): Promise<INoticeItem> => {
   }
 }
 
-const getNoticesList = async (): Promise<INoticeItem[]> => {
+export const getNoticesList = async (): Promise<INoticeItem[]> => {
   return [{
     content: '1일 시장조사업체 옴디아에 따르면 올 4분기 전 세계 스마트폰용 OLED 시장에서 BOE는 점유율(매출 기준) 6.9%를 기록할 것으로 예상된다. BOE는 지난 2분기와 3분기 각각 17.1%, 13.7%의 높은 점유율을 보였는데, 4분기엔 절반 수준으로 추락하는 셈이다.',
     title: '화웨이 제재에 LGD 스마트폰 OLED BOE 넘는다',
@@ -69,5 +69,3 @@ const getNoticesList = async (): Promise<INoticeItem[]> => {
     _id: '2'
   }]
 }
-
-export default getNoticesList

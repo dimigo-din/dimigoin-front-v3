@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 export type EventFunction<T> = (e: { target: { value: T } }) => any;
 
@@ -19,6 +19,21 @@ const useInput = <T = string>(
   };
   return { value, onChange };
 };
+
+export const useTextInput = (initialValue?: string): [{
+    error: boolean;
+    errorMessage: string | undefined;
+    value: string | undefined;
+    onChange: ({ target: { value: willSetValue }, }: { target: { value: string; }; }) => void;
+  }, Dispatch<SetStateAction<string | undefined>>] => {
+  const input = useInput(initialValue)
+  const [errorMessage, setErrorMessage] = useState<string>();
+  return [{
+    ...input,
+    error: !!errorMessage,
+    errorMessage
+  }, setErrorMessage]
+}
 
 export const useCheckbox = (initValue?: boolean) => {
   const [checked, setChecked] = useState(initValue || false);

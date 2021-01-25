@@ -1,0 +1,5 @@
+export enum COOKIE_JAR_KEY {
+    ACCESS_TOKEN = "ACCESS_TOKEN",
+    REFRESH_TOKEN = "REFRESH_TOKEN",
+    MY_INFO = "MY_INFO"
+}

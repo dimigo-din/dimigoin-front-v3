@@ -51,9 +51,11 @@ export const ResponsiveScreenWrapper = styled.div`
   }
 `;
 
+export const MOBILD_DEFAULT_THRESHOLD = 720
+
 export const ResponsiveWrapper = styled.div<{ threshold?: number }>`
   display: flex;
-  @media screen and (max-width: ${({ threshold }) => threshold || 760}px) {
+  @media screen and (max-width: ${({ threshold }) => threshold || MOBILD_DEFAULT_THRESHOLD}px) {
     flex-direction: column;
     & > [data-divider] {
       margin: 15px 0px;

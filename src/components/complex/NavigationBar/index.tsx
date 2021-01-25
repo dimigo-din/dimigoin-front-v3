@@ -7,6 +7,8 @@ import NavigationItem from "./NavigationItem";
 import navigations from "./navigations";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { UnstyledLink } from "../../basic/Atomics";
+import { getMyLocalData } from "../../../api/user";
+import { SCHOOL_API_SERVER } from "../../../constants";
 
 const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
   const scrollerRef = useRef<HTMLDivElement>(null)
@@ -20,6 +22,8 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
     },
     [scrollerRef],
   )
+  const myLocalData = getMyLocalData()
+  const profileImageURI = myLocalData ? `${SCHOOL_API_SERVER}/user_photo/${myLocalData.photo.slice(-1)[0]}` : undefined
   return (
     <Wrapper>
       <Container>
@@ -39,8 +43,10 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
           )}
         </Scroller>
         <ProfileContainer>
-          <ProfileImage />
-          <LogoutLogo height={26.5} width={26.5} />
+          <ProfileImage src={profileImageURI} />
+          <UnstyledLink to="/auth/login">
+            <LogoutLogo height={26.5} width={26.5} />
+          </UnstyledLink>
         </ProfileContainer>
       </Container>
     </Wrapper>

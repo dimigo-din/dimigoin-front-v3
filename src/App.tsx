@@ -15,34 +15,19 @@ function App() {
       <GlobalStyle />
       <ModalContainer />
       <ToastContainer />
-      <Container>
-        <TopLine />
         <RouterWrap>
           <Router />
         </RouterWrap>
         <BottomImage src={dimigoBackgroundImage} />
-      </Container>
     </>
   );
 }
 
 export default App;
 
-const Container = styled.div`
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-`;
-
-const TopLine = styled.div`
-  width: 100%;
-  height: 12px;
-  background-color: var(--main-theme-accent);
-`;
-
 const RouterWrap = styled.main`
-  flex: 1 0 auto;
-  padding-bottom: 20px;
+  /* flex: 1 0 auto;
+  padding-bottom: 20px; */
 `;
 
 const BottomImage = styled.img`

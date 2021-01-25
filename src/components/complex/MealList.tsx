@@ -2,12 +2,12 @@ import css from '@emotion/css'
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { ReactComponent as CloseSvg } from '../../assets/icons/close.svg'
-import getMeals from '../../functions/getMeals'
 import useConsole from '../../hooks/useConsole'
 import { HeaderIconWrapper, Horizontal } from '../basic/Atomics'
 import { Title as CardTitle } from '../basic/CardGroupHeader'
 import Card from '../basic/Card'
 import { ResponsiveWrapper } from '../layout/Cols'
+// import { getWeeklyMeals } from '../../api'
 
 export interface DailyMealProps {
   header: string;
@@ -77,9 +77,9 @@ export const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
   const [meals, setMeals] = useState<DailyMealProps[]>();
   const date = new Date()
   useEffect(() => {
-    getMeals(date)
-      .then(setMeals)
-      .catch(goBack)
+    // getWeeklyMeals(date)
+    //   .then(setMeals)
+    //   .catch(goBack)
   }, [ date, goBack ])
   useConsole('meals', meals)
   if (!meals) return <></>

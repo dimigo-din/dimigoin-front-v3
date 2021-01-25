@@ -5,7 +5,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { Card, CardGroupHeader, Divider, HeaderIconWrapper, Horizontal,
         NavigationBar, PageWrapper, ResponsiveWrapper, showModal, TextCardGroup,
         Title, UnstyledLink } from '../components'
-import getNoticesList, { INoticeItem, getNotice } from '../functions/getNotices'
+import { INoticeItem, getNotice, getNoticesList } from '../api'
 import { ReactComponent as CloseSvg } from '../assets/icons/close.svg'
 
 const BriefNoticeTitle = styled.h2`

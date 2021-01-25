@@ -2,62 +2,70 @@ import React from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
 import Card from "../basic/Card";
+import { DAILY_TIME_PERIOD, getTimePeriod } from "../../utils";
+import { DailyMeal } from "../../api";
 
-const MealItem: React.FC<MealItem> = ({
-  selected = false,
+const MealItem: React.FC<MealItemSelected> = ({
+  highlight: selected = false,
   name = "",
   menu = "",
 }) => (
-    <MealItemContainer selected={selected}>
-      <MealNameText selected={selected}>{name}</MealNameText>
-      <MealMenuText selected={selected}>{menu}</MealMenuText>
-    </MealItemContainer>
-  );
-
-export interface Meal {
-  name: string;
-  menu: string;
-  selected?: boolean;
-}
-
-interface TodayMealProps {
-  meals: Meal[];
-}
-
-export const TodayMeal: React.FC<TodayMealProps> = ({ meals }) => (
-  <MealCard>
-    {meals.map((meal) => (
-      <MealItem key={meal.name} {...meal} />
-    ))}
-  </MealCard>
+  <MealItemContainer highlight={selected}>
+    <MealNameText highlight={selected}>{name}</MealNameText>
+    <MealMenuText highlight={selected}>{menu}</MealMenuText>
+  </MealItemContainer>
 );
 
-interface MealItemSelected {
-  selected?: boolean;
+interface TodayMealProps {
+  meals?: DailyMeal | null;
 }
 
-interface MealItem extends MealItemSelected {
+const NO_MEAL_DATA = "급식 정보가 없습니다"
+
+export const TodayMeal: React.FC<TodayMealProps> = ({ meals, ...props }) => {
+  const period = getTimePeriod()
+  return (
+    <MealCard {...props}>
+      {
+        (meals?.breakfast.length || meals?.dinner.length || meals?.lunch.length) ? (
+          <>
+            <MealItem highlight={period === DAILY_TIME_PERIOD.MORNING} name="아침" menu={meals?.breakfast.join(', ') || NO_MEAL_DATA} />
+            <MealItem highlight={period === DAILY_TIME_PERIOD.BEFORE_NOON} name="점심" menu={meals?.lunch.join(', ') || NO_MEAL_DATA} />
+            <MealItem highlight={period === DAILY_TIME_PERIOD.EVENING} name="저녁" menu={meals?.dinner.join(', ') || NO_MEAL_DATA} />
+          </>
+        ) : <NoDailyMealData>
+            {NO_MEAL_DATA}
+          </NoDailyMealData>
+      }
+    </MealCard>
+  )
+};
+
+interface MealItemSelected {
+  highlight?: boolean;
   name?: string;
   menu?: string;
 }
 
 const MealCard = styled(Card)`
-  /* height: 100%; */
   padding: 0;
   display: flex;
   flex-direction: column;
+  &>*{
+    flex: 1;
+  }
 `;
 
 const MealItemContainer = styled.div<MealItemSelected>`
   width: calc(100% - 78px);
   flex-grow: 1;
   border-left: 5px solid transparent;
-  padding: 24px 39px 24px 34px;
+  padding: 24px 36px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 
-  ${({ selected = false }) =>
+  ${({ highlight: selected = false }) =>
     selected &&
     css`
       background-color: var(--main-theme-accent-background);
@@ -71,7 +79,7 @@ const MealNameText = styled.span<MealItemSelected>`
   line-height: 1.17;
   color: #d1d1d1;
 
-  ${({ selected = false }) =>
+  ${({ highlight: selected = false }) =>
     selected &&
     css`
       color: var(--main-theme-accent);
@@ -86,11 +94,21 @@ export const MealMenuText = styled.p<MealItemSelected>`
   margin-top: 12px;
   color: #d1d1d1;
 
-  ${({ selected = false }) =>
+  ${({ highlight: selected = false }) =>
     selected &&
     css`
       color: #111111;
     `}
 `;
+
+export const NoDailyMealData = styled.p`
+  font-size: 18px;
+  font-weight: bold;
+  color: #d1d1d1;
+
+  align-items: center;
+  justify-content: center;
+  display: flex;
+`
 
 export default TodayMeal;

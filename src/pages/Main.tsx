@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import css from "@emotion/css";
 
-import {  ApplimentStatus, CardGroupHeader, Col, Divider, Meal,
+import {  ApplimentStatus, CardGroupHeader, Col, Divider,
           MealList, NavigationBar, PageWrapper, ResponsiveWrapper,
           SelfStudyStatus, showModal, showCardModal, TextCardGroup, TimeTable,
           TodayMeal } from "../components";
+import { useMeal } from "../hooks/api";
 
 const Main: React.FC = () => {
   const [notice, setNotice] = useState<string[]>();
   const [myTodays, setMyTodays] = useState<ApplimentStatus[]>();
-  const [meals, setMeals] = useState<Meal[]>();
+  const meals = useMeal()
   useEffect(() => {
     setNotice([
       "방과 후 수강신청 중 너무 많은 동시 접속자로 인해 잠시 서버가 다운되는 문제가 있었으나 방금 전 복구되었습니다. 스포츠를 제외한 방과 후 신청은 새로 일정을 공지해드릴 예정입니다.",
@@ -20,13 +21,6 @@ const Main: React.FC = () => {
         location: "와동체육관",
         name: "스포츠",
         time: "2타임 ~ 3타임 배드민턴",
-      },
-    ]);
-    setMeals([
-      {
-        menu: "집가고싶을때하는밥",
-        name: "간식",
-        selected: true,
       },
     ]);
   }, []);
