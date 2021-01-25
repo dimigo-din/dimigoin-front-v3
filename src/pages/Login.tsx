@@ -28,12 +28,15 @@ const Login: React.FC = () => {
       history.push('/')
     }
   }, [usernameInput.value, passwordInput.value, setPasswordError, setUsernameError, history])
+  const enterToSubmit = useCallback((e) => {
+    if(e.key === 'Enter') login()
+  }, [login])
   return <Wrapper>
     <SameHeightHorizontal threshold={SMALL_SCREEN_THRESHOLD}>
       <InputContainer>
         <BrandWithText />
-        <Input css={ css`margin-top: 36px;` } placeholder="아이디" {...usernameInput} />
-        <Input css={ css`margin-top: 12px;` } type="password" placeholder="비밀번호" {...passwordInput} />
+        <Input css={ css`margin-top: 36px;` } placeholder="아이디" {...usernameInput} onKeyPress={enterToSubmit} />
+        <Input css={ css`margin-top: 12px;` } type="password" placeholder="비밀번호" {...passwordInput} onKeyPress={enterToSubmit} />
         <LoginButton onClick={login}>
           로그인
         </LoginButton>
