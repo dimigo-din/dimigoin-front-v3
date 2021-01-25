@@ -24,7 +24,7 @@ const NO_MEAL_DATA = "급식 정보가 없습니다"
 export const TodayMeal: React.FC<TodayMealProps> = ({ meals, ...props }) => (
   <MealCard {...props}>
     {
-      (meals?.breakfast.length && meals.dinner.length && meals.lunch.length) ? (
+      (meals?.breakfast.length || meals?.dinner.length || meals?.lunch.length) ? (
         <>
           <MealItem name="아침" menu={meals?.breakfast.join(', ') || NO_MEAL_DATA} />
           <MealItem name="점심" menu={meals?.lunch.join(', ') || NO_MEAL_DATA} />
