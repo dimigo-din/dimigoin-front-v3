@@ -4,7 +4,7 @@ import { AuthTokens } from '../constants/types';
 import { cookieJar } from '../storage';
 import { api } from './api';
 import { APIResource } from './serverResource';
-import { getMyData, saveMyData } from './user';
+import { fetchMyData, saveMyData } from './user';
 
 export const getAccessToken = (): string | undefined => {
     return cookieJar.get(COOKIE_JAR_KEY.ACCESS_TOKEN)
@@ -35,7 +35,7 @@ export const loginWithInfo = async ({
             username
         })
         setTokens(res)
-        saveMyData(await getMyData())
+        saveMyData(await fetchMyData())
         return true
     } catch(e) {
         return false
