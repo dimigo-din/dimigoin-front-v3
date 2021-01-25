@@ -6,7 +6,7 @@ import css from "@emotion/css";
 import { useMeal } from "../hooks/api";
 import { useTextInput } from "../hooks/useInput";
 import { clearTokens, loginWithInfo } from "../api";
-import { useHistory, withRouter } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const SMALL_SCREEN_THRESHOLD = 840
 
