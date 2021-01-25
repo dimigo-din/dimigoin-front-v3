@@ -28,19 +28,14 @@ request.interceptors.response.use(undefined, (error) => {
 })
 
 export const api = async <T extends keyof APIResource>(method: AxiosRequestConfig['method'], endpoint: string, param?: APIResource[T]['req']) => {
+  const token = getToken()
   return (await request(endpoint, {
     data: param,
     method,
-    headers: {
-      Authorization: `Bearer ${getToken()}`
-    }
+    ...(token && {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
   })).data as APIResource[T]['res']
 }
-
-// export const post = async <T extends keyof PostResource>(endpoint: PostResource[T]['endpoint'], param?: PostResource[T]['req']) => {
-//   return (await requestor('POST', endpoint, param)) as PostResource[T]['res']
-// }
-
-// export const get = async <T extends keyof GetResource>(endpoint: GetResource[T]['endpoint'], param?: GetResource[T]['req']) => {
-//   return (await requestor('GET', endpoint, param)) as GetResource[T]['res']
-// }

@@ -1,4 +1,4 @@
-import { Gender, UserType } from "../../constants/types"
+import { MyData } from "../../constants/types"
 
 export interface GetMyInfo {
     method: 'GET';
@@ -6,19 +6,6 @@ export interface GetMyInfo {
     needAuth: true;
     req: {};
     res: {
-        identity: {
-            idx: number;
-            username: string;
-            name: string;
-            userType: UserType;
-            gender: Gender;
-            createdAt: string;
-            updatedAt: string;
-            class: number;
-            grade: number;
-            number: number;
-            serial: number;
-            photo: string[];
-        }
+        identity: MyData
     };
 }
