@@ -4,7 +4,7 @@ import css from "@emotion/css";
 import Card from "../basic/Card";
 import { DailyMeal } from "../../api/serverResource";
 
-const MealItem: React.FC<MealItem> = ({
+const MealItem: React.FC<MealItemSelected> = ({
   selected = false,
   name = "",
   menu = "",
@@ -19,35 +19,44 @@ interface TodayMealProps {
   meals: DailyMeal | null;
 }
 
+const NO_MEAL_DATA = "급식 정보가 없습니다"
+
 export const TodayMeal: React.FC<TodayMealProps> = ({ meals, ...props }) => (
   <MealCard {...props}>
-    <MealItem name="아침" menu={meals?.breakfast.join(', ')} />
-    <MealItem name="점심" menu={meals?.lunch.join(', ')} />
-    <MealItem name="저녁" menu={meals?.dinner.join(', ')} />
+    {
+      meals ? (
+        <>
+          <MealItem name="아침" menu={meals?.breakfast.join(', ') || NO_MEAL_DATA} />
+          <MealItem name="점심" menu={meals?.lunch.join(', ') || NO_MEAL_DATA} />
+          <MealItem name="저녁" menu={meals?.dinner.join(', ') || NO_MEAL_DATA} />
+        </>
+      ) : <NoDailyMealData>
+        {NO_MEAL_DATA}
+      </NoDailyMealData>
+    }
   </MealCard>
 );
 
 interface MealItemSelected {
   selected?: boolean;
-}
-
-interface MealItem extends MealItemSelected {
   name?: string;
   menu?: string;
 }
 
 const MealCard = styled(Card)`
-  /* height: 100%; */
   padding: 0;
   display: flex;
   flex-direction: column;
+  &>*{
+    flex: 1;
+  }
 `;
 
 const MealItemContainer = styled.div<MealItemSelected>`
   width: calc(100% - 78px);
   flex-grow: 1;
   border-left: 5px solid transparent;
-  padding: 24px 39px 24px 34px;
+  padding: 24px 36px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -87,5 +96,15 @@ export const MealMenuText = styled.p<MealItemSelected>`
       color: #111111;
     `}
 `;
+
+export const NoDailyMealData = styled.p`
+  font-size: 18px;
+  font-weight: bold;
+  color: #d1d1d1;
+
+  align-items: center;
+  justify-content: center;
+  display: flex;
+`
 
 export default TodayMeal;
