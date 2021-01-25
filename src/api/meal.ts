@@ -1,5 +1,5 @@
 // import { DailyMealProps } from "../components/complex/MealList"
-import { get } from "./api"
+import { api } from "./api"
 // import { toast } from 'react-toastify'
 
 // const DAYS = ['월', '화', '수', '목', '금', '토', '일']
@@ -24,5 +24,5 @@ export const getWeeklyMeals = async (date: Date): Promise<any> => {
 }
 
 export const getDailyMeal = (date: Date = new Date()) => {
-    return get<"dailyMeal">(`/meal/${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate()}`, false).then(e => e.meal)
+    return api<"dailyMeal">('GET', `/meal/${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate()}`).then(e => e.meal)
 }

@@ -1,8 +1,8 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import makeAlert from '../functions/makeAlert';
 import { toast } from 'react-toastify'
 import { getToken } from './auth';
-import { GetResource, PostResource } from './serverResource';
+import { APIResource } from './serverResource';
 
 if (!process.env.REACT_APP_API_URI) makeAlert.error("서버 정보를 불러오는데 실패했습니다")
 export const request = axios.create({
@@ -21,29 +21,26 @@ request.interceptors.response.use(undefined, (error) => {
     502: '서버가 작동하지 않습니다'
     // 401: ''
   })[error.response.status as | 404 | 500 | 403]
-  // console.log(error.response)
   toast(errorMessage, {
     type: 'error'
   })
   return Promise.reject(error);
 })
 
-export const post = async <T extends keyof PostResource>(endpoint: PostResource[T]['endpoint'], param?: PostResource[T]['req']) => {
+export const api = async <T extends keyof APIResource>(method: AxiosRequestConfig['method'], endpoint: string, param?: APIResource[T]['req']) => {
   return (await request(endpoint, {
     data: param,
-    method: 'POST',
+    method,
     headers: {
-      authentication: `bearer ${getToken()}`
+      Authorization: `Bearer ${getToken()}`
     }
-  })).data as PostResource[T]['res']
+  })).data as APIResource[T]['res']
 }
 
-export const get = async <T extends keyof GetResource>(endpoint: GetResource[T]['endpoint'], needAuth: GetResource[T]['needAuth'] =  true, param?: GetResource[T]['req']) => {
-  return (await request(endpoint, {
-    data: param,
-    method: 'GET',
-    headers: {
-      authentication: `bearer ${getToken()}`
-    }
-  })).data as GetResource[T]['res']
-}
+// export const post = async <T extends keyof PostResource>(endpoint: PostResource[T]['endpoint'], param?: PostResource[T]['req']) => {
+//   return (await requestor('POST', endpoint, param)) as PostResource[T]['res']
+// }
+
+// export const get = async <T extends keyof GetResource>(endpoint: GetResource[T]['endpoint'], param?: GetResource[T]['req']) => {
+//   return (await requestor('GET', endpoint, param)) as GetResource[T]['res']
+// }
