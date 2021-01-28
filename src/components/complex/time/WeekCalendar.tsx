@@ -1,4 +1,4 @@
-import React, { BlockquoteHTMLAttributes, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import css from "@emotion/css";
 import styled from "@emotion/styled";
 import { EventFunction } from "../../../hooks/useInput";
@@ -14,11 +14,11 @@ interface WeekCalendarProps {
 
 export const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange, rangeSelect }) => {
   const [ pivotDate, setPivotDate ] = useState(date || new Date());
-  const [ selectPosition, setSelectingPosition ] = useState(0);
-  const days = new Array(7)
+  const [ selectedPosition, setSelectingPosition ] = useState(0);
+  const [ days ] = useState(new Array(7)
     .fill(0)
     .map((e, index) => +pivotDate + 86400000 * (index - pivotDate.getDay()))
-    .map((e) => e - (e % 1000000));
+    .map((e) => e - (e % 1000000)));
   
   const [selectedDates, setSelectDates] = useState<number[]>([+pivotDate - (+pivotDate % 1000000)]);
   const selectDate = (timestamp: number) => {
@@ -26,14 +26,11 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange, rang
       setSelectDates(() => [timestamp])
       return
     }
-    if(selectPosition === 0) setSelectDates(dates => [timestamp])
+    if(selectedPosition === 0) setSelectDates(dates => [timestamp])
     else setSelectDates(dates => [dates[0], timestamp].sort())
   
     setSelectingPosition(position => position === 0 ? 1 : 0)
   }
-  
-  const showPrevWeek = () => setPivotDate(date => new Date(+date - 604800000))
-  const showNextWeek = () => setPivotDate(date => new Date(+date + 604800000))
   useEffect(() => {
     if (!onChange) return;
     const date = selectedDates.map(t => {
@@ -50,6 +47,9 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange, rang
       },
     });
   }, [ selectedDates, onChange ]);
+  
+  const showPrevWeek = useCallback(() => setPivotDate(date => new Date(+date - 604800000)), [])
+  const showNextWeek = useCallback(() => setPivotDate(date => new Date(+date + 604800000)), [])
   return (
     <Wrapper>
       <HeaderWrapper>
@@ -84,7 +84,6 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange, rang
         {days.map((timestamp) => {
           const date = new Date(timestamp);
           const isBetween = selectedDates[0] < timestamp && timestamp < selectedDates[1]
-          console.log(isBetween)
           return (
             <DayWrapper
               isEnd={Boolean(selectedDates[0] && (selectedDates[1] === timestamp))}
