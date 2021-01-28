@@ -1,13 +1,13 @@
 import { COOKIE_JAR_KEY } from "../constants/cookieJarKeys"
-import { MyData } from "../constants/types"
+import { User } from "../constants/types"
 import { cookieJar } from "../storage"
 import { api } from "./api"
 
-export const saveMyData = async (myData: MyData) => {
+export const saveMyData = async (myData: User) => {
     cookieJar.set(COOKIE_JAR_KEY.MY_INFO, myData)
 }
 
-export const getMyLocalData = () => cookieJar.get(COOKIE_JAR_KEY.MY_INFO) as MyData | undefined
+export const getMyLocalData = () => cookieJar.get(COOKIE_JAR_KEY.MY_INFO) as User | undefined
 
 
 export const fetchMyData = async () => {

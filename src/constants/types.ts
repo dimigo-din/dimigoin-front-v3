@@ -17,14 +17,12 @@ export enum Gender {
     F = "F",
 }
 
-export interface MyData {
+export interface User {
     idx: number;
     username: string;
     name: string;
     userType: UserType;
     gender: Gender;
-    createdAt: string;
-    updatedAt: string;
     class: number;
     grade: number;
     number: number;
