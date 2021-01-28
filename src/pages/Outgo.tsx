@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import css from "@emotion/css";
 import styled from "@emotion/styled";
-import { CardExplainContent, OutgoApplyInput, WeekCalendar, LargeTimeSelector,
-        SelectingTime, NavigationBar, PageWrapper, ResponsiveWrapper, Col,
-        CardGroupHeader, OutgoApplyForm, Divider, OutgoApplier, Card, Checkbox, Button } from "../components";
+import {
+  CardExplainContent, OutgoApplyInput, WeekCalendar, LargeTimeSelector,
+  SelectingTime, NavigationBar, PageWrapper, ResponsiveWrapper, Col,
+  CardGroupHeader, OutgoApplyForm, Divider, OutgoApplier, Card, Checkbox, Button
+} from "../components";
 import useInput, { EventFunction, useCheckbox } from "../hooks/useInput";
 import { Student } from "../constants/types";
+import makeAlert from "../functions/makeAlert";
 
 interface DateSelectorProps {
   onChange: EventFunction<[Date, Date]>
@@ -27,14 +30,14 @@ const DateSelector: React.FC<DateSelectorProps> = ({ onChange }) => {
       value: dayInput.value!!
     }
   }), [])
-  
+
   useEffect(() => {
-    if(!onChange || !dayInput.value) return
-    const [ _from, _to ] = dayInput.value;
+    if (!onChange || !dayInput.value) return
+    const [_from, _to] = dayInput.value;
     if (!(_from && _to && timeInput.value)) return;
-    
+
     const from = new Date(+_from), to = new Date(+_to)
-    
+
     from.setHours(timeInput.value[0]?.hour);
     from.setMinutes(timeInput.value[0]?.minute);
     to.setHours(timeInput.value[1]?.hour);
@@ -48,11 +51,11 @@ const DateSelector: React.FC<DateSelectorProps> = ({ onChange }) => {
   }, [dayInput.value, timeInput.value, onChange]);
   return (
     <>
-    <Checkbox
-      text="당일외출이 아님"
-      css={css`margin-bottom: 12px;`}
-      {...isNotDailyCheckbox}
-    />
+      <Checkbox
+        text="당일외출이 아님"
+        css={css`margin-bottom: 12px;`}
+        {...isNotDailyCheckbox}
+      />
       <WeekCalendar {...dayInput} rangeSelect={isNotDailyCheckbox.checked} />
       <LargeTimeSelector
         {...timeInput}
@@ -70,9 +73,40 @@ const Outgo: React.FC = () => {
   const applierInput = useInput<Student[]>()
   const dateSelectorInput = useInput<[Date, Date]>()
 
-  const submitHandler = () => {
-    console.log(dateSelectorInput.value)
-  };
+  const applierValue = applierInput.value
+  const applyFormValue = applyFormInput.value
+  const dateSelectorValue = dateSelectorInput.value
+
+  const isTimeSelected = Boolean(dateSelectorValue?.[0] && +dateSelectorValue[0])
+  const isDateRange = dateSelectorValue?.[0].getDate() !== dateSelectorValue?.[1].getDate()
+
+  const submitHandler = useCallback(() => {
+    const alerts = [
+      (!applierValue || applierValue?.length === 0) && "신청자 목록을 다시 확인해주세요",
+      (!applyFormValue?.approver && "승인교사를 다시 확인해주세요"),
+      (!applyFormValue?.detailReason && "상세 사유를 다시 확인해주세요"),
+      ((!dateSelectorValue?.[0] || !+dateSelectorValue[0]) && "외출 시간을 다시 확인해주세요"),
+      ((!dateSelectorValue?.[1] || !+dateSelectorValue[1]) && "귀가 시간을 다시 확인해주세요"),
+      (isTimeSelected && (+(dateSelectorValue?.[0] || 0) >= +(dateSelectorValue?.[1] || 0))) && "시간 범위를 다시 확인해주세요"
+    ].filter<string>((e): e is string => !!e)
+    
+    console.log(isTimeSelected, +(dateSelectorValue?.[0] || 0), +(dateSelectorValue?.[1] || 0))
+
+    if (alerts.length) {
+      alerts.forEach(alert => makeAlert.error(alert))
+      return
+    }
+
+    console.log({
+      applier: applierValue!!.map(e => e.studentId),
+      approver: applyFormValue!!.approver,
+      detailReason: applyFormValue!!.detailReason,
+      duration: {
+        start: dateSelectorValue!![0],
+        end: dateSelectorValue!![1]
+      }
+    })
+  }, [applierValue, applyFormValue, dateSelectorValue, isTimeSelected]);
 
   return (
     <>
@@ -118,18 +152,28 @@ const Outgo: React.FC = () => {
                     flex-direction: column;
                   `}
                 >
-                  <Info>
-                    7월 4일,
-                    <br />
-                    <DateHighlight>10시 30분</DateHighlight> 부터{" "}
-                    <DateHighlight>13시 30분</DateHighlight> 까지
+                  {isTimeSelected ? <Info>
+                    {
+                      isDateRange ? <>
+                        <DateHighlight>{dateSelectorValue!![0].getMonth() + 1}월 {dateSelectorValue!![0].getDate()}일 </DateHighlight>
+                        {dateSelectorValue!![0].getHours()}시 {dateSelectorValue!![0].getMinutes()}분 부터{" "}
+                        <br />
+                        <DateHighlight>{dateSelectorValue!![1].getMonth() + 1}월 {dateSelectorValue!![1].getDate()}일 </DateHighlight>
+                        {dateSelectorValue!![1].getHours()}시 {dateSelectorValue!![1].getMinutes()}분 까지{" "}
+                      </> : <>
+                        {dateSelectorValue!![0].getMonth() + 1}월 {dateSelectorValue!![0].getDate()}일,
+                        <br />
+                        <DateHighlight>{dateSelectorValue!![0].getHours()}시 {dateSelectorValue!![0].getMinutes()}분</DateHighlight> 부터{" "}
+                        <DateHighlight>{dateSelectorValue!![1].getHours()}시 {dateSelectorValue!![1].getMinutes()}분</DateHighlight> 까지
+                      </>
+                    }
                     <br /> 외출을 신청합니다
-                  </Info>
-                  <CardExplainContent css={css`margin-top: 36px;`}>
+                  </Info> : null}
+                  <CardExplainContent css={isTimeSelected && css`margin-top: 36px;`}>
                     <h2>이용방법</h2>
                     <p>외출시, 정문 외출 인식기에 외출시간을 입력합니다.</p>
                     <p>귀교시, 정문 외출 인식기에 귀교시간을 입력합니다.</p>
-                    
+
                     <h2>주의사항</h2>
                     <p>신청 전, 모든 내용이 올바르게 기재되었는지 확인해주세요.</p>
                     <p>허위 기재된 내용이 있다면 불이익을 받을 수 있습니다.</p>
