@@ -46,7 +46,6 @@ const LogicalInput = styled.input<LogicalInputProps>`
   font-family: 'NanumSquare', sans-serif;
   font-size: 17px;
   transition: 300ms;
-  color: red;
 
   &:hover {
     box-shadow: inset 0px 0px 0px 2px #D1D1D1;
