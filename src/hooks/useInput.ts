@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useContext, useState } from "react";
+import useConsole from "./useConsole";
 
 export type EventFunction<T> = (e: { target: { value: T } }) => any;
 
@@ -7,8 +8,8 @@ const useInput = <T = string>(
   inputValidation?: (value: T) => boolean
 ) => {
   const [value, setValue] = useState<T | undefined>(initValue);
-
-  const onChange = ({
+  useConsole("RECALL", "input recall" + value);
+  const onChange = useCallback(({
     target: { value: willSetValue },
   }: {
     target: { value: T };
@@ -16,7 +17,8 @@ const useInput = <T = string>(
     if (!inputValidation) setValue(willSetValue);
     if (inputValidation && inputValidation(willSetValue))
       setValue(willSetValue);
-  };
+  }, [inputValidation]);
+  
   return { value, onChange };
 };
 

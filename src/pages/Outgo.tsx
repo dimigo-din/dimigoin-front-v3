@@ -9,14 +9,13 @@ import useInput from "../hooks/useInput";
 const DateSelector: React.FC = () => {
   const dayInput = useInput<Date>();
   const timeInput = useInput<SelectingTime[]>();
+  
   useEffect(() => {
     const from = dayInput.value;
     const to = dayInput.value;
     if (!(from && to && timeInput.value)) return;
     from.setHours(timeInput.value[0]?.hour);
     to.setHours(timeInput.value[1]?.hour);
-
-    console.log(from, to);
   }, [dayInput.value, timeInput.value]);
   return (
     <>
