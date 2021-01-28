@@ -17,10 +17,10 @@ export interface OutgoApplyInput {
 }
 
 interface OutgoApplyProps {
-  onChange?: EventFunction<OutgoApplyInput>;
+  onSubmit?: EventFunction<OutgoApplyInput>;
 }
 
-export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }) => {
+export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onSubmit, ...props }) => {
   const outgoType = useInput<RadioButtonItem>();
   const applyType = useInput<RadioButtonItem>();
   const outgoReason = useInput<DropdownItem>();
@@ -28,8 +28,9 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }
   const approver = useInput<DropdownItem>();
 
   useEffect(() => {
-    onChange &&
-      onChange({
+    console.log("폼 리렌더")
+    onSubmit &&
+      onSubmit({
         target: {
           value: {
             outgoType: outgoType?.value?.key,
@@ -41,10 +42,11 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }
         },
       });
   }, [
+    
     applyType,
     detailReason,
     approver,
-    onChange,
+    onSubmit,
     outgoReason,
     outgoType
   ]);
