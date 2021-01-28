@@ -41,7 +41,6 @@ const LogicalInput = styled.input<LogicalInputProps>`
     box-shadow로 테두리 색을 처리했습니다.
   */
   box-shadow: inset 0px 0px 0px 1px #EEEEEE;
-  /* appearance: none; */
   background-color: #ffffff;
   font-family: 'NanumSquare', sans-serif;
   font-size: 17px;
