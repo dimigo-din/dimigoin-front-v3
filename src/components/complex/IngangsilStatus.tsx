@@ -72,7 +72,6 @@ export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
 };
 
 const NumberCommonStyle = css`
-  color: #2d2d2d;
   font-weight: 900;
   text-align: center;
 `.styles;
