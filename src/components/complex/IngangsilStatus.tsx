@@ -11,6 +11,7 @@ interface IngangsilStatusProps {
   time: string;
   isApplied: boolean;
   name: string;
+  onSubmit(time: string): void;
 }
 
 export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
@@ -19,6 +20,7 @@ export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
   max,
   isApplied,
   name,
+  onSubmit
 }) => {
   const isRequestable =
     //1. 신청 했고, 자리가 없을 때
@@ -63,6 +65,7 @@ export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
           `,
         ]}
         disabled={!isRequestable}
+        onClick={() => onSubmit(time)}
       >
         {/* 신청했는지 판별하는 변수를 넣어주세요  */}
         {isApplied ? "취소하기" : "신청하기"}

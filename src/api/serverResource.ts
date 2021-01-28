@@ -15,5 +15,5 @@ export interface APIResource {
     dailyMeal: GetDailyMeal;
     dummy: Dummy;
     getMyInfo: GetMyInfo;
-    myApplyStatus: MyApplyStatus;
+    myIngangsilApplyStatus: MyApplyStatus;
 }

@@ -12,3 +12,14 @@ export interface MyApplyStatus {
         applicationsInClass: User[]
     }
 }
+
+export interface Apply {
+    method: "POST";
+    endpoint: "/ingang-application/time/:time",
+    req: {};
+    res: {
+        date: string;
+        time: number;
+        applier: string;
+    }
+}
