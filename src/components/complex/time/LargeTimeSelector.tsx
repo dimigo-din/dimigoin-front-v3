@@ -7,12 +7,14 @@ interface TimeSelectorProps {
   defaultHour?: number;
   defaultMinute?: number;
   onChange?: EventFunction<SelectingTime>;
+  rangeTag: |"부터"|"까지";
 }
 
 const TimeSelector: React.FC<TimeSelectorProps> = ({
   defaultHour = 9,
   defaultMinute = 30,
   onChange,
+  rangeTag
 }) => {
   const hourInput = useInput(defaultHour + "", (value) => +value <= 24);
   const minuteInput = useInput(defaultMinute + "", (value) => +value <= 60);
@@ -46,7 +48,7 @@ const TimeSelector: React.FC<TimeSelectorProps> = ({
         <Divider data-divider >:</Divider>
         <Indicator {...minuteInput} />
       </IndicatorWrapper>
-      <FromUntil>부터</FromUntil>
+      <FromUntil>{rangeTag}</FromUntil>
     </TimeWrapper>
   );
 };
@@ -74,8 +76,8 @@ export const LargeTimeSelector: React.FC<LargeTimeSelectorProps> = ({ value, onC
   }, [ fromInput.value, toInput.value, onChange ]);
   return (
     <Wrapper {...props}>
-      <TimeSelector defaultHour={9} defaultMinute={30} {...fromInput} />
-      <TimeSelector defaultHour={21} defaultMinute={30} {...toInput} />
+      <TimeSelector defaultHour={9} defaultMinute={30} {...fromInput} rangeTag="부터" />
+      <TimeSelector defaultHour={21} defaultMinute={30} {...toInput} rangeTag="까지" />
     </Wrapper>
   );
 };
