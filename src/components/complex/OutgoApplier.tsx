@@ -42,7 +42,8 @@ const AddApplierModal: React.FC<{
     <FormItem>
       <InputLabel>학급</InputLabel>
       <Dropdown placeholder="학급 선택" items={getClassInfo().map(clas => ({
-        name: `${clas[0]}학년 ${clas[1]}반`
+        name: `${clas[0]}학년 ${clas[1]}반`,
+        key: `${clas[0]}-${clas[1]}`
       }))} {...classDropdown} />
     </FormItem>
     <FormItem>
