@@ -30,7 +30,7 @@ export default ({ items, placeholder, onChange, requireMessage, ...props }: Drop
     <FixedHeightWrapper opened={opened} {...props}>
       <Wrapper
         highlighted={opened}
-        blueBorder={opened || selectedIndex !== -1}
+        border={opened}
         onClick={() => items && setOpened((b) => !b)}
         disabled={!!items}
       >
@@ -77,7 +77,7 @@ const highlightedBorder = css`
   border-color: var(--main-theme-accent);
 `;
 
-const Wrapper = styled.div<{ highlighted?: boolean; blueBorder?: boolean; disabled?: boolean }>`
+const Wrapper = styled.div<{ highlighted?: boolean; border?: boolean; disabled?: boolean }>`
   border-radius: 6px;
   border: solid 1px #D1D1D1;
   transition: 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
@@ -92,8 +92,8 @@ const Wrapper = styled.div<{ highlighted?: boolean; blueBorder?: boolean; disabl
     css`
       box-shadow: 0 0 6px 0 #F8C5D7;
     `}
-  ${({ blueBorder }) =>
-    blueBorder &&
+  ${({ border }) =>
+    border &&
     css`
       border-color: var(--main-theme-accent);
     `}
