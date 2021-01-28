@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useCallback, useContext, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import useConsole from "./useConsole";
 
 export type EventFunction<T> = (e: { target: { value: T } }) => any;

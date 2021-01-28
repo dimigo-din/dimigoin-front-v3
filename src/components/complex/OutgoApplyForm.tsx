@@ -17,38 +17,44 @@ export interface OutgoApplyInput {
 }
 
 interface OutgoApplyProps {
-  onSubmit?: EventFunction<OutgoApplyInput>;
+  onChange?: EventFunction<OutgoApplyInput>;
 }
 
-export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onSubmit, ...props }) => {
+export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }) => {
   const outgoType = useInput<RadioButtonItem>();
   const applyType = useInput<RadioButtonItem>();
   const outgoReason = useInput<DropdownItem>();
   const detailReason = useInput();
   const approver = useInput<DropdownItem>();
 
+  const applyTypeValue = applyType.value,
+        detailReasonValue = detailReason.value,
+        approverValue = approver.value,
+        outgoReasonValue= outgoReason.value,
+        outgoTypeValue = outgoType.value
+
+
   useEffect(() => {
-    console.log("폼 리렌더")
-    onSubmit &&
-      onSubmit({
+    console.log('네?')
+    onChange &&
+      onChange({
         target: {
           value: {
-            outgoType: outgoType?.value?.key,
-            applyType: applyType?.value?.key,
-            outgoReason: outgoReason?.value?.key,
-            detailReason: detailReason?.value,
-            approver: approver?.value?.key,
+            outgoType: outgoTypeValue?.key,
+            applyType: applyTypeValue?.key,
+            outgoReason: outgoReasonValue?.key,
+            detailReason: detailReasonValue,
+            approver: approverValue?.key,
           },
         },
       });
   }, [
-    
-    applyType,
-    detailReason,
-    approver,
-    onSubmit,
-    outgoReason,
-    outgoType
+    onChange,
+    applyTypeValue,
+    approverValue,
+    detailReasonValue,
+    outgoReasonValue,
+    outgoTypeValue
   ]);
   return (
     <>
