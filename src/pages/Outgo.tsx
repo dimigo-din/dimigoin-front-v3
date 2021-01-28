@@ -4,22 +4,28 @@ import styled from "@emotion/styled";
 import { CardExplainContent, OutgoApplyInput, WeekCalendar, LargeTimeSelector,
         SelectingTime, NavigationBar, PageWrapper, ResponsiveWrapper, Col,
         CardGroupHeader, OutgoApplyForm, Divider, OutgoApplier, Card, Checkbox, Button } from "../components";
-import useInput from "../hooks/useInput";
+import useInput, { useCheckbox } from "../hooks/useInput";
 
 const DateSelector: React.FC = () => {
-  const dayInput = useInput<Date>();
+  const dayInput = useInput<Date[]>();
   const timeInput = useInput<SelectingTime[]>();
+  const isNotDailyCheckbox = useCheckbox();
   
   useEffect(() => {
     const from = dayInput.value;
     const to = dayInput.value;
     if (!(from && to && timeInput.value)) return;
-    from.setHours(timeInput.value[0]?.hour);
-    to.setHours(timeInput.value[1]?.hour);
+    // from.setHours(timeInput.value[0]?.hour);
+    // to.setHours(timeInput.value[1]?.hour);
   }, [dayInput.value, timeInput.value]);
   return (
     <>
-      <WeekCalendar {...dayInput} />
+    <Checkbox
+      text="당일외출이 아님"
+      css={css`margin-bottom: 12px;`}
+      {...isNotDailyCheckbox}
+    />
+      <WeekCalendar {...dayInput} rangeSelect={isNotDailyCheckbox.checked} />
       <LargeTimeSelector
         {...timeInput}
         css={css`
