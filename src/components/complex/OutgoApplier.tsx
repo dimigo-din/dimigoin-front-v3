@@ -9,7 +9,7 @@ import { ReactComponent as CloseSvg } from '../../assets/icons/close.svg'
 import _Dropdown, { DropdownItem } from "../basic/Dropdown";
 import { Horizontal } from "../basic/Atomics";
 import Button from "../basic/Button";
-import useInput from "../../hooks/useInput";
+import useInput, { EventFunction } from "../../hooks/useInput";
 import useConsole from "../../hooks/useConsole";
 import { Student } from "../../constants/types";
 
@@ -62,7 +62,11 @@ const AddApplierModal: React.FC<{
  
 }
 
-export const OutgoApplier: React.FC = () => {
+interface OutgoApplierProps {
+  onChange: EventFunction<Student[]>
+}
+
+export const OutgoApplier: React.FC<OutgoApplierProps> = ({ onChange }) => {
   const [appliers, setAppliers] = useState<Student[]>([]);
   const addApplier = () => {
     showCardModal((close) => <AddApplierModal register={(applier) => {
@@ -76,6 +80,7 @@ export const OutgoApplier: React.FC = () => {
         `
       }})
   }
+  useEffect(() => onChange && onChange({ target: { value: appliers } }), [appliers, onChange])
   return (
     <Card css={css`padding: -6px;`} leftBorder>
       {appliers &&

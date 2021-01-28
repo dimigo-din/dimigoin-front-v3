@@ -76,8 +76,8 @@ export const LargeTimeSelector: React.FC<LargeTimeSelectorProps> = ({ value, onC
   }, [ fromInput.value, toInput.value, onChange ]);
   return (
     <Wrapper {...props}>
-      <TimeSelector defaultHour={9} defaultMinute={30} {...fromInput} rangeTag="부터" />
-      <TimeSelector defaultHour={21} defaultMinute={30} {...toInput} rangeTag="까지" />
+      <TimeSelector defaultHour={value?.[0].hour} defaultMinute={value?.[0].minute} {...fromInput} rangeTag="부터" />
+      <TimeSelector defaultHour={value?.[1].hour} defaultMinute={value?.[1].minute} {...toInput} rangeTag="까지" />
     </Wrapper>
   );
 };

@@ -4,7 +4,7 @@ import useConsole from "./useConsole";
 export type EventFunction<T> = (e: { target: { value: T } }) => any;
 
 const useInput = <T = string>(
-  initValue?: any,
+  initValue?: T,
   inputValidation?: (value: T) => boolean
 ) => {
   const [value, setValue] = useState<T | undefined>(initValue);

@@ -4,20 +4,48 @@ import styled from "@emotion/styled";
 import { CardExplainContent, OutgoApplyInput, WeekCalendar, LargeTimeSelector,
         SelectingTime, NavigationBar, PageWrapper, ResponsiveWrapper, Col,
         CardGroupHeader, OutgoApplyForm, Divider, OutgoApplier, Card, Checkbox, Button } from "../components";
-import useInput, { useCheckbox } from "../hooks/useInput";
+import useInput, { EventFunction, useCheckbox } from "../hooks/useInput";
+import { Student } from "../constants/types";
 
-const DateSelector: React.FC = () => {
-  const dayInput = useInput<Date[]>();
-  const timeInput = useInput<SelectingTime[]>();
+interface DateSelectorProps {
+  onChange: EventFunction<[Date, Date]>
+}
+
+const DateSelector: React.FC<DateSelectorProps> = ({ onChange }) => {
+  const dayInput = useInput<[Date, Date]>();
+  const timeInput = useInput<SelectingTime[]>([{
+    hour: 19,
+    minute: 0
+  }, {
+    hour: 17,
+    minute: 45
+  }]);
   const isNotDailyCheckbox = useCheckbox();
+
+  useEffect(() => onChange({
+    target: {
+      value: dayInput.value!!
+    }
+  }), [])
   
   useEffect(() => {
-    const from = dayInput.value;
-    const to = dayInput.value;
-    if (!(from && to && timeInput.value)) return;
-    // from.setHours(timeInput.value[0]?.hour);
-    // to.setHours(timeInput.value[1]?.hour);
-  }, [dayInput.value, timeInput.value]);
+    if(!onChange || !dayInput.value) return
+    const [ _from, _to ] = dayInput.value;
+    if (!(_from && _to && timeInput.value)) return;
+    
+    const from = new Date(+_from), to = new Date(+_to)
+    
+    from.setHours(timeInput.value[0]?.hour);
+    from.setMinutes(timeInput.value[0]?.minute);
+    to.setHours(timeInput.value[1]?.hour);
+    to.setMinutes(timeInput.value[1]?.minute);
+
+    onChange({
+      target: {
+        value: [from, to]
+      }
+    })
+  }, [dayInput.value, timeInput.value, onChange]);
   return (
     <>
     <Checkbox
@@ -28,6 +56,7 @@ const DateSelector: React.FC = () => {
       <WeekCalendar {...dayInput} rangeSelect={isNotDailyCheckbox.checked} />
       <LargeTimeSelector
         {...timeInput}
+
         css={css`
           margin-top: 24px;
         `}
@@ -37,14 +66,14 @@ const DateSelector: React.FC = () => {
 };
 
 const Outgo: React.FC = () => {
-  const applyData = useInput<OutgoApplyInput>();
+  const applyFormInput = useInput<OutgoApplyInput>();
+  const applierInput = useInput<Student[]>()
+  const dateSelectorInput = useInput<[Date, Date]>()
 
   const submitHandler = () => {
-    console.log(applyData.value)
+    console.log(dateSelectorInput.value)
   };
-  useEffect(() => {
-    // console.log(applyData.value);
-  }, [applyData.value]);
+
   return (
     <>
       <NavigationBar />
@@ -64,19 +93,19 @@ const Outgo: React.FC = () => {
                 display: flex;
                 flex-direction: column;
               `}
-              {...applyData}
+              {...applyFormInput}
             />
           </Col>
           <Divider data-divider />
           <Col width={6.5}>
             <CardGroupHeader>신청자</CardGroupHeader>
-            <OutgoApplier />
+            <OutgoApplier {...applierInput} />
             <Divider data-divider small horizontal />
             <ResponsiveWrapper threshold={1400}>
               <Col width={4}>
                 <CardGroupHeader>외출시간</CardGroupHeader>
                 <Card leftBorder>
-                  <DateSelector />
+                  <DateSelector {...dateSelectorInput} />
                 </Card>
               </Col>
               <Divider data-divider small />

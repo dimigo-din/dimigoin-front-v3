@@ -7,27 +7,27 @@ import { ReactComponent as ArrowLeft } from "../../../assets/icons/arrow-left.sv
 import { ReactComponent as ArrowRight } from "../../../assets/icons/arrow-right.svg"
 
 interface WeekCalendarProps {
-  date?: Date;
-  onChange?: EventFunction<Date[]>;
+  date?: [Date, Date];
+  onChange?: EventFunction<[Date, Date]>;
   rangeSelect?: boolean;
 }
 
 export const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange, rangeSelect }) => {
-  const [ pivotDate, setPivotDate ] = useState(date || new Date());
+  const [ pivotDate, setPivotDate ] = useState(date?.[0] || new Date());
   const [ selectedPosition, setSelectingPosition ] = useState(0);
   const [ days ] = useState(new Array(7)
     .fill(0)
     .map((e, index) => +pivotDate + 86400000 * (index - pivotDate.getDay()))
     .map((e) => e - (e % 1000000)));
   
-  const [selectedDates, setSelectDates] = useState<number[]>([+pivotDate - (+pivotDate % 1000000)]);
+  const [selectedDates, setSelectDates] = useState<[number, number]>((date?.map(e => +e) || Array(2).fill([+pivotDate - (+pivotDate % 1000000)])) as [number, number]);
   const selectDate = (timestamp: number) => {
     if(!rangeSelect) {
-      setSelectDates(() => [timestamp])
+      setSelectDates(() => [timestamp, timestamp])
       return
     }
-    if(selectedPosition === 0) setSelectDates(dates => [timestamp])
-    else setSelectDates(dates => [dates[0], timestamp].sort())
+    if(selectedPosition === 0) setSelectDates(() => [timestamp, timestamp])
+    else setSelectDates(dates => [dates[0], timestamp].sort() as [number, number])
   
     setSelectingPosition(position => position === 0 ? 1 : 0)
   }
@@ -40,7 +40,7 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange, rang
       date.setSeconds(0);
       date.setMilliseconds(0);
       return date
-    });
+    }) as [Date, Date];
     onChange({
       target: {
         value: date,
