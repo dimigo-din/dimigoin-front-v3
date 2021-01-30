@@ -4,11 +4,13 @@ import styled from "@emotion/styled";
 import {
   CardExplainContent, OutgoApplyInput, WeekCalendar, LargeTimeSelector,
   SelectingTime, NavigationBar, PageWrapper, ResponsiveWrapper, Col,
-  CardGroupHeader, OutgoApplyForm, Divider, OutgoApplier, Card, Checkbox, Button
+  CardGroupHeader, OutgoApplyForm, Divider, OutgoApplier, Card, Checkbox, Button, TextCardGroup
 } from "../components";
 import useInput, { EventFunction, useCheckbox } from "../hooks/useInput";
-import { Student } from "../constants/types";
+import { BriefStudent } from "../constants/types";
 import makeAlert from "../functions/makeAlert";
+import { OutgoRequestForm } from "../api";
+import { requestOutgo } from "../api/outgo";
 
 interface DateSelectorProps {
   onChange: EventFunction<[Date, Date]>
@@ -70,7 +72,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ onChange }) => {
 
 const Outgo: React.FC = () => {
   const applyFormInput = useInput<OutgoApplyInput>();
-  const applierInput = useInput<Student[]>()
+  const applierInput = useInput<BriefStudent[]>()
   const dateSelectorInput = useInput<[Date, Date]>()
 
   const applierValue = applierInput.value
@@ -85,6 +87,7 @@ const Outgo: React.FC = () => {
       (!applierValue || applierValue?.length === 0) && "신청자 목록",
       (!applyFormValue?.approver && "승인교사"),
       (!applyFormValue?.detailReason && "상세 사유"),
+      (!applyFormValue?.outgoReason && "외출 사유"),
       ((!dateSelectorValue?.[0] || !+dateSelectorValue[0]) && "외출 시간"),
       ((!dateSelectorValue?.[1] || !+dateSelectorValue[1]) && "귀가 시간"),
       (isTimeSelected && (+(dateSelectorValue?.[0] || 0) >= +(dateSelectorValue?.[1] || 0))) && "시간 범위"
@@ -97,15 +100,18 @@ const Outgo: React.FC = () => {
       return
     }
 
-    console.log({
+    const outgoRequestForm: OutgoRequestForm =  {
       applier: applierValue!!.map(e => e.studentId),
-      approver: applyFormValue!!.approver,
+      approver: applyFormValue!!.approver!!,
+      reason: applyFormValue!!.outgoReason!!,
       detailReason: applyFormValue!!.detailReason,
       duration: {
         start: dateSelectorValue!![0],
         end: dateSelectorValue!![1]
       }
-    })
+    }
+
+    console.log(requestOutgo(outgoRequestForm))
   }, [applierValue, applyFormValue, dateSelectorValue, isTimeSelected]);
 
   return (
@@ -133,7 +139,12 @@ const Outgo: React.FC = () => {
           <Divider data-divider />
           <Col width={6.5}>
             <CardGroupHeader>신청자</CardGroupHeader>
-            <OutgoApplier {...applierInput} />
+            {applyFormValue?.outgoType === 'group' ? <OutgoApplier {...applierInput} /> : <TextCardGroup content={[{
+              text: <>
+                <p>현재 외출 유형이 개인 외출로 지정되어있습니다.</p>
+                <p>신청자를 추가하려면 유형을 단체 외출로 변경해주세요.</p>
+              </>
+            }]} /> }
             <Divider data-divider small horizontal />
             <ResponsiveWrapper threshold={1400}>
               <Col width={4}>
