@@ -15,11 +15,11 @@ export const apiWithoutAuth = axios.create({
 
 request.interceptors.response.use(undefined, (error) => {
   const errorMessage = error.response?.data?.message || ({
+    401: '토큰이 만료되었습니다.',
     404: '리소스를 찾을 수 없습니다',
     500: '알 수 없는 서버 오류입니다.',
     403: '접근 권한이 없습니다',
     502: '서버가 작동하지 않습니다'
-    // 401: ''
   })[error.response.status as | 404 | 500 | 403]
   toast(errorMessage, {
     type: 'error'
