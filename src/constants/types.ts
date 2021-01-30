@@ -1,6 +1,7 @@
-export interface Student {
+export interface BriefStudent {
     name: string;
     studentId: string;
+    userId: string;
 }
 
 export interface AuthTokens {
