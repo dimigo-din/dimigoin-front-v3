@@ -5,6 +5,7 @@ import { EventFunction } from "../../../hooks/useInput";
 import { getThisWeek } from "../../../utils";
 import { ReactComponent as ArrowLeft } from "../../../assets/icons/arrow-left.svg"  
 import { ReactComponent as ArrowRight } from "../../../assets/icons/arrow-right.svg"
+import useConsole from "../../../hooks/useConsole";
 
 interface WeekCalendarProps {
   date?: [Date, Date];
@@ -15,10 +16,14 @@ interface WeekCalendarProps {
 export const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange, rangeSelect }) => {
   const [ pivotDate, setPivotDate ] = useState(date?.[0] || new Date());
   const [ selectedPosition, setSelectingPosition ] = useState(0);
-  const [ days ] = useState(new Array(7)
-    .fill(0)
-    .map((e, index) => +pivotDate + 86400000 * (index - pivotDate.getDay()))
-    .map((e) => e - (e % 1000000)));
+  const [ days, setDays ] = useState<number[]>();
+
+  useEffect(() => setDays(new Array(7)
+  .fill(0)
+  .map((e, index) => +pivotDate + 86400000 * (index - pivotDate.getDay()))
+  .map((e) => e - (e % 1000000))), [ pivotDate ])
+
+  useConsole("PIVOT", days);
   
   const [selectedDates, setSelectDates] = useState<[number, number]>((date?.map(e => +e) || Array(2).fill([+pivotDate - (+pivotDate % 1000000)])) as [number, number]);
   const selectDate = (timestamp: number) => {
@@ -81,7 +86,7 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange, rang
         </DayHeaderWrapper>
       </BorderWrapper>
       <WeekWrapper>
-        {days.map((timestamp) => {
+        {days?.map((timestamp) => {
           const date = new Date(timestamp);
           const isBetween = selectedDates[0] < timestamp && timestamp < selectedDates[1]
           return (
