@@ -1,14 +1,14 @@
 import styled from '@emotion/styled';
 import React, { useEffect, useState } from 'react'
-import { Student } from '../../constants/types';
+import { BriefStudent } from '../../constants/types';
 
 async function getUserClass(): Promise<[number, number]> {
     return [1, 3]
 }
 
 interface TimelineRow {
-    subject: Student;
-    target?: Student;
+    subject: BriefStudent;
+    target?: BriefStudent;
     location: {
         from?: string;
         to: string;

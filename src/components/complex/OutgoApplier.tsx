@@ -11,21 +11,22 @@ import { Horizontal } from "../basic/Atomics";
 import Button from "../basic/Button";
 import useInput, { EventFunction } from "../../hooks/useInput";
 import useConsole from "../../hooks/useConsole";
-import { Student } from "../../constants/types";
+import { BriefStudent } from "../../constants/types";
 
 const getClassInfo = () => [...Array(3)].map((_, grade) => [...Array(6)].map((_, clas) => [grade + 1, clas + 1])).flat()
-const getStudentIinfoByClass = (clas: string): Student[] => [...Array(10)].map(() => ({
+const getStudentIinfoByClass = (clas: string): BriefStudent[] => [...Array(10)].map(() => ({
   studentId: Math.floor(Math.random() * 2000) + 1000 + '',
-  name: "테스트유저"
+  name: "테스트유저",
+  userId: this.studentId
 }))
 
 const AddApplierModal: React.FC<{
   close: () => void;
-  register: (applier: Student) => void;
+  register: (applier: BriefStudent) => void;
 }> = ({ close, register }) => {
   const classDropdown = useInput<DropdownItem>();
   const studentDropdown = useInput<DropdownItem>();
-  const [studentList, setStudentList] = useState<Student[]>();
+  const [studentList, setStudentList] = useState<BriefStudent[]>();
   useEffect(() => {
     console.log(classDropdown.value)
     if(classDropdown.value?.key) setStudentList(getStudentIinfoByClass(classDropdown.value.key))
@@ -63,11 +64,11 @@ const AddApplierModal: React.FC<{
 }
 
 interface OutgoApplierProps {
-  onChange: EventFunction<Student[]>
+  onChange: EventFunction<BriefStudent[]>
 }
 
 export const OutgoApplier: React.FC<OutgoApplierProps> = ({ onChange }) => {
-  const [appliers, setAppliers] = useState<Student[]>([]);
+  const [appliers, setAppliers] = useState<BriefStudent[]>([]);
   const addApplier = () => {
     showCardModal((close) => <AddApplierModal register={(applier) => {
       setAppliers((beforeAppliers) => [...beforeAppliers, applier])
