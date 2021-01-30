@@ -82,18 +82,18 @@ const Outgo: React.FC = () => {
 
   const submitHandler = useCallback(() => {
     const alerts = [
-      (!applierValue || applierValue?.length === 0) && "신청자 목록을 다시 확인해주세요",
-      (!applyFormValue?.approver && "승인교사를 다시 확인해주세요"),
-      (!applyFormValue?.detailReason && "상세 사유를 다시 확인해주세요"),
-      ((!dateSelectorValue?.[0] || !+dateSelectorValue[0]) && "외출 시간을 다시 확인해주세요"),
-      ((!dateSelectorValue?.[1] || !+dateSelectorValue[1]) && "귀가 시간을 다시 확인해주세요"),
-      (isTimeSelected && (+(dateSelectorValue?.[0] || 0) >= +(dateSelectorValue?.[1] || 0))) && "시간 범위를 다시 확인해주세요"
+      (!applierValue || applierValue?.length === 0) && "신청자 목록",
+      (!applyFormValue?.approver && "승인교사"),
+      (!applyFormValue?.detailReason && "상세 사유"),
+      ((!dateSelectorValue?.[0] || !+dateSelectorValue[0]) && "외출 시간"),
+      ((!dateSelectorValue?.[1] || !+dateSelectorValue[1]) && "귀가 시간"),
+      (isTimeSelected && (+(dateSelectorValue?.[0] || 0) >= +(dateSelectorValue?.[1] || 0))) && "시간 범위"
     ].filter<string>((e): e is string => !!e)
     
     console.log(isTimeSelected, +(dateSelectorValue?.[0] || 0), +(dateSelectorValue?.[1] || 0))
 
     if (alerts.length) {
-      alerts.forEach(alert => makeAlert.error(alert))
+      makeAlert.error(alerts.join(', ').을를 + " 다시 확인해주세요")
       return
     }
 
