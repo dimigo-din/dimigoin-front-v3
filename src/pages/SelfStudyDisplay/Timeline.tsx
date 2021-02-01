@@ -21,7 +21,8 @@ async function getTimeline(classInfo: [number, number]): Promise<TimelineRow[]> 
     return [{
         subject: {
             name: "전형서",
-            studentId: "2048"
+            studentId: "2048",
+            userId: "2048"
         },
         location: {
             from: "화장실",
@@ -32,11 +33,13 @@ async function getTimeline(classInfo: [number, number]): Promise<TimelineRow[]> 
     }, {
         subject: {
             name: "서주현",
-            studentId: "2018"
+            studentId: "2018",
+            userId: "2018"
         },
         target: {
             name: "현주서",
-            studentId: "2021"
+            studentId: "2021",
+            userId: "2021"
         },
         location: {
             to: "교실"

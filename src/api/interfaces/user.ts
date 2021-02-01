@@ -9,3 +9,12 @@ export interface GetMyInfo {
         identity: User
     };
 }
+
+export interface GetAllStudents {
+    method: 'GET';
+    endpoint: "/user/student";
+    req: {};
+    res: {
+        students: User[]
+    }
+}

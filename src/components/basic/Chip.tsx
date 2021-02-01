@@ -6,11 +6,10 @@ const Chip = styled.div`
   background-color: var(--main-theme-accent);
   color: white;
   font-weight: 700;
-  border-radius: 36px;
-  display: inline-block;
-  & + & {
-    /* margin-left: 12px; */
-  }
+  border-radius: 6px;
+  /* display: inline-block; */
+  height: 36px;
+  box-sizing: border-box;
 `;
 
 export default Chip;
