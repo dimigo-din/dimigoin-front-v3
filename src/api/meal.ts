@@ -24,5 +24,5 @@ export const getWeeklyMeals = async (date: Date): Promise<any> => {
 }
 
 export const getDailyMeal = (date: Date = new Date()) => {
-    return api<"dailyMeal">('GET', `/meal/${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate()}`).then(e => e.meal)
+    return api<"dailyMeal">('GET', `/meal/date/${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`).then(e => e.meal)
 }

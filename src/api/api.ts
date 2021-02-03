@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import { getAccessToken } from './auth';
 import { APIResource } from './serverResource';
 
-if (!process.env.REACT_APP_API_URI) makeAlert.error("서버 정보를 불러오는데 실패했습니다")
+if (!process.env.REACT_APP_API_URI) makeAlert.error("서버 정보를 불러오는 데 실패했습니다")
 export const request = axios.create({
   baseURL: process.env.REACT_APP_API_URI
 });
