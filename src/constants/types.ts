@@ -1,3 +1,9 @@
+interface SavedDocument {
+    _id: string;
+}
+
+export type Doc<Obj> = Obj & SavedDocument
+
 export interface BriefStudent {
     name: string;
     studentId: string;
@@ -18,7 +24,7 @@ export enum Gender {
     F = "F",
 }
 
-export interface User {
+export interface User extends SavedDocument {
     idx: number;
     username: string;
     name: string;

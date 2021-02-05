@@ -7,10 +7,11 @@ import {
   CardGroupHeader, OutgoApplyForm, Divider, OutgoApplier, Card, Checkbox, Button, TextCardGroup
 } from "../components";
 import useInput, { EventFunction, useCheckbox } from "../hooks/useInput";
-import { BriefStudent } from "../constants/types";
+import { BriefStudent, Doc } from "../constants/types";
 import makeAlert from "../functions/makeAlert";
 import { OutgoRequestForm } from "../api";
 import { requestOutgo } from "../api/outgo";
+import { getMyData } from "../api/user";
 
 interface DateSelectorProps {
   onChange: EventFunction<[Date, Date]>
@@ -72,7 +73,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ onChange }) => {
 
 const Outgo: React.FC = () => {
   const applyFormInput = useInput<OutgoApplyInput>();
-  const applierInput = useInput<BriefStudent[]>()
+  const { setValue: setAppliers, ...applierInput } = useInput<Doc<BriefStudent>[]>()
   const dateSelectorInput = useInput<[Date, Date]>()
 
   const applierValue = applierInput.value
@@ -81,6 +82,15 @@ const Outgo: React.FC = () => {
 
   const isTimeSelected = Boolean(dateSelectorValue?.[0] && +dateSelectorValue[0])
   const isDateRange = dateSelectorValue?.[0].getDate() !== dateSelectorValue?.[1].getDate()
+  
+  useEffect(() => {
+    getMyData().then(myData => setAppliers(() => [{
+      name: myData.name,
+      studentId: myData.serial.toString(),
+      userId: myData.idx.toString(),
+      _id: myData._id,
+    }]))
+  }, [ setAppliers ])
 
   const submitHandler = useCallback(() => {
     const alerts = [
@@ -101,7 +111,7 @@ const Outgo: React.FC = () => {
     }
 
     const outgoRequestForm: OutgoRequestForm =  {
-      applier: applierValue!!.map(e => e.studentId),
+      applier: applierValue!!.map(e => e._id),
       approver: applyFormValue!!.approver!!,
       reason: applyFormValue!!.outgoReason!!,
       detailReason: applyFormValue!!.detailReason,

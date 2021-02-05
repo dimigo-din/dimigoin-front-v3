@@ -3,13 +3,15 @@ import styled from "@emotion/styled";
 import css from "@emotion/css";
 import Chip from "../basic/Chip";
 import Card from "../basic/Card";
-import { BriefStudent, User } from "../../constants/types";
+import { BriefStudent, Doc, User } from "../../constants/types";
 import useInput, { EventFunction } from "../../hooks/useInput";
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { fetchAllStudents, getMyData, getMyLocalData } from "../../api/user";
+import useConsole from "../../hooks/useConsole";
 
 interface OutgoApplierProps {
-  onChange: EventFunction<BriefStudent[]>
+  onChange: EventFunction<Doc<BriefStudent>[]>;
+  value?: Doc<BriefStudent>[];
 }
 
 const InputChip: React.FC<{
@@ -58,19 +60,20 @@ const InputChip: React.FC<{
   </FixedHeightContainer>
 }
 
-interface OutgoProcessingUser extends BriefStudent {
+interface OutgoProcessingUser extends Doc<BriefStudent> {
   grade: number
 }
 
-export const OutgoApplier: React.FC<OutgoApplierProps> = ({ onChange }) => {
-  const [studentsList, setStudentsList] = useState<BriefStudent[]>()
-  const [appliers, setAppliers] = useState<BriefStudent[] | null>(null);
-  const addApplier = (d: BriefStudent) => {
+export const OutgoApplier: React.FC<OutgoApplierProps> = ({ onChange, value }) => {
+  const [studentsList, setStudentsList] = useState<Doc<BriefStudent>[]>()
+  const [appliers, setAppliers] = useState<Doc<BriefStudent>[] | null>(value ?? null);
+  const addApplier = (d: Doc<BriefStudent>) => {
     setAppliers(_appliers => [...(_appliers || []), d])
   }
   const removeApplier = (index: number) => {
     appliers && setAppliers(_appliers => [...appliers!!.slice(0, index), ..._appliers!!.slice(index + 1)])
   }
+  useConsole('ADF', value);
   useEffect(() => {
     (async () => {
       const students = await fetchAllStudents()
@@ -80,7 +83,8 @@ export const OutgoApplier: React.FC<OutgoApplierProps> = ({ onChange }) => {
         name: e.name,
         studentId: e.serial + "",
         userId: e.idx + "",
-        grade: e.grade
+        grade: e.grade,
+        _id: e._id
       }))
 
       // 같은 학년 학생을 우선순위로 표시하기 위해 정렬합니다
@@ -90,11 +94,11 @@ export const OutgoApplier: React.FC<OutgoApplierProps> = ({ onChange }) => {
       // 배열의 원본을 수정하는 mutable method(push 등..)은 사용하지 마세요!
       // *현재는 O(n)
       const myData = await getMyData()
-      setAppliers(() => [{
-        name: myData.name,
-        studentId: String(myData.serial),
-        userId: String(myData.idx)
-      }])
+      // setAppliers(() => [{
+      //   name: myData.name,
+      //   studentId: String(myData.serial),
+      //   userId: String(myData.idx)
+      // }])
       const myGrade = myData.grade
       const sortedByGrade = filterNoSerialConvertBrief.reduce((acc, current) => {
         if (current.grade === myGrade) return [[...acc[0], current], acc[1]]

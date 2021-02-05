@@ -19,7 +19,7 @@ const useInput = <T = string>(
       setValue(willSetValue);
   }, [inputValidation]);
   
-  return { value, onChange };
+  return { value, onChange, setValue };
 };
 
 export const useTextInput = (initialValue?: string): [{
