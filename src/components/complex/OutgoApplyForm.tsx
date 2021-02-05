@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../basic/Card";
 import { FormHeader } from "../basic/Form";
 import RadioButton, {
@@ -7,6 +7,7 @@ import RadioButton, {
 import Dropdown, { DropdownItem } from "../basic/Dropdown";
 import Textarea from "../basic/Textarea";
 import useInput, { EventFunction } from "../../hooks/useInput";
+import { getAllTeachers } from "../../api/user";
 
 export interface OutgoApplyInput {
   outgoType?: string;
@@ -26,6 +27,14 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }
   const outgoReason = useInput<DropdownItem>();
   const detailReason = useInput();
   const approver = useInput<DropdownItem>();
+  const [ approversList, setApproversList ] = useState<DropdownItem[]>();
+
+  useEffect(() => {
+    getAllTeachers().then(teacherList => setApproversList(() => teacherList.map(teacher => ({
+      name: teacher.name + ' 선생님',
+      key: teacher._id
+    }))))
+  }, [ setApproversList ]);
 
   const applyTypeValue = applyType.value,
         detailReasonValue = detailReason.value,
@@ -113,16 +122,7 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }
         <FormHeader>승인 교사</FormHeader>
         <Dropdown
           {...approver}
-          items={[
-            {
-              name: "1 - 1 공정도 선생님",
-              key: "JDK",
-            },
-            {
-              name: "1 - 2 류명희 선생님",
-              key: "ryu",
-            },
-          ]}
+          items={approversList}
           placeholder="이 곳을 눌러 선택하세요"
         />
       </Card>

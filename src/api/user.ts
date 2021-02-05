@@ -1,13 +1,13 @@
 import { COOKIE_JAR_KEY } from "../constants/cookieJarKeys"
-import { User } from "../constants/types"
+import { Student } from "../constants/types"
 import { cookieJar } from "../storage"
 import { api } from "./api"
 
-export const saveMyData = async (myData: User) => {
+export const saveMyData = async (myData: Student) => {
     cookieJar.set(COOKIE_JAR_KEY.MY_INFO, myData)
 }
 
-export const getMyLocalData = () => cookieJar.get(COOKIE_JAR_KEY.MY_INFO) as User | undefined
+export const getMyLocalData = () => cookieJar.get(COOKIE_JAR_KEY.MY_INFO) as Student | undefined
 
 export const fetchMyData = async () => {
     const myData = await api<"getMyInfo">("GET", "/user/me")
@@ -19,4 +19,6 @@ export const getMyData = async () => {
     return getMyLocalData() || await fetchMyData()
 }
 
-export const fetchAllStudents = () => api<"GetAllStudents">("GET", "/user/student").then(d => d.students)
+export const fetchAllStudents = () => api<"getAllStudents">("GET", "/user/student").then(d => d.students)
+
+export const getAllTeachers = () => api<"getAllTeachers">("GET", "/user/teacher").then(d => d.teachers)

@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import css from "@emotion/css";
 import Chip from "../basic/Chip";
 import Card from "../basic/Card";
-import { BriefStudent, Doc, User } from "../../constants/types";
+import { BriefStudent, Doc, Student } from "../../constants/types";
 import useInput, { EventFunction } from "../../hooks/useInput";
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { fetchAllStudents, getMyData, getMyLocalData } from "../../api/user";

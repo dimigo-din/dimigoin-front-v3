@@ -1,4 +1,4 @@
-import { User } from "../../constants/types"
+import { Student, Teacher } from "../../constants/types"
 
 export interface GetMyInfo {
     method: 'GET';
@@ -6,7 +6,7 @@ export interface GetMyInfo {
     needAuth: true;
     req: {};
     res: {
-        identity: User
+        identity: Student
     };
 }
 
@@ -15,6 +15,15 @@ export interface GetAllStudents {
     endpoint: "/user/student";
     req: {};
     res: {
-        students: User[]
+        students: Student[]
+    }
+}
+
+export interface GetAllTeachers {
+    method: 'GET';
+    endpoint: "/user/teacher";
+    req: {};
+    res: {
+        teachers: Teacher[]
     }
 }

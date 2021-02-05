@@ -12,6 +12,7 @@ import makeAlert from "../functions/makeAlert";
 import { OutgoRequestForm } from "../api";
 import { requestOutgo } from "../api/outgo";
 import { getMyData } from "../api/user";
+import { toast } from "react-toastify";
 
 interface DateSelectorProps {
   onChange: EventFunction<[Date, Date]>
@@ -82,8 +83,8 @@ const Outgo: React.FC = () => {
 
   const isTimeSelected = Boolean(dateSelectorValue?.[0] && +dateSelectorValue[0])
   const isDateRange = dateSelectorValue?.[0].getDate() !== dateSelectorValue?.[1].getDate()
-  
-  useEffect(() => {
+
+  const applyMe = useCallback(() => {
     getMyData().then(myData => setAppliers(() => [{
       name: myData.name,
       studentId: myData.serial.toString(),
@@ -91,6 +92,14 @@ const Outgo: React.FC = () => {
       _id: myData._id,
     }]))
   }, [ setAppliers ])
+  
+  useEffect(() => {
+    if(applyFormValue?.outgoType === 'alone') applyMe()
+  }, [ applyMe, applyFormValue ])
+
+  useEffect(() => {
+    applyMe()
+  }, [ applyMe ])
 
   const submitHandler = useCallback(() => {
     const alerts = [
@@ -121,7 +130,7 @@ const Outgo: React.FC = () => {
       }
     }
 
-    console.log(requestOutgo(outgoRequestForm))
+    requestOutgo(outgoRequestForm).then(() => toast.success("외출 신청을 완료했습니다!"))
   }, [applierValue, applyFormValue, dateSelectorValue, isTimeSelected]);
 
   return (
