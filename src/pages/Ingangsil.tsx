@@ -24,7 +24,7 @@ export default () => {
   } as Record<NightSelfStudyTime, IngangsilTicket[]>)
 
   const loadStatus = useCallback(() => {
-    ingangsil.getMyStatus().then(setFetchedMyStatus)
+    return ingangsil.getMyStatus().then(setFetchedMyStatus)
   }, [setFetchedMyStatus])
   
   useEffect(() => {
@@ -172,7 +172,7 @@ export default () => {
                   onSubmit={async () => {
                     if(applied) await ingangsil.unapply(selfStudyId)
                     else await ingangsil.apply(selfStudyId)
-                    loadStatus()
+                    await loadStatus()
                   }}
                   name={`야간 자율학습 ${index + 1}타임`}
                   currentApplied={currentTimeAppliers?.length}
