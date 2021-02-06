@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../basic/Card";
 import { FormHeader } from "../basic/Form";
 import RadioButton, {
@@ -7,6 +7,7 @@ import RadioButton, {
 import Dropdown, { DropdownItem } from "../basic/Dropdown";
 import Textarea from "../basic/Textarea";
 import useInput, { EventFunction } from "../../hooks/useInput";
+import { getAllTeachers } from "../../api/user";
 
 export interface OutgoApplyInput {
   outgoType?: string;
@@ -17,38 +18,52 @@ export interface OutgoApplyInput {
 }
 
 interface OutgoApplyProps {
-  onSubmit?: EventFunction<OutgoApplyInput>;
+  onChange?: EventFunction<OutgoApplyInput>;
 }
 
-export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onSubmit, ...props }) => {
+export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }) => {
   const outgoType = useInput<RadioButtonItem>();
   const applyType = useInput<RadioButtonItem>();
   const outgoReason = useInput<DropdownItem>();
   const detailReason = useInput();
   const approver = useInput<DropdownItem>();
+  const [ approversList, setApproversList ] = useState<DropdownItem[]>();
 
   useEffect(() => {
-    console.log("폼 리렌더")
-    onSubmit &&
-      onSubmit({
+    getAllTeachers().then(teacherList => setApproversList(() => teacherList.map(teacher => ({
+      name: teacher.name + ' 선생님',
+      key: teacher._id
+    }))))
+  }, [ setApproversList ]);
+
+  const applyTypeValue = applyType.value,
+        detailReasonValue = detailReason.value,
+        approverValue = approver.value,
+        outgoReasonValue= outgoReason.value,
+        outgoTypeValue = outgoType.value
+
+
+  useEffect(() => {
+    console.log('네?')
+    onChange &&
+      onChange({
         target: {
           value: {
-            outgoType: outgoType?.value?.key,
-            applyType: applyType?.value?.key,
-            outgoReason: outgoReason?.value?.key,
-            detailReason: detailReason?.value,
-            approver: approver?.value?.key,
+            outgoType: outgoTypeValue?.key,
+            applyType: applyTypeValue?.key,
+            outgoReason: outgoReasonValue?.key,
+            detailReason: detailReasonValue,
+            approver: approverValue?.key,
           },
         },
       });
   }, [
-    
-    applyType,
-    detailReason,
-    approver,
-    onSubmit,
-    outgoReason,
-    outgoType
+    onChange,
+    applyTypeValue,
+    approverValue,
+    detailReasonValue,
+    outgoReasonValue,
+    outgoTypeValue
   ]);
   return (
     <>
@@ -107,16 +122,7 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onSubmit, ...props }
         <FormHeader>승인 교사</FormHeader>
         <Dropdown
           {...approver}
-          items={[
-            {
-              name: "1 - 1 공정도 선생님",
-              key: "JDK",
-            },
-            {
-              name: "1 - 2 류명희 선생님",
-              key: "ryu",
-            },
-          ]}
+          items={approversList}
           placeholder="이 곳을 눌러 선택하세요"
         />
       </Card>

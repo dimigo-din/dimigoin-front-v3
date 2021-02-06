@@ -1,4 +1,5 @@
 export * from "./auth"
 export * from "./meal"
 export * from "./user"
+export * from "./outgo"
 export * from "./ingangsil"

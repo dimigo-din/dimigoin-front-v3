@@ -1,37 +1,66 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import css from "@emotion/css";
 import styled from "@emotion/styled";
 import { EventFunction } from "../../../hooks/useInput";
+import { getThisWeek } from "../../../utils";
+import { ReactComponent as ArrowLeft } from "../../../assets/icons/arrow-left.svg"  
+import { ReactComponent as ArrowRight } from "../../../assets/icons/arrow-right.svg"
+import useConsole from "../../../hooks/useConsole";
 
 interface WeekCalendarProps {
-  date?: Date;
-  onChange?: EventFunction<Date>;
+  date?: [Date, Date];
+  onChange?: EventFunction<[Date, Date]>;
+  rangeSelect?: boolean;
 }
 
-export const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange }) => {
-  const now = date || new Date();
-  const days = new Array(7)
-    .fill(0)
-    .map((e, index) => +now + 86400000 * (index - now.getDay()))
-    .map((e) => e - (e % 1000000));
-  const [selectedDate, selectDate] = useState(+now - (+now % 1000000));
+export const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange, rangeSelect }) => {
+  const [ pivotDate, setPivotDate ] = useState(date?.[0] || new Date());
+  const [ selectedPosition, setSelectingPosition ] = useState(0);
+  const [ days, setDays ] = useState<number[]>();
+
+  useEffect(() => setDays(new Array(7)
+  .fill(0)
+  .map((e, index) => +pivotDate + 86400000 * (index - pivotDate.getDay()))
+  .map((e) => e - (e % 1000000))), [ pivotDate ])
+
+  useConsole("PIVOT", days);
+  
+  const [selectedDates, setSelectDates] = useState<[number, number]>((date?.map(e => +e) || Array(2).fill([+pivotDate - (+pivotDate % 1000000)])) as [number, number]);
+  const selectDate = (timestamp: number) => {
+    if(!rangeSelect) {
+      setSelectDates(() => [timestamp, timestamp])
+      return
+    }
+    if(selectedPosition === 0) setSelectDates(() => [timestamp, timestamp])
+    else setSelectDates(dates => [dates[0], timestamp].sort() as [number, number])
+  
+    setSelectingPosition(position => position === 0 ? 1 : 0)
+  }
   useEffect(() => {
     if (!onChange) return;
-    const date = new Date(selectedDate);
-    date.setHours(0);
-    date.setMinutes(0);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
+    const date = selectedDates.map(t => {
+      const date = new Date(t)
+      date.setHours(0);
+      date.setMinutes(0);
+      date.setSeconds(0);
+      date.setMilliseconds(0);
+      return date
+    }) as [Date, Date];
     onChange({
       target: {
         value: date,
       },
     });
-  }, [ selectedDate, onChange ]);
+  }, [ selectedDates, onChange ]);
+  
+  const showPrevWeek = useCallback(() => setPivotDate(date => new Date(+date - 604800000)), [])
+  const showNextWeek = useCallback(() => setPivotDate(date => new Date(+date + 604800000)), [])
   return (
     <Wrapper>
       <HeaderWrapper>
-        <Header>7월 1주</Header>
+        <ArrowLeft onClick={showPrevWeek} />
+        <Header>{pivotDate.getMonth() + 1}월 {getThisWeek(pivotDate)}주</Header>
+        <ArrowRight onClick={showNextWeek} />
       </HeaderWrapper>
       <BorderWrapper>
         <DayHeaderWrapper>
@@ -56,21 +85,28 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange }) =>
           </DayHeader>
         </DayHeaderWrapper>
       </BorderWrapper>
-      <DayWrapper>
-        {days.map((timestamp) => {
+      <WeekWrapper>
+        {days?.map((timestamp) => {
           const date = new Date(timestamp);
-
+          const isBetween = selectedDates[0] < timestamp && timestamp < selectedDates[1]
           return (
-            <Day
-              key={timestamp}
-              selected={selectedDate === timestamp}
-              onClick={() => selectDate(timestamp)}
+            <DayWrapper
+              isEnd={Boolean(selectedDates[0] && (selectedDates[1] === timestamp))}
+              isStart={Boolean(selectedDates[1] && (selectedDates[0] === timestamp))}
+              isBetween={isBetween}
             >
-              {date.getDate()}
-            </Day>
+              <Day
+                key={timestamp}
+                selected={selectedDates.includes(timestamp)}
+                rangeBetweed={isBetween}
+                onClick={() => selectDate(timestamp)}
+              >
+                {date.getDate()}
+              </Day>
+            </DayWrapper>
           );
         })}
-      </DayWrapper>
+      </WeekWrapper>
     </Wrapper>
   );
 };
@@ -86,6 +122,9 @@ const HeaderWrapper = styled.div`
   max-width: 150px;
   margin: 0px auto;
   padding-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const Header = styled.div`
@@ -114,11 +153,11 @@ const BorderWrapper = styled.div`
   border-bottom: solid 1px #e6e6e6;
 `;
 
-const DayWrapper = styled(DayHeaderWrapper)`
+const WeekWrapper = styled(DayHeaderWrapper)`
   margin: 0px auto;
 `;
 
-const Day = styled.div<{ selected: boolean }>`
+const Day = styled.div<{ selected: boolean; rangeBetweed: boolean; }>`
   font-size: 20px;
   font-weight: 700;
   color: #8a8a8a;
@@ -127,7 +166,7 @@ const Day = styled.div<{ selected: boolean }>`
   text-align: center;
   padding: 12px;
   line-height: 24px;
-  background-color: white;
+  /* background-color: white; */
   transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
   border-radius: 15px;
   
@@ -144,3 +183,18 @@ const Day = styled.div<{ selected: boolean }>`
       font-size: 16px;
     }
 `;
+
+const DayWrapper = styled.div<{isStart?: boolean; isEnd?: boolean; isBetween: boolean}>`
+  transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
+  ${({isBetween, isStart, isEnd}) => (isBetween || isStart || isEnd) && css`
+    background-color: rgba(var(--main-theme-accent-rgb), 0.1);
+  `}
+  ${({isStart}) => isStart && css`
+    border-top-left-radius: 24px;
+    border-bottom-left-radius: 24px;
+  `}
+  ${({isEnd}) => isEnd && css`
+    border-top-right-radius: 24px;
+    border-bottom-right-radius: 24px;
+  `}
+`

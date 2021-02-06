@@ -27,7 +27,7 @@ const GlobalStyle = createGlobalStyle`
   #root {
     font-family: 'NanumSquare', -apple-system, BlinkMacSystemFont,
       'Segoe UI', Helvetica, Arial, sans-serif;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
   }
 `;
 
