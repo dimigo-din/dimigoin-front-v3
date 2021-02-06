@@ -27,7 +27,7 @@ request.interceptors.response.use(undefined, (error) => {
   return Promise.reject(error);
 })
 
-export const api = async <T extends keyof APIResource>(method: AxiosRequestConfig['method'], endpoint: APIResource[T]['endpoint'] | string, param?: APIResource[T]['req'] & {
+export const api = async <T extends keyof APIResource>(method: APIResource[T]["method"], endpoint: APIResource[T]['endpoint'] | string, param?: APIResource[T]['req'] & {
   withoutAuth?: boolean
 }, headers?: any) => {
   const token = getAccessToken()

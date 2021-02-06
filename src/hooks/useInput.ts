@@ -1,10 +1,10 @@
-import { Dispatch, SetStateAction, useCallback, useContext, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import useConsole from "./useConsole";
 
 export type EventFunction<T> = (e: { target: { value: T } }) => any;
 
 const useInput = <T = string>(
-  initValue?: any,
+  initValue?: T,
   inputValidation?: (value: T) => boolean
 ) => {
   const [value, setValue] = useState<T | undefined>(initValue);
@@ -19,7 +19,7 @@ const useInput = <T = string>(
       setValue(willSetValue);
   }, [inputValidation]);
   
-  return { value, onChange };
+  return { value, onChange, setValue };
 };
 
 export const useTextInput = (initialValue?: string): [{

@@ -1,4 +1,4 @@
-import { AllMeal, GetDailyMeal, LoginWithInfo, GetMyInfo, LoginWithRefreshToken } from "./interfaces";
+import { AllMeal, GetDailyMeal, LoginWithInfo, GetMyInfo, LoginWithRefreshToken, RequestOutgo, GetAllStudents, GetAllTeachers } from "./interfaces";
 
 interface Dummy {
     method: 'GET';
@@ -15,4 +15,7 @@ export interface APIResource {
     dailyMeal: GetDailyMeal;
     dummy: Dummy;
     getMyInfo: GetMyInfo;
+    requestOutgo: RequestOutgo;
+    getAllStudents: GetAllStudents;
+    getAllTeachers: GetAllTeachers;
 }

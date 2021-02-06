@@ -7,7 +7,7 @@ import { HeaderIconWrapper, Horizontal } from '../basic/Atomics'
 import { Title as CardTitle } from '../basic/CardGroupHeader'
 import Card from '../basic/Card'
 import { ResponsiveWrapper } from '../layout/Cols'
-// import { getWeeklyMeals } from '../../api'
+import { getThisWeek } from '../../utils'
 
 export interface DailyMealProps {
   header: string;
@@ -69,9 +69,7 @@ const DailyMealItem = styled.p`
   @media screen and (max-width: 960px) {
     max-width: unset;
   }
-`
-
-const getThisWeek = (date: Date) => Math.ceil((date.getDate() - date.getDay() + 4) / 7)
+` 
 
 export const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
   const [meals, setMeals] = useState<DailyMealProps[]>();

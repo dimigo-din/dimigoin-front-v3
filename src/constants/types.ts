@@ -1,6 +1,13 @@
-export interface Student {
+interface SavedDocument {
+    _id: string;
+}
+
+export type Doc<Obj> = Obj & SavedDocument
+
+export interface BriefStudent {
     name: string;
     studentId: string;
+    userId: string;
 }
 
 export interface AuthTokens {
@@ -17,17 +24,20 @@ export enum Gender {
     F = "F",
 }
 
-export interface MyData {
+export interface User {
     idx: number;
     username: string;
-    name: string;
     userType: UserType;
     gender: Gender;
-    createdAt: string;
-    updatedAt: string;
+    name: string;
+}
+
+export interface Student extends Doc<User> {
     class: number;
     grade: number;
     number: number;
     serial: number;
     photo: string[];
 }
+
+export interface Teacher extends Doc<User> {}

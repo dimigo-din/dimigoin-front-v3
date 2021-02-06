@@ -1,139 +1,195 @@
 import React, { useEffect, useState } from "react";
-import Chip from "../basic/Chip";
-import Card from "../basic/Card";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
-import { showCardModal } from "./modal/CardModal";
-import { Title } from "../basic/CardGroupHeader";
-import { ReactComponent as CloseSvg } from '../../assets/icons/close.svg'
-import _Dropdown, { DropdownItem } from "../basic/Dropdown";
-import { Horizontal } from "../basic/Atomics";
-import Button from "../basic/Button";
-import useInput from "../../hooks/useInput";
+import Chip from "../basic/Chip";
+import Card from "../basic/Card";
+import { BriefStudent, Doc, Student } from "../../constants/types";
+import useInput, { EventFunction } from "../../hooks/useInput";
+import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
+import { fetchAllStudents, getMyData, getMyLocalData } from "../../api/user";
 import useConsole from "../../hooks/useConsole";
-import { Student } from "../../constants/types";
 
-const getClassInfo = () => [...Array(3)].map((_, grade) => [...Array(6)].map((_, clas) => [grade + 1, clas + 1])).flat()
-const getStudentIinfoByClass = (clas: string): Student[] => [...Array(10)].map(() => ({
-  studentId: Math.floor(Math.random() * 2000) + 1000 + '',
-  name: "테스트유저"
-}))
-
-const AddApplierModal: React.FC<{
-  close: () => void;
-  register: (applier: Student) => void;
-}> = ({ close, register }) => {
-  const classDropdown = useInput<DropdownItem>();
-  const studentDropdown = useInput<DropdownItem>();
-  const [studentList, setStudentList] = useState<Student[]>();
-  useEffect(() => {
-    console.log(classDropdown.value)
-    if(classDropdown.value?.key) setStudentList(getStudentIinfoByClass(classDropdown.value.key))
-  }, [classDropdown.value])
-  useConsole('SELECTED_STUDENT', studentDropdown.value)
-  return <>
-  <FormModalWrapper>
-    <Horizontal css={css`justify-content: space-between;`}>
-    <Title>
-      외출 인원 추가
-    </Title>
-    <CloseSvg onClick={close} />
-    </Horizontal>
-    <FormItem>
-      <InputLabel>학급</InputLabel>
-      <Dropdown placeholder="학급 선택" items={getClassInfo().map(clas => ({
-        name: `${clas[0]}학년 ${clas[1]}반`
-      }))} {...classDropdown} />
-    </FormItem>
-    <FormItem>
-      <InputLabel>이름</InputLabel>
-      <Dropdown placeholder="반을 먼저 선택해주세요" items={studentList?.map(e => ({
-        name: e.name,
-        key: e.studentId
-      }))} {...studentDropdown} />
-    </FormItem>
-  </FormModalWrapper>
-  <FormModalButton onClick={() => studentDropdown.value?.key && studentDropdown.value?.name && register({
-    name: studentDropdown.value.name,
-    studentId: studentDropdown.value.key
-  })}>완료</FormModalButton>
-  </>
- 
+interface OutgoApplierProps {
+  onChange: EventFunction<Doc<BriefStudent>[]>;
+  value?: Doc<BriefStudent>[];
 }
 
-export const OutgoApplier: React.FC = () => {
-  const [appliers, setAppliers] = useState<Student[]>([]);
-  const addApplier = () => {
-    showCardModal((close) => <AddApplierModal register={(applier) => {
-      setAppliers((beforeAppliers) => [...beforeAppliers, applier])
-      close()
-    }} close={close} />, undefined, {
-      cardProps: {
-        css: css`
-          width: 720px;
-          padding: 0px;
-        `
-      }})
+const InputChip: React.FC<{
+  onSubmit(student: BriefStudent): any;
+  studentsList?: BriefStudent[]
+}> = ({ studentsList, onSubmit }) => {
+  const [typing, setTypingState] = useState(false)
+  const [focusedIndex, setFocusIndex] = useState(-1)
+  const [queriedStudents, setQueriedStudents] = useState<BriefStudent[]>()
+  const userInput = useInput()
+  useEffect(() => {
+    setQueriedStudents(() =>
+      studentsList?.filter(student =>
+        student.name
+          .includes(userInput.value!!) ||
+        student.studentId
+          .startsWith(userInput.value!!)
+      ).slice(0, 5)
+    )
+  }, [userInput.value, studentsList])
+  useEffect(() => setFocusIndex(-1), [userInput.value])
+  return <FixedHeightContainer>
+    <InputChipWrapper isTyping={Boolean(typing || userInput.value)}>
+      {((typing || userInput.value) && studentsList) ? <>
+        <UserNameInput autoFocus {...userInput} onBlur={() => setTypingState(false)} onKeyDown={e => {
+          if (e.key === 'ArrowDown') return setFocusIndex(_index => _index + 1)
+          if (e.key === 'ArrowUp') return setFocusIndex(_index => _index - 1)
+          if (e.key === 'Enter') queriedStudents && onSubmit(queriedStudents[focusedIndex])
+        }} />
+        {
+          queriedStudents ? queriedStudents
+            .map((student, index) => <SearchListItem
+              focus={index === focusedIndex}
+              onMouseEnter={() => setFocusIndex(() => index)}
+              onClick={() => onSubmit(student)}
+            >
+              {student.studentId} {student.name}
+            </SearchListItem>) : <SearchListItem>
+              학번 혹은 이름을 입력해주세요
+        </SearchListItem>
+        }
+      </> : <AddNewWrapper onClick={() => setTypingState(true)}>
+          <AddNewIcon />
+        </AddNewWrapper>}
+    </InputChipWrapper>
+  </FixedHeightContainer>
+}
+
+interface OutgoProcessingUser extends Doc<BriefStudent> {
+  grade: number
+}
+
+export const OutgoApplier: React.FC<OutgoApplierProps> = ({ onChange, value }) => {
+  const [studentsList, setStudentsList] = useState<Doc<BriefStudent>[]>()
+  const [appliers, setAppliers] = useState<Doc<BriefStudent>[] | null>(value ?? null);
+  const addApplier = (d: Doc<BriefStudent>) => {
+    setAppliers(_appliers => [...(_appliers || []), d])
   }
+  const removeApplier = (index: number) => {
+    appliers && setAppliers(_appliers => [...appliers!!.slice(0, index), ..._appliers!!.slice(index + 1)])
+  }
+  useConsole('ADF', value);
+  useEffect(() => {
+    (async () => {
+      const students = await fetchAllStudents()
+      // 학번이 없는(졸업생, 자퇴생) 학생을 필터링합니다
+      // 메모리 할당을 줄이기 위해 불필요한 프로퍼티를 제거한 인터페이스로 재구조화합니다
+      const filterNoSerialConvertBrief = students.filter(e => e.serial).map<OutgoProcessingUser>(e => ({
+        name: e.name,
+        studentId: e.serial + "",
+        userId: e.idx + "",
+        grade: e.grade,
+        _id: e._id
+      }))
+
+      // 같은 학년 학생을 우선순위로 표시하기 위해 정렬합니다
+      // 2차원배열의 0번 인덱스에는 나와 같은 학년의 학생들이,
+      // 1번 인덱스에는 나머지 학생들을 대입합니다.
+      // 혹시 더 나은 로직이 있다면 수정 부탁드립니다 :)
+      // 배열의 원본을 수정하는 mutable method(push 등..)은 사용하지 마세요!
+      // *현재는 O(n)
+      const myData = await getMyData()
+      // setAppliers(() => [{
+      //   name: myData.name,
+      //   studentId: String(myData.serial),
+      //   userId: String(myData.idx)
+      // }])
+      const myGrade = myData.grade
+      const sortedByGrade = filterNoSerialConvertBrief.reduce((acc, current) => {
+        if (current.grade === myGrade) return [[...acc[0], current], acc[1]]
+        return [acc[0], [...acc[1], current]]
+      }, [[], []] as OutgoProcessingUser[][])
+
+      // 2차원배열을 1차원으로 펼쳐서 학생리스트로 지정합니다
+      setStudentsList(() => sortedByGrade.flat())
+    })()
+  }, [])
+  useEffect(() => {
+    if (onChange && appliers) onChange({ target: { value: appliers } })
+  }, [appliers, onChange])
   return (
-    <Card css={css`padding: -6px;`} leftBorder>
+    <Wrapper leftBorder>
       {appliers &&
-        appliers.map((applier) => (
-          <Chip css={css`margin: 6px;`} key={applier.studentId}>
+        appliers.map((applier, index) => (
+          <Chip css={css`margin: 6px;`} key={applier.studentId} onClick={() => removeApplier(index)}>
             {applier.studentId} {applier.name}
           </Chip>
         ))}
-      <InputChip onClick={addApplier}>
-        +
-      </InputChip>
-    </Card>
+      <InputChip studentsList={studentsList} onSubmit={addApplier} />
+    </Wrapper>
   );
 };
 
-const InputChip = styled.div`
-  margin: 6px;
+const Wrapper = styled(Card)`
+  display: flex;
+  flex-wrap: wrap;
+  padding: -6px;
+`
+
+const FixedHeightContainer = styled.div`
+  height: 32px;
   width: 138px;
-  display: inline-block;
-  text-align: center;
+  /* display: inline-block; */
+  margin: 6px;
+  position: relative;
+  z-index: 2;
+`
+
+const InputChipWrapper = styled.div<{ isTyping: boolean }>`
   background-color: transparent;
-  border: solid 2px var(--main-theme-accent);
-  color: var(--main-theme-accent);
-  border-radius: 36px;
-  font-size: 24px;
-  vertical-align: middle;
-  height: 34px;
+  color: #E6E6E6;
+  border-radius: 6px;
   box-sizing: border-box;
-  line-height: 30px;
-  font-weight: 700;
-  &::placeholder {
-    color: var(--main-theme-accent);
-  }
+  margin: 0px;
+  transition: 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
+  box-shadow: 0px 0px 0px 2px #E6E6E6;
+  /*  */
+  ${({ isTyping }) => isTyping && css`
+    /* vertical-align: top; */
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.06);
+    background-color: white;
+  `}
 `;
 
-const InputLabel = styled.p`
-  font-size: 22px;
-  flex-shrink: 0;
-  margin-right: 32px;
-`
-
-const FormItem = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-`
-
-const Dropdown= styled(_Dropdown)`
-  flex: 1;
-`
-
-const FormModalWrapper = styled.div`
-  padding: 32px 45px 32px;
-`
-
-const FormModalButton = styled(Button)`
+const UserNameInput = styled.input`
+  border: none;
+  height: 32px;
   width: 100%;
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
+  outline: none;
+  box-sizing: border-box;
+  font-size: 16px;
+  padding: 10px;
+  background-color: transparent;
+  color: var(--main-theme-accent);
+  font-weight: 700;
+  border-bottom: 1px solid #EFEFEF;
+`
+
+const AddNewWrapper = styled.div`
+  display: grid;
+  place-items: center;
+  height: 32px;
+`
+
+const AddNewIcon = styled(PlusIcon)`
+  
+`
+
+const SearchListItem = styled.div<{ focus?: boolean }>`
+  padding: 10px;
+  color: #999999;
+  font-weight: 700;
+  font-size: 16px;
+  height: 36px;
+  box-sizing: border-box;
+  ${({ focus }) => focus && css`
+    background-color: #F8F8F8;
+  `}
 `
 
 export default OutgoApplier;
