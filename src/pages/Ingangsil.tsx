@@ -11,6 +11,7 @@ import ingangsil from "../api/ingangsil";
 import { APIResource } from "../api";
 import { IngangsilTicket, NightSelfStudyTime } from "../constants/types";
 import { useMyData } from "../hooks/api/useMyData";
+import Skeleton from "react-loading-skeleton";
 
 export default () => {
   const [myStatus, setFetchedMyStatus] = useState<APIResource["myIngangsilApplyStatus"]["res"]>()
@@ -26,7 +27,6 @@ export default () => {
   const loadStatus = useCallback(() => {
     return ingangsil.getMyStatus().then(setFetchedMyStatus)
   }, [setFetchedMyStatus])
-  
   useEffect(() => {
     const timer = setInterval(() => loadStatus(), 1000)
     return () => {
@@ -67,13 +67,13 @@ export default () => {
                   <Row>
                     <People />
                     <Desc>
-                      한 학급당 최대 <b>7명</b>
+                      {myStatus ? <>한 학급당 최대 <b>{myStatus.ingangMaxApplier}명</b></> : <Skeleton width={120} />}
                     </Desc>
                   </Row>
                   <Row>
                     <DateIcon />
                     <Desc>
-                      일주일 최대 <b>{myStatus?.weeklyTicketCount}회</b>
+                      {myStatus ? <>일주일 최대 <b>{myStatus.weeklyTicketCount}회</b></> : <Skeleton width={100} />}
                     </Desc>
                   </Row>
                 </Col>
@@ -91,10 +91,12 @@ export default () => {
                       color: var(--main-theme-accent);
                     `}
                   >
-                    <Ticket />
-                    <Desc>
-                      남은 티켓 <b>{myStatus?.weeklyRemainTicket}/{myStatus?.weeklyTicketCount}</b>
-                    </Desc>
+                    {myStatus ? (<>
+                      <Ticket />
+                      <Desc>
+                        남은 티켓 <b>{myStatus?.weeklyRemainTicket}/{myStatus?.weeklyTicketCount}</b>
+                      </Desc>
+                    </>) : <Skeleton width={100} />}
                   </Row>
                   <Row>
                     <Info>
@@ -146,18 +148,27 @@ export default () => {
             />
             <Divider horizontal small data-divider />
             <CardGroupHeader withBubble>우리반 신청자</CardGroupHeader>
-            {groupedByTime && [...Array(2)].map((_, index) =>
-              <Card leftBorder>
+            {[...Array(2)].map((_, index) => {
+              const currentTimeAppliers = groupedByTime?.[NightSelfStudyTime[index === 0 ? "NSS1" : "NSS2"]]
+              return (<Card leftBorder>
                 <ResponsiveWrapper>
                   <IngangTime>{index + 1}타임</IngangTime>
                   <Divider small data-divider />
                   <IngangerWrapper>
-                    {groupedByTime[NightSelfStudyTime[index === 0 ? "NSS1" : "NSS2"]].map(({ applier: { name, number } }) => (
-                      <Inganger key={number}>{number} {name}</Inganger>
-                    ))}
+                    {currentTimeAppliers ? // 로드가 됐으면
+                      currentTimeAppliers.length === 0 ? // 신청자가 없으면
+                        <Inganger>신청자가 없습니다</Inganger> :
+                        currentTimeAppliers.map(({ applier: { name, number } }) => ( // 신청자가 있으면
+                          <Inganger key={number}>{number} {name}</Inganger>
+                        )) : <>
+                        <Inganger><Skeleton width={60} /></Inganger> {/* 로드가 안됐으면 */}
+                        <Inganger><Skeleton width={60} /></Inganger>
+                        <Inganger><Skeleton width={60} /></Inganger>
+                      </>}
                   </IngangerWrapper>
                 </ResponsiveWrapper>
-              </Card>)}
+              </Card>)
+            })}
           </Col>
           <Divider data-divider />
           <Col width={5.5}>
@@ -170,7 +181,7 @@ export default () => {
                 <IngansilStatus
                   key={`ingangsil${index}`}
                   onSubmit={async () => {
-                    if(applied) await ingangsil.unapply(selfStudyId)
+                    if (applied) await ingangsil.unapply(selfStudyId)
                     else await ingangsil.apply(selfStudyId)
                     await loadStatus()
                   }}
