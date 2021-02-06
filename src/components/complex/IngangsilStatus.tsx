@@ -29,7 +29,7 @@ export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
   onSubmit
 }) => {
   const isRequestable =
-    (max && currentApplied) ? (//1. 신청 했고, 자리가 없을 때
+    ((max !== undefined) && (currentApplied !== undefined)) ? (//1. 신청 했고, 자리가 없을 때
       currentApplied < max ||
       //2. 자리가 남았을때
       Boolean(isApplied && currentApplied >= max)) : null;
