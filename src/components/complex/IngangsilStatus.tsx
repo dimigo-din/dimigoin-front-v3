@@ -5,6 +5,7 @@ import CardGroupHeader from "../basic/CardGroupHeader";
 import Card from "../basic/Card";
 import Button from "../basic/Button";
 import Skeleton from "react-loading-skeleton";
+import { NightSelfStudyTime } from "../../constants/types";
 
 interface IngangsilStatusProps {
   currentApplied?: number;
@@ -12,7 +13,7 @@ interface IngangsilStatusProps {
   time: string;
   isApplied?: boolean;
   name: string;
-  onSubmit(time: string): void;
+  onSubmit(): void;
 }
 
 const nullableSkeletonText = (value?: any) => {
@@ -43,7 +44,7 @@ export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
       </CardGroupHeader>
       <Card>
         <NumberWrapper>
-          <div css={currentApplied !== undefined && max !== undefined && currentApplied < max ? active : disabled}>
+          <div css={isRequestable ? active : disabled}>
             <NumberName>현원</NumberName>
             <NumberDisplay>{nullableSkeletonText(currentApplied)}</NumberDisplay>
           </div>
@@ -55,7 +56,7 @@ export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
       </Card>
       <ApplyButton
         disabled={!isRequestable}
-        onClick={() => onSubmit(time)}
+        onClick={() => onSubmit()}
         css={max === undefined && css`color: transparent;`}
       >
         {/* 신청했는지 판별하는 변수를 넣어주세요  */}

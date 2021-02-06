@@ -17,8 +17,19 @@ export interface MyApplyStatus {
     }
 }
 
-export interface Apply {
+export interface ApplyIngangsil {
     method: "POST";
+    endpoint: "/ingang-application/time/:time",
+    req: {};
+    res: {
+        date: string;
+        time: number;
+        applier: string;
+    }
+}
+
+export interface UnapplyIngangsil {
+    method: "DELETE";
     endpoint: "/ingang-application/time/:time",
     req: {};
     res: {

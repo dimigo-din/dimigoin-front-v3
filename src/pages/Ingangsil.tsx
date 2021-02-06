@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import NavigationBar from "../components/complex/NavigationBar";
 import css from "@emotion/css";
@@ -22,10 +22,17 @@ export default () => {
     [NightSelfStudyTime.NSS1]: [],
     [NightSelfStudyTime.NSS2]: []
   } as Record<NightSelfStudyTime, IngangsilTicket[]>)
+
+  const loadStatus = useCallback(() => {
+    ingangsil.getMyStatus().then(setFetchedMyStatus)
+  }, [setFetchedMyStatus])
   
   useEffect(() => {
-    ingangsil.getMyStatus().then(setFetchedMyStatus)
-  }, []);
+    const timer = setInterval(() => loadStatus(), 1000)
+    return () => {
+      clearInterval(timer)
+    }
+  }, [loadStatus]);
 
   return (
     <>
@@ -145,8 +152,8 @@ export default () => {
                   <IngangTime>{index + 1}타임</IngangTime>
                   <Divider small data-divider />
                   <IngangerWrapper>
-                    {groupedByTime[NightSelfStudyTime[index === 0 ? "NSS1" : "NSS2"]].map(({ applier: { name } }) => (
-                      <Inganger key={name}>{name}</Inganger>
+                    {groupedByTime[NightSelfStudyTime[index === 0 ? "NSS1" : "NSS2"]].map(({ applier: { name, number } }) => (
+                      <Inganger key={number}>{number} {name}</Inganger>
                     ))}
                   </IngangerWrapper>
                 </ResponsiveWrapper>
@@ -155,16 +162,22 @@ export default () => {
           <Divider data-divider />
           <Col width={5.5}>
             {[...Array(2)].map((_, index) => {
-              const currentTimeAppliers = groupedByTime?.[NightSelfStudyTime[index === 0 ? "NSS1" : "NSS2"]]
+              const selfStudyId = NightSelfStudyTime[index === 0 ? "NSS1" : "NSS2"]
+              const currentTimeAppliers = groupedByTime?.[selfStudyId]
+              const applied = myData && currentTimeAppliers?.map(e => e.applier._id).includes(myData?._id)
               return (<>
                 {index !== 0 && <Divider horizontal small data-divider />}
                 <IngansilStatus
                   key={`ingangsil${index}`}
-                  onSubmit={ingangsil.submit}
+                  onSubmit={async () => {
+                    if(applied) await ingangsil.unapply(selfStudyId)
+                    else await ingangsil.apply(selfStudyId)
+                    loadStatus()
+                  }}
                   name={`야간 자율학습 ${index + 1}타임`}
                   currentApplied={currentTimeAppliers?.length}
                   max={myStatus?.ingangMaxApplier}
-                  isApplied={myData && currentTimeAppliers?.map(e => e.applier._id).includes(myData?._id)}
+                  isApplied={applied}
                   time={["19:50 - 21:10", "21:10 - 22:30"][index]}
                 /></>
               )
