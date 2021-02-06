@@ -20,5 +20,4 @@ export const getMyData = async () => {
 }
 
 export const fetchAllStudents = () => api<"getAllStudents">("GET", "/user/student").then(d => d.students)
-
 export const getAllTeachers = () => api<"getAllTeachers">("GET", "/user/teacher").then(d => d.teachers)

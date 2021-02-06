@@ -1,4 +1,4 @@
-import { AllMeal, GetDailyMeal, LoginWithInfo, GetMyInfo, LoginWithRefreshToken, RequestOutgo, GetAllStudents, GetAllTeachers } from "./interfaces";
+import { AllMeal, GetDailyMeal, LoginWithInfo, GetMyInfo, LoginWithRefreshToken, RequestOutgo, GetAllStudents, GetAllTeachers, MyApplyStatus } from "./interfaces";
 
 interface Dummy {
     method: 'GET';
@@ -18,4 +18,5 @@ export interface APIResource {
     requestOutgo: RequestOutgo;
     getAllStudents: GetAllStudents;
     getAllTeachers: GetAllTeachers;
+    myIngangsilApplyStatus: MyApplyStatus;
 }

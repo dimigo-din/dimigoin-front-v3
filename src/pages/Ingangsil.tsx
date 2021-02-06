@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import NavigationBar from "../components/complex/NavigationBar";
 import css from "@emotion/css";
 import { PageWrapper, ResponsiveWrapper, Col, CardGroupHeader, Card,
         CardTitle, Divider, IngansilStatus, TextCardGroup } from "../components";
 import { ReactComponent as CircleSvg } from "../assets/icons/circle.svg";
+import ingangsil from "../api/ingangsil";
+import { APIResource } from "../api";
 
 export default () => {
+  const [myStatus, setFetchedMyStatus] = useState<APIResource["myIngangsilApplyStatus"]["res"]>()
+  useEffect(() => {
+    ingangsil.getMyStatus().then(setFetchedMyStatus)
+  }, []);
+
   return (
     <>
       <NavigationBar />
@@ -46,7 +53,7 @@ export default () => {
                   <Row>
                     <DateIcon />
                     <Desc>
-                      일주일 최대 <b>4회</b>
+                      일주일 최대 <b>{myStatus?.weeklyTicketCount}회</b>
                     </Desc>
                   </Row>
                 </Col>
@@ -66,7 +73,7 @@ export default () => {
                   >
                     <Ticket />
                     <Desc>
-                      남은 티켓 <b>1/4</b>
+                      남은 티켓 <b>{myStatus?.weeklyRemainTicket}/{myStatus?.weeklyTicketCount}</b>
                     </Desc>
                   </Row>
                   <Row>
@@ -113,7 +120,7 @@ export default () => {
                       <p>와이파이는 모두가 공유하는 공공재입니다.</p>
                     </Info>
                   ),
-                  leftBorder: true,
+                  leftBorder: true, 
                 },
               ]}
             />
@@ -124,7 +131,7 @@ export default () => {
                 <IngangTime>1타임</IngangTime>
                 <Divider small data-divider />
                 <IngangerWrapper>
-                  {["손승욱", "강혁진", "이승민", "우상윤", "주의점은", "위", "속성은", "웹킷엔진을", "사용하지", "않는", "브라우저에서는", "정상적으로", "노출이", "안되기때문에", "height값을", "줘야하는데"].map((name) => (
+                  {myStatus?.applicationsInClass.map(({name}) => (
                     <Inganger key={name}>{name}</Inganger>
                   ))}
                 </IngangerWrapper>
@@ -139,18 +146,21 @@ export default () => {
                 max: 8,
                 time: "19:50 - 21:10",
                 isApplied: false,
+                id: "NSS1"
               },
               {
                 currentApplied: 2,
                 max: 8,
                 time: "21:10 - 22:30",
                 isApplied: true,
+                id: "NSS2"
               },
             ].map((status, index) => (<>
               {index !== 0 && <Divider horizontal small data-divider />}
               <IngansilStatus
-                key={status.time}
+                key={status.id}
                 {...status}
+                onSubmit={ingangsil.submit}
                 name={`야간 자율학습 ${index + 1}타임`}
               /></>
             ))}
