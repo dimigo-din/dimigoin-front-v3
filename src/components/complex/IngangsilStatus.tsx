@@ -4,14 +4,19 @@ import styled from '@emotion/styled'
 import CardGroupHeader from "../basic/CardGroupHeader";
 import Card from "../basic/Card";
 import Button from "../basic/Button";
+import Skeleton from "react-loading-skeleton";
 
 interface IngangsilStatusProps {
-  currentApplied: number;
-  max: number;
+  currentApplied?: number;
+  max?: number;
   time: string;
-  isApplied: boolean;
+  isApplied?: boolean;
   name: string;
   onSubmit(time: string): void;
+}
+
+const nullableSkeletonText = (value?: any) => {
+  return value === undefined ? <Skeleton /> : value;
 }
 
 export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
@@ -23,10 +28,10 @@ export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
   onSubmit
 }) => {
   const isRequestable =
-    //1. 신청 했고, 자리가 없을 때
-    currentApplied < max ||
-    //2. 자리가 남았을때
-    (isApplied && currentApplied >= max);
+    (max && currentApplied) ? (//1. 신청 했고, 자리가 없을 때
+      currentApplied < max ||
+      //2. 자리가 남았을때
+      Boolean(isApplied && currentApplied >= max)) : null;
   return (
     <>
       <CardGroupHeader
@@ -37,39 +42,25 @@ export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
         {name}
       </CardGroupHeader>
       <Card>
-        <div
-          css={css`
-            display: flex;
-            justify-content: space-around;
-            flex-shrink: 3;
-            /* margin: 54px auto 24px; */
-            padding: 3vw 0px 2vw;
-          `}
-        >
-          <div css={currentApplied < max ? active : disabled}>
+        <NumberWrapper>
+          <div css={currentApplied !== undefined && max !== undefined && currentApplied < max ? active : disabled}>
             <NumberName>현원</NumberName>
-            <NumberDisplay>{currentApplied}</NumberDisplay>
+            <NumberDisplay>{nullableSkeletonText(currentApplied)}</NumberDisplay>
           </div>
           <div>
             <NumberName>총원</NumberName>
-            <NumberDisplay>{max}</NumberDisplay>
+            <NumberDisplay>{nullableSkeletonText(max)}</NumberDisplay>
           </div>
-        </div>
+        </NumberWrapper>
       </Card>
-      <Button
-        css={[
-          css`
-            display: block;
-            text-align: center;
-            margin-top: 10px;
-          `,
-        ]}
+      <ApplyButton
         disabled={!isRequestable}
         onClick={() => onSubmit(time)}
+        css={max === undefined && css`color: transparent;`}
       >
         {/* 신청했는지 판별하는 변수를 넣어주세요  */}
         {isApplied ? "취소하기" : "신청하기"}
-      </Button>
+      </ApplyButton>
     </>
   );
 };
@@ -101,3 +92,16 @@ const disabled = css`
     color: #8a8a8a;
   }
 `;
+
+const ApplyButton = styled(Button)`
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+`
+
+const NumberWrapper = styled.div`
+  display: flex;
+  justify-content: space-around;
+  flex-shrink: 3;
+  padding: 3vw 0px 2vw;
+`

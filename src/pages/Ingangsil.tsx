@@ -2,14 +2,27 @@ import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import NavigationBar from "../components/complex/NavigationBar";
 import css from "@emotion/css";
-import { PageWrapper, ResponsiveWrapper, Col, CardGroupHeader, Card,
-        CardTitle, Divider, IngansilStatus, TextCardGroup } from "../components";
+import {
+  PageWrapper, ResponsiveWrapper, Col, CardGroupHeader, Card,
+  CardTitle, Divider, IngansilStatus, TextCardGroup
+} from "../components";
 import { ReactComponent as CircleSvg } from "../assets/icons/circle.svg";
 import ingangsil from "../api/ingangsil";
 import { APIResource } from "../api";
+import { IngangsilTicket, NightSelfStudyTime } from "../constants/types";
+import { useMyData } from "../hooks/api/useMyData";
 
 export default () => {
   const [myStatus, setFetchedMyStatus] = useState<APIResource["myIngangsilApplyStatus"]["res"]>()
+  const myData = useMyData()
+  const groupedByTime = myStatus?.applicationsInClass.reduce((acc, current) => {
+    acc[current.time] = [...(acc[current.time] || []), current]
+    return acc
+  }, {
+    [NightSelfStudyTime.NSS1]: [],
+    [NightSelfStudyTime.NSS2]: []
+  } as Record<NightSelfStudyTime, IngangsilTicket[]>)
+  
   useEffect(() => {
     ingangsil.getMyStatus().then(setFetchedMyStatus)
   }, []);
@@ -120,50 +133,42 @@ export default () => {
                       <p>와이파이는 모두가 공유하는 공공재입니다.</p>
                     </Info>
                   ),
-                  leftBorder: true, 
+                  leftBorder: true,
                 },
               ]}
             />
             <Divider horizontal small data-divider />
             <CardGroupHeader withBubble>우리반 신청자</CardGroupHeader>
-            <Card leftBorder>
-              <ResponsiveWrapper>
-                <IngangTime>1타임</IngangTime>
-                <Divider small data-divider />
-                <IngangerWrapper>
-                  {myStatus?.applicationsInClass.map(({name}) => (
-                    <Inganger key={name}>{name}</Inganger>
-                  ))}
-                </IngangerWrapper>
-              </ResponsiveWrapper>
-            </Card>
+            {groupedByTime && [...Array(2)].map((_, index) =>
+              <Card leftBorder>
+                <ResponsiveWrapper>
+                  <IngangTime>{index + 1}타임</IngangTime>
+                  <Divider small data-divider />
+                  <IngangerWrapper>
+                    {groupedByTime[NightSelfStudyTime[index === 0 ? "NSS1" : "NSS2"]].map(({ applier: { name } }) => (
+                      <Inganger key={name}>{name}</Inganger>
+                    ))}
+                  </IngangerWrapper>
+                </ResponsiveWrapper>
+              </Card>)}
           </Col>
           <Divider data-divider />
           <Col width={5.5}>
-            {[
-              {
-                currentApplied: 8,
-                max: 8,
-                time: "19:50 - 21:10",
-                isApplied: false,
-                id: "NSS1"
-              },
-              {
-                currentApplied: 2,
-                max: 8,
-                time: "21:10 - 22:30",
-                isApplied: true,
-                id: "NSS2"
-              },
-            ].map((status, index) => (<>
-              {index !== 0 && <Divider horizontal small data-divider />}
-              <IngansilStatus
-                key={status.id}
-                {...status}
-                onSubmit={ingangsil.submit}
-                name={`야간 자율학습 ${index + 1}타임`}
-              /></>
-            ))}
+            {[...Array(2)].map((_, index) => {
+              const currentTimeAppliers = groupedByTime?.[NightSelfStudyTime[index === 0 ? "NSS1" : "NSS2"]]
+              return (<>
+                {index !== 0 && <Divider horizontal small data-divider />}
+                <IngansilStatus
+                  key={`ingangsil${index}`}
+                  onSubmit={ingangsil.submit}
+                  name={`야간 자율학습 ${index + 1}타임`}
+                  currentApplied={currentTimeAppliers?.length}
+                  max={myStatus?.ingangMaxApplier}
+                  isApplied={myData && currentTimeAppliers?.map(e => e.applier._id).includes(myData?._id)}
+                  time={["19:50 - 21:10", "21:10 - 22:30"][index]}
+                /></>
+              )
+            })}
           </Col>
         </ResponsiveWrapper>
       </PageWrapper>
