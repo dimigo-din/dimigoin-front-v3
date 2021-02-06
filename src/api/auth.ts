@@ -1,6 +1,6 @@
 
 import { COOKIE_JAR_KEY } from '../constants/cookieJarKeys';
-import { AuthTokens } from '../constants/types';
+import { AuthTokens, Student } from '../constants/types';
 import { cookieJar } from '../storage';
 import { api } from './api';
 import { APIResource } from './serverResource';

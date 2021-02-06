@@ -1,4 +1,4 @@
-import { User } from "../../constants/types";
+import { Doc, NightSelfStudyTime, Student, User } from "../../constants/types";
 
 export interface MyApplyStatus {
     method: "GET";
@@ -9,12 +9,27 @@ export interface MyApplyStatus {
         weeklyUsedTicket: number;
         weeklyRemainTicket: number;
         ingangMaxApplier: number
-        applicationsInClass: User[]
+        applicationsInClass: Doc<{
+            date: string;
+            time: keyof typeof NightSelfStudyTime;
+            applier: Student;
+        }>[]
     }
 }
 
-export interface Apply {
+export interface ApplyIngangsil {
     method: "POST";
+    endpoint: "/ingang-application/time/:time",
+    req: {};
+    res: {
+        date: string;
+        time: number;
+        applier: string;
+    }
+}
+
+export interface UnapplyIngangsil {
+    method: "DELETE";
     endpoint: "/ingang-application/time/:time",
     req: {};
     res: {

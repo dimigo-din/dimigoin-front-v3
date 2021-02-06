@@ -1,18 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import NavigationBar from "../components/complex/NavigationBar";
 import css from "@emotion/css";
-import { PageWrapper, ResponsiveWrapper, Col, CardGroupHeader, Card,
-        CardTitle, Divider, IngansilStatus, TextCardGroup } from "../components";
+import {
+  PageWrapper, ResponsiveWrapper, Col, CardGroupHeader, Card,
+  CardTitle, Divider, IngansilStatus, TextCardGroup
+} from "../components";
 import { ReactComponent as CircleSvg } from "../assets/icons/circle.svg";
 import ingangsil from "../api/ingangsil";
 import { APIResource } from "../api";
+import { IngangsilTicket, NightSelfStudyTime } from "../constants/types";
+import { useMyData } from "../hooks/api/useMyData";
+import Skeleton from "react-loading-skeleton";
 
 export default () => {
   const [myStatus, setFetchedMyStatus] = useState<APIResource["myIngangsilApplyStatus"]["res"]>()
+  const myData = useMyData()
+  const groupedByTime = myStatus?.applicationsInClass.reduce((acc, current) => {
+    acc[current.time] = [...(acc[current.time] || []), current]
+    return acc
+  }, {
+    [NightSelfStudyTime.NSS1]: [],
+    [NightSelfStudyTime.NSS2]: []
+  } as Record<NightSelfStudyTime, IngangsilTicket[]>)
+
+  const loadStatus = useCallback(() => {
+    return ingangsil.getMyStatus().then(setFetchedMyStatus)
+  }, [setFetchedMyStatus])
   useEffect(() => {
-    ingangsil.getMyStatus().then(setFetchedMyStatus)
-  }, []);
+    const timer = setInterval(() => loadStatus(), 1000)
+    return () => {
+      clearInterval(timer)
+    }
+  }, [loadStatus]);
 
   return (
     <>
@@ -47,13 +67,13 @@ export default () => {
                   <Row>
                     <People />
                     <Desc>
-                      한 학급당 최대 <b>7명</b>
+                      {myStatus ? <>한 학급당 최대 <b>{myStatus.ingangMaxApplier}명</b></> : <Skeleton width={120} />}
                     </Desc>
                   </Row>
                   <Row>
                     <DateIcon />
                     <Desc>
-                      일주일 최대 <b>{myStatus?.weeklyTicketCount}회</b>
+                      {myStatus ? <>일주일 최대 <b>{myStatus.weeklyTicketCount}회</b></> : <Skeleton width={100} />}
                     </Desc>
                   </Row>
                 </Col>
@@ -71,10 +91,12 @@ export default () => {
                       color: var(--main-theme-accent);
                     `}
                   >
-                    <Ticket />
-                    <Desc>
-                      남은 티켓 <b>{myStatus?.weeklyRemainTicket}/{myStatus?.weeklyTicketCount}</b>
-                    </Desc>
+                    {myStatus ? (<>
+                      <Ticket />
+                      <Desc>
+                        남은 티켓 <b>{myStatus?.weeklyRemainTicket}/{myStatus?.weeklyTicketCount}</b>
+                      </Desc>
+                    </>) : <Skeleton width={100} />}
                   </Row>
                   <Row>
                     <Info>
@@ -120,50 +142,57 @@ export default () => {
                       <p>와이파이는 모두가 공유하는 공공재입니다.</p>
                     </Info>
                   ),
-                  leftBorder: true, 
+                  leftBorder: true,
                 },
               ]}
             />
             <Divider horizontal small data-divider />
             <CardGroupHeader withBubble>우리반 신청자</CardGroupHeader>
-            <Card leftBorder>
-              <ResponsiveWrapper>
-                <IngangTime>1타임</IngangTime>
-                <Divider small data-divider />
-                <IngangerWrapper>
-                  {myStatus?.applicationsInClass.map(({name}) => (
-                    <Inganger key={name}>{name}</Inganger>
-                  ))}
-                </IngangerWrapper>
-              </ResponsiveWrapper>
-            </Card>
+            {[...Array(2)].map((_, index) => {
+              const currentTimeAppliers = groupedByTime?.[NightSelfStudyTime[index === 0 ? "NSS1" : "NSS2"]]
+              return (<Card leftBorder>
+                <ResponsiveWrapper>
+                  <IngangTime>{index + 1}타임</IngangTime>
+                  <Divider small data-divider />
+                  <IngangerWrapper>
+                    {currentTimeAppliers ? // 로드가 됐으면
+                      currentTimeAppliers.length === 0 ? // 신청자가 없으면
+                        <Inganger>신청자가 없습니다</Inganger> :
+                        currentTimeAppliers.map(({ applier: { name, number } }) => ( // 신청자가 있으면
+                          <Inganger key={number}>{number} {name}</Inganger>
+                        )) : <>
+                        <Inganger><Skeleton width={60} /></Inganger> {/* 로드가 안됐으면 */}
+                        <Inganger><Skeleton width={60} /></Inganger>
+                        <Inganger><Skeleton width={60} /></Inganger>
+                      </>}
+                  </IngangerWrapper>
+                </ResponsiveWrapper>
+              </Card>)
+            })}
           </Col>
           <Divider data-divider />
           <Col width={5.5}>
-            {[
-              {
-                currentApplied: 8,
-                max: 8,
-                time: "19:50 - 21:10",
-                isApplied: false,
-                id: "NSS1"
-              },
-              {
-                currentApplied: 2,
-                max: 8,
-                time: "21:10 - 22:30",
-                isApplied: true,
-                id: "NSS2"
-              },
-            ].map((status, index) => (<>
-              {index !== 0 && <Divider horizontal small data-divider />}
-              <IngansilStatus
-                key={status.id}
-                {...status}
-                onSubmit={ingangsil.submit}
-                name={`야간 자율학습 ${index + 1}타임`}
-              /></>
-            ))}
+            {[...Array(2)].map((_, index) => {
+              const selfStudyId = NightSelfStudyTime[index === 0 ? "NSS1" : "NSS2"]
+              const currentTimeAppliers = groupedByTime?.[selfStudyId]
+              const applied = myData && currentTimeAppliers?.map(e => e.applier._id).includes(myData?._id)
+              return (<>
+                {index !== 0 && <Divider horizontal small data-divider />}
+                <IngansilStatus
+                  key={`ingangsil${index}`}
+                  onSubmit={async () => {
+                    if (applied) await ingangsil.unapply(selfStudyId)
+                    else await ingangsil.apply(selfStudyId)
+                    await loadStatus()
+                  }}
+                  name={`야간 자율학습 ${index + 1}타임`}
+                  currentApplied={currentTimeAppliers?.length}
+                  max={myStatus?.ingangMaxApplier}
+                  isApplied={applied}
+                  time={["19:50 - 21:10", "21:10 - 22:30"][index]}
+                /></>
+              )
+            })}
           </Col>
         </ResponsiveWrapper>
       </PageWrapper>

@@ -19,9 +19,21 @@ export enum UserType {
     T = "T",
     S = "S",
 }
+
 export enum Gender {
     M = "M",
     F = "F",
+}
+
+export enum NightSelfStudyTime {
+    NSS1 = "NSS1",
+    NSS2 = "NSS2"
+}
+
+export interface IngangsilTicket extends SavedDocument {
+    date: string;
+    time: keyof typeof NightSelfStudyTime;
+    applier: Student;
 }
 
 export interface User {
@@ -40,4 +52,4 @@ export interface Student extends Doc<User> {
     photo: string[];
 }
 
-export interface Teacher extends Doc<User> {}
+export interface Teacher extends Doc<User> { }
