@@ -12,22 +12,23 @@ import Skeleton from "react-loading-skeleton";
 import useConsole from "../hooks/useConsole";
 import { getTimetable } from "../api/timetable";
 import { useMyData } from "../hooks/api/useMyData";
+import { Doc, Notice } from "../constants/types";
 
 const Main: React.FC = () => {
-  const [notice, setNotice] = useState<string[]>();
+  const [notice, setNotice] = useState<Doc<Notice>[]>();
   const [appliments, setAppliments] = useState<ApplimentStatus[]>();
   const [timetableData, setTimeTableData] = useState<string[][] | null>();
   const meals = useMeal()
   const myData = useMyData()
   useEffect(() => {
-    getAllNotices().then(notices => setNotice(() => notices.map(e => e.content)))
+    getAllNotices().then(notices => setNotice(() => notices))
     if(myData) {
       getTimetable(myData.grade, myData.class)
         .then(table => setTimeTableData(() => table.map(day => day.sequence)))
         .catch(() => setTimeTableData(() => null))
     }
   }, [myData]);
-  // useConsole('MEALMEAL', meals);
+
   return (
     <>
       <NavigationBar />
@@ -45,7 +46,7 @@ const Main: React.FC = () => {
             </CardGroupHeader>
             {notice && notice.length !== 0 ? (
               <TextCardGroup
-                content={notice.map((e) => ({ text: e, leftBorder: true }))}
+                content={notice.map((e) => ({ text: e.content, leftBorder: true, clickable: true, to: `/notices/${e._id}` }))}
                 spaceBetweenCards
               />
             ) : notice === undefined ? (

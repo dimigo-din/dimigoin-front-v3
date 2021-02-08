@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useCallback, useEffect } from "react";
 import styled from "@emotion/styled";
 import { ReactComponent as IconLogo } from '../../../assets/brand.svg'
 import { ReactComponent as LogoutLogo } from '../../../assets/icons/logout.svg'
@@ -7,8 +7,9 @@ import NavigationItem from "./NavigationItem";
 import navigations from "./navigations";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { UnstyledLink } from "../../basic/Atomics";
-import { getMyLocalData } from "../../../api/user";
+import { getMyData, getMyLocalData } from "../../../api/user";
 import { SCHOOL_API_SERVER } from "../../../constants";
+import { useMyData } from "../../../hooks/api/useMyData";
 
 const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
   const scrollerRef = useRef<HTMLDivElement>(null)
@@ -22,7 +23,7 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
     },
     [scrollerRef],
   )
-  const myLocalData = getMyLocalData()
+  const myLocalData = useMyData()
   const profileImageURI = myLocalData ? `${SCHOOL_API_SERVER}/user_photo/${myLocalData.photo.slice(-1)[0]}` : undefined
   return (
     <Wrapper>

@@ -2,11 +2,13 @@ import React, { ReactNode } from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
 import Card, { CardProps } from "./Card";
+import { UnstyledLink } from "./Atomics";
 
 interface TextCardGroupProps {
   content: (CardProps & {
     text?: ReactNode;
     key?: string;
+    to?: string;
   })[];
   spaceBetweenCards?: boolean;
 }
@@ -19,12 +21,19 @@ export const TextCardGroup: React.FC<TextCardGroupProps> = ({
   return (
     <div css={spaceBetweenCards || shadow} {...props}>
       {content.map((i) => (
-        <TextCard
-          children={i?.text}
-          css={spaceBetweenCards || cancelHover}
-          {...i}
-          key={i.key || i.text?.toString()}
-        />
+        i.to ? <UnstyledLink to={i.to}>
+          <TextCard
+            children={i?.text}
+            css={spaceBetweenCards || cancelHover}
+            {...i}
+            key={i.key || i.text?.toString()}
+          />
+        </UnstyledLink> : <TextCard
+            children={i?.text}
+            css={spaceBetweenCards || cancelHover}
+            {...i}
+            key={i.key || i.text?.toString()}
+          />
       ))}
     </div>
   );
