@@ -2,12 +2,13 @@ import { useEffect, useState } from "react"
 import { DailyMeal, getDailyMeal } from "../../api"
 
 export const useMeal = (date?: Date) => {
-    const [meal, setMeal] = useState<DailyMeal | null>(null)
+    const [meal, setMeal] = useState<DailyMeal | undefined | null>(undefined)
     const dateKey = +(date||0)
 
-    useEffect((...d) => {
-        console.log('리렌더..', d)
-        getDailyMeal(date).then(setMeal)
+    useEffect(() => {
+        getDailyMeal(date)
+            .then(setMeal)
+            .catch(() => setMeal(() => null))
     }, [dateKey])
     return meal
 }

@@ -15,6 +15,8 @@ export interface AuthTokens {
     refreshToken: string;
 }
 
+export type Grade = |1|2;
+
 export enum UserType {
     T = "T",
     S = "S",
