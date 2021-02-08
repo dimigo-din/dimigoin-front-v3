@@ -15,6 +15,8 @@ export interface AuthTokens {
     refreshToken: string;
 }
 
+export type Grade = | 1 | 2;
+
 export enum UserType {
     T = "T",
     S = "S",
@@ -46,10 +48,18 @@ export interface User {
 
 export interface Student extends Doc<User> {
     class: number;
-    grade: number;
+    grade: Grade;
     number: number;
     serial: number;
     photo: string[];
+}
+
+export interface Notice {
+    targetGrade: Grade[];
+    title: string;
+    content: string;
+    startDate: Date;
+    endDate: Date;
 }
 
 export interface Teacher extends Doc<User> { }

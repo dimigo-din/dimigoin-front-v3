@@ -1,7 +1,7 @@
 import { AllMeal, GetDailyMeal, LoginWithInfo, GetMyInfo,
     LoginWithRefreshToken, RequestOutgo, GetAllStudents,
     GetAllTeachers, MyApplyStatus,
-    ApplyIngangsil, UnapplyIngangsil } from "./interfaces";
+    ApplyIngangsil, UnapplyIngangsil, AllNotices, Timetable } from "./interfaces";
 
 interface Dummy {
     method: 'GET';
@@ -24,4 +24,7 @@ export interface APIResource {
     myIngangsilApplyStatus: MyApplyStatus;
     applyIngangsil: ApplyIngangsil;
     unapplyIngangsil: UnapplyIngangsil;
+    allNotices: AllNotices;
+    timetable: Timetable
+    ;
 }

@@ -4,6 +4,9 @@ import css from "@emotion/css";
 import Card from "../basic/Card";
 import { DAILY_TIME_PERIOD, getTimePeriod } from "../../utils";
 import { DailyMeal } from "../../api";
+import { NoData } from "../basic";
+import useConsole from "../../hooks/useConsole";
+import Skeleton from "react-loading-skeleton";
 
 const MealItem: React.FC<MealItemSelected> = ({
   highlight: selected = false,
@@ -16,6 +19,10 @@ const MealItem: React.FC<MealItemSelected> = ({
   </MealItemContainer>
 );
 
+const Loader = () => <MealItemContainer>
+  <MealMenuText><Skeleton count={2} /></MealMenuText>
+</MealItemContainer>
+
 interface TodayMealProps {
   meals?: DailyMeal | null;
 }
@@ -24,6 +31,7 @@ const NO_MEAL_DATA = "급식 정보가 없습니다"
 
 export const TodayMeal: React.FC<TodayMealProps> = ({ meals, ...props }) => {
   const period = getTimePeriod()
+  useConsole('MEALMEAL', meals)
   return (
     <MealCard {...props}>
       {
@@ -33,9 +41,13 @@ export const TodayMeal: React.FC<TodayMealProps> = ({ meals, ...props }) => {
             <MealItem highlight={period === DAILY_TIME_PERIOD.BEFORE_NOON} name="점심" menu={meals?.lunch.join(', ') || NO_MEAL_DATA} />
             <MealItem highlight={period === DAILY_TIME_PERIOD.EVENING} name="저녁" menu={meals?.dinner.join(', ') || NO_MEAL_DATA} />
           </>
-        ) : <NoDailyMealData>
-            {NO_MEAL_DATA}
-          </NoDailyMealData>
+        ) : meals === null ? <NoData>
+          {NO_MEAL_DATA}
+        </NoData> : <>
+        <Loader />
+        <Loader />
+        <Loader />
+        </>
       }
     </MealCard>
   )
@@ -100,15 +112,5 @@ export const MealMenuText = styled.p<MealItemSelected>`
       color: #111111;
     `}
 `;
-
-export const NoDailyMealData = styled.p`
-  font-size: 18px;
-  font-weight: bold;
-  color: #d1d1d1;
-
-  align-items: center;
-  justify-content: center;
-  display: flex;
-`
 
 export default TodayMeal;

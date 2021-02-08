@@ -53,3 +53,14 @@ export const CardExplainContent = styled.div`
     margin-top: 12px;
   }
 `;
+
+export const NoData = styled.p`
+  font-size: 18px;
+  font-weight: bold;
+  color: #d1d1d1;
+
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  padding: 24px 36px;
+`

@@ -7,11 +7,12 @@ import { useMeal } from "../hooks/api";
 import { useTextInput } from "../hooks/useInput";
 import { clearTokens, loginWithInfo } from "../api";
 import { useHistory } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
 
 const SMALL_SCREEN_THRESHOLD = 840
 
 const Login: React.FC = () => {
-  const todayMeal = useMeal()
+  const todayMeal = useMeal(new Date("2020-01-01"))
   const [ usernameInput, setUsernameError ] = useTextInput();
   const [ passwordInput, setPasswordError] = useTextInput()
   const history = useHistory()
