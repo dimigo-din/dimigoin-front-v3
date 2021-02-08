@@ -10,14 +10,23 @@ import { useMeal } from "../hooks/api";
 import { getAllNotices } from "../api/notice";
 import Skeleton from "react-loading-skeleton";
 import useConsole from "../hooks/useConsole";
+import { getTimetable } from "../api/timetable";
+import { useMyData } from "../hooks/api/useMyData";
 
 const Main: React.FC = () => {
   const [notice, setNotice] = useState<string[]>();
   const [appliments, setAppliments] = useState<ApplimentStatus[]>();
-  const meals = useMeal(new Date("2022-01-03"))
+  const [timetableData, setTimeTableData] = useState<string[][] | null>();
+  const meals = useMeal()
+  const myData = useMyData()
   useEffect(() => {
-    getAllNotices().then(notices => setNotice(() => notices?.map(e => e.content)))
-  }, []);
+    getAllNotices().then(notices => setNotice(() => notices.map(e => e.content)))
+    if(myData) {
+      getTimetable(myData.grade, myData.class)
+        .then(table => setTimeTableData(() => table.map(day => day.sequence)))
+        .catch(() => setTimeTableData(() => null))
+    }
+  }, [myData]);
   // useConsole('MEALMEAL', meals);
   return (
     <>
@@ -63,7 +72,7 @@ const Main: React.FC = () => {
         <ResponsiveWrapper threshold={1200}>
           <Col width={3} css={fullHeight}>
             <CardGroupHeader>시간표</CardGroupHeader>
-            <TimeTable />
+            {timetableData !== null ? <TimeTable timetable={timetableData} /> : <TextCardGroup content={[{ text: <NoData>시간표 데이터가 없습니다</NoData> }]} />}
           </Col>
           <Divider data-divider />
           <Col width={3}>
