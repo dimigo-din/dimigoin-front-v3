@@ -1,12 +1,15 @@
 import css from '@emotion/css'
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
-import { Card, CardGroupHeader, Divider, HeaderIconWrapper, Horizontal,
-        NavigationBar, PageWrapper, ResponsiveWrapper, showModal, TextCardGroup,
-        Title, UnstyledLink } from '../components'
-import { INoticeItem, getNotice, getNoticesList } from '../api'
-import { ReactComponent as CloseSvg } from '../assets/icons/close.svg'
+import { RouteComponentProps } from 'react-router-dom'
+import {
+  Button,
+  Card, CardGroupHeader, Divider, Horizontal,
+  NavigationBar, PageWrapper, ResponsiveWrapper, showModal, TextCardGroup,
+  Title, UnstyledLink
+} from '../components'
+import { Doc, Notice } from '../constants/types'
+import { getAllNotices, getNoticeById } from '../api/notice'
 
 const BriefNoticeTitle = styled.h2`
   font-weight: 800;
@@ -51,61 +54,63 @@ const Info = styled.p`
 `
 
 
-const NoticeListItem: React.FC<INoticeItem> = ({ content, title }) => <ResponsiveWrapper threshold={720}>
+const NoticeListItem: React.FC<Notice> = ({ content, title }) => <ResponsiveWrapper threshold={720}>
   <BriefNoticeTitle>{title}</BriefNoticeTitle>
   <BriefNoticeContent>{content}</BriefNoticeContent>
 </ResponsiveWrapper>
 
-const Article: React.FC<{ articleId: string, goBack(): void }> = ({ articleId, goBack }) => {
-  const [articleData, setArticleData] = useState<INoticeItem>()
+const Article: React.FC<{ articleId: string, goBack(): void, article?: Notice }> = ({ articleId, goBack, article }) => {
+  const [articleData, setArticleData] = useState<Notice>()
   useEffect(() => {
-    getNotice(articleId).then(setArticleData).catch(() => {
-      goBack()
-    })
-  }, [ articleId, goBack ])
+    console.log('ㄻㄴ아ㅣㅓㄻㄴ아ㅣ', articleId)
+    if (!article)
+      getNoticeById(articleId).then(e => setArticleData(() => e)).catch(() => {
+        goBack()
+      })
+  }, [articleId, goBack, article])
   if (!articleData) return <></>
   return (<Card css={css`
   border-top: 5px solid var(--main-theme-accent);
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
   `}>
-    <Horizontal>
       <Title css={css`
         word-break: break-all;
         flex-shrink: 1;
       `}>{articleData?.title}</Title>
-      <HeaderIconWrapper><CloseSvg onClick={goBack} /></HeaderIconWrapper>
-    </Horizontal>
     <div css={css`padding: 12px 0px;`}>
       <Divider visible horizontal size={7} />
-      {articleData.postedDate && <Horizontal css={css`flex-wrap: wrap;`}>
+      {articleData.startDate && <Horizontal css={css`flex-wrap: wrap;`}>
         <Horizontal css={css`flex-wrap: wrap;`}>
           <Info css={css`flex-shrink: 0; flex-basis: 1;`}>
-            {articleData.postedDate.getFullYear()}년{` `}
-            {articleData.postedDate.getMonth() + 1}월{` `}
-            {articleData.postedDate.getDate()}일{` `}
-            {articleData.postedDate.toLocaleTimeString().slice(0, -3)}
+            {articleData.startDate.getFullYear()}년{` `}
+            {articleData.startDate.getMonth() + 1}월{` `}
+            {articleData.startDate.getDate()}일{` `}
+            {articleData.startDate.toLocaleTimeString().slice(0, -3)}
           </Info>
-          {articleData.viewers && <Info css={css`flex-shrink: 0; flex-basis: 1;`}>· {articleData.viewers} 읽음</Info>}
         </Horizontal>
-        <Horizontal css={css`flex-wrap: wrap;`}>
+        {/* <Horizontal css={css`flex-wrap: wrap;`}>
           <Info>{articleData.author}</Info>
-        </Horizontal>
+        </Horizontal> */}
       </Horizontal>}
       <Divider visible horizontal size={7} />
     </div>
     {articleData.content.split('\n').map(e => <Content>{e}</Content>)}
+    <div css={css`margin-top: 12px; text-align: right;`}>
+      <Button onClick={goBack} css={css`padding: 12px 30px;`}>닫기</Button>
+    </div>
   </Card>)
 }
 
 const Notices: React.FC<RouteComponentProps<{
   articleId: string;
-}>> = ({ match, history }) => {
-  const [noticesData, setNoticesData] = useState<INoticeItem[]>()
+}>> = ({ match, history, ...props }) => {
+  const [noticesData, setNoticesData] = useState<Doc<Notice>[]>()
   const { articleId } = match.params
+
   history.listen(() => console.log(match.params))
   useEffect(() => {
-    getNoticesList().then(setNoticesData)
+    getAllNotices().then(setNoticesData)
   }, [])
   useEffect(() => {
     articleId && showModal((close) => <Article goBack={() => {
@@ -116,7 +121,7 @@ const Notices: React.FC<RouteComponentProps<{
         css: css`max-width: 1080px; padding: 60px 20px 20px;`
       }
     }, () => history.push('/notices'))
-  }, [ articleId, history ])
+  }, [articleId, history])
   return <>
     <NavigationBar />
     <PageWrapper>
@@ -132,4 +137,4 @@ const Notices: React.FC<RouteComponentProps<{
   </>
 }
 
-export default withRouter(Notices)
+export default Notices

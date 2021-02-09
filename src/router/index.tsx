@@ -1,20 +1,18 @@
 import * as React from "react";
-import { BrowserRouter, Switch, Route, Redirect, withRouter } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect, withRouter, HashRouter } from "react-router-dom";
 
-import { Main } from "../pages";
+import { Main, Notices } from "../pages";
 import Ingangsil from "../pages/Ingangsil";
 import Outgo from "../pages/Outgo";
-import Notices from "../pages/Notices";
 import SelfStudyDisplay from "../pages/SelfStudyDisplay";
-import Council from "../pages/Council";
 import Mentoring from "../pages/Mentoring";
 import { LoadableComponent } from "@loadable/component";
 import { getAccessToken, getRefreshToken, loginWithRefreshToken } from "../api";
 import styled from "@emotion/styled";
 import Login from "../pages/Login";
 
-const needAuth = (Component: LoadableComponent<{}>) => {
-  return (params => {
+const needAuth = <T extends {}>(Component: LoadableComponent<T>) => {
+  return (params: T) => {
     try {
       const accessToken = getAccessToken()
       if (!accessToken) throw new Error("Cannot find access token")
@@ -26,26 +24,25 @@ const needAuth = (Component: LoadableComponent<{}>) => {
     } catch {
       return <Redirect to="/auth/login" />
     }
-  }) as React.FC
+  }
 }
 
 const Router: React.FC = () => (
-  <BrowserRouter>
+  <HashRouter>
     <Switch>
       <Route path="/auth/login" component={Login} />
       <Container>
         <TopLine />
         <Route path="/ingangsil" component={Ingangsil} />
         <Route path="/outgo" component={Outgo} />
-        <Route path="/notices/:articleId" component={Notices} />
-        <Route path="/notices" component={Notices} />
+        <Route path="/notices/:articleId" component={needAuth(Notices)} />
+        <Route path="/notices" exact component={needAuth(Notices)} />
         <Route path="/selfstudydisplay" component={SelfStudyDisplay} />
-        <Route path="/council" component={Council} />
         <Route path="/mentoring" component={Mentoring} />
-        <Route path="/" exact component={withRouter(needAuth(Main))} />
+        <Route path="/" exact component={needAuth(Main)} />
       </Container>
     </Switch>
-  </BrowserRouter>
+  </HashRouter>
 );
 
 const Container = styled.div`
@@ -60,6 +57,5 @@ export const TopLine = styled.div`
   height: 12px;
   background-color: var(--main-theme-accent);
 `;
-
 
 export default Router;
