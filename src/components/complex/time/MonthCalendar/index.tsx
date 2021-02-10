@@ -1,4 +1,7 @@
-import Calandar from 'react-calendar'
+import React from 'react'
+import Calandar, { CalendarProps } from 'react-calendar'
 import './style.css'
 
-export default Calandar
+export const MonthCalendar: React.FC<CalendarProps> = ({...props}) => {
+    return <Calandar prevLabel="<" nextLabel=">" {...props} />
+}
