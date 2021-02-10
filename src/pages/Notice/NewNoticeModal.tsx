@@ -1,10 +1,13 @@
 import css from "@emotion/css"
 import styled from "@emotion/styled"
 import React, { useCallback, useEffect } from "react"
+import { toast } from "react-toastify"
+import { registerNewNotice } from "../../api/notice"
 import {
     Card, Checkbox, CompactButton, RadioButtonGroup, RadioButtonItem, ResponsiveWrapper
 } from "../../components"
 import { useTinyDateRangeSelector } from "../../components/complex/time/TinyDateRangeSelector"
+import { Grade } from "../../constants/types"
 import useInput, { useCheckbox } from "../../hooks/useInput"
 
 export const NewNoticeModal: React.FC = () => {
@@ -24,13 +27,24 @@ export const NewNoticeModal: React.FC = () => {
     // const noticeTypeValue = noticeTypeInput.value
 
     const submit = useCallback(() => {
-        if(!dates) return;
-        console.log({
-            title: titleValue,
-            content: contentValue,
-            targetGrade: [grade1Checkbox, grade2Checkbox, grade3Checkbox].map((e, i) => e.checked && (i + 1)).filter(Boolean),
-            startDate: dates[0],
-            endDate: dates[1]
+        const alerts = [
+            !titleValue && "제목",
+            !contentValue && "내용",
+            ![grade1Checkbox, grade2Checkbox, grade3Checkbox].some(checkbox => checkbox.checked) && "대상 학년",
+            !dates && "게시 일자"
+        ].filter(Boolean)
+        if(alerts.length) {
+            toast.error(alerts.join(', ').을를 + " 다시 확인해주세요")
+            return
+        }
+        registerNewNotice({
+            title: titleValue!!,
+            content: contentValue!!,
+            targetGrade: [grade1Checkbox, grade2Checkbox, grade3Checkbox]
+                .map((e, i) => e.checked && (i + 1))
+                .filter<Grade>((e): e is Grade => [1, 2, 3].includes(Number(e))),
+            startDate: dates!![0],
+            endDate: dates!![1]
         })
     }, [titleValue, contentValue, grade1Checkbox, grade2Checkbox, grade3Checkbox, dates])
 
