@@ -51,7 +51,7 @@ export const NewNoticeModal: React.FC<{ closeModal(): void }> = ({ closeModal })
                 closeModal()
             })
             .catch(() => toast.success("공지를 등록하지 못했습니다"))
-    }, [titleValue, contentValue, grade1Checkbox, grade2Checkbox, grade3Checkbox, dates])
+    }, [titleValue, contentValue, grade1Checkbox, grade2Checkbox, grade3Checkbox, dates, closeModal])
 
     return <NoticeModalWrapper>
         <HeaderWrapper>
