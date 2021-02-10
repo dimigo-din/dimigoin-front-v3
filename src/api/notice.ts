@@ -10,3 +10,5 @@ const convertToDatedNotice = (notice: Doc<Notice>) => ({
 export const getAllNotices = (): Promise<Doc<Notice>[]> => api<"allNotices">("GET", "/notice").then(e => e.notices.map(convertToDatedNotice))
 
 export const getNoticeById = (id: string): Promise<Doc<Notice>> => api<"getNoticeById">("GET", `/notice/${id}`).then(e => convertToDatedNotice(e.notice))
+
+export const registerNotice = (data: Notice) => api<"registerNotice">("POST", "/notice", data)

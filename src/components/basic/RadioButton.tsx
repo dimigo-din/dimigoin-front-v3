@@ -8,39 +8,11 @@ interface RadioButtonProps {
   onChange?: (...p: any[]) => any;
   name?: string;
   disabled?: boolean;
-  // children: string;
 }
-const Circle = styled.div<{ disabled?: boolean }>`
-  width: 26px;
-  height: 26px;
-  border: 1.5px solid #8A8A8A;
-  border-radius: 13px;
-  box-sizing: border-box;
-  transition: 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
-`;
-const LogicalButton = styled.input`
-  display: none;
-  &:checked+div {
-    border-width: 7px;
-    border-color: var(--main-theme-accent);
-  }
-`;
-
-const Wrapper = styled.label`
-  display: flex;
-  align-items: center;
-`;
-
-const Label = styled.p`
-  font-size: 20px;
-  margin-left: 15px;
-  color: #8A8A8A;
-  white-space: pre;
-`
 
 export const RadioButton: React.FC<
-  React.HTMLAttributes<HTMLInputElement> & RadioButtonProps
-> = ({ disabled, children, id, ...props }) => {
+React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & RadioButtonProps
+> = ({ disabled, children, id, checked, ...props }) => {
   return (
     <Wrapper>
       <LogicalButton type="radio" {...props} disabled={disabled} id={id} />
@@ -60,18 +32,15 @@ interface RadioButtonsGroupProps {
   items: RadioButtonItem[];
   name: string;
   onChange: EventFunction<RadioButtonItem>;
+  value?: RadioButtonItem;
 }
 
-const RadioButtonGroup: React.FC<RadioButtonsGroupProps> = ({ items, name, onChange }) => {
+export const RadioButtonGroup: React.FC<RadioButtonsGroupProps> = ({ items, name, onChange,  }) => {
   return (
-    <Horizontal
-      css={css`
-        flex-wrap: wrap;
-        line-height: 36px;
-      `}
+    <RadioButtonGroupWrapper
     >
       {items.map((item) => (
-        <div css={css`flex: 1;`}>
+        <RadioButtonGroupItemWrapper>
           <RadioButton
             name={name}
             key={item.key}
@@ -82,10 +51,54 @@ const RadioButtonGroup: React.FC<RadioButtonsGroupProps> = ({ items, name, onCha
           >
             {item.name}
           </RadioButton>
-        </div>
+        </RadioButtonGroupItemWrapper>
       ))}
-    </Horizontal>
+    </RadioButtonGroupWrapper>
   );
 };
+
+const RadioButtonGroupWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  line-height: 36px;
+  margin: -6px;
+`
+
+const RadioButtonGroupItemWrapper = styled.div`
+  flex: 1;
+  margin: 6px;
+`
+
+const Circle = styled.div<{ disabled?: boolean }>`
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid #8A8A8A;
+  border-radius: 13px;
+  box-sizing: border-box;
+  transition: 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
+`;
+const LogicalButton = styled.input`
+  /* position: absolute; */
+  opacity: 0;
+  cursor: pointer;
+  &:checked+div {
+    border-width: 7px;
+    border-color: var(--main-theme-accent);
+  }
+`;
+
+const Wrapper = styled.label`
+  display: flex;
+  align-items: center;
+  user-select: none;
+
+`;
+
+const Label = styled.p`
+  font-size: 20px;
+  margin-left: 15px;
+  color: #8A8A8A;
+  white-space: pre;
+`
 
 export default RadioButtonGroup;

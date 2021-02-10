@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Card from "../basic/Card";
-import { FormHeader } from "../basic/Form";
-import RadioButton, {
-  RadioButtonItem,
-} from "../basic/RadioButton";
-import Dropdown, { DropdownItem } from "../basic/Dropdown";
-import Textarea from "../basic/Textarea";
 import useInput, { EventFunction } from "../../hooks/useInput";
 import { getAllTeachers } from "../../api/user";
+import {  Card, FormHeader, RadioButtonGroup, Textarea, Dropdown,
+          RadioButtonItem, DropdownItem } from "../basic";
 
 export interface OutgoApplyInput {
   outgoType?: string;
@@ -69,7 +64,7 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }
     <>
       <Card leftBorder>
         <FormHeader>외출 유형</FormHeader>
-        <RadioButton
+        <RadioButtonGroup
           {...outgoType}
           name="outgoType"
           items={[
@@ -84,7 +79,7 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }
           ]}
         />
         <FormHeader>신청 유형</FormHeader>
-        <RadioButton
+        <RadioButtonGroup
           {...applyType}
           name="applyType"
           items={[
