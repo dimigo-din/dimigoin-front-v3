@@ -1,73 +1,90 @@
+import css from "@emotion/css"
 import styled from "@emotion/styled"
 import React, { useCallback, useEffect } from "react"
 import {
-    Card, Checkbox, CompactButton, RadioButtonGroup, RadioButtonItem
+    Card, Checkbox, CompactButton, RadioButtonGroup, RadioButtonItem, ResponsiveWrapper
 } from "../../components"
+import { useTinyDateRangeSelector } from "../../components/complex/time/TinyDateRangeSelector"
 import useInput, { useCheckbox } from "../../hooks/useInput"
 
 export const NewNoticeModal: React.FC = () => {
     const titleInput = useInput()
     const contentInput = useInput()
-    const noticeTypeInput = useInput<RadioButtonItem>()
+    // const noticeTypeInput = useInput<RadioButtonItem>()
     const grade1Checkbox = useCheckbox(),
         grade2Checkbox = useCheckbox(),
         grade3Checkbox = useCheckbox()
+    const {
+        element: TinyDateRangeSelector,
+        dates
+    } = useTinyDateRangeSelector()
 
     const titleValue = titleInput.value
     const contentValue = contentInput.value
-    const noticeTypeValue = noticeTypeInput.value
+    // const noticeTypeValue = noticeTypeInput.value
 
     const submit = useCallback(() => {
+        if(!dates) return;
         console.log({
             title: titleValue,
             content: contentValue,
-            targetGrade: [grade1Checkbox, grade2Checkbox, grade3Checkbox].map((e, i) => e.checked && (i + 1)).filter(Boolean)
+            targetGrade: [grade1Checkbox, grade2Checkbox, grade3Checkbox].map((e, i) => e.checked && (i + 1)).filter(Boolean),
+            startDate: dates[0],
+            endDate: dates[1]
         })
-    }, [titleValue, contentValue, grade1Checkbox, grade2Checkbox, grade3Checkbox])
+    }, [titleValue, contentValue, grade1Checkbox, grade2Checkbox, grade3Checkbox, dates])
 
     return <NoticeModalWrapper>
         <HeaderWrapper>
             <TitleInput placeholder="이곳을 눌러 제목을 입력하세요" {...titleInput} />
-            <NoticeTypeRadioSelector items={[{
+            {/* <NoticeTypeRadioSelector items={[{
                 name: "글까지",
                 key: "ARTICLE_ONLY"
             }, {
                 name: "제목만",
                 key: "WITH_CONTENT"
-            }]} name="IsIncludingContent" {...noticeTypeInput} />
+            }]} name="IsIncludingContent" {...noticeTypeInput} /> */}
         </HeaderWrapper>
         <ContentInput {...contentInput} />
-        <FormWrapper>
-            <CheckboxesWrapper>
-                <Checkbox text="1학년" {...grade1Checkbox} />
-                <Checkbox text="2학년" {...grade2Checkbox} />
-                <Checkbox text="3학년" {...grade3Checkbox} />
-            </CheckboxesWrapper>
-            <div>
-                <CompactButton onClick={submit}>게시</CompactButton>
-            </div>
-        </FormWrapper>
+        <BottomControls threshold={500}>
+            <FormWrapper>
+                <FormRow>
+                    <FormHeader>게시일</FormHeader>
+                    <CheckboxesWrapper>
+                        {TinyDateRangeSelector}
+                    </CheckboxesWrapper>
+                </FormRow>
+                <FormRow>
+                    <FormHeader>대상</FormHeader>
+                    <CheckboxesWrapper>
+                        <Checkbox text="1학년" {...grade1Checkbox} />
+                        <Checkbox text="2학년" {...grade2Checkbox} />
+                        <Checkbox text="3학년" {...grade3Checkbox} />
+                    </CheckboxesWrapper>
+                </FormRow>
+            </FormWrapper>
+                <SubmitButton onClick={submit}>게시</SubmitButton>
+        </BottomControls>
     </NoticeModalWrapper>
 }
 
-const CheckboxesWrapper = styled.div`
-    flex: 1;
-    display: flex;
-    margin: 0px -6px;
-    flex-shrink: 0;
-    flex-wrap: wrap;
-    &>*{
-        margin: 6px;
-    }
+const SubmitButton = styled(CompactButton)`
+    margin-top: 12px;
 `
 
-const FormWrapper = styled.div`
+const CheckboxesWrapper = styled.div`
+    display: flex;
+`
+
+const BottomControls = styled(ResponsiveWrapper)`
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
-    /* @media screen and (max-width: 440px) {
-        flex-direction: column;
-    } */
+    ${({ threshold }) => threshold && css`
+        @media screen and (max-width: ${threshold}px) {
+            align-items: flex-start;
+        }
+    `}
 `
 
 const NoticeModalWrapper = styled(Card)`
@@ -104,7 +121,7 @@ const TitleInput = styled.input`
     max-width: 100%;
     min-width: 100px;
     /* 100px보다 가로길이가 짧은 기기에서
-    디미고인에 접속하시는분이 없기를 바라겠습니다 */
+    디미고인에 접속하시는분이 없기를 바라겠습니다 제발... */
     width: 100%;
     text-overflow: ellipsis;
     margin-bottom: 12px;
@@ -117,4 +134,23 @@ const ContentInput = styled.textarea`
     width: 100%;
     flex: 1;
     font-size: 22px;
+`
+
+const FormRow = styled.div`
+    display: flex;
+    align-items: center;
+    &+& {
+        margin-top: 10px;
+    }
+`
+
+const FormHeader = styled.p`
+    font-size: 20px;
+    font-weight: 700;
+    margin-right: 10px;
+    flex-shrink: 0;
+`
+
+const FormWrapper= styled.div`
+    flex: 1;
 `

@@ -62,7 +62,7 @@ const Notices: React.FC<RouteComponentProps<{
         content={noticesData.map(e => ({
           text: <UnstyledLink to={`/notices/${e._id}`}><NoticeListItem {...e} /></UnstyledLink>,
           leftBorder: true,
-          key: e.title,
+          key: e._id,
         }))}
         spaceBetweenCards />}
     </PageWrapper>
