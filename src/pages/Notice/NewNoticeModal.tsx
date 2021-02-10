@@ -10,7 +10,7 @@ import { useTinyDateRangeSelector } from "../../components/complex/time/TinyDate
 import { Grade } from "../../constants/types"
 import useInput, { useCheckbox } from "../../hooks/useInput"
 
-export const NewNoticeModal: React.FC = () => {
+export const NewNoticeModal: React.FC<{ closeModal(): void }> = ({ closeModal }) => {
     const titleInput = useInput()
     const contentInput = useInput()
     // const noticeTypeInput = useInput<RadioButtonItem>()
@@ -46,6 +46,11 @@ export const NewNoticeModal: React.FC = () => {
             startDate: dates!![0],
             endDate: dates!![1]
         })
+            .then(() => {
+                toast.success("공지를 등록했습니다")
+                closeModal()
+            })
+            .catch(() => toast.success("공지를 등록하지 못했습니다"))
     }, [titleValue, contentValue, grade1Checkbox, grade2Checkbox, grade3Checkbox, dates])
 
     return <NoticeModalWrapper>

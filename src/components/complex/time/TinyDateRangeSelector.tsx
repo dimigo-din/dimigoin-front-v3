@@ -57,7 +57,7 @@ export const useTinyDateRangeSelector = (): {
           {dates[0].toLocaleDateString()} ~ {dates[1].toLocaleDateString()}
         </> : "날짜를 선택해주세요"}
       </Wrapper>
-      {yPosition && <Calendar y={yPosition} selectRange value={dates} onChange={applyChangedDate} />}
+      {yPosition && <Calendar minDate={new Date()} y={yPosition} selectRange value={dates} onChange={applyChangedDate} />}
     </span>
   }
 }

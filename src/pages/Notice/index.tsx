@@ -4,13 +4,14 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import {
   Button, CardGroupHeader, Horizontal, NavigationBar, PageWrapper,
-  ResponsiveWrapper, showCardModal, showModal, TextCardGroup, UnstyledLink
+  ResponsiveWrapper, showModal, TextCardGroup, UnstyledLink
 } from '../../components'
-import { Doc, Notice } from '../../constants/types'
+import { Doc, Notice, UserType } from '../../constants/types'
 import { getAllNotices } from '../../api/notice'
 import { ReactComponent as _EditIcon } from "../../assets/icons/edit.svg"
 import { ArticleModal } from './ArticleModal'
 import { NewNoticeModal } from './NewNoticeModal'
+import { useMyData } from '../../hooks/api/useMyData'
 
 const NoticeListItem: React.FC<Notice> = ({ content, title }) => <ResponsiveWrapper threshold={720}>
   <NoticeTitle>{title}</NoticeTitle>
@@ -23,9 +24,12 @@ const Notices: React.FC<RouteComponentProps<{
   const [noticesData, setNoticesData] = useState<Doc<Notice>[]>()
   const { articleId } = match.params
 
+  const fetchNotices = useCallback(() => getAllNotices().then(setNoticesData), [ setNoticesData ])
+  const myData = useMyData()
+
   useEffect(() => {
-    getAllNotices().then(setNoticesData)
-  }, [])
+    fetchNotices()
+  }, [ fetchNotices ])
   useEffect(() => {
     articleId && showModal((close) => <ArticleModal goBack={() => {
       history.goBack()
@@ -38,7 +42,10 @@ const Notices: React.FC<RouteComponentProps<{
   }, [articleId, history])
 
   const newNotice = useCallback(() => {
-    showModal(() => <NewNoticeModal />,  {
+    showModal(close => <NewNoticeModal closeModal={() => {
+      fetchNotices()
+      close()
+    }} />,  {
       wrapperProps: {
         css: css`max-width: 1080px; width: 100vw; height: 100vh; display: flex; padding: 60px 20px 20px;`
       },
@@ -46,17 +53,17 @@ const Notices: React.FC<RouteComponentProps<{
         css: css`overflow-y: auto;`
       }
     })
-  }, [])
+  }, [ fetchNotices ])
 
   return <>
     <NavigationBar />
     <PageWrapper>
       <HeaderWrapper>
         <CardGroupHeader css={css`margin-bottom: 0px;`}>공지사항</CardGroupHeader>
-        <NewNoticeButton onClick={newNotice}>
+        {myData?.userType === UserType.T && <NewNoticeButton onClick={newNotice}>
           <EditIcon />
           글쓰기
-        </NewNoticeButton>
+        </NewNoticeButton>}
       </HeaderWrapper>
       {noticesData && <TextCardGroup
         content={noticesData.map(e => ({
