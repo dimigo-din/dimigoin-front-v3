@@ -12,8 +12,8 @@ export const Checkbox: React.FC<CheckboxProps> = ({ text, ...props }) => {
   const check = useCheckbox(false);
   return (
     <Wrapper {...props}>
+      <InvisibleCheck {...check} />
       <CheckWrapper checked={check.checked}>
-        <InvisibleCheck {...check} />
         <Check visible={check.checked} />
       </CheckWrapper>
       <span css={css`
@@ -33,7 +33,12 @@ const Wrapper = styled.label`
 `;
 
 const InvisibleCheck = styled.input`
-  display: none;
+  /* display: none; */
+  opacity: 0;
+  width: 0px;
+  &:focus+div {
+    box-shadow: inset 0px 0px 0px 2px var(--main-theme-accent);
+  }
 `;
 
 const CheckWrapper = styled.div<{ checked: boolean }>`
