@@ -29,6 +29,7 @@ const Wrapper = styled.label`
   font-size: 16px;
   display: block;
   color: #8a8a8a;
+  flex-shrink: 0;
 `;
 
 const InvisibleCheck = styled.input`
@@ -45,7 +46,7 @@ const CheckWrapper = styled.div<{ checked: boolean }>`
   place-items: center;
   transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
   border-color: #8a8a8a;
-  margin-right: 16px;
+  margin-right: 10px;
   vertical-align: middle;
   ${({ checked }) =>
     checked &&

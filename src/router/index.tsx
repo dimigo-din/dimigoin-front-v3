@@ -50,6 +50,7 @@ const Container = styled.div`
   min-height: 100vh;
   flex-direction: column;
   padding-bottom: 20px;
+  box-sizing: border-box;
 `;
 
 export const TopLine = styled.div`

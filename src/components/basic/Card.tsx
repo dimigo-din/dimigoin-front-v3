@@ -72,7 +72,7 @@ interface CardContainerProps {
 }
 
 const Container = styled.div<CardContainerProps>`
-  position: relative;
+  /* position: relative; */
   padding: 25px;
   background-color: #fff;
   border-radius: 5px;

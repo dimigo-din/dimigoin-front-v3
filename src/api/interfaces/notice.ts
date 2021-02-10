@@ -1,4 +1,6 @@
-import { Doc, Notice } from "../../constants/types";
+import { Doc, Grade, Notice } from "../../constants/types";
+
+
 
 export interface AllNotices {
   endpoint: '/notice';
@@ -21,5 +23,14 @@ export interface GetNoticeById {
       startDate: string;
       endDate: string;
     }>
+  }
+}
+
+export interface RegisterNotice {
+  endpoint: '/notice';
+  method: 'POST';
+  req: Notice;
+  res: {
+
   }
 }
