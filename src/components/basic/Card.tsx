@@ -76,7 +76,7 @@ const Container = styled.div<CardContainerProps>`
   padding: 25px;
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0 0 20px 0 rgba(146, 146, 146, 0.09);
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.03);
   transition: 1s cubic-bezier(0, 0.46, 0.12, 0.98);
 
   & + & {
@@ -99,12 +99,12 @@ const Container = styled.div<CardContainerProps>`
       padding-bottom: 0;
     `};
 
-  ${({ hover = false }) =>
+  ${({ hover = true }) =>
     hover &&
     css`
       &:hover {
         z-index: 1;
-        box-shadow: 2px 16px 36px rgba(21, 19, 19, 0.15), -5px -5px 10px #fff;
+        box-shadow: 0px 0px 36px rgba(0, 0, 0, 0.05);
       }
     `};
 
@@ -112,7 +112,8 @@ const Container = styled.div<CardContainerProps>`
     clickable &&
     css`
       &:active {
-        box-shadow: inset 1px 1px 2px #dadeeb, inset -1px -1px 2px #fff;
+        filter: blur(0.6px);
+        transform: scale(0.99);
       }
     `};
 `;
