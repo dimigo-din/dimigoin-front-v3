@@ -13,12 +13,28 @@ import { ReactComponent as _TrashIcon } from "../../assets/icons/trash.svg"
 import { ArticleModal } from './ArticleModal'
 import { NewNoticeModal } from './NoticeEditorModal'
 import { useMyData } from '../../hooks/api/useMyData'
+import { swal } from '../../functions/swal'
 
-const NoticeListItem: React.FC<Notice & { editable: boolean }> = ({ content, title, editable }) => <NoticeListItemWrapper threshold={720}>
+interface NoticeListItemProps extends Notice {
+  editable: boolean;
+  removeAction(): void;
+  editAction(): void;
+}
+
+const NoticeListItem: React.FC<NoticeListItemProps> = ({
+  content, title, editable, removeAction, editAction
+}) => <NoticeListItemWrapper threshold={720}>
   <NoticeTitle>{title}</NoticeTitle>
   <NoticeContent>{content}</NoticeContent>
   {editable && <>
-    <EditNoticeButtonIcon /><RemoveNoticeButtonIcon />
+    <EditNoticeButtonIcon onClick={e => {
+      e.preventDefault()
+      editAction()
+    }} />
+    <RemoveNoticeButtonIcon onClick={e => {
+      e.preventDefault()
+      removeAction()
+    }} />
   </>}
 </NoticeListItemWrapper>
 
@@ -33,6 +49,12 @@ const Notices: React.FC<RouteComponentProps<{
 
   useEffect(() => {
     fetchNotices()
+    swal({
+      title: "신청이 완료되었습니다",
+      text: "해당 탭에서 신청 목록을 확인하실 수 있습니다",
+      imageUrl: require('../../assets/icons/alert/success.svg'),
+      confirmButtonText: "확인",
+    })
   }, [fetchNotices])
   useEffect(() => {
     articleId && showModal((close) => <ArticleModal goBack={() => {
@@ -59,6 +81,15 @@ const Notices: React.FC<RouteComponentProps<{
     })
   }, [fetchNotices])
 
+  const requestRemoveNotice = useCallback((noticeId: string) => {
+    swal({
+      title: "신청이 완료되었습니다",
+      text: "해당 탭에서 신청 목록을 확인하실 수 있습니다",
+      imageUrl: require('../../assets/icons/alert/success.svg'),
+      confirmButtonText: "확인",
+    })
+  }, [])
+
   return <>
     <NavigationBar />
     <PageWrapper>
@@ -71,7 +102,14 @@ const Notices: React.FC<RouteComponentProps<{
       </HeaderWrapper>
       {noticesData && <TextCardGroup
         content={noticesData.map(e => ({
-          text: <UnstyledLink to={`/notices/${e._id}`}><NoticeListItem editable={myData?.userType === UserType.T} {...e} /></UnstyledLink>,
+          text: <UnstyledLink to={`/notices/${e._id}`}>
+            <NoticeListItem
+              editable={myData?.userType === UserType.T}
+              editAction={console.log}
+              removeAction={() => requestRemoveNotice(e._id)}
+              {...e}
+            />
+          </UnstyledLink>,
           leftBorder: true,
           key: e._id,
         }))}
