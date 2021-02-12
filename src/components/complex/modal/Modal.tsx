@@ -21,7 +21,7 @@ export const ModalContainer = () => {
   const disappear = useCallback(() => {
     onClose && onClose();
     setDisappearingAnimation(true);
-    setTimeout(() => setVisivility(false), 300);
+    setTimeout(() => setVisivility(false), 600);
   }, [ onClose ]);
   useEffect(() => {
     showModal = (
@@ -48,7 +48,7 @@ export const ModalContainer = () => {
       visible={disappearingAnimation}
       {...props?.backdropProps}
     >
-      <Wrapper onClick={(e) => e.stopPropagation()} {...props?.wrapperProps}>
+      <Wrapper onClick={(e) => e.stopPropagation()} {...props?.wrapperProps} disappear={disappearingAnimation}>
         {ModalElement}
       </Wrapper>
     </Backdrop>
@@ -64,14 +64,14 @@ export const Backdrop = styled.div<{ visible?: boolean }>`
   left: 0px;
   overflow-y: scroll;
   backdrop-filter: blur(2px);
-  animation: appear 300ms forwards;
+  animation: appear 600ms cubic-bezier(0, 0.75, 0.21, 1) forwards;
   display: grid;
   place-items: center;
 
   ${({ visible }) =>
     visible &&
     css`
-      animation: disappear 300ms forwards;
+      animation: disappear 600ms cubic-bezier(0, 0.75, 0.21, 1) forwards;
     `}
   @keyframes appear {
     from {
@@ -95,6 +95,37 @@ export const Backdrop = styled.div<{ visible?: boolean }>`
     }
   }
 `;
-const Wrapper = styled.div`
+
+const Wrapper = styled.div<{ disappear: boolean }>`
   box-sizing: border-box;
+  animation: ContentEnter 300ms cubic-bezier(0, 0.75, 0.21, 1) forwards;
+  
+  ${({ disappear }) =>
+    disappear &&
+    css`
+      animation: ContentExit 600ms cubic-bezier(0, 0.75, 0.21, 1) forwards;
+    `}
+
+  @keyframes ContentEnter {
+      from {
+          opacity: 0;
+          transform: scale(0.995);
+      }
+      to {
+          opacity: 1;
+          transform: scale(1);
+      }
+  }
+  @keyframes ContentExit {
+      from {
+          opacity: 1;
+          transform: scale(1);
+      }
+      to {
+          opacity: 0;
+          /* display: none; */
+          transform: scale(0.995);
+      }
+  }
+
 `;

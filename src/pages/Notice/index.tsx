@@ -13,12 +13,28 @@ import { ReactComponent as _TrashIcon } from "../../assets/icons/trash.svg"
 import { ArticleModal } from './ArticleModal'
 import { NewNoticeModal } from './NoticeEditorModal'
 import { useMyData } from '../../hooks/api/useMyData'
+import { swal } from '../../functions/swal'
 
-const NoticeListItem: React.FC<Notice & { editable: boolean }> = ({ content, title, editable }) => <NoticeListItemWrapper threshold={720}>
+interface NoticeListItemProps extends Notice {
+  editable: boolean;
+  removeAction(): void;
+  editAction(): void;
+}
+
+const NoticeListItem: React.FC<NoticeListItemProps> = ({
+  content, title, editable, removeAction, editAction
+}) => <NoticeListItemWrapper threshold={720}>
   <NoticeTitle>{title}</NoticeTitle>
   <NoticeContent>{content}</NoticeContent>
   {editable && <>
-    <EditNoticeButtonIcon /><RemoveNoticeButtonIcon />
+    <EditNoticeButtonIcon onClick={e => {
+      e.preventDefault()
+      editAction()
+    }} />
+    <RemoveNoticeButtonIcon onClick={e => {
+      e.preventDefault()
+      removeAction()
+    }} />
   </>}
 </NoticeListItemWrapper>
 
@@ -34,6 +50,7 @@ const Notices: React.FC<RouteComponentProps<{
   useEffect(() => {
     fetchNotices()
   }, [fetchNotices])
+
   useEffect(() => {
     articleId && showModal((close) => <ArticleModal goBack={() => {
       history.goBack()
@@ -59,6 +76,10 @@ const Notices: React.FC<RouteComponentProps<{
     })
   }, [fetchNotices])
 
+  const requestRemoveNotice = () => {
+    
+  }
+
   return <>
     <NavigationBar />
     <PageWrapper>
@@ -71,7 +92,14 @@ const Notices: React.FC<RouteComponentProps<{
       </HeaderWrapper>
       {noticesData && <TextCardGroup
         content={noticesData.map(e => ({
-          text: <UnstyledLink to={`/notices/${e._id}`}><NoticeListItem editable={myData?.userType === UserType.T} {...e} /></UnstyledLink>,
+          text: <UnstyledLink to={`/notices/${e._id}`}>
+            <NoticeListItem
+              editable={myData?.userType === UserType.T}
+              editAction={console.log}
+              removeAction={() => requestRemoveNotice(e._id)}
+              {...e}
+            />
+          </UnstyledLink>,
           leftBorder: true,
           key: e._id,
         }))}
