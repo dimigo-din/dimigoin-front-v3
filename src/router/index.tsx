@@ -1,18 +1,15 @@
 import * as React from "react";
 import { BrowserRouter, Switch, Route, Redirect, withRouter, HashRouter } from "react-router-dom";
-
-import { Main, Notices } from "../pages";
-import Ingangsil from "../pages/Ingangsil";
-import Outgo from "../pages/Outgo";
-import SelfStudyDisplay from "../pages/SelfStudyDisplay";
-import Mentoring from "../pages/Mentoring";
+import { Main, Notices, Ingangsil, Mentoring, Outgo, SelfStudyDisplay } from "../pages";
 import { LoadableComponent } from "@loadable/component";
 import { getAccessToken, getRefreshToken, loginWithRefreshToken } from "../api";
 import styled from "@emotion/styled";
 import Login from "../pages/Login";
+import { getMyData, getMyLocalData } from "../api/user";
+import { UserType } from "../constants/types";
 
-const needAuth = <T extends {}>(Component: LoadableComponent<T>) => {
-  return (params: T) => {
+const needAuth = <PageProps extends {}>(Component: LoadableComponent<PageProps>) => {
+  return (params: PageProps) => {
     try {
       const accessToken = getAccessToken()
       if (!accessToken) throw new Error("Cannot find access token")
@@ -33,12 +30,12 @@ const Router: React.FC = () => (
       <Route path="/auth/login" component={Login} />
       <Container>
         <TopLine />
-        <Route path="/ingangsil" component={Ingangsil} />
-        <Route path="/outgo" component={Outgo} />
+        <Route path="/ingangsil" component={needAuth(Ingangsil)} />
+        <Route path="/outgo" component={needAuth(Outgo)} />
         <Route path="/notices/:articleId" component={needAuth(Notices)} />
         <Route path="/notices" exact component={needAuth(Notices)} />
-        <Route path="/selfstudydisplay" component={SelfStudyDisplay} />
-        <Route path="/mentoring" component={Mentoring} />
+        <Route path="/selfstudydisplay" component={needAuth(SelfStudyDisplay)} />
+        <Route path="/mentoring" component={needAuth(Mentoring)} />
         <Route path="/" exact component={needAuth(Main)} />
       </Container>
     </Switch>

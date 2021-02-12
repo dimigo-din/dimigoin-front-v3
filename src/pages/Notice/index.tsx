@@ -4,18 +4,39 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import {
   Button, CardGroupHeader, Horizontal, NavigationBar, PageWrapper,
-  ResponsiveWrapper, showCardModal, showModal, TextCardGroup, UnstyledLink
+  ResponsiveWrapper, showModal, TextCardGroup, UnstyledLink
 } from '../../components'
-import { Doc, Notice } from '../../constants/types'
+import { Doc, Notice, UserType } from '../../constants/types'
 import { getAllNotices } from '../../api/notice'
 import { ReactComponent as _EditIcon } from "../../assets/icons/edit.svg"
+import { ReactComponent as _TrashIcon } from "../../assets/icons/trash.svg"
 import { ArticleModal } from './ArticleModal'
-import { NewNoticeModal } from './NewNoticeModal'
+import { NewNoticeModal } from './NoticeEditorModal'
+import { useMyData } from '../../hooks/api/useMyData'
+import { swal } from '../../functions/swal'
 
-const NoticeListItem: React.FC<Notice> = ({ content, title }) => <ResponsiveWrapper threshold={720}>
+interface NoticeListItemProps extends Notice {
+  editable: boolean;
+  removeAction(): void;
+  editAction(): void;
+}
+
+const NoticeListItem: React.FC<NoticeListItemProps> = ({
+  content, title, editable, removeAction, editAction
+}) => <NoticeListItemWrapper threshold={720}>
   <NoticeTitle>{title}</NoticeTitle>
   <NoticeContent>{content}</NoticeContent>
-</ResponsiveWrapper>
+  {editable && <>
+    <EditNoticeButtonIcon onClick={e => {
+      e.preventDefault()
+      editAction()
+    }} />
+    <RemoveNoticeButtonIcon onClick={e => {
+      e.preventDefault()
+      removeAction()
+    }} />
+  </>}
+</NoticeListItemWrapper>
 
 const Notices: React.FC<RouteComponentProps<{
   articleId: string;
@@ -23,9 +44,18 @@ const Notices: React.FC<RouteComponentProps<{
   const [noticesData, setNoticesData] = useState<Doc<Notice>[]>()
   const { articleId } = match.params
 
+  const fetchNotices = useCallback(() => getAllNotices().then(setNoticesData), [setNoticesData])
+  const myData = useMyData()
+
   useEffect(() => {
-    getAllNotices().then(setNoticesData)
-  }, [])
+    fetchNotices()
+    swal({
+      title: "신청이 완료되었습니다",
+      text: "해당 탭에서 신청 목록을 확인하실 수 있습니다",
+      imageUrl: require('../../assets/icons/alert/success.svg'),
+      confirmButtonText: "확인",
+    })
+  }, [fetchNotices])
   useEffect(() => {
     articleId && showModal((close) => <ArticleModal goBack={() => {
       history.goBack()
@@ -38,13 +68,25 @@ const Notices: React.FC<RouteComponentProps<{
   }, [articleId, history])
 
   const newNotice = useCallback(() => {
-    showModal(() => <NewNoticeModal />,  {
+    showModal(close => <NewNoticeModal closeModal={() => {
+      fetchNotices()
+      close()
+    }} />, {
       wrapperProps: {
         css: css`max-width: 1080px; width: 100vw; height: 100vh; display: flex; padding: 60px 20px 20px;`
       },
       backdropProps: {
         css: css`overflow-y: auto;`
       }
+    })
+  }, [fetchNotices])
+
+  const requestRemoveNotice = useCallback((noticeId: string) => {
+    swal({
+      title: "신청이 완료되었습니다",
+      text: "해당 탭에서 신청 목록을 확인하실 수 있습니다",
+      imageUrl: require('../../assets/icons/alert/success.svg'),
+      confirmButtonText: "확인",
     })
   }, [])
 
@@ -53,14 +95,21 @@ const Notices: React.FC<RouteComponentProps<{
     <PageWrapper>
       <HeaderWrapper>
         <CardGroupHeader css={css`margin-bottom: 0px;`}>공지사항</CardGroupHeader>
-        <NewNoticeButton onClick={newNotice}>
-          <EditIcon />
+        {myData?.userType === UserType.T && <NewNoticeButton onClick={newNotice}>
+          <NewNoticeButtonIcon />
           글쓰기
-        </NewNoticeButton>
+        </NewNoticeButton>}
       </HeaderWrapper>
       {noticesData && <TextCardGroup
         content={noticesData.map(e => ({
-          text: <UnstyledLink to={`/notices/${e._id}`}><NoticeListItem {...e} /></UnstyledLink>,
+          text: <UnstyledLink to={`/notices/${e._id}`}>
+            <NoticeListItem
+              editable={myData?.userType === UserType.T}
+              editAction={console.log}
+              removeAction={() => requestRemoveNotice(e._id)}
+              {...e}
+            />
+          </UnstyledLink>,
           leftBorder: true,
           key: e._id,
         }))}
@@ -84,6 +133,7 @@ const NoticeContent = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 1;
   @media screen and (max-width: 720px) {
     margin-left: 0px;
   
@@ -96,8 +146,33 @@ const NoticeContent = styled.p`
   }
 `
 
-const EditIcon = styled(_EditIcon)`
+const NoticeListItemButtonIconStyle = css`
+  transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
+  fill: rgba(0, 0, 0, 0.2);
+  opacity: 0.5;
+  height: 20px;
+  width: 20px;
+  flex-shrink: 0;
+  &:hover {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+`
+
+const RemoveNoticeButtonIcon = styled(_TrashIcon)`
+  ${NoticeListItemButtonIconStyle};
+  padding-left: 6px;
+`
+
+const EditNoticeButtonIcon = styled(_EditIcon)`
+  ${NoticeListItemButtonIconStyle}
+  padding-left: 12px;
+  padding-right: 6px;
+`
+
+const NewNoticeButtonIcon = styled(_EditIcon)`
   margin-right: 12px;
+  fill: white;
 `
 
 const NewNoticeButton = styled(Button)`
@@ -107,6 +182,13 @@ const NewNoticeButton = styled(Button)`
 const HeaderWrapper = styled(Horizontal)`
   justify-content: space-between;
   margin-bottom: 14px;
+`
+
+const NoticeListItemWrapper = styled(ResponsiveWrapper)`
+  align-items: center;
+  &:hover svg {
+    fill: var(--main-theme-accent);
+  }
 `
 
 export default Notices

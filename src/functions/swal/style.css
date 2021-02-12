@@ -1,0 +1,85 @@
+.swal2-backdrop-show {
+    backdrop-filter: blur(2px);
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.swal2-backdrop-show * {
+    font-family: "NanumSquare";
+}
+
+.swal2-image {
+    margin-bottom: 30px;
+}
+
+.swal2-modal {
+    border-top: 5px solid var(--main-theme-accent);
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+}
+
+.swal2-title {
+    color: var(--main-theme-accent);
+    font-size: 27px;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.swal2-html-container {
+    color: #707070;
+}
+
+.swal2-actions {
+    padding: 0px;
+    display: flex;
+    border-top: 1px solid #D1D1D1;
+}
+
+.swal2-actions>button {
+    transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
+    display: block;
+    flex: 1;
+    margin: 0px;
+    background-color: white !important;
+    background-image: linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0));
+    color: #E83C77 !important;
+    font-weight: 700;
+    padding: 20px 0px;
+}
+
+.swal2-actions>button:hover {
+    border-radius: 0px;
+    background-color: rgba(0, 0, 0, 0.03) !important;
+    background-image: linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0)) !important;
+}
+
+
+.ANIMATED_ENTER {
+    animation: AlertEnter 300ms cubic-bezier(0, 0.75, 0.21, 1);
+}
+
+.ANIMATED_EXIT {
+    animation: AlertExit 300ms cubic-bezier(0, 0.75, 0.21, 1);
+}
+
+@keyframes AlertEnter {
+    from {
+        opacity: 0;
+        transform: scale(0.99);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+@keyframes AlertExit {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        /* display: none; */
+        transform: scale(0.97);
+    }
+}
