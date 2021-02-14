@@ -1,5 +1,20 @@
 import { Doc, NightSelfStudyTime, Student, User } from "../../constants/types";
 
+export interface HourAndMinute {
+    hour: number;
+    minute: string;
+}
+
+export interface IngangApplyPeriod {
+    start: HourAndMinute,
+    end: HourAndMinute,
+}
+
+export interface NightSelfStudyTimeRanges {
+    NSS1: string;
+    NSS2: string;
+};
+
 export interface MyApplyStatus {
     method: "GET";
     endpoint: "/ingang-application/status",
@@ -8,12 +23,14 @@ export interface MyApplyStatus {
         weeklyTicketCount: number;
         weeklyUsedTicket: number;
         weeklyRemainTicket: number;
-        ingangMaxApplier: number
+        ingangMaxApplier: number;
         applicationsInClass: Doc<{
             date: string;
             time: keyof typeof NightSelfStudyTime;
             applier: Student;
-        }>[]
+        }>[],
+        nightSelfStudyTimes: NightSelfStudyTimeRanges;
+        ingangApplyPeriod: IngangApplyPeriod;
     }
 }
 
