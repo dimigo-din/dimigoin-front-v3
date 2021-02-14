@@ -12,6 +12,7 @@ import { APIResource } from "../api";
 import { IngangsilTicket, NightSelfStudyTime } from "../constants/types";
 import { useMyData } from "../hooks/api/useMyData";
 import Skeleton from "react-loading-skeleton";
+import { IngangApplyPeriod } from '../api/interfaces/ingangsil';
 
 export default () => {
   const [myStatus, setFetchedMyStatus] = useState<APIResource["myIngangsilApplyStatus"]["res"]>()
@@ -23,6 +24,10 @@ export default () => {
     [NightSelfStudyTime.NSS1]: [],
     [NightSelfStudyTime.NSS2]: []
   } as Record<NightSelfStudyTime, IngangsilTicket[]>)
+  const timeRangeToString = ({ start, end }: IngangApplyPeriod) => (
+    `${start.hour.toString().padStart(2, '0')}:${start.minute.toString().padStart(2, '0')} ~` +
+    `${end.hour.toString().padStart(2, '0')}:${end.minute.toString().padStart(2, '0')}`
+  );
 
   const loadStatus = useCallback(() => {
     return ingangsil.getMyStatus().then(setFetchedMyStatus)
@@ -62,7 +67,9 @@ export default () => {
                   </CardTitle>
                   <Row>
                     <Time />
-                    <Desc>07:00 ~ 08:15</Desc>
+                    <Desc>
+                      {myStatus ? timeRangeToString(myStatus.ingangApplyPeriod) : <Skeleton width={120} />}
+                    </Desc>
                   </Row>
                   <Row>
                     <People />
@@ -73,7 +80,7 @@ export default () => {
                   <Row>
                     <DateIcon />
                     <Desc>
-                      {myStatus ? <>일주일 최대 <b>{myStatus.weeklyTicketCount}회</b></> : <Skeleton width={100} />}
+                      {myStatus ? <>일주일 최대 <b>{myStatus.weeklyTicketCount}회</b></> : <Skeleton width={120} />}
                     </Desc>
                   </Row>
                 </Col>
