@@ -3,11 +3,12 @@ import styled from "@emotion/styled";
 import css from "@emotion/css";
 import { Horizontal, UnstyledLink } from "./Atomics";
 import { Divider } from "../layout/Cols";
+import Skeleton from "react-loading-skeleton";
 
 interface CardGroupheaderProps {
   withBubble?: boolean;
   subButton?: {
-    text: string;
+    text?: string;
     route?: string;
     action?: () => any;
   };
@@ -29,13 +30,13 @@ export const CardGroupHeader: React.FC<CardGroupheaderProps> = ({
         {subButton && (
           subButton.route ? (
             <SubButton>
-              <UnstyledLink to={subButton.route}>{subButton.text}
+              <UnstyledLink to={subButton.route}>{subButton.text || <Skeleton width={120} />}
               </UnstyledLink>
             </SubButton>
           ) : subButton.action ? (
-            <SubButton onClick={subButton.action}>{subButton.text}</SubButton>
+            <SubButton onClick={subButton.action}>{subButton.text || <Skeleton width={120} />}</SubButton>
           ) : (
-                <SubButton>{subButton.text}</SubButton>
+                <SubButton>{subButton.text || <Skeleton width={120} />}</SubButton>
               )
         )}
       </Horizontal>

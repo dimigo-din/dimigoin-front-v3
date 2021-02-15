@@ -14,7 +14,12 @@ import { useMyData } from "../hooks/api/useMyData";
 import Skeleton from "react-loading-skeleton";
 import { IngangApplyPeriod } from '../api/interfaces/ingangsil';
 
-export default () => {
+const timeRangeToString = ({ start, end }: IngangApplyPeriod) => (
+  `${start.hour.toString().padStart(2, '0')}:${start.minute.toString().padStart(2, '0')} ~` +
+  `${end.hour.toString().padStart(2, '0')}:${end.minute.toString().padStart(2, '0')}`
+);
+
+const Ingangsil: React.FC = () => {
   const [myStatus, setFetchedMyStatus] = useState<APIResource["myIngangsilApplyStatus"]["res"]>()
   const myData = useMyData()
   const groupedByTime = myStatus?.applicationsInClass.reduce((acc, current) => {
@@ -24,10 +29,6 @@ export default () => {
     [NightSelfStudyTime.NSS1]: [],
     [NightSelfStudyTime.NSS2]: []
   } as Record<NightSelfStudyTime, IngangsilTicket[]>)
-  const timeRangeToString = ({ start, end }: IngangApplyPeriod) => (
-    `${start.hour.toString().padStart(2, '0')}:${start.minute.toString().padStart(2, '0')} ~` +
-    `${end.hour.toString().padStart(2, '0')}:${end.minute.toString().padStart(2, '0')}`
-  );
 
   const loadStatus = useCallback(() => {
     return ingangsil.getMyStatus().then(setFetchedMyStatus)
@@ -196,7 +197,7 @@ export default () => {
                   currentApplied={currentTimeAppliers?.length}
                   max={myStatus?.ingangMaxApplier}
                   isApplied={applied}
-                  time={["19:50 - 21:10", "21:10 - 22:30"][index]}
+                  time={myStatus?.nightSelfStudyTimes[selfStudyId]}
                 /></>
               )
             })}
@@ -364,3 +365,5 @@ const IngangerWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
 `
+
+export default Ingangsil
