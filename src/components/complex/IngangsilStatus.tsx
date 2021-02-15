@@ -10,7 +10,7 @@ import { NightSelfStudyTime } from "../../constants/types";
 interface IngangsilStatusProps {
   currentApplied?: number;
   max?: number;
-  time: string;
+  time?: string;
   isApplied?: boolean;
   name: string;
   onSubmit(): void;
