@@ -84,7 +84,9 @@ export const OutgoApplier: React.FC<OutgoApplierProps> = ({ onChange, value }) =
         studentId: e.serial + "",
         userId: e.idx + "",
         grade: e.grade,
-        _id: e._id
+        _id: e._id,
+        createdAt: e.createdAt,
+        updatedAt: e.updatedAt
       }))
 
       // 같은 학년 학생을 우선순위로 표시하기 위해 정렬합니다

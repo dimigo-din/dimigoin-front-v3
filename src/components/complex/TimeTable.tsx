@@ -41,7 +41,7 @@ export const TimeTable: React.FC<TimeTableProps> = ({ timetable, ...props }) => 
         >
           <DaysHeader>
             <tr>
-              {days.map((day, index) => (
+              {days.slice(0, 5).map((day, index) => (
                 <Day key={day} colored={today === index}>
                   {day}
                 </Day>
