@@ -9,12 +9,12 @@ interface Position {
   type: | "top" | "bottom";
 }
 
-export const useTinyDateRangeSelector = (): {
+export const useTinyDateRangeSelector = (initDate?: Date[]): {
   element: JSX.Element;
   dates?: Date[];
 } => {
   const [yPosition, setYPosition] = useState<Position>()
-  const [dates, setDates] = useState<Date[]>();
+  const [dates, setDates] = useState<Date[] | undefined>(initDate);
 
   useEffect(() => setYPosition(() => undefined), [ dates ])
 

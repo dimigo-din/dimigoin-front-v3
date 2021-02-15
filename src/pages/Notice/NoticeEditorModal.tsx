@@ -2,25 +2,25 @@ import css from "@emotion/css"
 import styled from "@emotion/styled"
 import React, { useCallback, useEffect } from "react"
 import { toast } from "react-toastify"
-import { registerNewNotice } from "../../api/notice"
+import { editRegisteredNotice, registerNewNotice } from "../../api/notice"
 import {
     Card, Checkbox, CompactButton, RadioButtonGroup, RadioButtonItem, ResponsiveWrapper
 } from "../../components"
 import { useTinyDateRangeSelector } from "../../components/complex/time/TinyDateRangeSelector"
-import { Grade } from "../../constants/types"
+import { Doc, Grade, Notice } from "../../constants/types"
 import useInput, { useCheckbox } from "../../hooks/useInput"
 
-export const NewNoticeModal: React.FC<{ closeModal(): void }> = ({ closeModal }) => {
-    const titleInput = useInput()
-    const contentInput = useInput()
+export const NoticeEditingModal: React.FC<{ closeModal(): void; } & Partial<Doc<Notice>>> = ({ closeModal, ...originNotice }) => {
+    const titleInput = useInput(originNotice.title)
+    const contentInput = useInput(originNotice.content)
     // const noticeTypeInput = useInput<RadioButtonItem>()
-    const grade1Checkbox = useCheckbox(),
-        grade2Checkbox = useCheckbox(),
-        grade3Checkbox = useCheckbox()
+    const grade1Checkbox = useCheckbox(originNotice.targetGrade?.includes(1)),
+        grade2Checkbox = useCheckbox(originNotice.targetGrade?.includes(1)),
+        grade3Checkbox = useCheckbox(originNotice.targetGrade?.includes(2))
     const {
         element: TinyDateRangeSelector,
         dates
-    } = useTinyDateRangeSelector()
+    } = useTinyDateRangeSelector((originNotice.startDate && originNotice.endDate) && [originNotice.startDate, originNotice.endDate])
 
     const titleValue = titleInput.value
     const contentValue = contentInput.value
@@ -33,11 +33,11 @@ export const NewNoticeModal: React.FC<{ closeModal(): void }> = ({ closeModal })
             ![grade1Checkbox, grade2Checkbox, grade3Checkbox].some(checkbox => checkbox.checked) && "대상 학년",
             !dates && "게시 일자"
         ].filter(Boolean)
-        if(alerts.length) {
+        if (alerts.length) {
             toast.error(alerts.join(', ').을를 + " 다시 확인해주세요")
             return
         }
-        registerNewNotice({
+        const data = {
             title: titleValue!!,
             content: contentValue!!,
             targetGrade: [grade1Checkbox, grade2Checkbox, grade3Checkbox]
@@ -45,12 +45,21 @@ export const NewNoticeModal: React.FC<{ closeModal(): void }> = ({ closeModal })
                 .filter<Grade>((e): e is Grade => [1, 2, 3].includes(Number(e))),
             startDate: dates!![0],
             endDate: dates!![1]
-        })
-            .then(() => {
-                toast.success("공지를 등록했습니다")
+        }
+        if (originNotice._id) {
+            editRegisteredNotice(originNotice._id, data).then(() => {
+                toast.success("공지를 수정했습니다")
                 closeModal()
             })
-            .catch(() => toast.success("공지를 등록하지 못했습니다"))
+                .catch(() => toast.success("공지를 수정하지 못했습니다"))
+        } else {
+            registerNewNotice(data)
+                .then(() => {
+                    toast.success("공지를 등록했습니다")
+                    closeModal()
+                })
+                .catch(() => toast.success("공지를 등록하지 못했습니다"))
+        }
     }, [titleValue, contentValue, grade1Checkbox, grade2Checkbox, grade3Checkbox, dates, closeModal])
 
     return <NoticeModalWrapper>
@@ -82,7 +91,7 @@ export const NewNoticeModal: React.FC<{ closeModal(): void }> = ({ closeModal })
                     </CheckboxesWrapper>
                 </FormRow>
             </FormWrapper>
-                <SubmitButton onClick={submit}>게시</SubmitButton>
+            <SubmitButton onClick={submit}>{originNotice._id ? "수정" : "게시"}</SubmitButton>
         </BottomControls>
     </NoticeModalWrapper>
 }
@@ -170,6 +179,6 @@ const FormHeader = styled.p`
     flex-shrink: 0;
 `
 
-const FormWrapper= styled.div`
+const FormWrapper = styled.div`
     flex: 1;
 `

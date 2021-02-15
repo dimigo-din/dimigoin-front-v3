@@ -12,7 +12,7 @@ import { ReactComponent as _EditIcon } from "../../assets/icons/edit.svg"
 import { ReactComponent as _TrashIcon } from "../../assets/icons/trash.svg"
 import DangerIcon from "../../assets/icons/danger.svg"
 import { ArticleModal } from './ArticleModal'
-import { NewNoticeModal } from './NoticeEditorModal'
+import { NoticeEditingModal } from './NoticeEditorModal'
 import { useMyData } from '../../hooks/api/useMyData'
 import { swal } from '../../functions/swal'
 import { toast } from 'react-toastify'
@@ -40,6 +40,15 @@ const NoticeListItem: React.FC<NoticeListItemProps> = ({
   </>}
 </NoticeListItemWrapper>
 
+const NOTICE_EDITING_MODAL_OPTION = {
+  wrapperProps: {
+    css: css`max-width: 1080px; width: 100vw; height: 100vh; display: flex; padding: 60px 20px 20px;`
+  },
+  backdropProps: {
+    css: css`overflow-y: auto;`
+  }
+}
+
 const Notices: React.FC<RouteComponentProps<{
   articleId: string;
 }>> = ({ match, history }) => {
@@ -65,17 +74,10 @@ const Notices: React.FC<RouteComponentProps<{
   }, [articleId, history])
 
   const newNotice = useCallback(() => {
-    showModal(close => <NewNoticeModal closeModal={() => {
+    showModal(close => <NoticeEditingModal closeModal={() => {
       fetchNotices()
       close()
-    }} />, {
-      wrapperProps: {
-        css: css`max-width: 1080px; width: 100vw; height: 100vh; display: flex; padding: 60px 20px 20px;`
-      },
-      backdropProps: {
-        css: css`overflow-y: auto;`
-      }
-    })
+    }} />, NOTICE_EDITING_MODAL_OPTION)
   }, [fetchNotices])
 
   const requestRemoveNotice = async (id: string, title: string) => {
@@ -101,6 +103,13 @@ const Notices: React.FC<RouteComponentProps<{
     }
   }
 
+  const editNotice = (origin: Notice) => {
+    showModal(close => <NoticeEditingModal {...origin} closeModal={() => {
+      fetchNotices()
+      close()
+    }} />, NOTICE_EDITING_MODAL_OPTION)
+  }
+
   return <>
     <NavigationBar />
     <PageWrapper>
@@ -116,7 +125,7 @@ const Notices: React.FC<RouteComponentProps<{
           text: <UnstyledLink to={`/notices/${e._id}`}>
             <NoticeListItem
               editable={myData?.userType === UserType.T}
-              editAction={console.log}
+              editAction={() => editNotice(e)}
               removeAction={() => requestRemoveNotice(e._id, e.title)}
               {...e}
             />

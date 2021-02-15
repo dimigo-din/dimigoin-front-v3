@@ -6,15 +6,16 @@ import Dimigoincon from "./Dimigoincon";
 
 interface CheckboxProps {
   text?: string;
+  checked?: boolean;
+  onChange?(e: React.ChangeEvent<HTMLInputElement>): void;
 }
 
-export const Checkbox: React.FC<CheckboxProps> = ({ text, ...props }) => {
-  const check = useCheckbox(false);
+export const Checkbox: React.FC<CheckboxProps> = ({ text, onChange, checked, ...props }) => {
   return (
     <Wrapper {...props}>
-      <InvisibleCheck {...check} />
-      <CheckWrapper checked={check.checked}>
-        <Check visible={check.checked} />
+      <InvisibleCheck checked={checked} onChange={onChange} />
+      <CheckWrapper checked={!!checked}>
+        <Check visible={!!checked} />
       </CheckWrapper>
       <span css={css`
   vertical-align: middle;`}>

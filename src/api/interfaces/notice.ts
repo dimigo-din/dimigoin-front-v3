@@ -28,7 +28,16 @@ export interface RegisterNotice {
   method: 'POST';
   req: APIDocNotice;
   res: {
+    notice: Doc<APIDocNotice>
+  }
+}
 
+export interface EditRegisteredNotice {
+  endpoint: '/notice/:id';
+  method: 'PATCH';
+  req: APIDocNotice;
+  res: {
+    notice: Doc<APIDocNotice>
   }
 }
 
