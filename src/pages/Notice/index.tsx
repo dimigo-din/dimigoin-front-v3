@@ -7,13 +7,15 @@ import {
   ResponsiveWrapper, showModal, TextCardGroup, UnstyledLink
 } from '../../components'
 import { Doc, Notice, UserType } from '../../constants/types'
-import { getAllNotices } from '../../api/notice'
+import { getAllNotices, removeNotice } from '../../api/notice'
 import { ReactComponent as _EditIcon } from "../../assets/icons/edit.svg"
 import { ReactComponent as _TrashIcon } from "../../assets/icons/trash.svg"
+import DangerIcon from "../../assets/icons/danger.svg"
 import { ArticleModal } from './ArticleModal'
 import { NewNoticeModal } from './NoticeEditorModal'
 import { useMyData } from '../../hooks/api/useMyData'
 import { swal } from '../../functions/swal'
+import { toast } from 'react-toastify'
 
 interface NoticeListItemProps extends Notice {
   editable: boolean;
@@ -76,8 +78,27 @@ const Notices: React.FC<RouteComponentProps<{
     })
   }, [fetchNotices])
 
-  const requestRemoveNotice = () => {
-    
+  const requestRemoveNotice = async (id: string, title: string) => {
+    const alertQuestionResult = await swal({
+      title: "공지를 지우시겠어요?",
+      html: <>
+        <p>"{title}"를 삭제해요.</p>
+        <p>이 작업은 취소할 수 없어요.</p>
+      </>,
+      imageUrl: DangerIcon,
+      showCancelButton: true,
+      focusCancel: true
+    })
+    if(alertQuestionResult.isDenied) return
+    try {
+      const removeRequest = await removeNotice(id)
+      if(removeRequest._id === id) toast.success("공지를 지웠어요")
+      else toast.error("공지를 지우지 못했어요.")
+    } catch(e) {
+      toast.error("공지를 지우지 못했어요. 에러 : " + e)
+    } finally {
+      await fetchNotices()
+    }
   }
 
   return <>
@@ -96,7 +117,7 @@ const Notices: React.FC<RouteComponentProps<{
             <NoticeListItem
               editable={myData?.userType === UserType.T}
               editAction={console.log}
-              removeAction={() => requestRemoveNotice(e._id)}
+              removeAction={() => requestRemoveNotice(e._id, e.title)}
               {...e}
             />
           </UnstyledLink>,

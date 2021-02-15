@@ -14,3 +14,5 @@ export const getAllNotices = (): Promise<Doc<Notice>[]> => api<"allNotices">("GE
 export const getNoticeById = (id: string): Promise<Doc<Notice>> => api<"getNoticeById">("GET", `/notice/${id}`).then(e => convertToDatedNotice(e.notice))
 
 export const registerNewNotice = (data: Notice) => api<"registerNotice">("POST", "/notice", data)
+
+export const removeNotice = (id: string) => api<"removeNotice">("DELETE", `/notice/${id}`).then(e => e.notice)

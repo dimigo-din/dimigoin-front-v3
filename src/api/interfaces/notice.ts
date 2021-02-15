@@ -46,3 +46,15 @@ export interface CurrentNotices {
     }>[]
   }
 }
+
+export interface RemoveNotice {
+  endpoint: '/notice/:id';
+  method: 'DELETE';
+  req: {};
+  res: {
+    notice: Doc<Notice & {
+      startDate: string;
+      endDate: string;
+    }>
+  }
+}
