@@ -1,7 +1,8 @@
+import { APIDocNotice } from "."
 import { Doc, Notice } from "../constants/types"
 import { api } from "./api"
 
-const convertToDatedNotice = (notice: Doc<Notice>) => ({
+const convertToDatedNotice = (notice: Doc<APIDocNotice>) => ({
     ...notice,
     startDate: new Date(notice.startDate),
     endDate: new Date(notice.endDate),
@@ -13,6 +14,10 @@ export const getAllNotices = (): Promise<Doc<Notice>[]> => api<"allNotices">("GE
 
 export const getNoticeById = (id: string): Promise<Doc<Notice>> => api<"getNoticeById">("GET", `/notice/${id}`).then(e => convertToDatedNotice(e.notice))
 
-export const registerNewNotice = (data: Notice) => api<"registerNotice">("POST", "/notice", data)
+export const registerNewNotice = (data: Notice) => api<"registerNotice">("POST", "/notice", {
+    ...data,
+    startDate: data.startDate.toISOString().slice(0, 10),
+    endDate: data.startDate.toISOString().slice(0, 10)
+})
 
 export const removeNotice = (id: string) => api<"removeNotice">("DELETE", `/notice/${id}`).then(e => e.notice)

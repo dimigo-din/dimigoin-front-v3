@@ -1,16 +1,16 @@
-import { Doc, Grade, Notice } from "../../constants/types";
+import { Doc, Merge, Notice } from "../../constants/types";
 
-
+export type APIDocNotice = Merge<Notice, {
+  startDate: string;
+  endDate: string;
+}>
 
 export interface AllNotices {
   endpoint: '/notice';
   method: 'GET';
   req: {};
   res: {
-    notices: Doc<Notice & {
-      startDate: string;
-      endDate: string;
-    }>[]
+    notices: Doc<APIDocNotice>[]
   }
 }
 
@@ -19,17 +19,14 @@ export interface GetNoticeById {
   method: 'GET';
   req: {};
   res: {
-    notice: Doc<Notice & {
-      startDate: string;
-      endDate: string;
-    }>
+    notice: Doc<APIDocNotice>
   }
 }
 
 export interface RegisterNotice {
   endpoint: '/notice';
   method: 'POST';
-  req: Notice;
+  req: APIDocNotice;
   res: {
 
   }
@@ -40,10 +37,7 @@ export interface CurrentNotices {
   method: 'GET';
   req: {};
   res: {
-    notices: Doc<Notice & {
-      startDate: string;
-      endDate: string;
-    }>[]
+    notices: Doc<APIDocNotice>[]
   }
 }
 
@@ -52,9 +46,6 @@ export interface RemoveNotice {
   method: 'DELETE';
   req: {};
   res: {
-    notice: Doc<Notice & {
-      startDate: string;
-      endDate: string;
-    }>
+    notice: Doc<APIDocNotice>
   }
 }
