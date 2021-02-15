@@ -89,7 +89,7 @@ const Notices: React.FC<RouteComponentProps<{
       showCancelButton: true,
       focusCancel: true
     })
-    if(alertQuestionResult.isDenied) return
+    if(!alertQuestionResult.isConfirmed) return
     try {
       const removeRequest = await removeNotice(id)
       if(removeRequest._id === id) toast.success("공지를 지웠어요")
