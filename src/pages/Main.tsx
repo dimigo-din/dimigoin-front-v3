@@ -7,12 +7,10 @@ import {  ApplimentStatus, CardGroupHeader, Col, Divider,
           TodayMeal, 
           NoData} from "../components";
 import { useMeal } from "../hooks/api";
-import { getAllNotices } from "../api/notice";
 import Skeleton from "react-loading-skeleton";
-import useConsole from "../hooks/useConsole";
-import { getTimetable } from "../api/timetable";
 import { useMyData } from "../hooks/api/useMyData";
 import { Doc, Notice } from "../constants/types";
+import { getCurrentNotices, getTimetable } from "../api";
 
 const Main: React.FC = () => {
   const [notice, setNotice] = useState<Doc<Notice>[]>();
@@ -21,7 +19,7 @@ const Main: React.FC = () => {
   const meals = useMeal()
   const myData = useMyData()
   useEffect(() => {
-    getAllNotices().then(notices => setNotice(() => notices))
+    getCurrentNotices().then(notices => setNotice(() => notices))
     if(myData) {
       getTimetable(myData.grade, myData.class)
         .then(table => setTimeTableData(() => table.map(day => day.sequence)))
@@ -46,7 +44,11 @@ const Main: React.FC = () => {
             </CardGroupHeader>
             {notice && notice.length !== 0 ? (
               <TextCardGroup
-                content={notice.map((e) => ({ text: e.content, leftBorder: true, clickable: true, to: `/notices/${e._id}` }))}
+                content={[...notice.slice(0, 2).map((e) => ({ text: e.content, leftBorder: true, clickable: true, to: `/notices/${e._id}` })), ...(notice.length > 2 ? [{
+                  text: `외 ${notice.length - 2}건의 공지사항이 있습니다`,
+                  to: "/notices",
+                  clickable: true,
+                }] : [])]}
                 spaceBetweenCards
               />
             ) : notice === undefined ? (

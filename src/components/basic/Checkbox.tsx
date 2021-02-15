@@ -6,15 +6,16 @@ import Dimigoincon from "./Dimigoincon";
 
 interface CheckboxProps {
   text?: string;
+  checked?: boolean;
+  onChange?(e: React.ChangeEvent<HTMLInputElement>): void;
 }
 
-export const Checkbox: React.FC<CheckboxProps> = ({ text, ...props }) => {
-  const check = useCheckbox(false);
+export const Checkbox: React.FC<CheckboxProps> = ({ text, onChange, checked, ...props }) => {
   return (
     <Wrapper {...props}>
-      <CheckWrapper checked={check.checked}>
-        <InvisibleCheck {...check} />
-        <Check visible={check.checked} />
+      <InvisibleCheck checked={checked} onChange={onChange} />
+      <CheckWrapper checked={!!checked}>
+        <Check visible={!!checked} />
       </CheckWrapper>
       <span css={css`
   vertical-align: middle;`}>
@@ -29,10 +30,16 @@ const Wrapper = styled.label`
   font-size: 16px;
   display: block;
   color: #8a8a8a;
+  flex-shrink: 0;
 `;
 
 const InvisibleCheck = styled.input`
-  display: none;
+  /* display: none; */
+  opacity: 0;
+  width: 0px;
+  &:focus+div {
+    box-shadow: inset 0px 0px 0px 2px var(--main-theme-accent);
+  }
 `;
 
 const CheckWrapper = styled.div<{ checked: boolean }>`
@@ -45,7 +52,7 @@ const CheckWrapper = styled.div<{ checked: boolean }>`
   place-items: center;
   transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
   border-color: #8a8a8a;
-  margin-right: 16px;
+  margin-right: 10px;
   vertical-align: middle;
   ${({ checked }) =>
     checked &&

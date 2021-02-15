@@ -15,7 +15,7 @@ interface DropdownProps {
   onChange?: EventFunction<DropdownItem>;
 }
 
-export default ({ items, placeholder, onChange, requireMessage, ...props }: DropdownProps) => {
+export const Dropdown = ({ items, placeholder, onChange, requireMessage, ...props }: DropdownProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [opened, setOpened] = useState(false);
   const clickHandler = ({

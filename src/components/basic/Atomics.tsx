@@ -1,6 +1,7 @@
 import css from "@emotion/css";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
+import Button from "./Button";
 
 export const UnstyledLink = styled(Link)`
   color: inherit;
@@ -63,4 +64,8 @@ export const NoData = styled.p`
   justify-content: center;
   display: flex;
   padding: 24px 36px;
+`
+
+export const CompactButton = styled(Button)`
+  padding: 12px 30px;
 `

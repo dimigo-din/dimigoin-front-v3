@@ -10,30 +10,23 @@ export interface ButtonProps {
   large?: boolean;
   text?: boolean;
   disabled?: boolean;
-  onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+  onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   children: React.ReactNode;
 }
 
 const style = {
   btn: css`
-    position: relative;
-    display: inline-flex;
-    overflow: hidden;
-    align-items: center;
-    justify-content: center;
-    padding: 18px;
-    appearance: none;
+    display: inline-block;
     background-color: var(--main-theme-accent);
+    padding: 18px;
     border-radius: 5px;
     color: #fff;
     cursor: pointer;
     font-size: 17px;
     font-weight: 600;
     text-decoration: none;
-    transition: all 0.2s ease-in-out, 0.5s background-color ease;
-    user-select: none;
-    white-space: nowrap;
-    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
   `,
   gray: css`
     background-color: #f3f3f3;
@@ -80,14 +73,13 @@ export const Button: React.FC<ButtonProps> = ({
     small && style.small,
   ].filter(Boolean);
   return (
-    <a
-      href={href}
+    <div
       css={buttonStyle}
       onClick={(e) => active && onClick && onClick(e)}
       {...props}
     >
       {children}
-    </a>
+    </div>
   );
 };
 

@@ -1,22 +1,16 @@
-import { AllMeal, GetDailyMeal, LoginWithInfo, GetMyInfo,
+import {
+    AllMeal, GetDailyMeal, LoginWithInfo, GetMyInfo,
     LoginWithRefreshToken, RequestOutgo, GetAllStudents,
-    GetAllTeachers, MyApplyStatus,
-    ApplyIngangsil, UnapplyIngangsil, AllNotices, Timetable } from "./interfaces";
-
-interface Dummy {
-    method: 'GET';
-    endpoint: '/dummy';
-    needAuth: true;
-    req: {};
-    res: {};
-}
+    GetAllTeachers, MyApplyStatus, ApplyIngangsil, UnapplyIngangsil,
+    AllNotices, Timetable, GetNoticeById, RegisterNotice,
+    CurrentNotices, RemoveNotice, EditRegisteredNotice
+} from "./interfaces";
 
 export interface APIResource {
     loginWithInfo: LoginWithInfo;
     loginWithRefreshToken: LoginWithRefreshToken;
     allMeal: AllMeal;
     dailyMeal: GetDailyMeal;
-    dummy: Dummy;
     getMyInfo: GetMyInfo;
     requestOutgo: RequestOutgo;
     getAllStudents: GetAllStudents;
@@ -25,6 +19,10 @@ export interface APIResource {
     applyIngangsil: ApplyIngangsil;
     unapplyIngangsil: UnapplyIngangsil;
     allNotices: AllNotices;
-    timetable: Timetable
-    ;
+    timetable: Timetable;
+    getNoticeById: GetNoticeById;
+    registerNotice: RegisterNotice;
+    currentNotices: CurrentNotices;
+    removeNotice: RemoveNotice;
+    editRegisteredNotice: EditRegisteredNotice;
 }

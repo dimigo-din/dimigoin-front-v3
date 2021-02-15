@@ -90,6 +90,8 @@ const Outgo: React.FC = () => {
       studentId: myData.serial.toString(),
       userId: myData.idx.toString(),
       _id: myData._id,
+      createdAt: myData.createdAt,
+      updatedAt: myData.updatedAt
     }]))
   }, [ setAppliers ])
   

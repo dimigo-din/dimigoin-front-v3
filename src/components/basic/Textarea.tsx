@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-export default styled.textarea`
+export const Textarea = styled.textarea`
   border-radius: 6px;
   border: solid 1px #D1D1D1;
   width: 100%;

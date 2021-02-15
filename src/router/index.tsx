@@ -1,20 +1,15 @@
 import * as React from "react";
-import { BrowserRouter, Switch, Route, Redirect, withRouter } from "react-router-dom";
-
-import { Main } from "../pages";
-import Ingangsil from "../pages/Ingangsil";
-import Outgo from "../pages/Outgo";
-import Notices from "../pages/Notices";
-import SelfStudyDisplay from "../pages/SelfStudyDisplay";
-import Council from "../pages/Council";
-import Mentoring from "../pages/Mentoring";
+import { BrowserRouter, Switch, Route, Redirect, withRouter, HashRouter } from "react-router-dom";
+import { Main, Notices, Ingangsil, Mentoring, Outgo, SelfStudyDisplay } from "../pages";
 import { LoadableComponent } from "@loadable/component";
 import { getAccessToken, getRefreshToken, loginWithRefreshToken } from "../api";
 import styled from "@emotion/styled";
 import Login from "../pages/Login";
+import { getMyData, getMyLocalData } from "../api/user";
+import { UserType } from "../constants/types";
 
-const needAuth = (Component: LoadableComponent<{}>) => {
-  return (params => {
+const needAuth = <PageProps extends {}>(Component: LoadableComponent<PageProps>) => {
+  return (params: PageProps) => {
     try {
       const accessToken = getAccessToken()
       if (!accessToken) throw new Error("Cannot find access token")
@@ -26,26 +21,25 @@ const needAuth = (Component: LoadableComponent<{}>) => {
     } catch {
       return <Redirect to="/auth/login" />
     }
-  }) as React.FC
+  }
 }
 
 const Router: React.FC = () => (
-  <BrowserRouter>
+  <HashRouter>
     <Switch>
       <Route path="/auth/login" component={Login} />
       <Container>
         <TopLine />
-        <Route path="/ingangsil" component={Ingangsil} />
-        <Route path="/outgo" component={Outgo} />
-        <Route path="/notices/:articleId" component={Notices} />
-        <Route path="/notices" component={Notices} />
-        <Route path="/selfstudydisplay" component={SelfStudyDisplay} />
-        <Route path="/council" component={Council} />
-        <Route path="/mentoring" component={Mentoring} />
-        <Route path="/" exact component={withRouter(needAuth(Main))} />
+        <Route path="/ingangsil" component={needAuth(Ingangsil)} />
+        <Route path="/outgo" component={needAuth(Outgo)} />
+        <Route path="/notices/:articleId" component={needAuth(Notices)} />
+        <Route path="/notices" exact component={needAuth(Notices)} />
+        <Route path="/selfstudydisplay" component={needAuth(SelfStudyDisplay)} />
+        <Route path="/mentoring" component={needAuth(Mentoring)} />
+        <Route path="/" exact component={needAuth(Main)} />
       </Container>
     </Switch>
-  </BrowserRouter>
+  </HashRouter>
 );
 
 const Container = styled.div`
@@ -53,6 +47,7 @@ const Container = styled.div`
   min-height: 100vh;
   flex-direction: column;
   padding-bottom: 20px;
+  box-sizing: border-box;
 `;
 
 export const TopLine = styled.div`
@@ -60,6 +55,5 @@ export const TopLine = styled.div`
   height: 12px;
   background-color: var(--main-theme-accent);
 `;
-
 
 export default Router;
