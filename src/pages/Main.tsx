@@ -66,9 +66,7 @@ const Main: React.FC = () => {
           <Divider data-divider />
           <Col width={5}>
             <CardGroupHeader>자습 현황</CardGroupHeader>
-            <SelfStudyStatus onButtonPressed={(d) => {
-              showCardModal(() => <h1>{d}</h1>)
-            }} />
+            <SelfStudyStatus />
           </Col>
         </ResponsiveWrapper>
         <Divider data-divider horizontal />

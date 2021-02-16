@@ -1,42 +1,52 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import Card from "../basic/Card";
 import css from "@emotion/css";
+import { getMyAttendanceLog } from "../../api/attendance";
+import { getPrimaryPlaceList } from "../../api/place";
+import { Doc, Place } from "../../constants/types";
+
 import { ReactComponent as IngangsilSvg } from "../../assets/icons/ingangsil.svg";
 import { ReactComponent as HealingsilSvg } from "../../assets/icons/healingsil.svg";
 import { ReactComponent as OtherSvg } from "../../assets/icons/other.svg";
 import { ReactComponent as LaundrySvg } from "../../assets/icons/laundry.svg";
-import { ReactComponent as CircleSvg } from "../../assets/icons/circle.svg";
+import { ReactComponent as DeskSvg } from "../../assets/icons/desk.svg";
 
-const BUTTONS = [
-  {
-    name: "기타",
-    icon: OtherSvg,
-  },
-  {
-    name: "인강실",
-    icon: IngangsilSvg,
-  },
-  {
-    name: "안정실",
-    icon: HealingsilSvg,
-    selected: true,
-  },
-  {
-    name: "세탁",
-    icon: LaundrySvg,
-  },
-  {
-    name: "동아리",
-    icon: CircleSvg,
-  },
-];
+type IconAvailablePlaceId = ["601fe6b4a40ac010e7a6496c", "601fe6b4a40ac010e7a64962", "601fe6b4a40ac010e7a64966", "601fe6b4a40ac010e7a64968"]
 
-interface SelfStudyStatusProps {
-  onButtonPressed: (name: string) => void;
+const IconPlaceMap = [{
+  id: "601fe6b4a40ac010e7a6496c",
+  icon: DeskSvg,
+}, {
+  id: "601fe6b4a40ac010e7a64962",
+  icon: HealingsilSvg
+}, {
+  id: "601fe6b4a40ac010e7a64966",
+  icon: LaundrySvg,
+}, {
+  id: "601fe6b4a40ac010e7a64968",
+  icon: IngangsilSvg,
+}]
+
+const PlaceIcon: React.FC<{ placeId: string }> = ({ placeId }) => {
+  const mapped = IconPlaceMap.find(icons => icons.id === placeId)
+  if(mapped) return <mapped.icon css={iconStyle} />
+  return <></>
 }
 
-export const SelfStudyStatus: React.FC<SelfStudyStatusProps> = ({ onButtonPressed }) => {
+export const SelfStudyStatus: React.FC = () => {
+  const [ attendanceLog, setFetchedAttendanceLog ] = useState<unknown[]>();
+  const [ places, setPlaces ] = useState<Doc<Place>[]>();
+
+  useEffect(() => {
+    getMyAttendanceLog().then(setFetchedAttendanceLog)
+    getPrimaryPlaceList().then(setPlaces)
+  }, [])
+
+  const submitNewLocation = useCallback((locationName: string) => {
+    
+  }, [])
+
   return (
     <Card
       css={css`
@@ -47,14 +57,15 @@ export const SelfStudyStatus: React.FC<SelfStudyStatusProps> = ({ onButtonPresse
         <Time current>1타임</Time> <Time>2타임</Time>
       </Header>
       <ButtonsWrapper>
-        {BUTTONS.map((status) => (
+        {places && places.map(place => (
           <Button
-            selected={status.selected}
-            onMouseDown={() => onButtonPressed(status.name)}
-            key={status.name}
+            selected={false}
+            onMouseDown={() => submitNewLocation(place._id)}
+            key={place._id}
           >
-            <status.icon css={iconStyle} />
-            <ButtonText>{status.name}</ButtonText>
+            <PlaceIcon placeId={place._id} />
+            {/* <status.icon css={iconStyle} /> */}
+            <ButtonText>{place.label}</ButtonText>
           </Button>
         ))}
       </ButtonsWrapper>
@@ -93,17 +104,16 @@ const ButtonsWrapper = styled.div`
 const iconStyle = css`
   height: 36px;
   width: 36px;
-  fill: #8a8a8a;
 `;
 
 const Button = styled.div<{ selected?: boolean }>`
-  color: #8a8a8a;
+  color: #D1D1D1;
   text-align: center;
   min-width: 100px;
   margin: 12px;
 
   & svg path {
-    fill: #8a8a8a;
+    fill: #D1D1D1;
   }
   ${({ selected }) =>
     selected &&
@@ -112,12 +122,7 @@ const Button = styled.div<{ selected?: boolean }>`
       & svg path {
         fill: var(--main-theme-accent);
       }
-    `}/* transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
-  &:active {
-    transform: scale(0.993);
-    filter: blur(0.7px);
-    opacity: 0.8;
-  } */
+    `}
 `;
 
 const ButtonText = styled.div`

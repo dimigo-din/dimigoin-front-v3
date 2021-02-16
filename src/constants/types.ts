@@ -66,4 +66,11 @@ export interface Notice {
     endDate: Date;
 }
 
+export interface Place {
+    label: string;
+    type: string;
+    name: string;
+    location: string;
+}
+
 export interface Teacher extends Doc<User> { }
