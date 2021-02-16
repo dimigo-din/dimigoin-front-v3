@@ -1,9 +1,11 @@
-export interface AttendanceLog {
+import { AttendanceLog, Doc } from "../../constants/types";
+
+export interface AttendanceLogList {
     method: 'GET';
     endpoint: '/attendance';
     req: {};
     res: {
-        logs: unknown[]
+        logs: Doc<AttendanceLog>[]
     }
 }
 
@@ -15,7 +17,7 @@ export interface RegisterMovingHistory {
         remark: string;
     };
     res: {
-        attendanceLog: unknown[]
+        attendanceLog: Doc<AttendanceLog>
     }
 }
 

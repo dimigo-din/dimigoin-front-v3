@@ -3,7 +3,7 @@ import {
     RequestOutgo, GetAllStudents, GetAllTeachers, MyApplyStatus,
     ApplyIngangsil, UnapplyIngangsil, AllNotices, Timetable, GetNoticeById,
     RegisterNotice, CurrentNotices, RemoveNotice, EditRegisteredNotice,
-    AttendanceLog, RegisterMovingHistory, PrimaryPlaceList
+    AttendanceLogList, RegisterMovingHistory, PrimaryPlaceList
 } from "./interfaces";
 
 export interface APIResource {
@@ -25,7 +25,7 @@ export interface APIResource {
     currentNotices: CurrentNotices;
     removeNotice: RemoveNotice;
     editRegisteredNotice: EditRegisteredNotice;
-    attendanceLog: AttendanceLog;
+    attendanceLogList: AttendanceLogList;
     registerMovingHistory: RegisterMovingHistory;
     primaryPlaceList: PrimaryPlaceList;
 }

@@ -73,4 +73,11 @@ export interface Place {
     location: string;
 }
 
+export interface AttendanceLog {
+    student: Doc<Student>;
+    date: string;
+    place: Doc<Place>;
+    remark: string;
+}
+
 export interface Teacher extends Doc<User> { }

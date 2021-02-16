@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import Card from "../basic/Card";
 import css from "@emotion/css";
-import { getMyAttendanceLog } from "../../api/attendance";
+import { getMyAttendanceLog, registerMovingHistory } from "../../api/attendance";
 import { getPrimaryPlaceList } from "../../api/place";
 import { Doc, Place } from "../../constants/types";
 
@@ -11,6 +11,8 @@ import { ReactComponent as HealingsilSvg } from "../../assets/icons/healingsil.s
 import { ReactComponent as OtherSvg } from "../../assets/icons/other.svg";
 import { ReactComponent as LaundrySvg } from "../../assets/icons/laundry.svg";
 import { ReactComponent as DeskSvg } from "../../assets/icons/desk.svg";
+import { toast } from "react-toastify";
+import { getAdverbalSuffix1 } from "josa-complete";
 
 type IconAvailablePlaceId = ["601fe6b4a40ac010e7a6496c", "601fe6b4a40ac010e7a64962", "601fe6b4a40ac010e7a64966", "601fe6b4a40ac010e7a64968"]
 
@@ -35,17 +37,26 @@ const PlaceIcon: React.FC<{ placeId: string }> = ({ placeId }) => {
 }
 
 export const SelfStudyStatus: React.FC = () => {
-  const [ attendanceLog, setFetchedAttendanceLog ] = useState<unknown[]>();
+  const [ currentPlaceId, setCurrentPlaceId ] = useState<string>();
   const [ places, setPlaces ] = useState<Doc<Place>[]>();
 
-  useEffect(() => {
-    getMyAttendanceLog().then(setFetchedAttendanceLog)
-    getPrimaryPlaceList().then(setPlaces)
-  }, [])
+  const refetchCurrentPlaceId = useCallback(() => {
+    getMyAttendanceLog().then(log => setCurrentPlaceId(() => log[0].place._id))
+  }, [ setCurrentPlaceId ])
 
-  const submitNewLocation = useCallback((locationName: string) => {
-    
-  }, [])
+  useEffect(() => {
+    refetchCurrentPlaceId()
+    getPrimaryPlaceList().then(setPlaces)
+  }, [ refetchCurrentPlaceId ])
+
+  const submitNewLocation = useCallback((placeName: string, placeId: string, reason: string) => {
+    registerMovingHistory(placeId, reason).then(successRes => {
+      setCurrentPlaceId(() => successRes.place._id)
+      toast.success(`장소를 ${placeName}${
+        (successRes.place.name && (successRes.place.name !== placeName) && `(${successRes.place.name})`) || ""
+      }${getAdverbalSuffix1(placeName)} 이동했어요`)
+    })
+  }, [ ])
 
   return (
     <Card
@@ -59,12 +70,11 @@ export const SelfStudyStatus: React.FC = () => {
       <ButtonsWrapper>
         {places && places.map(place => (
           <Button
-            selected={false}
-            onMouseDown={() => submitNewLocation(place._id)}
+            selected={place._id === currentPlaceId}
+            onMouseDown={() => submitNewLocation(place.label, place._id, '(없음)')}
             key={place._id}
           >
             <PlaceIcon placeId={place._id} />
-            {/* <status.icon css={iconStyle} /> */}
             <ButtonText>{place.label}</ButtonText>
           </Button>
         ))}
