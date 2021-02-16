@@ -66,4 +66,7 @@ export interface Notice {
     endDate: Date;
 }
 
-export interface Teacher extends Doc<User> { }
+export interface Teacher extends Doc<User> {
+    position?: string;
+    role?: string;
+}
