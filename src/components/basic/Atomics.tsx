@@ -69,3 +69,5 @@ export const NoData = styled.p`
 export const CompactButton = styled(Button)`
   padding: 12px 30px;
 `
+
+export const cardModalTopBorder = css`border-top: 10px solid var(--main-theme-accent);`

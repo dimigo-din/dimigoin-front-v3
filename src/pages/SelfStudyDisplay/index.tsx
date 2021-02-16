@@ -216,7 +216,7 @@ const SelfStudyDisplay: React.FC = () => {
       </div>
       }]} />, {
       wrapperProps: {
-        css: css`max-width: 1080px; padding: 60px 20px 20px; width: 100%;`
+        css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px; width: 100%;`
       }
     })
   }, [])
@@ -232,7 +232,7 @@ const SelfStudyDisplay: React.FC = () => {
     </div>
     }]} />, {
       wrapperProps: {
-        css: css`max-width: 1080px; padding: 60px 20px 20px; width: 100%;`
+        css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px; width: 100%;`
       }
     })
   }, [])

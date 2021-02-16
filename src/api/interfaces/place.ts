@@ -8,3 +8,12 @@ export interface PrimaryPlaceList {
         places: Doc<Place>[]
     }
 }
+
+export interface PlaceList {
+    method: 'GET';
+    endpoint: '/place';
+    req: {};
+    res: {
+        places: Doc<Place>[]
+    }
+}

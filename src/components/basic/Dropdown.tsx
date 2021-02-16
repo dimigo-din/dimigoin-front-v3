@@ -30,7 +30,7 @@ export const Dropdown = ({ items, placeholder, onChange, requireMessage, ...prop
     <FixedHeightWrapper opened={opened} {...props}>
       <Wrapper
         highlighted={opened}
-        border={opened}
+        opened={opened}
         onClick={() => items && setOpened((b) => !b)}
         disabled={!!items}
       >
@@ -77,11 +77,13 @@ const highlightedBorder = css`
   border-color: var(--main-theme-accent);
 `;
 
-const Wrapper = styled.div<{ highlighted?: boolean; border?: boolean; disabled?: boolean }>`
+const Wrapper = styled.div<{ highlighted?: boolean; opened?: boolean; disabled?: boolean }>`
   border-radius: 6px;
   border: solid 1px #D1D1D1;
   transition: 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
   background-color: white;
+  max-height: 400px;
+
   ${({disabled}) => disabled && css`
     &:hover {
       ${highlightedBorder}
@@ -92,10 +94,11 @@ const Wrapper = styled.div<{ highlighted?: boolean; border?: boolean; disabled?:
     css`
       box-shadow: 0 0 6px 0 #F8C5D7;
     `}
-  ${({ border }) =>
-    border &&
+  ${({ opened }) =>
+    opened &&
     css`
       border-color: var(--main-theme-accent);
+  overflow-y: auto;
     `}
 `;
 
@@ -103,6 +106,9 @@ const Item = styled.div<{ highlighted?: boolean; visible?: boolean }>`
   color: #8A8A8A;
   padding: 18px 16px;
   font-size: 18px;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  white-space: nowrap;
 
   ${({ highlighted }) =>
     highlighted &&
@@ -113,7 +119,8 @@ const Item = styled.div<{ highlighted?: boolean; visible?: boolean }>`
   /* Belows are property for animating */
   height: unset;
   visibility: visible;
-  transition: padding 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
+  transition: padding 300ms cubic-bezier(0, 0.76, 0.12, 0.98),
+              height 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
   ${({ visible }) =>
     visible ||
     css`

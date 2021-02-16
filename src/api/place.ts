@@ -11,3 +11,12 @@ export const getPrimaryPlaceList = async () => {
     cacheItem(CacheKeys.PRIMARY_PLACE, fetched, +new Date() + 1000 * 60 * 60 * 24 * 5)
     return fetched
 }
+
+export const getPlaceList = async () => {
+    const cached = getCachedItem<Doc<Place>[]>(CacheKeys.PLACES)
+    if(cached) return cached
+    const fetched = (await api<"placeList">("GET", "/place")).places
+    // 일주일 캐시
+    cacheItem(CacheKeys.PLACES, fetched, +new Date() + 1000 * 60 * 60 * 24 * 5)
+    return fetched
+}
