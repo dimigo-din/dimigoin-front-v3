@@ -67,6 +67,6 @@ export interface Notice {
 }
 
 export interface Teacher extends Doc<User> {
-    position: string;
-    role: string;
+    position?: string;
+    role?: string;
 }
