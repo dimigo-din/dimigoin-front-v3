@@ -14,7 +14,7 @@ export interface RegisterMovingHistory {
     endpoint: '/attendance';
     req: {
         place: string;
-        remark: string;
+        remark?: string;
     };
     res: {
         attendanceLog: Doc<AttendanceLog>

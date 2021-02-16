@@ -18,41 +18,43 @@ import { OtherPlaceModal } from "./OtherPlaceModal";
 type IconAvailablePlaceId = ["601fe6b4a40ac010e7a6496c", "601fe6b4a40ac010e7a64962", "601fe6b4a40ac010e7a64966", "601fe6b4a40ac010e7a64968"]
 
 const IconPlaceMap = [{
-  id: "601fe6b4a40ac010e7a6496c",
+  label: "교실",
   icon: DeskSvg,
 }, {
-  id: "601fe6b4a40ac010e7a64962",
+  label: "안정실",
   icon: HealingsilSvg
 }, {
-  id: "601fe6b4a40ac010e7a64966",
+  label: "세탁",
   icon: LaundrySvg,
 }, {
-  id: "601fe6b4a40ac010e7a64968",
+  label: "인강실",
   icon: IngangsilSvg,
 }]
 
-const PlaceIcon: React.FC<{ placeId: string }> = ({ placeId }) => {
-  const mapped = IconPlaceMap.find(icons => icons.id === placeId)
+const PlaceIcon: React.FC<{ placeLabel: string }> = ({ placeLabel }) => {
+  const mapped = IconPlaceMap.find(icons => icons.label === placeLabel)
   if (mapped) return <mapped.icon css={iconStyle} />
   return <></>
 }
 
 export const SelfStudyStatus: React.FC = () => {
-  const [currentPlaceId, setCurrentPlaceId] = useState<string>();
+  const [currentPlace, setCurrentPlace] = useState<Doc<Place>>();
   const [places, setPlaces] = useState<Doc<Place>[]>();
 
+  const isOther = places && currentPlace && !places.some(e => e.label === currentPlace.label)
+
   const refetchCurrentPlaceId = useCallback(() => {
-    getMyAttendanceLog().then(log => setCurrentPlaceId(() => log[0]?.place._id))
-  }, [setCurrentPlaceId])
+    getMyAttendanceLog().then(log => setCurrentPlace(() => log[0]?.place))
+  }, [setCurrentPlace])
 
   useEffect(() => {
     refetchCurrentPlaceId()
     getPrimaryPlaceList().then(setPlaces)
   }, [refetchCurrentPlaceId])
 
-  const submitNewLocation = useCallback(async (placeName: string, placeId: string, reason: string) => {
+  const submitNewLocation = useCallback(async (placeName: string, placeId: string, reason?: string) => {
     return registerMovingHistory(placeId, reason).then(successRes => {
-      setCurrentPlaceId(() => successRes.place._id)
+      setCurrentPlace(() => successRes.place)
       toast.success(`장소를 ${placeName}${(successRes.place.name && (successRes.place.name !== placeName) && `(${successRes.place.name})`) || ""
         }${getAdverbalSuffix1(placeName)} 이동했어요`)
     })
@@ -79,20 +81,20 @@ export const SelfStudyStatus: React.FC = () => {
         {places && <>
           {places.map(place => (
             <Button
-              selected={place._id === currentPlaceId}
-              onClick={() => submitNewLocation(place.label, place._id, '(없음)')}
+              selected={place.label === currentPlace?.label}
+              onClick={() => submitNewLocation(place.label, place._id)}
               key={place._id}
             >
-              <PlaceIcon placeId={place._id} />
+              <PlaceIcon placeLabel={place.label} />
               <ButtonText>{place.label}</ButtonText>
             </Button>
           ))}
         <Button
-          selected={!!currentPlaceId && !places.some(e => e._id === currentPlaceId)}
+          selected={isOther}
           onClick={submitOtherPlace}
         >
           <OtherSvg />
-          <ButtonText>기타</ButtonText>
+          <ButtonText>기타 {isOther && `(${currentPlace?.name})`}</ButtonText>
         </Button>
         </>}
       </ButtonsWrapper>
