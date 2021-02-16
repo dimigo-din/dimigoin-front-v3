@@ -1,9 +1,9 @@
 import {
-    AllMeal, GetDailyMeal, LoginWithInfo, GetMyInfo,
-    LoginWithRefreshToken, RequestOutgo, GetAllStudents,
-    GetAllTeachers, MyApplyStatus, ApplyIngangsil, UnapplyIngangsil,
-    AllNotices, Timetable, GetNoticeById, RegisterNotice,
-    CurrentNotices, RemoveNotice, EditRegisteredNotice
+    AllMeal, GetDailyMeal, LoginWithInfo, GetMyInfo, LoginWithRefreshToken,
+    RequestOutgo, GetAllStudents, GetAllTeachers, MyApplyStatus,
+    ApplyIngangsil, UnapplyIngangsil, AllNotices, Timetable, GetNoticeById,
+    RegisterNotice, CurrentNotices, RemoveNotice, EditRegisteredNotice,
+    AttendanceLog, RegisterMovingHistory
 } from "./interfaces";
 
 export interface APIResource {
@@ -25,4 +25,6 @@ export interface APIResource {
     currentNotices: CurrentNotices;
     removeNotice: RemoveNotice;
     editRegisteredNotice: EditRegisteredNotice;
+    attendanceLog: AttendanceLog;
+    registerMovingHistory: RegisterMovingHistory;
 }
