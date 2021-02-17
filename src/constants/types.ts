@@ -55,7 +55,7 @@ export interface Student extends Doc<User> {
     grade: Grade;
     number: number;
     serial: number;
-    photo: string[];
+    photos: string[];
 }
 
 export interface Notice {
