@@ -17,11 +17,11 @@ export const registerMovingHistory = (placeId: string, reason?: string): Promise
 const today = new Date()
 const todayString = formatRequestableDate(today)
 
-const myData = getMyData()
-const myGrade = myData.then(d => d.grade)
-const myClass = myData.then(d => d.class)
+// const myData = getMyData()
+// const myGrade = myData.then(d => d.grade)
+// const myClass = myData.then(d => d.class)
 
 export const getWholeClassAttendanceLog = (grade: number, clas: number) =>
     api<"wholeClassAttendanceLog">("GET", `/attendance/date/${todayString}/grade/${grade}/class/${clas}`).then(e => e.status.sort((a, b) => a.student.serial - b.student.serial))
 
-export const getMyClassAttendanceLog = async () => getWholeClassAttendanceLog(await myGrade, await myClass)
+// export const getMyClassAttendanceLog = async () => getWholeClassAttendanceLog(await myGrade, await myClass)

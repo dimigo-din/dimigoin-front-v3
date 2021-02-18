@@ -1,4 +1,4 @@
-import React, { RefObject, useCallback, useEffect, useState } from "react";
+import React, { RefObject, useCallback, useDebugValue, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import css, { SerializedStyles } from "@emotion/css";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
@@ -20,12 +20,13 @@ import {
 import { Timeline } from "./Timeline";
 import MoveClass from "./MoveClass";
 import { AttendanceLogWithStudent, Gender, Student } from "../../constants/types";
-import { getMyClassAttendanceLog } from "../../api";
-import { CirclePlaceSelectModal } from "../../components/complex/CirclePlaceSelectModal";
+import { getWholeClassAttendanceLog } from "../../api";
 import { OtherPlaceModal } from "../Main/OtherPlaceModal";
+import { useMyData } from "../../hooks/api/useMyData";
+import Skeleton from "react-loading-skeleton";
 
 interface TopBarProps {
-  klassName: string;
+  klassName?: string;
   jaseupName: string;
 }
 
@@ -49,7 +50,7 @@ const TopBar: React.FC<TopBarProps> = ({ klassName, jaseupName }) => (
     `}
   >
     <IconLogo height={48} width={32} />
-    <ClassName>{klassName}</ClassName>
+    <ClassName>{klassName || <Skeleton width={300} />}</ClassName>
     <JaseupName>{jaseupName}</JaseupName>
   </Horizontal>
 );
@@ -90,7 +91,7 @@ const DraggableStudent: React.FC<{ student: Student }> = ({ student }) => {
 };
 
 const StudentList: React.FC<{
-  log: AttendanceLogWithStudent[];
+  log?: AttendanceLogWithStudent[];
   hasLabel: boolean;
   moveStudent(student: Student): void;
 }> = ({
@@ -116,13 +117,15 @@ const StudentList: React.FC<{
       >
         <Horizontal
           css={css`
-          margin: -20px;
+          margin: -10px;
           flex-wrap: wrap;
         `}
         >
-          {log.map((student) => (
+          {log ? log.map((student) => (
             <DraggableStudent key={student.student._id} student={student.student} />
-          ))}
+          )) : [...Array(Math.floor(Math.random() * 10) + 3)].map(() => <StudentWrapper>
+            <Skeleton width={80} />
+          </StudentWrapper>)}
         </Horizontal>
       </LabelCard>
     )
@@ -205,11 +208,13 @@ const groupedPlaces: DisplayPlace[] = [{
   isAvailable: false,
 }]
 
+const isRealData = (d: DisplayPlace): d is DisplayPlaceWithStudents => (d as any).students
+
 const OTHER_INDEX = groupedPlaces.findIndex(p => p.fallback)
 const INITIAL_INDEX = groupedPlaces.findIndex(p => p.initial)
 const keywordQuery = groupedPlaces.map(p => p.keyword)
 
-const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeName }: DisplayPlaceWithStudents) => new Promise<{
+const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeName }: DisplayPlace) => new Promise<{
   placeId: string;
   reason?: string;
 }>((success, error) => {
@@ -255,8 +260,11 @@ const SelfStudyDisplay: React.FC = () => {
     notAvailable: DisplayPlaceWithStudents[]
   }>()
 
+  const myData = useMyData()
+
   const fetchData = useCallback(async () => {
-    const [available, notAvailable] = (await getMyClassAttendanceLog())
+    if(!myData) return
+    const [available, notAvailable] = (await getWholeClassAttendanceLog(myData.grade, myData.class))
       .reduce((grouped, current) => {
         const placeGroupIndex = current.log?.place._id !== undefined ? grouped.findIndex(p => p.ids.includes(current.log!.place._id)) : INITIAL_INDEX
         const remarkQueriedIndex = !!current.log?.remark && keywordQuery.findIndex(keywords => keywords?.some(keyword => current.log!.remark.includes(keyword)))
@@ -274,17 +282,11 @@ const SelfStudyDisplay: React.FC = () => {
         return [grouped[0], [...grouped[1], current]]
       }, [[], []] as DisplayPlaceWithStudents[][])
     setSelfStudyStatus(() => ({ available, notAvailable }))
-  }, [setSelfStudyStatus])
+  }, [ setSelfStudyStatus, myData ])
 
-  const moveStudentPlaceTo = useCallback(async (student: Student, place: DisplayPlaceWithStudents) => {
+  const moveStudentPlaceTo = useCallback(async (student: Student, place: DisplayPlace) => {
     const parsedPlace = await getTargetPlaceByLabelAndStudent(student, place)
   }, [])
-
-  useEffect(() => {
-    fetchData()
-    const timer = setInterval(() => fetchData(), 1000)
-    return () => clearInterval(timer)
-  }, [fetchData])
 
   const openMoveClassDisplay = useCallback(() => {
     showModal(() => <NamedSection css={css`
@@ -320,6 +322,12 @@ const SelfStudyDisplay: React.FC = () => {
     })
   }, [])
 
+  useEffect(() => {
+    fetchData()
+    const timer = setInterval(() => fetchData(), 1000)
+    return () => clearInterval(timer)
+  }, [fetchData])
+
   return (
     <DndProvider backend={HTML5Backend}>
       <PageWrapper
@@ -327,7 +335,7 @@ const SelfStudyDisplay: React.FC = () => {
           padding-top: 40px;
         `}
       >
-        <TopBar klassName="1학년 3반" jaseupName="방과후 자율학습 1타임" />
+        <TopBar klassName={myData && `${myData.grade}학년 ${myData.class}반`} jaseupName="방과후 자율학습 1타임" />
         <TableWrapper>
           <div>
             {[{
@@ -356,8 +364,9 @@ const SelfStudyDisplay: React.FC = () => {
                   `}
                 >
                   {
-                    type.places?.map((place, placeIndex) => {
+                    (type.places || groupedPlaces).map((place, placeIndex) => {
                       const hasLabel = typeIndex === 0 && placeIndex === 0
+                      
                       return (
                         <Horizontal
                           css={css`
@@ -372,9 +381,9 @@ const SelfStudyDisplay: React.FC = () => {
                             </LocationLabelText>
                           </LabelCard>
                           <LabelCard title="인원" hasLabel={hasLabel} width={70}>
-                            {place.students?.length}
+                            {isRealData(place) ? place.students.length : <Skeleton width={50} />}
                           </LabelCard>
-                          <StudentList hasLabel={hasLabel} log={place.students} moveStudent={student => moveStudentPlaceTo(student, place)} />
+                          <StudentList hasLabel={hasLabel} log={isRealData(place) ? place.students : undefined} moveStudent={place && (student => moveStudentPlaceTo(student, place))} />
                         </Horizontal>
                       )
                     })
@@ -416,7 +425,7 @@ const SelfStudyDisplay: React.FC = () => {
               margin-left: 12px;
             }
           `}>
-            <ButtonWithIcon icon={RefreshIcon} label="새로고침" disabled />
+            <ButtonWithIcon icon={RefreshIcon} label="새로고침" onClick={() => fetchData()} />
             <ButtonWithIcon icon={DeskIcon} label="이동반" onClick={openMoveClassDisplay} />
             <ButtonWithIcon icon={HistoryIcon} label="히스토리" onClick={openTimeline} />
           </Horizontal>
@@ -495,7 +504,7 @@ const JaseupName = styled.h2`
 `;
 
 const StudentWrapper = styled.h3`
-  padding: 20px;
+  padding: 15px;
   color: var(--row-color);
   font-size: 23px;
   font-weight: 700;
