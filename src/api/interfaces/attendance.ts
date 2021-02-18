@@ -1,4 +1,4 @@
-import { AttendanceLog, Doc } from "../../constants/types";
+import { AttendanceLog, AttendanceLogWithStudent, Doc } from "../../constants/types";
 
 export interface AttendanceLogList {
     method: 'GET';
@@ -21,3 +21,11 @@ export interface RegisterMovingHistory {
     }
 }
 
+export interface WholeClassAttendanceLog {
+    method: 'GET';
+    endpoint: '/attendance/date/:date/grade/:grade/class/:class';
+    req: {};
+    res: {
+        status: AttendanceLogWithStudent[]
+    }
+}
