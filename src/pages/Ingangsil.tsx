@@ -64,7 +64,7 @@ const Ingangsil: React.FC = () => {
                       margin-bottom: 24px;
                     `}
                   >
-                    1학년 신청 시간
+                    {myData?.grade}학년 신청 시간
                   </CardTitle>
                   <Row>
                     <Time />
