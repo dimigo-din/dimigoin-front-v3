@@ -6,6 +6,8 @@ import { HTML5Backend } from "react-dnd-html5-backend"
 import { ReactComponent as DeskIcon } from "../../assets/icons/desk.svg";
 import { ReactComponent as HealingsilIcon } from "../../assets/icons/healingsil.svg";
 import { ReactComponent as OtherIcon } from "../../assets/icons/other.svg";
+import { ReactComponent as InsangsilIcon } from "../../assets/icons/ingangsil.svg";
+import { ReactComponent as CircleIcon } from "../../assets/icons/circle.svg";
 import { ReactComponent as RefreshIcon } from "../../assets/icons/refresh.svg";
 import { ReactComponent as HistoryIcon } from "../../assets/icons/history.svg";
 import { ReactComponent as IconLogo } from "../../assets/brand.svg";
@@ -140,6 +142,7 @@ interface DisplayPlace {
   icon: JSX.Element;
   isAvailable: boolean;
   fallback?: boolean;
+  keyword?: string[];
 }
 
 const iconStyle = css`
@@ -159,6 +162,17 @@ const groupedPlaces: DisplayPlace[] = [{
   name: "교실",
   isAvailable: true,
 }, {
+  icon: <InsangsilIcon css={iconStyle} />,
+  ids: ["601fe6b4a40ac010e7a64961", "601fe6b4a40ac010e7a64968"],
+  name: "인강실",
+  isAvailable: false,
+}, {
+  icon: <CircleIcon css={iconStyle} />,
+  ids: [],
+  name: "동아리",
+  isAvailable: false,
+  keyword: ["동아리"],
+}, {
   icon: <HealingsilIcon css={iconStyle} />,
   ids: ["601fe6b4a40ac010e7a64962"],
   name: "안정실",
@@ -172,6 +186,7 @@ const groupedPlaces: DisplayPlace[] = [{
 }]
 
 const OTHER_INDEX = groupedPlaces.findIndex(p => p.fallback)
+const keywordQuery = groupedPlaces.map(p => p.keyword)
 
 // const categorizedPlacesId = groupedPlaces.map(e => e.ids).flat()
 // let cachedPlacesData: Doc<Place>[]
@@ -182,32 +197,38 @@ const SelfStudyDisplay: React.FC = () => {
     notAvailable: DisplayPlaceWithStudents[]
   }>()
   const fetchData = useCallback(async () => {
-    const groupedByPlaceKey = (await getMyClassAttendanceLog()).reduce((grouped, current) => {
-      const key = current.log?.place._id || INIT_PLACE_KEY
-      return {
-        ...grouped,
-        [key]: [...(grouped[key] || []), current]
-      }
-    }, {} as {
-      [key: string]: AttendanceLogWithStudent[] | undefined
-    })
-    // console.log()
-    const [available, notAvailable] = Object.keys(groupedByPlaceKey)
-      .reduce((matched, current) => {
-        const placeGroupIndex = matched.findIndex(p => p.ids.includes(current))
-        const matchedIndex = placeGroupIndex === -1 ? OTHER_INDEX : placeGroupIndex
-        return [
-          ...matched.slice(0, matchedIndex), {
-            ...matched[matchedIndex],
-            students: [...(matched[matchedIndex].students || []), ...(groupedByPlaceKey[current] || [])]
-          },
-          ...matched.slice(matchedIndex + 1)
-        ]
-      }, groupedPlaces.map(g => ({...g, students: []})) as DisplayPlaceWithStudents[])
-      .reduce((grouped, current) => {
-        if (current.isAvailable) return [[...grouped[0], current], grouped[1]]
-        return [grouped[0], [...grouped[1], current]]
-      }, [[], []] as DisplayPlaceWithStudents[][])
+    const [available, notAvailable] = (await getMyClassAttendanceLog()).reduce((grouped, current) => {
+      const placeGroupIndex = !!current.log?.place._id && grouped.findIndex(p => p.ids.includes(current.log!.place._id))
+      const remarkQueriedIndex = !!current.log?.remark && keywordQuery.findIndex(keywords => keywords?.some(keyword => current.log!.remark.includes(keyword)))
+      const matchedIndex = +(remarkQueriedIndex !== -1 ? remarkQueriedIndex : placeGroupIndex !== -1 ? placeGroupIndex : OTHER_INDEX)
+      console.log(remarkQueriedIndex)
+      return [
+        ...grouped.slice(0, matchedIndex), {
+          ...grouped[matchedIndex],
+          students: [...(grouped[matchedIndex].students || []), current]
+        },
+        ...grouped.slice(matchedIndex + 1)
+      ]
+    }, groupedPlaces.map(g => ({ ...g, students: [] })) as DisplayPlaceWithStudents[]).reduce((grouped, current) => {
+      if (current.isAvailable) return [[...grouped[0], current], grouped[1]]
+      return [grouped[0], [...grouped[1], current]]
+    }, [[], []] as DisplayPlaceWithStudents[][])
+
+    console.log('?', available, notAvailable)
+    // const [available, notAvailable] = Object.keys(groupedByPlaceKey)
+    //   .reduce((matched, current) => {
+    //     const placeGroupIndex = matched.findIndex(p => p.ids.includes(current))
+    //     const keywordQueryIndex = keywordQuery.findIndex(k => k?.includes())
+    //     const matchedIndex = placeGroupIndex === -1 ? OTHER_INDEX : placeGroupIndex
+    //     return [
+    //       ...matched.slice(0, matchedIndex), {
+    //         ...matched[matchedIndex],
+    //         students: [...(matched[matchedIndex].students || []), ...(groupedByPlaceKey[current] || [])]
+    //       },
+    //       ...matched.slice(matchedIndex + 1)
+    //     ]
+    //   }, groupedPlaces.map(g => ({...g, students: []})) as DisplayPlaceWithStudents[])
+
 
     setSelfStudyStatus(() => ({ available, notAvailable }))
   }, [])
@@ -289,14 +310,14 @@ const SelfStudyDisplay: React.FC = () => {
                     &>*{margin-left: 15px;}
                   `}>
                       <LabelCard title="위치" width={125} css={noBreak} contentCss={locationLabelStyle}>
-                        <DeskIcon css={iconStyle} />
+                        {place.icon}
                         <LocationLabelText>
                           {place.name}
-                      </LocationLabelText>
+                        </LocationLabelText>
                       </LabelCard>
                       <LabelCard title={"인원"} width={70}>
                         {place.students?.length}
-                    </LabelCard>
+                      </LabelCard>
                       <StudentList hasLabel log={place.students} />
                     </Horizontal>)
                   }
@@ -420,6 +441,7 @@ const StudentWrapper = styled.h3`
   color: var(--row-color);
   font-size: 23px;
   font-weight: 700;
+  width: 100px;
 `;
 
 const locationLabelStyle = css`
