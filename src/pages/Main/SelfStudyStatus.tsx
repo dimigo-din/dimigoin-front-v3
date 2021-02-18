@@ -6,7 +6,7 @@ import { getAdverbalSuffix1 } from "josa-complete";
 import Card from "../../components/basic/Card";
 import { getMyAttendanceLog, registerMovingHistory } from "../../api/attendance";
 import { getPrimaryPlaceList } from "../../api/place";
-import { Doc, Place } from "../../constants/types";
+import { AttendanceLog, Doc, Place } from "../../constants/types";
 import { ReactComponent as IngangsilSvg } from "../../assets/icons/ingangsil.svg";
 import { ReactComponent as HealingsilSvg } from "../../assets/icons/healingsil.svg";
 import { ReactComponent as OtherSvg } from "../../assets/icons/other.svg";
@@ -38,14 +38,14 @@ const PlaceIcon: React.FC<{ placeLabel: string }> = ({ placeLabel }) => {
 }
 
 export const SelfStudyStatus: React.FC = () => {
-  const [currentPlace, setCurrentPlace] = useState<Doc<Place>>();
+  const [currentPlaceLog, setCurrentPlaceLog] = useState<Doc<AttendanceLog>>();
   const [places, setPlaces] = useState<Doc<Place>[]>();
 
-  const isOther = places && currentPlace && !places.some(e => e.label === currentPlace.label)
+  const isOther = places && currentPlaceLog && (!places.some(e => e._id === currentPlaceLog.place._id) || !!currentPlaceLog.remark)
 
   const refetchCurrentPlaceId = useCallback(() => {
-    getMyAttendanceLog().then(log => setCurrentPlace(() => log[0]?.place))
-  }, [setCurrentPlace])
+    getMyAttendanceLog().then(log => setCurrentPlaceLog(() => log[0]))
+  }, [setCurrentPlaceLog])
 
   useEffect(() => {
     refetchCurrentPlaceId()
@@ -54,7 +54,7 @@ export const SelfStudyStatus: React.FC = () => {
 
   const submitNewLocation = useCallback(async (placeName: string, placeId: string, reason?: string) => {
     return registerMovingHistory(placeId, reason).then(successRes => {
-      setCurrentPlace(() => successRes.place)
+      setCurrentPlaceLog(() => successRes)
       toast.success(`장소를 ${placeName}${(successRes.place.name && (successRes.place.name !== placeName) && `(${successRes.place.name})`) || ""
         }${getAdverbalSuffix1(placeName)} 이동했어요`)
     })
@@ -81,7 +81,7 @@ export const SelfStudyStatus: React.FC = () => {
         {places && <>
           {places.map(place => (
             <Button
-              selected={place.label === currentPlace?.label}
+              selected={!isOther && place._id === currentPlaceLog?.place._id}
               onClick={() => submitNewLocation(place.label, place._id)}
               key={place._id}
             >
@@ -94,7 +94,7 @@ export const SelfStudyStatus: React.FC = () => {
           onClick={submitOtherPlace}
         >
           <OtherSvg />
-          <ButtonText>기타 {isOther && `(${currentPlace?.name})`}</ButtonText>
+          <ButtonText>기타 {isOther && `(${currentPlaceLog?.place.name})`}</ButtonText>
         </Button>
         </>}
       </ButtonsWrapper>
