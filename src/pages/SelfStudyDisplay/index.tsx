@@ -71,6 +71,14 @@ const LabelCard: React.FC<LabelCardProps> = React.forwardRef(({
   )
 });
 
+const openTimelineByStudent = (student: Student) => {
+  showModal(() => <Timeline student={student} />, {
+    wrapperProps: {
+      css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px; width: 100%;`
+    }
+  })
+}
+
 const DraggableStudent: React.FC<{ student: Student }> = ({ student }) => {
   const [, draggable] = useDrag({
     item: {
@@ -82,7 +90,7 @@ const DraggableStudent: React.FC<{ student: Student }> = ({ student }) => {
     })
   })
   return (
-    <StudentWrapper>
+    <StudentWrapper onClick={() => openTimelineByStudent(student)}>
       <p ref={draggable}>
         {student.number} {student.name}
       </p>
@@ -288,39 +296,21 @@ const SelfStudyDisplay: React.FC = () => {
     const parsedPlace = await getTargetPlaceByLabelAndStudent(student, place)
   }, [])
 
-  const openMoveClassDisplay = useCallback(() => {
-    showModal(() => <NamedSection css={css`
-      padding: 20px;
-    `} sections={[{
-        name: "방과후 1실",
-        component: <MoveClass />
-      }, {
-        name: "방과후 2실",
-        component: <div>
-          대충2번정보
-      </div>
-      }]} />, {
-      wrapperProps: {
-        css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px; width: 100%;`
-      }
-    })
-  }, [])
-
-  const openTimeline = useCallback(() => {
-    showModal(() => <NamedSection sections={[{
-      name: "1타임",
-      component: <Timeline />
-    }, {
-      name: "2타임",
-      component: <div>
-        대충2번정보
-    </div>
-    }]} />, {
-      wrapperProps: {
-        css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px; width: 100%;`
-      }
-    })
-  }, [])
+  // const openMoveClassDisplay = useCallback(() => {
+  //   showModal(() => <NamedSection css={css`
+  //     padding: 20px;
+  //   `} sections={[{
+  //       name: "방과후 1실",
+  //       component: <MoveClass />
+  //     }, {
+  //       name: "방과후 2실",
+  //       component: <MoveClass />
+  //     }]} />, {
+  //     wrapperProps: {
+  //       css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px; width: 100%;`
+  //     }
+  //   })
+  // }, [])
 
   useEffect(() => {
     fetchData()
@@ -426,8 +416,8 @@ const SelfStudyDisplay: React.FC = () => {
             }
           `}>
             <ButtonWithIcon icon={RefreshIcon} label="새로고침" onClick={() => fetchData()} />
-            <ButtonWithIcon icon={DeskIcon} label="이동반" onClick={openMoveClassDisplay} />
-            <ButtonWithIcon icon={HistoryIcon} label="히스토리" onClick={openTimeline} />
+            {/* <ButtonWithIcon icon={DeskIcon} label="이동반" onClick={openMoveClassDisplay} /> */}
+            {/* <ButtonWithIcon icon={HistoryIcon} label="히스토리" onClick={openTimeline} /> */}
           </Horizontal>
         </Horizontal>
       </PageWrapper>

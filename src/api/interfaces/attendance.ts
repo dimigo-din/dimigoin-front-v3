@@ -29,3 +29,15 @@ export interface WholeClassAttendanceLog {
         status: AttendanceLogWithStudent[]
     }
 }
+
+export interface TimelineByStudent {
+    method: 'GET';
+    endpoint: '/attendance/date/:date/student/:studentId';
+    req: {};
+    res: {
+        logs: (Doc<AttendanceLog> & {
+            place: string;
+            student: string;
+        })[]
+    }
+}
