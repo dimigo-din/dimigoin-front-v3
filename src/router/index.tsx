@@ -1,12 +1,10 @@
 import * as React from "react";
-import { BrowserRouter, Switch, Route, Redirect, withRouter, HashRouter } from "react-router-dom";
+import { Switch, Route, Redirect, HashRouter } from "react-router-dom";
 import { Main, Notices, Ingangsil, Mentoring, Outgo, SelfStudyDisplay } from "../pages";
 import { LoadableComponent } from "@loadable/component";
 import { getAccessToken, getRefreshToken, loginWithRefreshToken } from "../api";
 import styled from "@emotion/styled";
 import Login from "../pages/Login";
-import { getMyData, getMyLocalData } from "../api/user";
-import { UserType } from "../constants/types";
 
 const needAuth = <PageProps extends {}>(Component: LoadableComponent<PageProps>) => {
   return (params: PageProps) => {

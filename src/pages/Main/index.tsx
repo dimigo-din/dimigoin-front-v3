@@ -3,10 +3,9 @@ import css from "@emotion/css";
 import Skeleton from "react-loading-skeleton";
 
 import {
-    ApplimentStatus, CardGroupHeader, Col, Divider,
-    MealList, NavigationBar, PageWrapper, ResponsiveWrapper,
-    showModal, showCardModal, TextCardGroup, TimeTable,
-    TodayMeal, NoData
+    ApplimentStatus, CardGroupHeader, Col, Divider, MealList,
+    NavigationBar, PageWrapper, ResponsiveWrapper, showModal,
+    TextCardGroup, TimeTable, TodayMeal, NoData
 } from "../../components";
 import { useMeal } from "../../hooks/api";
 import { useMyData } from "../../hooks/api/useMyData";
@@ -16,7 +15,7 @@ import { SelfStudyStatus } from "./SelfStudyStatus";
 
 const Main: React.FC = () => {
     const [notice, setNotice] = useState<Doc<Notice>[]>();
-    const [appliments, setAppliments] = useState<ApplimentStatus[]>();
+    // const [appliments, setAppliments] = useState<ApplimentStatus[]>();
     const [timetableData, setTimeTableData] = useState<string[][] | null>();
     const meals = useMeal()
     const myData = useMyData()
@@ -72,7 +71,10 @@ const Main: React.FC = () => {
                     </Col>
                     <Divider data-divider />
                     <Col width={5}>
-                        <CardGroupHeader>자습 현황</CardGroupHeader>
+                        <CardGroupHeader subButton={{
+                            text: "우리반 현황 보기",
+                            route: "/selfstudydisplay"
+                        }}>자습 현황</CardGroupHeader>
                         <SelfStudyStatus />
                     </Col>
                 </ResponsiveWrapper>
@@ -85,14 +87,13 @@ const Main: React.FC = () => {
                     <Divider data-divider />
                     <Col width={3}>
                         <CardGroupHeader>나의 신청현황</CardGroupHeader>
-                        {appliments ? (
+                        {/* {appliments ? (
                             appliments.map((myToday) => (
                                 <ApplimentStatus key={myToday.name} {...myToday} />
                             ))
-                        ) : (
-
+                        ) : ( */}
                                 <TextCardGroup content={[{ text: <NoData>신청 현황이 없습니다</NoData> }]} />
-                            )}
+                            {/* )} */}
                     </Col>
                     <Divider data-divider />
                     <Col width={4} css={fullHeight}>
