@@ -19,8 +19,10 @@ import {
 } from "../../components";
 import { Timeline } from "./Timeline";
 import MoveClass from "./MoveClass";
-import { AttendanceLogWithStudent } from "../../constants/types";
+import { AttendanceLogWithStudent, Gender, Student } from "../../constants/types";
 import { getMyClassAttendanceLog } from "../../api";
+import { CirclePlaceSelectModal } from "../../components/complex/CirclePlaceSelectModal";
+import { OtherPlaceModal } from "../Main/OtherPlaceModal";
 
 interface TopBarProps {
   klassName: string;
@@ -68,10 +70,11 @@ const LabelCard: React.FC<LabelCardProps> = React.forwardRef(({
   )
 });
 
-const StudentName: React.FC = ({ children }) => {
+const DraggableStudent: React.FC<{ student: Student }> = ({ student }) => {
   const [, draggable] = useDrag({
     item: {
-      type: "STUDENT"
+      type: "STUDENT",
+      student
     },
     collect: state => ({
       isDragging: state.isDragging()
@@ -79,7 +82,9 @@ const StudentName: React.FC = ({ children }) => {
   })
   return (
     <StudentWrapper>
-      <p ref={draggable}>{children}</p>
+      <p ref={draggable}>
+        {student.number} {student.name}
+      </p>
     </StudentWrapper>
   )
 };
@@ -87,12 +92,15 @@ const StudentName: React.FC = ({ children }) => {
 const StudentList: React.FC<{
   log: AttendanceLogWithStudent[];
   hasLabel: boolean;
+  moveStudent(student: Student): void;
 }> = ({
   log,
-  hasLabel
+  hasLabel,
+  moveStudent
 }) => {
-    const [, droppable] = useDrop({
-      accept: 'STUDENT'
+    const [, droppable] = useDrop<{ type: 'STUDENT', student: Student }, unknown, unknown>({
+      accept: 'STUDENT',
+      drop: ({ student }) => moveStudent(student)
     })
     return (
       <LabelCard
@@ -113,9 +121,7 @@ const StudentList: React.FC<{
         `}
         >
           {log.map((student) => (
-            <StudentName key={student.student._id}>
-              {student.student.number} {student.student.name}
-            </StudentName>
+            <DraggableStudent key={student.student._id} student={student.student} />
           ))}
         </Horizontal>
       </LabelCard>
@@ -166,6 +172,7 @@ const groupedPlaces: DisplayPlace[] = [{
   icon: <InsangsilIcon css={iconStyle} />,
   ids: ["601fe6b4a40ac010e7a64961", "601fe6b4a40ac010e7a64968"],
   name: "인강실",
+  keyword: ["인강실"],
   isAvailable: false,
 }, {
   icon: <CircleIcon css={iconStyle} />,
@@ -202,8 +209,45 @@ const OTHER_INDEX = groupedPlaces.findIndex(p => p.fallback)
 const INITIAL_INDEX = groupedPlaces.findIndex(p => p.initial)
 const keywordQuery = groupedPlaces.map(p => p.keyword)
 
-// const categorizedPlacesId = groupedPlaces.map(e => e.ids).flat()
-// let cachedPlacesData: Doc<Place>[]
+const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeName }: DisplayPlaceWithStudents) => new Promise<{
+  placeId: string;
+  reason?: string;
+}>((success, error) => {
+  if (placeName === '인강실')
+    return success({
+      placeId: ["601fe6b4a40ac010e7a64968", "601fe6b4a40ac010e7a64961"][student.grade - 1]
+    })
+  if (placeName === '세탁')
+    return success({
+      placeId: student.gender === Gender.F ? "601fe6b4a40ac010e7a64967" : "601fe6b4a40ac010e7a64966"
+    })
+  if (placeName === '안정실') return success({
+    placeId: "601fe6b4a40ac010e7a64962"
+  })
+  if (placeName === '동아리')
+    showModal((close) => <OtherPlaceModal priority="CIRCLE" onSubmit={(name, placeId, reason) => {
+      success({
+        placeId,
+        reason
+      })
+      close()
+    }} />, {
+      wrapperProps: {
+        css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
+      }
+    })
+  if (placeName === '기타') return showModal((close) => <OtherPlaceModal onSubmit={(name, placeId, reason) => {
+    success({
+      placeId,
+      reason
+    })
+    close()
+  }} />, {
+    wrapperProps: {
+      css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
+    }
+  })
+})
 
 const SelfStudyDisplay: React.FC = () => {
   const [selfStudyStatus, setSelfStudyStatus] = useState<{
@@ -212,30 +256,34 @@ const SelfStudyDisplay: React.FC = () => {
   }>()
 
   const fetchData = useCallback(async () => {
-    const [available, notAvailable] = (await getMyClassAttendanceLog()).reduce((grouped, current) => {
-      const placeGroupIndex = current.log?.place._id !== undefined ? grouped.findIndex(p => p.ids.includes(current.log!.place._id)) : INITIAL_INDEX
-      const remarkQueriedIndex = !!current.log?.remark && keywordQuery.findIndex(keywords => keywords?.some(keyword => current.log!.remark.includes(keyword)))
-      const matchedIndex = +((remarkQueriedIndex && remarkQueriedIndex !== -1) ? remarkQueriedIndex : ((placeGroupIndex !== -1) ? placeGroupIndex : OTHER_INDEX))
-      console.log(current.student.username, current.log?.place._id, placeGroupIndex)
-      return [
-        ...grouped.slice(0, matchedIndex), {
-          ...grouped[matchedIndex],
-          students: [...(grouped[matchedIndex].students || []), current]
-        },
-        ...grouped.slice(matchedIndex + 1)
-      ]
-    }, groupedPlaces.map(g => ({ ...g, students: [] })) as DisplayPlaceWithStudents[]).reduce((grouped, current) => {
-      if (current.isAvailable) return [[...grouped[0], current], grouped[1]]
-      return [grouped[0], [...grouped[1], current]]
-    }, [[], []] as DisplayPlaceWithStudents[][])
-
-    console.log(notAvailable)
-
+    const [available, notAvailable] = (await getMyClassAttendanceLog())
+      .reduce((grouped, current) => {
+        const placeGroupIndex = current.log?.place._id !== undefined ? grouped.findIndex(p => p.ids.includes(current.log!.place._id)) : INITIAL_INDEX
+        const remarkQueriedIndex = !!current.log?.remark && keywordQuery.findIndex(keywords => keywords?.some(keyword => current.log!.remark.includes(keyword)))
+        const matchedIndex = +((remarkQueriedIndex && remarkQueriedIndex !== -1) ? remarkQueriedIndex : ((placeGroupIndex !== -1) ? placeGroupIndex : OTHER_INDEX))
+        return [
+          ...grouped.slice(0, matchedIndex), {
+            ...grouped[matchedIndex],
+            students: [...(grouped[matchedIndex].students || []), current]
+          },
+          ...grouped.slice(matchedIndex + 1)
+        ]
+      }, groupedPlaces.map(g => ({ ...g, students: [] })) as DisplayPlaceWithStudents[])
+      .reduce((grouped, current) => {
+        if (current.isAvailable) return [[...grouped[0], current], grouped[1]]
+        return [grouped[0], [...grouped[1], current]]
+      }, [[], []] as DisplayPlaceWithStudents[][])
     setSelfStudyStatus(() => ({ available, notAvailable }))
+  }, [setSelfStudyStatus])
+
+  const moveStudentPlaceTo = useCallback(async (student: Student, place: DisplayPlaceWithStudents) => {
+    const parsedPlace = await getTargetPlaceByLabelAndStudent(student, place)
   }, [])
 
   useEffect(() => {
     fetchData()
+    const timer = setInterval(() => fetchData(), 1000)
+    return () => clearInterval(timer)
   }, [fetchData])
 
   const openMoveClassDisplay = useCallback(() => {
@@ -310,20 +358,25 @@ const SelfStudyDisplay: React.FC = () => {
                   {
                     type.places?.map((place, placeIndex) => {
                       const hasLabel = typeIndex === 0 && placeIndex === 0
-                      return (<Horizontal css={css`
-                      &>*{margin-left: 15px;}
-                    `}>
-                        <LabelCard title="위치" hasLabel={hasLabel} width={125} css={noBreak} contentCss={locationLabelStyle}>
-                          {place.icon}
-                          <LocationLabelText>
-                            {place.name}
-                          </LocationLabelText>
-                        </LabelCard>
-                        <LabelCard title="인원" hasLabel={hasLabel} width={70}>
-                          {place.students?.length}
-                        </LabelCard>
-                        <StudentList hasLabel={hasLabel} log={place.students} />
-                      </Horizontal>)
+                      return (
+                        <Horizontal
+                          css={css`
+                            &>*{margin-left: 15px;}
+                          `}
+                          key={place.name}
+                        >
+                          <LabelCard title="위치" hasLabel={hasLabel} width={125} css={noBreak} contentCss={locationLabelStyle}>
+                            {place.icon}
+                            <LocationLabelText>
+                              {place.name}
+                            </LocationLabelText>
+                          </LabelCard>
+                          <LabelCard title="인원" hasLabel={hasLabel} width={70}>
+                            {place.students?.length}
+                          </LabelCard>
+                          <StudentList hasLabel={hasLabel} log={place.students} moveStudent={student => moveStudentPlaceTo(student, place)} />
+                        </Horizontal>
+                      )
                     })
                   }
                 </div>
@@ -348,13 +401,13 @@ const SelfStudyDisplay: React.FC = () => {
               }
             `}
           >
-            <LabelCard title="총원" width={70}>
+            <LabelCard title="총원" hasLabel width={70}>
               10
             </LabelCard>
-            <LabelCard title="현원" width={70}>
+            <LabelCard title="현원" hasLabel width={70}>
               20
             </LabelCard>
-            <LabelCard title="결원" width={70} css={css`--row-color: ${ROW_COLOR.NOTAVAILABLE};`}>
+            <LabelCard title="결원" hasLabel width={70} css={css`--row-color: ${ROW_COLOR.NOTAVAILABLE};`}>
               30
             </LabelCard>
           </Horizontal>}

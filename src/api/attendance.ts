@@ -22,9 +22,6 @@ const myGrade = myData.then(d => d.grade)
 const myClass = myData.then(d => d.class)
 
 export const getWholeClassAttendanceLog = (grade: number, clas: number) =>
-    api<"wholeClassAttendanceLog">("GET", `/attendance/date/${todayString}/grade/${grade}/class/${clas}`).then(e => e.status)
+    api<"wholeClassAttendanceLog">("GET", `/attendance/date/${todayString}/grade/${grade}/class/${clas}`).then(e => e.status.sort((a, b) => a.student.serial - b.student.serial))
 
-export const getMyClassAttendanceLog = async () => {
-    console.log(todayString)
-    return getWholeClassAttendanceLog(await myGrade, await myClass)
-}
+export const getMyClassAttendanceLog = async () => getWholeClassAttendanceLog(await myGrade, await myClass)

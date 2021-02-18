@@ -7,15 +7,23 @@ import { Button, Card, CardGroupHeader, cardModalTopBorder, Dropdown, DropdownIt
 import { Doc, Place } from "../../constants/types"
 import useInput from "../../hooks/useInput"
 
+const orderTypeFirst = (places: Doc<Place>[], priority: string) => 
+    places.reduce<Doc<Place>[][]>((acc, current) => {
+        if(current.type === priority) return [[...acc[0], current], acc[1]]
+        return [acc[0], [...acc[1], current]]
+    }, [[], []]).flat()
+
+
 export const OtherPlaceModal: React.FC<{
-    onSubmit(placeId: string, placeName: string, reason: string): void
-}> = ({ onSubmit }) => {
+    onSubmit(placeId: string, placeName: string, reason: string): void;
+    priority?: string;
+}> = ({ onSubmit, priority }) => {
     const [ places, setPlaces ] = useState<Doc<Place>[]>()
     const placeDropdown = useInput<DropdownItem>();
     const reasonInput = useInput();
 
     useEffect(() => {
-        getPlaceList().then(setPlaces)
+        getPlaceList().then(e => setPlaces(priority ? orderTypeFirst(e, priority) : e))
     }, [])
 
     const submit = useCallback(() => {
@@ -56,6 +64,7 @@ export const OtherPlaceModal: React.FC<{
         </FormRow>
         <Caution>
             ※ 사전 허가된 활동 또는 감독 교사 승인 외 임의로 등록할 경우 불이익을 받을 수 있습니다
+            ※ 동아리 활동은 사유에 "동아리" 단어를 포함시켜주세요. 동아리실리 아닌 장소로 등록해도 사유에 동아리가 포함되면 동아리로 표시됩니다.
         </Caution>
         </MarginWrapper>
         <SubmitButton
