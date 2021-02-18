@@ -15,7 +15,7 @@ import { ReactComponent as HistoryIcon } from "../../assets/icons/history.svg";
 import { ReactComponent as IconLogo } from "../../assets/brand.svg";
 import {
   Button, ButtonProps, Horizontal, noBreak,
-  PageWrapper, showModal, NamedSection
+  PageWrapper, showModal, NamedSection, ResponsiveWrapper, Divider
 } from "../../components";
 import { Timeline } from "./Timeline";
 import MoveClass from "./MoveClass";
@@ -65,7 +65,7 @@ const LabelCard: React.FC<LabelCardProps> = React.forwardRef(({
 }, ref) => {
   return (
     <LabelWrapper {...props} width={width} ref={ref}>
-      {title && hasLabel && <LabelTitle>{title}</LabelTitle>}
+      {title && <LabelTitle visible={!!hasLabel}>{title}</LabelTitle>}
       <ContentWrapper hasLabel={!!(title && hasLabel)} css={contentCss}>{children}</ContentWrapper>
     </LabelWrapper>
   )
@@ -271,7 +271,7 @@ const SelfStudyDisplay: React.FC = () => {
   const myData = useMyData()
 
   const fetchData = useCallback(async () => {
-    if(!myData) return
+    if (!myData) return
     const [available, notAvailable] = (await getWholeClassAttendanceLog(myData.grade, myData.class))
       .reduce((grouped, current) => {
         const placeGroupIndex = current.log?.place._id !== undefined ? grouped.findIndex(p => p.ids.includes(current.log!.place._id)) : INITIAL_INDEX
@@ -290,7 +290,7 @@ const SelfStudyDisplay: React.FC = () => {
         return [grouped[0], [...grouped[1], current]]
       }, [[], []] as DisplayPlaceWithStudents[][])
     setSelfStudyStatus(() => ({ available, notAvailable }))
-  }, [ setSelfStudyStatus, myData ])
+  }, [setSelfStudyStatus, myData])
 
   const moveStudentPlaceTo = useCallback(async (student: Student, place: DisplayPlace) => {
     const parsedPlace = await getTargetPlaceByLabelAndStudent(student, place)
@@ -337,8 +337,9 @@ const SelfStudyDisplay: React.FC = () => {
               label: "결원",
               places: selfStudyStatus?.notAvailable
             }].map((type, typeIndex) =>
-              <Horizontal
+              <ResponsiveWrapper
                 key={type.color}
+                threshold={800}
                 css={css`
                   align-items: stretch;
                   --row-color: ${type.color};
@@ -346,45 +347,51 @@ const SelfStudyDisplay: React.FC = () => {
                 `}
               >
                 <RowLable css={noBreak}> {type.label} </RowLable>
-
-                <div
+                <Divider data-divider smaller />
+                <ResponsiveWrapper
+                  threshold={800}
                   css={css`
-                    margin-top: -15px;
+                    /* margin-top: -15px; */
+                    flex-direction: column;
                     flex: 1;
                   `}
                 >
                   {
                     (type.places || groupedPlaces).map((place, placeIndex) => {
                       const hasLabel = typeIndex === 0 && placeIndex === 0
-                      
+
                       return (
-                        <Horizontal
-                          css={css`
-                            &>*{margin-left: 15px;}
-                          `}
-                          key={place.name}
-                        >
-                          <LabelCard title="위치" hasLabel={hasLabel} width={125} css={noBreak} contentCss={locationLabelStyle}>
-                            {place.icon}
-                            <LocationLabelText>
-                              {place.name}
-                            </LocationLabelText>
-                          </LabelCard>
-                          <LabelCard title="인원" hasLabel={hasLabel} width={70}>
-                            {isRealData(place) ? place.students.length : <Skeleton width={50} />}
-                          </LabelCard>
-                          <StudentList hasLabel={hasLabel} log={isRealData(place) ? place.students : undefined} moveStudent={place && (student => moveStudentPlaceTo(student, place))} />
-                        </Horizontal>
+                        <>
+                        {placeIndex !== 0 && <Divider data-divider horizontal smaller />}
+                          <ResponsiveWrapper
+                            threshold={800}
+                            key={place.name}
+                          >
+                            <ResponsiveWrapper threshold={0}>
+                              <LabelCard title="위치" hasLabel={hasLabel} css={[noBreak, responsiveLabelCardWidth(125)]} contentCss={locationLabelStyle}>
+                                {place.icon}
+                                <LocationLabelText>
+                                  {place.name}
+                                </LocationLabelText>
+                              </LabelCard>
+                              <Divider data-divider smaller />
+                              <LabelCard title="인원" hasLabel={hasLabel} css={responsiveLabelCardWidth(75)}>
+                                {isRealData(place) ? place.students.length : <Skeleton width={50} />}
+                              </LabelCard>
+                            </ResponsiveWrapper>
+                            <Divider data-divider smaller />
+                            <StudentList hasLabel={hasLabel} log={isRealData(place) ? place.students : undefined} moveStudent={place && (student => moveStudentPlaceTo(student, place))} />
+                          </ResponsiveWrapper>
+                        </>
                       )
                     })
                   }
-                </div>
-              </Horizontal>)}
+                </ResponsiveWrapper>
+              </ResponsiveWrapper>)}
           </div>
         </TableWrapper>
-
+        <Divider />
         <Horizontal css={css`
-          margin-top: 20px;
           align-items: flex-start;
         `}>
           {<Horizontal
@@ -443,7 +450,7 @@ const RowLable = styled.div`
 const LabelWrapper = styled.div<{ width?: number }>`
   display: flex;
   flex-direction: column;
-  margin-top: 15px;
+  /* margin-top: 15px; */
   ${({ width }) =>
     width &&
     css`
@@ -451,7 +458,7 @@ const LabelWrapper = styled.div<{ width?: number }>`
     `}
 `;
 
-const LabelTitle = styled.h3`
+const LabelTitle = styled.h3<{ visible: boolean }>`
   color: white;
   background-color: var(--row-color);
   padding: 8px;
@@ -460,6 +467,12 @@ const LabelTitle = styled.h3`
   text-align: center;
   font-weight: 700;
   font-size: 18px;
+  
+  ${({visible}) => !visible && css`
+    @media screen and (min-width: 800px) {
+      display: none;
+    }
+  `}
 `;
 
 const ContentWrapper = styled.div<{ hasLabel: boolean; }>`
@@ -505,9 +518,22 @@ const locationLabelStyle = css`
   flex-direction: row;
 `
 
+const responsiveLabelCardWidth = (width: number) => css`
+  /* width: calc(var(--responsive-horizontal) * ${width}); */
+  width: ${width}px;
+  @media screen and (max-width: 800px) {
+    width: unset;
+    flex: 1;
+  }
+`
+
 const LocationLabelText = styled.p`
   flex: 1;
   text-align: right; 
+  @media screen and (max-width: 800px) {
+    flex: unset;
+    margin-left: 6px;
+  }
 `
 
 const ButtonWithIconWrapper = styled(Button)`
