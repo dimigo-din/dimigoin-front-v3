@@ -15,8 +15,6 @@ import { ReactComponent as DeskSvg } from "../../assets/icons/desk.svg";
 import { showModal } from "../../components/complex/modal";
 import { OtherPlaceModal } from "./OtherPlaceModal";
 
-type IconAvailablePlaceId = ["601fe6b4a40ac010e7a6496c", "601fe6b4a40ac010e7a64962", "601fe6b4a40ac010e7a64966", "601fe6b4a40ac010e7a64968"]
-
 const IconPlaceMap = [{
   label: "교실",
   icon: DeskSvg,

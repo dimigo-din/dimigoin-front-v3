@@ -4,14 +4,20 @@ import css, { SerializedStyles } from "@emotion/css";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { ReactComponent as DeskIcon } from "../../assets/icons/desk.svg";
-import { ReactComponent as LaundryIcon } from "../../assets/icons/laundry.svg";
+import { ReactComponent as HealingsilIcon } from "../../assets/icons/healingsil.svg";
+import { ReactComponent as OtherIcon } from "../../assets/icons/other.svg";
 import { ReactComponent as RefreshIcon } from "../../assets/icons/refresh.svg";
 import { ReactComponent as HistoryIcon } from "../../assets/icons/history.svg";
 import { ReactComponent as IconLogo } from "../../assets/brand.svg";
-import { Button, ButtonProps, Horizontal, noBreak,
-        PageWrapper, showModal, NamedSection } from "../../components";
+import {
+  Button, ButtonProps, Horizontal, noBreak,
+  PageWrapper, showModal, NamedSection
+} from "../../components";
 import { Timeline } from "./Timeline";
 import MoveClass from "./MoveClass";
+import { AttendanceLog, AttendanceLogWithStudent, Doc, Place, Student } from "../../constants/types";
+import { getMyClassAttendanceLog } from "../../api";
+import { getPlaceList } from "../../api/place";
 
 interface TopBarProps {
   klassName: string;
@@ -25,29 +31,14 @@ interface LabelCardProps {
   ref?: ((instance: HTMLDivElement | null) => void) | RefObject<HTMLDivElement> | null;
 }
 
-interface SelfStudyStatusByLabel {
-  label: string;
-  icon: JSX.Element;
-  students: {
-    name: string;
-    number: string;
-  }[];
-}
-
-interface ClassSelfStudyData {
-  type: SelfStudyPlaceState;
-  name: string;
-  labels: SelfStudyStatusByLabel[];
-}
-
 enum SelfStudyPlaceState {
   AVAILABLE = "AVAILABLE",
   NOTAVAILABLE = "NOTAVAILABLE"
 }
 
 const ROW_COLOR = {
-  [SelfStudyPlaceState.AVAILABLE]: "var(--main-theme-accent)",
-  [SelfStudyPlaceState.NOTAVAILABLE]: "#B8B8B8",
+  AVAILABLE: "var(--main-theme-accent)",
+  NOTAVAILABLE: "#B8B8B8",
 };
 
 const TopBar: React.FC<TopBarProps> = ({ klassName, jaseupName }) => (
@@ -93,13 +84,11 @@ const StudentName: React.FC = ({ children }) => {
   )
 };
 
-
-
 const StudentList: React.FC<{
-  students: SelfStudyStatusByLabel['students'];
+  log: AttendanceLogWithStudent[];
   hasLabel: boolean;
 }> = ({
-  students,
+  log,
   hasLabel
 }) => {
     const [, droppable] = useDrop({
@@ -122,9 +111,9 @@ const StudentList: React.FC<{
           flex-wrap: wrap;
         `}
         >
-          {students.map((student) => (
-            <StudentName key={student.number}>
-              {student.number} {student.name}
+          {log.map((student) => (
+            <StudentName key={student.student.number}>
+              {student.student.number} {student.student.name}
             </StudentName>
           ))}
         </Horizontal>
@@ -136,74 +125,96 @@ const ButtonWithIcon: React.FC<Partial<ButtonProps> & {
   icon: React.FunctionComponent;
   label: string;
 }> = ({ icon: Icon, label, ...props }) => {
-  return (<Button {...props}>
+  return (<ButtonWithIconWrapper {...props} >
     <Icon css={[iconStyle, css`
         fill: white;
         margin-right: 6px;
       `]} />
     {label}
-  </Button>)
+  </ButtonWithIconWrapper>)
 }
 
+interface DisplayPlace {
+  name: string;
+  ids: string[];
+  icon: JSX.Element;
+  isAvailable: boolean;
+  fallback?: boolean;
+}
+
+const iconStyle = css`
+  width: 24px;
+  fill: var(--row-color);
+`
+
+interface DisplayPlaceWithStudents extends DisplayPlace {
+  students: AttendanceLogWithStudent[]
+}
+
+const INIT_PLACE_KEY = "HOMEROOM"
+
+const groupedPlaces: DisplayPlace[] = [{
+  icon: <DeskIcon css={iconStyle} />,
+  ids: [INIT_PLACE_KEY],
+  name: "교실",
+  isAvailable: true,
+}, {
+  icon: <HealingsilIcon css={iconStyle} />,
+  ids: ["601fe6b4a40ac010e7a64962"],
+  name: "안정실",
+  isAvailable: false,
+}, {
+  icon: <OtherIcon css={iconStyle} />,
+  ids: [],
+  name: "기타",
+  isAvailable: false,
+  fallback: true,
+}]
+
+const OTHER_INDEX = groupedPlaces.findIndex(p => p.fallback)
+
+// const categorizedPlacesId = groupedPlaces.map(e => e.ids).flat()
+// let cachedPlacesData: Doc<Place>[]
+
 const SelfStudyDisplay: React.FC = () => {
-  const [selfStudyData, setSelfStudyData] = useState<ClassSelfStudyData[]>();
-  const [currentStudentQuentity, setCurrentStudentQuentity] = useState<{
-    [key in keyof typeof SelfStudyPlaceState]: number
+  const [selfStudyStatus, setSelfStudyStatus] = useState<{
+    available: DisplayPlaceWithStudents[];
+    notAvailable: DisplayPlaceWithStudents[]
   }>()
+  const fetchData = useCallback(async () => {
+    const groupedByPlaceKey = (await getMyClassAttendanceLog()).reduce((grouped, current) => {
+      const key = current.log?.place._id || INIT_PLACE_KEY
+      return {
+        ...grouped,
+        [key]: [...(grouped[key] || []), current]
+      }
+    }, {} as {
+      [key: string]: AttendanceLogWithStudent[] | undefined
+    })
+    // console.log()
+    const [available, notAvailable] = Object.keys(groupedByPlaceKey)
+      .reduce((matched, current) => {
+        const placeGroupIndex = matched.findIndex(p => p.ids.includes(current))
+        const matchedIndex = placeGroupIndex === -1 ? OTHER_INDEX : placeGroupIndex
+        return [
+          ...matched.slice(0, matchedIndex), {
+            ...matched[matchedIndex],
+            students: [...(matched[matchedIndex].students || []), ...(groupedByPlaceKey[current] || [])]
+          },
+          ...matched.slice(matchedIndex + 1)
+        ]
+      }, groupedPlaces.map(g => ({...g, students: []})) as DisplayPlaceWithStudents[])
+      .reduce((grouped, current) => {
+        if (current.isAvailable) return [[...grouped[0], current], grouped[1]]
+        return [grouped[0], [...grouped[1], current]]
+      }, [[], []] as DisplayPlaceWithStudents[][])
+
+    setSelfStudyStatus(() => ({ available, notAvailable }))
+  }, [])
+
   useEffect(() => {
-    setSelfStudyData(() => [
-      {
-        name: "현원",
-        type: SelfStudyPlaceState.AVAILABLE,
-        labels: [
-          {
-            icon: <DeskIcon css={iconStyle} />,
-            label: "교실",
-            students: [
-              {
-                name: "강예원",
-                number: "01",
-              },
-            ],
-          },
-          {
-            icon: <DeskIcon css={iconStyle} />,
-            label: "이동반",
-            students: [
-              {
-                name: "강예투",
-                number: "02",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: "결원",
-        type: SelfStudyPlaceState.NOTAVAILABLE,
-        labels: [
-          {
-            icon: <LaundryIcon css={iconStyle} />,
-            label: "세탁",
-            students: [
-              {
-                name: "박정한",
-                number: "10",
-              },
-            ],
-          },
-        ],
-      },
-    ]);
-  }, []);
-  useEffect(() => {
-    if (!selfStudyData) return
-    const [available, notAvailable] = (selfStudyData.map(status => status.labels.reduce((acc, place) => place.students.length + acc, 0)))
-    setCurrentStudentQuentity(() => ({
-      AVAILABLE: available,
-      NOTAVAILABLE: notAvailable
-    }))
-  }, [selfStudyData])
+    fetchData()
+  }, [fetchData])
 
   const openMoveClassDisplay = useCallback(() => {
     showModal(() => <NamedSection css={css`
@@ -249,42 +260,48 @@ const SelfStudyDisplay: React.FC = () => {
         <TopBar klassName="1학년 3반" jaseupName="방과후 자율학습 1타임" />
         <TableWrapper>
           <div>
-            {selfStudyData?.map((row, groupIndex) => (
+            {[{
+              color: ROW_COLOR.AVAILABLE,
+              label: "현원",
+              places: selfStudyStatus?.available
+            }, {
+              color: ROW_COLOR.NOTAVAILABLE,
+              label: "결원",
+              places: selfStudyStatus?.notAvailable
+            }].map(type =>
               <Horizontal
                 css={css`
                   align-items: stretch;
-                  --row-color: ${ROW_COLOR[row.type]};
+                  --row-color: ${type.color};
                   margin-top: 20px;
                 `}
-                key={row.name}
               >
-                <RowLable css={noBreak}>{row.name}</RowLable>
+                <RowLable css={noBreak}> {type.label} </RowLable>
 
-                <div  
+                <div
                   css={css`
                     margin-top: -15px;
                     flex: 1;
                   `}
                 >
-                  {row.labels.map((label, rowIndex) => (
-                    <Horizontal key={label.label} css={css`
-                      &>*{margin-left: 15px;}`
-                    }>
-                      <LabelCard title={groupIndex === 0 && rowIndex === 0 && "위치"} width={125} css={noBreak} contentCss={locationLabelStyle}>
-                        {label.icon}
+                  {
+                    type.places?.map(place => <Horizontal css={css`
+                    &>*{margin-left: 15px;}
+                  `}>
+                      <LabelCard title="위치" width={125} css={noBreak} contentCss={locationLabelStyle}>
+                        <DeskIcon css={iconStyle} />
                         <LocationLabelText>
-                          {label.label}
-                        </LocationLabelText>
+                          {place.name}
+                      </LocationLabelText>
                       </LabelCard>
-                      <LabelCard title={groupIndex === 0 && rowIndex === 0 && "인원"} width={70}>
-                        {label.students.length}
-                      </LabelCard>
-                      <StudentList hasLabel={(groupIndex === 0) && (rowIndex === 0)} students={label.students} />
-                    </Horizontal>
-                  ))}
+                      <LabelCard title={"인원"} width={70}>
+                        {place.students?.length}
+                    </LabelCard>
+                      <StudentList hasLabel log={place.students} />
+                    </Horizontal>)
+                  }
                 </div>
-              </Horizontal>
-            ))}
+              </Horizontal>)}
           </div>
         </TableWrapper>
 
@@ -292,7 +309,7 @@ const SelfStudyDisplay: React.FC = () => {
           margin-top: 20px;
           align-items: flex-start;
         `}>
-          {currentStudentQuentity && <Horizontal
+          {<Horizontal
             css={css`
               align-items: stretch;
               --row-color: ${ROW_COLOR.AVAILABLE};
@@ -306,13 +323,13 @@ const SelfStudyDisplay: React.FC = () => {
             `}
           >
             <LabelCard title="총원" width={70}>
-              {currentStudentQuentity.AVAILABLE + currentStudentQuentity.NOTAVAILABLE}
+              10
             </LabelCard>
             <LabelCard title="현원" width={70}>
-              {currentStudentQuentity?.AVAILABLE}
+              20
             </LabelCard>
             <LabelCard title="결원" width={70} css={css`--row-color: ${ROW_COLOR.NOTAVAILABLE};`}>
-              {currentStudentQuentity?.NOTAVAILABLE}
+              30
             </LabelCard>
           </Horizontal>}
           <Horizontal css={css`
@@ -383,7 +400,7 @@ const ContentWrapper = styled.div<{ hasLabel: boolean; }>`
   justify-content: center;
   flex-direction: column;
   
-  ${({hasLabel}) => !hasLabel && css`border-radius: 5px;`}
+  ${({ hasLabel }) => !hasLabel && css`border-radius: 5px;`}
 `;
 
 const ClassName = styled.h1`
@@ -405,18 +422,18 @@ const StudentWrapper = styled.h3`
   font-weight: 700;
 `;
 
-const iconStyle = css`
-  width: 24px;
-  fill: var(--row-color);
-`
-
 const locationLabelStyle = css`
   flex-direction: row;
 `
 
 const LocationLabelText = styled.p`
   flex: 1;
-  text-align: center; 
+  text-align: right; 
+`
+
+const ButtonWithIconWrapper = styled(Button)`
+  align-items: center;
+  display: flex;
 `
 
 export default SelfStudyDisplay;

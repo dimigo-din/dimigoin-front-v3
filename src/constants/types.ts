@@ -80,4 +80,9 @@ export interface AttendanceLog {
     remark: string;
 }
 
+export interface AttendanceLogWithStudent {
+    student: Doc<Student>;
+    log: AttendanceLog | null;
+}
+
 export interface Teacher extends Doc<User> { }
