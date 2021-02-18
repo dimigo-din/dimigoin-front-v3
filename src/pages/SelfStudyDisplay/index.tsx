@@ -9,6 +9,8 @@ import { ReactComponent as OtherIcon } from "../../assets/icons/other.svg";
 import { ReactComponent as InsangsilIcon } from "../../assets/icons/ingangsil.svg";
 import { ReactComponent as CircleIcon } from "../../assets/icons/circle.svg";
 import { ReactComponent as RefreshIcon } from "../../assets/icons/refresh.svg";
+import { ReactComponent as LaundryIcon } from "../../assets/icons/laundry.svg";
+import { ReactComponent as AbsentIcon } from "../../assets/icons/close.svg";
 import { ReactComponent as HistoryIcon } from "../../assets/icons/history.svg";
 import { ReactComponent as IconLogo } from "../../assets/brand.svg";
 import {
@@ -17,9 +19,8 @@ import {
 } from "../../components";
 import { Timeline } from "./Timeline";
 import MoveClass from "./MoveClass";
-import { AttendanceLog, AttendanceLogWithStudent, Doc, Place, Student } from "../../constants/types";
+import { AttendanceLogWithStudent } from "../../constants/types";
 import { getMyClassAttendanceLog } from "../../api";
-import { getPlaceList } from "../../api/place";
 
 interface TopBarProps {
   klassName: string;
@@ -30,12 +31,8 @@ interface LabelCardProps {
   title: string | boolean;
   contentCss?: SerializedStyles;
   width?: number;
+  hasLabel?: boolean;
   ref?: ((instance: HTMLDivElement | null) => void) | RefObject<HTMLDivElement> | null;
-}
-
-enum SelfStudyPlaceState {
-  AVAILABLE = "AVAILABLE",
-  NOTAVAILABLE = "NOTAVAILABLE"
 }
 
 const ROW_COLOR = {
@@ -60,12 +57,13 @@ const LabelCard: React.FC<LabelCardProps> = React.forwardRef(({
   title,
   contentCss,
   width,
+  hasLabel,
   ...props
 }, ref) => {
   return (
     <LabelWrapper {...props} width={width} ref={ref}>
-      {title && <LabelTitle>{title}</LabelTitle>}
-      <ContentWrapper hasLabel={!!title} css={contentCss}>{children}</ContentWrapper>
+      {title && hasLabel && <LabelTitle>{title}</LabelTitle>}
+      <ContentWrapper hasLabel={!!(title && hasLabel)} css={contentCss}>{children}</ContentWrapper>
     </LabelWrapper>
   )
 });
@@ -98,7 +96,8 @@ const StudentList: React.FC<{
     })
     return (
       <LabelCard
-        title={hasLabel && "이름"}
+        title="이름"
+        hasLabel={hasLabel}
         css={css`
         flex: 1;
       `}
@@ -114,7 +113,7 @@ const StudentList: React.FC<{
         `}
         >
           {log.map((student) => (
-            <StudentName key={student.student.number}>
+            <StudentName key={student.student._id}>
               {student.student.number} {student.student.name}
             </StudentName>
           ))}
@@ -175,6 +174,12 @@ const groupedPlaces: DisplayPlace[] = [{
   isAvailable: false,
   keyword: ["동아리"],
 }, {
+  icon: <LaundryIcon css={iconStyle} />,
+  ids: [],
+  name: "세탁",
+  isAvailable: false,
+  keyword: ["동아리"],
+}, {
   icon: <HealingsilIcon css={iconStyle} />,
   ids: ["601fe6b4a40ac010e7a64962"],
   name: "안정실",
@@ -185,6 +190,12 @@ const groupedPlaces: DisplayPlace[] = [{
   name: "기타",
   isAvailable: false,
   fallback: true,
+}, {
+  icon: <AbsentIcon css={iconStyle} />,
+  ids: [],
+  name: "결석",
+  keyword: ["결석"],
+  isAvailable: false,
 }]
 
 const OTHER_INDEX = groupedPlaces.findIndex(p => p.fallback)
@@ -199,7 +210,7 @@ const SelfStudyDisplay: React.FC = () => {
     available: DisplayPlaceWithStudents[];
     notAvailable: DisplayPlaceWithStudents[]
   }>()
-  
+
   const fetchData = useCallback(async () => {
     const [available, notAvailable] = (await getMyClassAttendanceLog()).reduce((grouped, current) => {
       const placeGroupIndex = current.log?.place._id !== undefined ? grouped.findIndex(p => p.ids.includes(current.log!.place._id)) : INITIAL_INDEX
@@ -279,8 +290,9 @@ const SelfStudyDisplay: React.FC = () => {
               color: ROW_COLOR.NOTAVAILABLE,
               label: "결원",
               places: selfStudyStatus?.notAvailable
-            }].map(type =>
+            }].map((type, typeIndex) =>
               <Horizontal
+                key={type.color}
                 css={css`
                   align-items: stretch;
                   --row-color: ${type.color};
@@ -296,20 +308,23 @@ const SelfStudyDisplay: React.FC = () => {
                   `}
                 >
                   {
-                    type.places?.map(place => <Horizontal css={css`
-                    &>*{margin-left: 15px;}
-                  `}>
-                      <LabelCard title="위치" width={125} css={noBreak} contentCss={locationLabelStyle}>
-                        {place.icon}
-                        <LocationLabelText>
-                          {place.name}
-                        </LocationLabelText>
-                      </LabelCard>
-                      <LabelCard title={"인원"} width={70}>
-                        {place.students?.length}
-                      </LabelCard>
-                      <StudentList hasLabel log={place.students} />
-                    </Horizontal>)
+                    type.places?.map((place, placeIndex) => {
+                      const hasLabel = typeIndex === 0 && placeIndex === 0
+                      return (<Horizontal css={css`
+                      &>*{margin-left: 15px;}
+                    `}>
+                        <LabelCard title="위치" hasLabel={hasLabel} width={125} css={noBreak} contentCss={locationLabelStyle}>
+                          {place.icon}
+                          <LocationLabelText>
+                            {place.name}
+                          </LocationLabelText>
+                        </LabelCard>
+                        <LabelCard title="인원" hasLabel={hasLabel} width={70}>
+                          {place.students?.length}
+                        </LabelCard>
+                        <StudentList hasLabel={hasLabel} log={place.students} />
+                      </Horizontal>)
+                    })
                   }
                 </div>
               </Horizontal>)}
