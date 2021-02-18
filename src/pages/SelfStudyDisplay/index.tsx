@@ -143,6 +143,7 @@ interface DisplayPlace {
   isAvailable: boolean;
   fallback?: boolean;
   keyword?: string[];
+  initial?: boolean;
 }
 
 const iconStyle = css`
@@ -161,6 +162,7 @@ const groupedPlaces: DisplayPlace[] = [{
   ids: [INIT_PLACE_KEY],
   name: "교실",
   isAvailable: true,
+  initial: true,
 }, {
   icon: <InsangsilIcon css={iconStyle} />,
   ids: ["601fe6b4a40ac010e7a64961", "601fe6b4a40ac010e7a64968"],
@@ -186,6 +188,7 @@ const groupedPlaces: DisplayPlace[] = [{
 }]
 
 const OTHER_INDEX = groupedPlaces.findIndex(p => p.fallback)
+const INITIAL_INDEX = groupedPlaces.findIndex(p => p.initial)
 const keywordQuery = groupedPlaces.map(p => p.keyword)
 
 // const categorizedPlacesId = groupedPlaces.map(e => e.ids).flat()
@@ -196,12 +199,13 @@ const SelfStudyDisplay: React.FC = () => {
     available: DisplayPlaceWithStudents[];
     notAvailable: DisplayPlaceWithStudents[]
   }>()
+  
   const fetchData = useCallback(async () => {
     const [available, notAvailable] = (await getMyClassAttendanceLog()).reduce((grouped, current) => {
-      const placeGroupIndex = !!current.log?.place._id && grouped.findIndex(p => p.ids.includes(current.log!.place._id))
+      const placeGroupIndex = current.log?.place._id !== undefined ? grouped.findIndex(p => p.ids.includes(current.log!.place._id)) : INITIAL_INDEX
       const remarkQueriedIndex = !!current.log?.remark && keywordQuery.findIndex(keywords => keywords?.some(keyword => current.log!.remark.includes(keyword)))
-      const matchedIndex = +(remarkQueriedIndex !== -1 ? remarkQueriedIndex : placeGroupIndex !== -1 ? placeGroupIndex : OTHER_INDEX)
-      console.log(remarkQueriedIndex)
+      const matchedIndex = +((remarkQueriedIndex && remarkQueriedIndex !== -1) ? remarkQueriedIndex : ((placeGroupIndex !== -1) ? placeGroupIndex : OTHER_INDEX))
+      console.log(current.student.username, current.log?.place._id, placeGroupIndex)
       return [
         ...grouped.slice(0, matchedIndex), {
           ...grouped[matchedIndex],
@@ -214,21 +218,7 @@ const SelfStudyDisplay: React.FC = () => {
       return [grouped[0], [...grouped[1], current]]
     }, [[], []] as DisplayPlaceWithStudents[][])
 
-    console.log('?', available, notAvailable)
-    // const [available, notAvailable] = Object.keys(groupedByPlaceKey)
-    //   .reduce((matched, current) => {
-    //     const placeGroupIndex = matched.findIndex(p => p.ids.includes(current))
-    //     const keywordQueryIndex = keywordQuery.findIndex(k => k?.includes())
-    //     const matchedIndex = placeGroupIndex === -1 ? OTHER_INDEX : placeGroupIndex
-    //     return [
-    //       ...matched.slice(0, matchedIndex), {
-    //         ...matched[matchedIndex],
-    //         students: [...(matched[matchedIndex].students || []), ...(groupedByPlaceKey[current] || [])]
-    //       },
-    //       ...matched.slice(matchedIndex + 1)
-    //     ]
-    //   }, groupedPlaces.map(g => ({...g, students: []})) as DisplayPlaceWithStudents[])
-
+    console.log(notAvailable)
 
     setSelfStudyStatus(() => ({ available, notAvailable }))
   }, [])
