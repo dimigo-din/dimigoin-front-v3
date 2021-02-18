@@ -19,7 +19,7 @@ interface TopBarProps {
 }
 
 interface LabelCardProps {
-  title: string;
+  title: string | boolean;
   contentCss?: SerializedStyles;
   width?: number;
   ref?: ((instance: HTMLDivElement | null) => void) | RefObject<HTMLDivElement> | null;
@@ -71,8 +71,8 @@ const LabelCard: React.FC<LabelCardProps> = React.forwardRef(({
 }, ref) => {
   return (
     <LabelWrapper {...props} width={width} ref={ref}>
-      <LabelTitle>{title}</LabelTitle>
-      <ContentWrapper css={contentCss}>{children}</ContentWrapper>
+      {title && <LabelTitle>{title}</LabelTitle>}
+      <ContentWrapper hasLabel={!!title} css={contentCss}>{children}</ContentWrapper>
     </LabelWrapper>
   )
 });
@@ -96,16 +96,18 @@ const StudentName: React.FC = ({ children }) => {
 
 
 const StudentList: React.FC<{
-  students: SelfStudyStatusByLabel['students']
+  students: SelfStudyStatusByLabel['students'];
+  hasLabel: boolean;
 }> = ({
-  students
+  students,
+  hasLabel
 }) => {
     const [, droppable] = useDrop({
       accept: 'STUDENT'
     })
     return (
       <LabelCard
-        title="이름"
+        title={hasLabel && "이름"}
         css={css`
         flex: 1;
       `}
@@ -247,7 +249,7 @@ const SelfStudyDisplay: React.FC = () => {
         <TopBar klassName="1학년 3반" jaseupName="방과후 자율학습 1타임" />
         <TableWrapper>
           <div>
-            {selfStudyData?.map((row) => (
+            {selfStudyData?.map((row, groupIndex) => (
               <Horizontal
                 css={css`
                   align-items: stretch;
@@ -258,26 +260,26 @@ const SelfStudyDisplay: React.FC = () => {
               >
                 <RowLable css={noBreak}>{row.name}</RowLable>
 
-                <div
+                <div  
                   css={css`
                     margin-top: -15px;
                     flex: 1;
                   `}
                 >
-                  {row.labels.map((label) => (
+                  {row.labels.map((label, rowIndex) => (
                     <Horizontal key={label.label} css={css`
                       &>*{margin-left: 15px;}`
                     }>
-                      <LabelCard title="위치" width={125} css={noBreak} contentCss={locationLabelStyle}>
+                      <LabelCard title={groupIndex === 0 && rowIndex === 0 && "위치"} width={125} css={noBreak} contentCss={locationLabelStyle}>
                         {label.icon}
                         <LocationLabelText>
                           {label.label}
                         </LocationLabelText>
                       </LabelCard>
-                      <LabelCard title="인원" width={70}>
+                      <LabelCard title={groupIndex === 0 && rowIndex === 0 && "인원"} width={70}>
                         {label.students.length}
                       </LabelCard>
-                      <StudentList students={label.students} />
+                      <StudentList hasLabel={(groupIndex === 0) && (rowIndex === 0)} students={label.students} />
                     </Horizontal>
                   ))}
                 </div>
@@ -365,7 +367,7 @@ const LabelTitle = styled.h3`
   font-size: 18px;
 `;
 
-const ContentWrapper = styled.div`
+const ContentWrapper = styled.div<{ hasLabel: boolean; }>`
   border: 1px solid var(--row-color);
   padding: 14px;
   color: var(--row-color);
@@ -380,6 +382,8 @@ const ContentWrapper = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  
+  ${({hasLabel}) => !hasLabel && css`border-radius: 5px;`}
 `;
 
 const ClassName = styled.h1`
