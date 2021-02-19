@@ -31,21 +31,38 @@ export enum Gender {
     F = "F",
 }
 
-export enum NightSelfStudyTime {
+export interface HourAndMinute {
+    hour: number;
+    minute: string;
+}
+
+export enum NightSelfStudyTimeKey {
     NSS1 = "NSS1",
     NSS2 = "NSS2"
 }
 
 export enum AfterschoolSelfStudyTime {
-    BSS1 = "BSS1",
-    BSS2 = "BSS2"
+    AFSC1 = "AFSC1",
+    AFSC2 = "AFSC2",
 }
 
-export type SelfStudyTime = NightSelfStudyTime | AfterschoolSelfStudyTime
+export enum SelfStudyTime {
+    AFSC1 = "AFSC1",
+    AFSC2 = "AFSC2",
+    NSS1 = "NSS1",
+    NSS2 = "NSS2"
+}
+
+export interface IngangApplyPeriod {
+    start: HourAndMinute,
+    end: HourAndMinute,
+}
+
+// export type SelfStudyTime = NightSelfStudyTime | AfterschoolSelfStudyTime
 
 export interface IngangsilTicket extends SavedDocument {
     date: string;
-    time: keyof typeof NightSelfStudyTime;
+    time: keyof typeof NightSelfStudyTimeKey;
     applier: Student;
 }
 
@@ -55,6 +72,7 @@ export interface User {
     userType: UserType;
     gender: Gender;
     name: string;
+    permissions: string[]
 }
 
 export interface Student extends Doc<User> {

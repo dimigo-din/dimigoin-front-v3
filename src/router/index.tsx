@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Switch, Route, Redirect, HashRouter } from "react-router-dom";
-import { Main, Notices, Ingangsil, Mentoring, Outgo, SelfStudyDisplay } from "../pages";
+import { Switch, Route, Redirect, HashRouter, RouteComponentProps } from "react-router-dom";
+import { Main, Notices, Ingangsil, Mentoring, Outgo, SelfStudyDisplay, IngangsilManager } from "../pages";
 import { LoadableComponent } from "@loadable/component";
 import { getAccessToken, getRefreshToken, loginWithRefreshToken } from "../api";
 import styled from "@emotion/styled";
@@ -8,6 +8,8 @@ import Login from "../pages/Login";
 import { Student, UserType } from "../constants/types";
 import { getMyData } from "../api/user";
 import { NavigationBar } from "../components";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 const needAuth = <PageProps extends {}>(Component: LoadableComponent<PageProps>) => {
   return (params: PageProps) => {
@@ -25,7 +27,7 @@ const needAuth = <PageProps extends {}>(Component: LoadableComponent<PageProps>)
   }
 }
 
-const NeedAuthAndBranch = <TeacherProps, StudentProps>({
+const needAuthAndBranch = <TeacherProps, StudentProps>({
   Teacher,
   Student
 }: {
@@ -45,6 +47,30 @@ const NeedAuthAndBranch = <TeacherProps, StudentProps>({
   }
 }
 
+const needPermission = <Props extends {}>(permission: string, Page: React.FC<RouteComponentProps<Props>>) => (props: RouteComponentProps<Props>) => {
+  const [hasPermission, setHasPermission] = React.useState<boolean>();
+
+  useEffect(() => {
+    getMyData()
+      .then(d => {
+        const _hasPermission = d.permissions.includes(permission)
+        if(!_hasPermission)
+          toast.info("권한이 없습니다")
+        setHasPermission(() => _hasPermission)
+      })
+      .catch(() => {
+        toast.info("로그인이 필요합니다")
+        setHasPermission(() => false)
+      })
+  }, [])
+
+  if (hasPermission === undefined) return <></>
+  if (hasPermission)
+    return <Page {...props} />
+  return <Redirect to="/" />
+}
+
+
 const Router: React.FC = () => (
   <HashRouter>
     <Switch>
@@ -53,7 +79,8 @@ const Router: React.FC = () => (
       <Container>
         <TopLine />
         <NavigationBar />
-        <Route path="/ingangsil" component={NeedAuthAndBranch<{}, {}>(Ingangsil)} />
+        <Route path="/ingangsil/manager" component={needPermission("ingang-application", needAuth(IngangsilManager))} />
+        <Route path="/ingangsil" exact component={needAuthAndBranch<{}, {}>(Ingangsil)} />
         <Route path="/outgo" component={needAuth(Outgo)} />
         <Route path="/notices/:articleId" component={needAuth(Notices)} />
         <Route path="/notices" exact component={needAuth(Notices)} />

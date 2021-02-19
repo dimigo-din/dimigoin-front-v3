@@ -16,7 +16,7 @@ import {
 import { Timeline } from "./Timeline";
 import {
   AfterschoolSelfStudyTime, AttendanceLogWithStudent,
-  NightSelfStudyTime, SelfStudyTime, Student
+  NightSelfStudyTimeKey, SelfStudyTime, Student
 } from "../../constants/types";
 import { getWholeClassAttendanceLog } from "../../api";
 import { useMyData } from "../../hooks/api/useMyData";
@@ -348,10 +348,10 @@ const SelfStudyDisplay: React.FC = () => {
           clasName={myData && `${myData.grade}학년 ${myData.class}반`}
           selfStudyName={
             currentSelfStudyTime ? ({
-              [NightSelfStudyTime.NSS1]: "야간자율학습 1타임",
-              [NightSelfStudyTime.NSS2]: "야간자율학습 2타임",
-              [AfterschoolSelfStudyTime.BSS1]: "방과후자율학습 1타임",
-              [AfterschoolSelfStudyTime.BSS2]: "방과후자율학습 2타임"
+              [SelfStudyTime.NSS1]: "야간자율학습 1타임",
+              [SelfStudyTime.NSS2]: "야간자율학습 2타임",
+              [SelfStudyTime.AFSC1]: "방과후자율학습 1타임",
+              [SelfStudyTime.AFSC2]: "방과후자율학습 2타임"
             })[currentSelfStudyTime] : "자율학습시간이 아닙니다"
           } />
         <TableWrapper>

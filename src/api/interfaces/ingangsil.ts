@@ -1,14 +1,4 @@
-import { Doc, DownloadbleFile, NightSelfStudyTime, Student } from "../../constants/types";
-
-export interface HourAndMinute {
-    hour: number;
-    minute: string;
-}
-
-export interface IngangApplyPeriod {
-    start: HourAndMinute,
-    end: HourAndMinute,
-}
+import { Doc, DownloadbleFile, IngangApplyPeriod, NightSelfStudyTimeKey, SelfStudyTime, Student } from "../../constants/types";
 
 export interface NightSelfStudyTimeRanges {
     NSS1: string;
@@ -26,10 +16,10 @@ export interface MyApplyStatus {
         ingangMaxApplier: number;
         applicationsInClass: Doc<{
             date: string;
-            time: keyof typeof NightSelfStudyTime;
+            time: NightSelfStudyTimeKey;
             applier: Student;
         }>[],
-        nightSelfStudyTimes: NightSelfStudyTimeRanges;
+        selfStudyTimes: Record<SelfStudyTime, IngangApplyPeriod>
         ingangApplyPeriod: IngangApplyPeriod;
     }
 }

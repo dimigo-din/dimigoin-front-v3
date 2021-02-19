@@ -71,7 +71,7 @@ const ApplierListCard: React.FC<{ onClickDownload(): void }> = ({ onClickDownloa
     </Card>
 }
 
-export const TeacherIngangsil: React.FC = () => {
+export const IngangsilManager: React.FC = () => {
     const downloadExcel = useCallback(async (grade: number) => {
         const request = await requestExcelFile(grade)
         downloadFileFromDownloadble(request)
@@ -141,4 +141,4 @@ const Name = styled.div`
     white-space: nowrap;
 `
 
-export default TeacherIngangsil
+export default IngangsilManager

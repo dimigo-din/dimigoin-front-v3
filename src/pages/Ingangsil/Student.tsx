@@ -7,10 +7,9 @@ import {
 } from "../../components";
 import { ReactComponent as CircleSvg } from "../../assets/icons/circle.svg";
 import { APIResource } from "../../api";
-import { IngangsilTicket, NightSelfStudyTime } from "../../constants/types";
+import { IngangApplyPeriod, IngangsilTicket, NightSelfStudyTimeKey, SelfStudyTime } from "../../constants/types";
 import { useMyData } from "../../hooks/api/useMyData";
 import Skeleton from "react-loading-skeleton";
-import { IngangApplyPeriod } from '../../api/interfaces/ingangsil';
 import { applyIngangsil, getMyIngangsilStatus, unapplyIngangsil } from "../../api/ingangsil";
 
 const timeRangeToString = ({ start, end }: IngangApplyPeriod) => (
@@ -25,9 +24,9 @@ const Ingangsil: React.FC = () => {
     acc[current.time] = [...(acc[current.time] || []), current]
     return acc
   }, {
-    [NightSelfStudyTime.NSS1]: [],
-    [NightSelfStudyTime.NSS2]: []
-  } as Record<NightSelfStudyTime, IngangsilTicket[]>)
+    [NightSelfStudyTimeKey.NSS1]: [],
+    [NightSelfStudyTimeKey.NSS2]: []
+  } as Record<NightSelfStudyTimeKey, IngangsilTicket[]>)
 
   const loadStatus = useCallback(() => {
     return getMyIngangsilStatus().then(setFetchedMyStatus)
@@ -153,9 +152,12 @@ const Ingangsil: React.FC = () => {
               ]}
             />
             <Divider horizontal small data-divider />
-            <CardGroupHeader withBubble>우리반 신청자</CardGroupHeader>
+            <CardGroupHeader subButton={{
+              text: "인원관리",
+              route: '/ingangsil/manager'
+            }}>우리반 신청자</CardGroupHeader>
             {[...Array(2)].map((_, index) => {
-              const currentTimeAppliers = groupedByTime?.[NightSelfStudyTime[index === 0 ? "NSS1" : "NSS2"]]
+              const currentTimeAppliers = groupedByTime?.[NightSelfStudyTimeKey[index === 0 ? "NSS1" : "NSS2"]]
               return (<Card leftBorder>
                 <ResponsiveWrapper>
                   <IngangTime>{index + 1}타임</IngangTime>
@@ -179,7 +181,7 @@ const Ingangsil: React.FC = () => {
           <Divider data-divider />
           <Col width={5.5}>
             {[...Array(2)].map((_, index) => {
-              const selfStudyId = NightSelfStudyTime[index === 0 ? "NSS1" : "NSS2"]
+              const selfStudyId = NightSelfStudyTimeKey[index === 0 ? "NSS1" : "NSS2"]
               const currentTimeAppliers = groupedByTime?.[selfStudyId]
               const applied = myData && currentTimeAppliers?.map(e => e.applier._id).includes(myData?._id)
               return (<>
@@ -195,7 +197,7 @@ const Ingangsil: React.FC = () => {
                   currentApplied={currentTimeAppliers?.length}
                   max={myStatus?.ingangMaxApplier}
                   isApplied={applied}
-                  time={myStatus?.nightSelfStudyTimes[selfStudyId]}
+                  time={myStatus?.selfStudyTimes[selfStudyId]}
                 /></>
               )
             })}
