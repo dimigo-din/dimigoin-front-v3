@@ -17,14 +17,19 @@ const orderTypeFirst = (places: Doc<Place>[], priority: string) =>
 export const OtherPlaceModal: React.FC<{
     onSubmit(placeId: string, placeName: string, reason: string): void;
     priority?: string;
-}> = ({ onSubmit, priority }) => {
+    showOnly?: string;
+}> = ({ onSubmit, priority, showOnly }) => {
     const [ places, setPlaces ] = useState<Doc<Place>[]>()
     const placeDropdown = useInput<DropdownItem>();
     const reasonInput = useInput();
 
     useEffect(() => {
-        getPlaceList().then(e => setPlaces(priority ? orderTypeFirst(e, priority) : e))
-    }, [])
+        (async () => {
+            const placeList = await getPlaceList()
+            if(showOnly) setPlaces(() => placeList.filter(place => place.type === showOnly))
+            else setPlaces(() => priority ? orderTypeFirst(placeList, priority) : placeList)
+        })()
+    }, [ setPlaces, showOnly, priority ])
 
     const submit = useCallback(() => {
         const errors = [

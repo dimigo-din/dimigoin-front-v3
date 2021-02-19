@@ -154,11 +154,10 @@ const ButtonWithIcon: React.FC<Partial<ButtonProps> & {
 
 interface DisplayPlace {
   name: string;
-  ids: string[];
+  type: string;
   icon: JSX.Element;
   isAvailable: boolean;
   fallback?: boolean;
-  keyword?: string[];
   initial?: boolean;
 }
 
@@ -175,44 +174,30 @@ const INIT_PLACE_KEY = "HOMEROOM"
 
 const groupedPlaces: DisplayPlace[] = [{
   icon: <DeskIcon css={iconStyle} />,
-  ids: [INIT_PLACE_KEY],
+  type: "CLASSROOM",
   name: "교실",
   isAvailable: true,
   initial: true,
 }, {
   icon: <InsangsilIcon css={iconStyle} />,
-  ids: ["601fe6b4a40ac010e7a64961", "601fe6b4a40ac010e7a64968"],
+  type: "INGANG",
   name: "인강실",
-  keyword: ["인강실"],
   isAvailable: false,
 }, {
   icon: <CircleIcon css={iconStyle} />,
-  ids: [],
-  name: "동아리",
-  isAvailable: false,
-  keyword: ["동아리"],
-}, {
-  icon: <LaundryIcon css={iconStyle} />,
-  ids: [],
-  name: "세탁",
-  isAvailable: false,
-  keyword: ["동아리"],
-}, {
-  icon: <HealingsilIcon css={iconStyle} />,
-  ids: ["601fe6b4a40ac010e7a64962"],
-  name: "안정실",
+  type: "CIRCLE",
+  name: "동아리실",
   isAvailable: false,
 }, {
   icon: <OtherIcon css={iconStyle} />,
-  ids: [],
+  type: "ETC",
   name: "기타",
   isAvailable: false,
   fallback: true,
 }, {
   icon: <AbsentIcon css={iconStyle} />,
-  ids: [],
+  type: "ABSENT",
   name: "결석",
-  keyword: ["결석"],
   isAvailable: false,
 }]
 
@@ -220,7 +205,6 @@ const isRealData = (d: DisplayPlace): d is DisplayPlaceWithStudents => (d as any
 
 const OTHER_INDEX = groupedPlaces.findIndex(p => p.fallback)
 const INITIAL_INDEX = groupedPlaces.findIndex(p => p.initial)
-const keywordQuery = groupedPlaces.map(p => p.keyword)
 
 const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeName }: DisplayPlace) => new Promise<{
   placeId: string;
@@ -237,8 +221,8 @@ const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeName }: 
   if (placeName === '안정실') return success({
     placeId: "601fe6b4a40ac010e7a64962"
   })
-  if (placeName === '동아리')
-    showModal((close) => <OtherPlaceModal priority="CIRCLE" onSubmit={(name, placeId, reason) => {
+  if (placeName === '동아리실')
+    showModal((close) => <OtherPlaceModal showOnly="CIRCLE" onSubmit={(name, placeId, reason) => {
       success({
         placeId,
         reason
@@ -268,15 +252,19 @@ const SelfStudyDisplay: React.FC = () => {
     notAvailable: DisplayPlaceWithStudents[]
   }>()
 
+  const [ studentQuantity, setStudentQuantity ] = useState<{
+    available: number,
+    notAvailable: number
+  }>()
+
   const myData = useMyData()
 
   const fetchData = useCallback(async () => {
     if (!myData) return
     const [available, notAvailable] = (await getWholeClassAttendanceLog(myData.grade, myData.class))
       .reduce((grouped, current) => {
-        const placeGroupIndex = current.log?.place._id !== undefined ? grouped.findIndex(p => p.ids.includes(current.log!.place._id)) : INITIAL_INDEX
-        const remarkQueriedIndex = !!current.log?.remark && keywordQuery.findIndex(keywords => keywords?.some(keyword => current.log!.remark.includes(keyword)))
-        const matchedIndex = +((remarkQueriedIndex && remarkQueriedIndex !== -1) ? remarkQueriedIndex : ((placeGroupIndex !== -1) ? placeGroupIndex : OTHER_INDEX))
+        const placeGroupIndex = current.log?.place.type !== undefined ? grouped.findIndex(p => p.type === current.log?.place.type) : INITIAL_INDEX
+        const matchedIndex = (placeGroupIndex !== -1) ? placeGroupIndex : OTHER_INDEX
         return [
           ...grouped.slice(0, matchedIndex), {
             ...grouped[matchedIndex],
@@ -290,6 +278,10 @@ const SelfStudyDisplay: React.FC = () => {
         return [grouped[0], [...grouped[1], current]]
       }, [[], []] as DisplayPlaceWithStudents[][])
     setSelfStudyStatus(() => ({ available, notAvailable }))
+    setStudentQuantity(() => ({
+      available: available.reduce((acc, current) => acc + current.students.length, 0),
+      notAvailable: notAvailable.reduce((acc, current) => acc + current.students.length, 0)
+    }))
   }, [setSelfStudyStatus, myData])
 
   const moveStudentPlaceTo = useCallback(async (student: Student, place: DisplayPlace) => {
@@ -351,7 +343,6 @@ const SelfStudyDisplay: React.FC = () => {
                 <ResponsiveWrapper
                   threshold={800}
                   css={css`
-                    /* margin-top: -15px; */
                     flex-direction: column;
                     flex: 1;
                   `}
@@ -362,13 +353,13 @@ const SelfStudyDisplay: React.FC = () => {
 
                       return (
                         <>
-                        {placeIndex !== 0 && <Divider data-divider horizontal smaller />}
+                          {placeIndex !== 0 && <Divider data-divider horizontal smaller />}
                           <ResponsiveWrapper
                             threshold={800}
                             key={place.name}
                           >
                             <ResponsiveWrapper threshold={0}>
-                              <LabelCard title="위치" hasLabel={hasLabel} css={[noBreak, responsiveLabelCardWidth(125)]} contentCss={locationLabelStyle}>
+                              <LabelCard title="위치" hasLabel={hasLabel} css={[noBreak, responsiveLabelCardWidth(160)]} contentCss={locationLabelStyle}>
                                 {place.icon}
                                 <LocationLabelText>
                                   {place.name}
@@ -390,12 +381,15 @@ const SelfStudyDisplay: React.FC = () => {
               </ResponsiveWrapper>)}
           </div>
         </TableWrapper>
-        <Divider />
-        <Horizontal css={css`
+        <ResponsiveWrapper css={css`
+          flex-direction: column;
+        `}>
+          <Divider data-divider smaller horizontal />
+          <ResponsiveWrapper css={css`
           align-items: flex-start;
         `}>
-          {<Horizontal
-            css={css`
+            <Horizontal
+              css={css`
               align-items: stretch;
               --row-color: ${ROW_COLOR.AVAILABLE};
               flex: 1;
@@ -406,27 +400,31 @@ const SelfStudyDisplay: React.FC = () => {
                 margin-top: 0px;
               }
             `}
-          >
-            <LabelCard title="총원" hasLabel width={70}>
-              10
+            >
+              <LabelCard title="총원" hasLabel width={70}>
+                {studentQuantity ? (studentQuantity.available + studentQuantity.notAvailable) : <Skeleton width={30} />}
             </LabelCard>
-            <LabelCard title="현원" hasLabel width={70}>
-              20
+              <LabelCard title="현원" hasLabel width={70}>
+              {studentQuantity ? studentQuantity.available : <Skeleton width={30} />}
             </LabelCard>
-            <LabelCard title="결원" hasLabel width={70} css={css`--row-color: ${ROW_COLOR.NOTAVAILABLE};`}>
-              30
+              <LabelCard title="결원" hasLabel width={70} css={css`--row-color: ${ROW_COLOR.NOTAVAILABLE};`}>
+              {studentQuantity ? studentQuantity.notAvailable : <Skeleton width={30} />}
             </LabelCard>
-          </Horizontal>}
-          <Horizontal css={css`
+            </Horizontal>
+            <ResponsiveWrapper css={css`
+          flex-direction: column;
             &>*+* {
               margin-left: 12px;
             }
           `}>
-            <ButtonWithIcon icon={RefreshIcon} label="새로고침" onClick={() => fetchData()} />
-            {/* <ButtonWithIcon icon={DeskIcon} label="이동반" onClick={openMoveClassDisplay} /> */}
-            {/* <ButtonWithIcon icon={HistoryIcon} label="히스토리" onClick={openTimeline} /> */}
-          </Horizontal>
-        </Horizontal>
+              <Divider data-divider smaller />
+              <ButtonWithIcon icon={RefreshIcon} label="새로고침" onClick={() => fetchData()} />
+              {/* <ButtonWithIcon icon={DeskIcon} label="이동반" onClick={openMoveClassDisplay} /> */}
+              {/* <ButtonWithIcon icon={HistoryIcon} label="히스토리" onClick={openTimeline} /> */}
+            </ResponsiveWrapper>
+          </ResponsiveWrapper>
+
+        </ResponsiveWrapper>
       </PageWrapper>
     </DndProvider>
   );
@@ -468,7 +466,7 @@ const LabelTitle = styled.h3<{ visible: boolean }>`
   font-weight: 700;
   font-size: 18px;
   
-  ${({visible}) => !visible && css`
+  ${({ visible }) => !visible && css`
     @media screen and (min-width: 800px) {
       display: none;
     }
