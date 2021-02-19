@@ -6,12 +6,12 @@ import {
   CardTitle, Divider, IngansilStatus, TextCardGroup
 } from "../../components";
 import { ReactComponent as CircleSvg } from "../../assets/icons/circle.svg";
-import ingangsil from "../../api/ingangsil";
 import { APIResource } from "../../api";
 import { IngangsilTicket, NightSelfStudyTime } from "../../constants/types";
 import { useMyData } from "../../hooks/api/useMyData";
 import Skeleton from "react-loading-skeleton";
 import { IngangApplyPeriod } from '../../api/interfaces/ingangsil';
+import { applyIngangsil, getMyIngangsilStatus, unapplyIngangsil } from "../../api/ingangsil";
 
 const timeRangeToString = ({ start, end }: IngangApplyPeriod) => (
   `${start.hour.toString().padStart(2, '0')}:${start.minute.toString().padStart(2, '0')} ~ ` +
@@ -30,7 +30,7 @@ const Ingangsil: React.FC = () => {
   } as Record<NightSelfStudyTime, IngangsilTicket[]>)
 
   const loadStatus = useCallback(() => {
-    return ingangsil.getMyStatus().then(setFetchedMyStatus)
+    return getMyIngangsilStatus().then(setFetchedMyStatus)
   }, [setFetchedMyStatus])
   useEffect(() => {
     const timer = setInterval(() => loadStatus(), 1000)
@@ -187,8 +187,8 @@ const Ingangsil: React.FC = () => {
                 <IngansilStatus
                   key={`ingangsil${index}`}
                   onSubmit={async () => {
-                    if (applied) await ingangsil.unapply(selfStudyId)
-                    else await ingangsil.apply(selfStudyId)
+                    if (applied) await unapplyIngangsil(selfStudyId)
+                    else await applyIngangsil(selfStudyId)
                     await loadStatus()
                   }}
                   name={`야간 자율학습 ${index + 1}타임`}

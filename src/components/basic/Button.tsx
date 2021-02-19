@@ -16,7 +16,7 @@ export interface ButtonProps {
 
 const style = {
   btn: css`
-    display: inline-block;
+    display: inline-flex;
     background-color: var(--main-theme-accent);
     padding: 18px;
     border-radius: 5px;

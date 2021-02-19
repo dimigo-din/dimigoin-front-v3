@@ -96,3 +96,13 @@ export interface Teacher extends Doc<User> {
     position?: string;
     role?: string;
 }
+
+export interface DownloadbleFile {
+    downloadLimit: number;
+    downloadCount: number;
+    name: string;
+    extension: string;
+    owner: string;
+    _id: string;
+    // id가 꼭 필요한 특수케이스입니다,,
+}

@@ -1,4 +1,4 @@
-import { Doc, NightSelfStudyTime, Student } from "../../constants/types";
+import { Doc, DownloadbleFile, NightSelfStudyTime, Student } from "../../constants/types";
 
 export interface HourAndMinute {
     hour: number;
@@ -53,5 +53,14 @@ export interface UnapplyIngangsil {
         date: string;
         time: number;
         applier: string;
+    }
+}
+
+export interface RequestExcelFile {
+    endpoint: '/ingang-application/export/grade/:grade';
+    method: 'GET';
+    req: {};
+    res: {
+        exportedFile: Doc<DownloadbleFile>
     }
 }

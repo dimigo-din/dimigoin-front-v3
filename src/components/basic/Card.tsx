@@ -22,6 +22,7 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   onMouseOut?: MouseEventHandler;
   onBlur?: FocusEventHandler;
   leftBorder?: boolean;
+  disableSpace?: boolean;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -69,6 +70,7 @@ interface CardContainerProps {
   hover?: boolean;
   clickable?: boolean;
   leftBorder?: boolean;
+  disableSpace?: boolean;
 }
 
 const Container = styled.div<CardContainerProps>`
@@ -79,9 +81,11 @@ const Container = styled.div<CardContainerProps>`
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.03);
   transition: 1s cubic-bezier(0, 0.46, 0.12, 0.98);
 
-  & + & {
-    margin-top: 10px;
-  }
+  ${({ disableSpace }) => !disableSpace && css`
+    & + & {
+      margin-top: 10px;
+    }
+  `}
 
   ${({ leftBorder }) =>
     leftBorder &&

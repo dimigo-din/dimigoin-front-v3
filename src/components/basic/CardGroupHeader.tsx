@@ -9,6 +9,7 @@ interface CardGroupheaderProps {
   withBubble?: boolean;
   subButton?: {
     text?: string;
+    component?: JSX.Element;
     route?: string;
     action?: () => any;
   };
@@ -27,18 +28,21 @@ export const CardGroupHeader: React.FC<CardGroupheaderProps> = ({
       `}>
         <Title withBubble={withBubble}>{children}</Title>
         <Divider small />
-        {subButton && (
+        {subButton && (subButton.component || (
           subButton.route ? (
             <SubButton>
-              <UnstyledLink to={subButton.route}>{subButton.text || <Skeleton width={120} />}
+              <UnstyledLink to={subButton.route}>
+                {subButton.text || <Skeleton width={120} />}
               </UnstyledLink>
             </SubButton>
           ) : subButton.action ? (
-            <SubButton onClick={subButton.action}>{subButton.text || <Skeleton width={120} />}</SubButton>
+            <SubButton onClick={subButton.action}>
+              {subButton.text || <Skeleton width={120} />}
+            </SubButton>
           ) : (
                 <SubButton>{subButton.text || <Skeleton width={120} />}</SubButton>
               )
-        )}
+        ))}
       </Horizontal>
     </Wrapper>
   );
