@@ -1,7 +1,6 @@
 import css from "@emotion/css"
 import styled from "@emotion/styled"
 import React, { useCallback, useEffect, useState } from "react"
-import useInput from "../../../hooks/useInput"
 import { MonthCalendar } from "./MonthCalendar"
 
 interface Position {

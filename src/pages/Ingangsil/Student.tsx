@@ -1,18 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import NavigationBar from "../components/complex/NavigationBar";
 import css from "@emotion/css";
 import {
   PageWrapper, ResponsiveWrapper, Col, CardGroupHeader, Card,
   CardTitle, Divider, IngansilStatus, TextCardGroup
-} from "../components";
-import { ReactComponent as CircleSvg } from "../assets/icons/circle.svg";
-import ingangsil from "../api/ingangsil";
-import { APIResource } from "../api";
-import { IngangsilTicket, NightSelfStudyTime } from "../constants/types";
-import { useMyData } from "../hooks/api/useMyData";
+} from "../../components";
+import { ReactComponent as CircleSvg } from "../../assets/icons/circle.svg";
+import ingangsil from "../../api/ingangsil";
+import { APIResource } from "../../api";
+import { IngangsilTicket, NightSelfStudyTime } from "../../constants/types";
+import { useMyData } from "../../hooks/api/useMyData";
 import Skeleton from "react-loading-skeleton";
-import { IngangApplyPeriod } from '../api/interfaces/ingangsil';
+import { IngangApplyPeriod } from '../../api/interfaces/ingangsil';
 
 const timeRangeToString = ({ start, end }: IngangApplyPeriod) => (
   `${start.hour.toString().padStart(2, '0')}:${start.minute.toString().padStart(2, '0')} ~ ` +
@@ -42,7 +41,6 @@ const Ingangsil: React.FC = () => {
 
   return (
     <>
-      <NavigationBar />
       <PageWrapper>
         <ResponsiveWrapper threshold={1100} css={css`
           @media screen and (max-width: 1100px) {

@@ -5,6 +5,9 @@ import { LoadableComponent } from "@loadable/component";
 import { getAccessToken, getRefreshToken, loginWithRefreshToken } from "../api";
 import styled from "@emotion/styled";
 import Login from "../pages/Login";
+import { Student, UserType } from "../constants/types";
+import { getMyData } from "../api/user";
+import { NavigationBar } from "../components";
 
 const needAuth = <PageProps extends {}>(Component: LoadableComponent<PageProps>) => {
   return (params: PageProps) => {
@@ -22,17 +25,38 @@ const needAuth = <PageProps extends {}>(Component: LoadableComponent<PageProps>)
   }
 }
 
+const NeedAuthAndBranch = <TeacherProps, StudentProps>({
+  Teacher,
+  Student
+}: {
+  Teacher: LoadableComponent<TeacherProps>;
+  Student: LoadableComponent<StudentProps>;
+}): React.FC<StudentProps & TeacherProps> => {
+  return function C(props) {
+    const [myData, setMyData] = React.useState<Student | null>();
+    React.useEffect(() => {
+      getMyData().then(setMyData).catch(() => setMyData(null))
+    }, [])
+
+    if (myData === null) return <Redirect to="/auth/login" />
+    if (myData?.userType === UserType.S) return <Student {...props} />
+    if (myData?.userType === UserType.T) return <Teacher {...props} />
+    return <></>
+  }
+}
+
 const Router: React.FC = () => (
   <HashRouter>
     <Switch>
       <Route path="/auth/login" component={Login} />
+      <Route path="/selfstudydisplay" component={needAuth(SelfStudyDisplay)} />
       <Container>
         <TopLine />
-        <Route path="/ingangsil" component={needAuth(Ingangsil)} />
+        <NavigationBar />
+        <Route path="/ingangsil" component={NeedAuthAndBranch<{}, {}>(Ingangsil)} />
         <Route path="/outgo" component={needAuth(Outgo)} />
         <Route path="/notices/:articleId" component={needAuth(Notices)} />
         <Route path="/notices" exact component={needAuth(Notices)} />
-        <Route path="/selfstudydisplay" component={needAuth(SelfStudyDisplay)} />
         <Route path="/mentoring" component={needAuth(Mentoring)} />
         <Route path="/" exact component={needAuth(Main)} />
       </Container>

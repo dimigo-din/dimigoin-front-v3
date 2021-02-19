@@ -10,16 +10,15 @@ import { ReactComponent as CircleIcon } from "../../assets/icons/circle.svg";
 import { ReactComponent as AbsentIcon } from "../../assets/icons/close.svg";
 import { ReactComponent as IconLogo } from "../../assets/brand.svg";
 import {
-  Button, Horizontal, noBreak, PageWrapper, showModal,
+  Horizontal, noBreak, PageWrapper, showModal,
   ResponsiveWrapper, Divider, UnstyledLink
 } from "../../components";
 import { Timeline } from "./Timeline";
 import {
-  AfterschoolSelfStudyTime, AttendanceLogWithStudent, Gender,
+  AfterschoolSelfStudyTime, AttendanceLogWithStudent,
   NightSelfStudyTime, SelfStudyTime, Student
 } from "../../constants/types";
 import { getWholeClassAttendanceLog } from "../../api";
-import { OtherPlaceModal } from "../Main/OtherPlaceModal";
 import { useMyData } from "../../hooks/api/useMyData";
 import Skeleton from "react-loading-skeleton";
 import { getSelfStudyPeriod } from "../../utils";
@@ -224,45 +223,45 @@ const isRealData = (d: DisplayPlace): d is DisplayPlaceWithStudents => (d as any
 const OTHER_INDEX = groupedPlaces.findIndex(p => p.fallback)
 const INITIAL_INDEX = groupedPlaces.findIndex(p => p.initial)
 
-const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeName }: DisplayPlace) => new Promise<{
-  placeId: string;
-  reason?: string;
-}>((success) => {
-  if (placeName === '인강실')
-    return success({
-      placeId: ["601fe6b4a40ac010e7a64968", "601fe6b4a40ac010e7a64961"][student.grade - 1]
-    })
-  if (placeName === '세탁')
-    return success({
-      placeId: student.gender === Gender.F ? "601fe6b4a40ac010e7a64967" : "601fe6b4a40ac010e7a64966"
-    })
-  if (placeName === '안정실') return success({
-    placeId: "601fe6b4a40ac010e7a64962"
-  })
-  if (placeName === '동아리실')
-    showModal((close) => <OtherPlaceModal showOnly="CIRCLE" onSubmit={(name, placeId, reason) => {
-      success({
-        placeId,
-        reason
-      })
-      close()
-    }} />, {
-      wrapperProps: {
-        css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
-      }
-    })
-  if (placeName === '기타') return showModal((close) => <OtherPlaceModal onSubmit={(name, placeId, reason) => {
-    success({
-      placeId,
-      reason
-    })
-    close()
-  }} />, {
-    wrapperProps: {
-      css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
-    }
-  })
-})
+// const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeName }: DisplayPlace) => new Promise<{
+//   placeId: string;
+//   reason?: string;
+// }>((success) => {
+//   if (placeName === '인강실')
+//     return success({
+//       placeId: ["601fe6b4a40ac010e7a64968", "601fe6b4a40ac010e7a64961"][student.grade - 1]
+//     })
+//   if (placeName === '세탁')
+//     return success({
+//       placeId: student.gender === Gender.F ? "601fe6b4a40ac010e7a64967" : "601fe6b4a40ac010e7a64966"
+//     })
+//   if (placeName === '안정실') return success({
+//     placeId: "601fe6b4a40ac010e7a64962"
+//   })
+//   if (placeName === '동아리실')
+//     showModal((close) => <OtherPlaceModal showOnly="CIRCLE" onSubmit={(name, placeId, reason) => {
+//       success({
+//         placeId,
+//         reason
+//       })
+//       close()
+//     }} />, {
+//       wrapperProps: {
+//         css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
+//       }
+//     })
+//   if (placeName === '기타') return showModal((close) => <OtherPlaceModal onSubmit={(name, placeId, reason) => {
+//     success({
+//       placeId,
+//       reason
+//     })
+//     close()
+//   }} />, {
+//     wrapperProps: {
+//       css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
+//     }
+//   })
+// })
 
 const SelfStudyDisplay: React.FC = () => {
   const [selfStudyStatus, setSelfStudyStatus] = useState<{
@@ -599,9 +598,9 @@ const LocationLabelText = styled.p`
   }
 `
 
-const ButtonWithIconWrapper = styled(Button)`
-  align-items: center;
-  display: flex;
-`
+// const ButtonWithIconWrapper = styled(Button)`
+//   align-items: center;
+//   display: flex;
+// `
 
 export default SelfStudyDisplay;

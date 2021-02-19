@@ -3,10 +3,10 @@ import styled from "@emotion/styled";
 import css from "@emotion/css";
 import Chip from "../basic/Chip";
 import Card from "../basic/Card";
-import { BriefStudent, Doc, Student } from "../../constants/types";
+import { BriefStudent, Doc } from "../../constants/types";
 import useInput, { EventFunction } from "../../hooks/useInput";
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
-import { fetchAllStudents, getMyData, getMyLocalData } from "../../api/user";
+import { fetchAllStudents, getMyData } from "../../api/user";
 import useConsole from "../../hooks/useConsole";
 
 interface OutgoApplierProps {

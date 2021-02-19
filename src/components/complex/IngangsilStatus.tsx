@@ -5,7 +5,6 @@ import CardGroupHeader from "../basic/CardGroupHeader";
 import Card from "../basic/Card";
 import Button from "../basic/Button";
 import Skeleton from "react-loading-skeleton";
-import { NightSelfStudyTime } from "../../constants/types";
 
 interface IngangsilStatusProps {
   currentApplied?: number;

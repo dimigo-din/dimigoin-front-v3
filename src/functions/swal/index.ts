@@ -1,4 +1,4 @@
-import Swal, { SweetAlertOptions } from 'sweetalert2'
+import Swal from 'sweetalert2'
 import withReactContent, { ReactSweetAlertOptions } from 'sweetalert2-react-content'
 import './style.css'
 

@@ -1,4 +1,4 @@
-import { Doc, NightSelfStudyTime, Student, User } from "../../constants/types";
+import { Doc, NightSelfStudyTime, Student } from "../../constants/types";
 
 export interface HourAndMinute {
     hour: number;

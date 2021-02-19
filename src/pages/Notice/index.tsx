@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import React, { useCallback, useEffect, useState } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import {
-  Button, CardGroupHeader, Horizontal, NavigationBar, PageWrapper,
+  Button, CardGroupHeader, Horizontal, PageWrapper,
   ResponsiveWrapper, showModal, TextCardGroup, UnstyledLink
 } from '../../components'
 import { Doc, Notice, UserType } from '../../constants/types'
@@ -111,7 +111,6 @@ const Notices: React.FC<RouteComponentProps<{
   }
 
   return <>
-    <NavigationBar />
     <PageWrapper>
       <HeaderWrapper>
         <CardGroupHeader css={css`margin-bottom: 0px;`}>공지사항</CardGroupHeader>

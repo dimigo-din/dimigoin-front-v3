@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect } from "react";
+import React, { useRef, useCallback } from "react";
 import styled from "@emotion/styled";
 import { ReactComponent as IconLogo } from '../../../assets/brand.svg'
 import { ReactComponent as LogoutLogo } from '../../../assets/icons/logout.svg'
@@ -7,8 +7,6 @@ import NavigationItem from "./NavigationItem";
 import navigations from "./navigations";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { UnstyledLink } from "../../basic/Atomics";
-import { getMyData, getMyLocalData } from "../../../api/user";
-import { SCHOOL_API_SERVER } from "../../../constants";
 import { useMyData } from "../../../hooks/api/useMyData";
 
 const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {

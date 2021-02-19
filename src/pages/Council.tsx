@@ -38,7 +38,6 @@ const Council: React.FC = () => {
             })
     }, [])
     return <>
-        <NavigationBar />
         <PageWrapper>
         <Horizontal>
         <Col width={5}>

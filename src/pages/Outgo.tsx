@@ -3,8 +3,8 @@ import css from "@emotion/css";
 import styled from "@emotion/styled";
 import {
   CardExplainContent, OutgoApplyInput, WeekCalendar, LargeTimeSelector,
-  SelectingTime, NavigationBar, PageWrapper, ResponsiveWrapper, Col,
-  CardGroupHeader, OutgoApplyForm, Divider, OutgoApplier, Card, Checkbox, Button, TextCardGroup
+  SelectingTime, PageWrapper, ResponsiveWrapper, Col, CardGroupHeader,
+  OutgoApplyForm, Divider, OutgoApplier, Card, Checkbox, Button, TextCardGroup
 } from "../components";
 import useInput, { EventFunction, useCheckbox } from "../hooks/useInput";
 import { BriefStudent, Doc } from "../constants/types";
@@ -33,7 +33,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ onChange }) => {
     target: {
       value: dayInput.value!!
     }
-  }), [])
+  }), [ dayInput.value, onChange ])
 
   useEffect(() => {
     if (!onChange || !dayInput.value) return
@@ -137,7 +137,6 @@ const Outgo: React.FC = () => {
 
   return (
     <>
-      <NavigationBar />
       <PageWrapper>
         <ResponsiveWrapper threshold={1200}>
           <Col width={3.5}>

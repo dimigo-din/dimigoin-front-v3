@@ -3,8 +3,8 @@ import css from "@emotion/css";
 import Skeleton from "react-loading-skeleton";
 
 import {
-    ApplimentStatus, CardGroupHeader, Col, Divider, MealList,
-    NavigationBar, PageWrapper, ResponsiveWrapper, showModal,
+    CardGroupHeader, Col, Divider, MealList,
+    PageWrapper, ResponsiveWrapper, showModal,
     TextCardGroup, TimeTable, TodayMeal, NoData
 } from "../../components";
 import { useMeal } from "../../hooks/api";
@@ -30,7 +30,6 @@ const Main: React.FC = () => {
 
     return (
         <>
-            <NavigationBar />
             <PageWrapper>
                 <ResponsiveWrapper threshold={960}>
                     <Col width={5}>
