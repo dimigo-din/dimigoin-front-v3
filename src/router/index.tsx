@@ -5,7 +5,7 @@ import { LoadableComponent } from "@loadable/component";
 import { getAccessToken, getRefreshToken, loginWithRefreshToken } from "../api";
 import styled from "@emotion/styled";
 import Login from "../pages/Login";
-import { Student, UserType } from "../constants/types";
+import { Permission, Student, UserType } from "../constants/types";
 import { getMyData } from "../api/user";
 import { NavigationBar } from "../components";
 import { toast } from "react-toastify";
@@ -47,7 +47,7 @@ const needAuthAndBranch = <TeacherProps, StudentProps>({
   }
 }
 
-const needPermission = <Props extends {}>(permission: string, Page: React.FC<RouteComponentProps<Props>>) => (props: RouteComponentProps<Props>) => {
+const needPermission = <Props extends {}>(permission: Permission, Page: React.FC<RouteComponentProps<Props>>) => (props: RouteComponentProps<Props>) => {
   const [hasPermission, setHasPermission] = React.useState<boolean>();
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const Router: React.FC = () => (
       <Container>
         <TopLine />
         <NavigationBar />
-        <Route path="/ingangsil/manager" component={needPermission("ingang-application", needAuth(IngangsilManager))} />
+        <Route path="/ingangsil/manager" component={needPermission(Permission["ingang-application"], needAuth(IngangsilManager))} />
         <Route path="/ingangsil" exact component={needAuthAndBranch<{}, {}>(Ingangsil)} />
         <Route path="/outgo" component={needAuth(Outgo)} />
         <Route path="/notices/:articleId" component={needAuth(Notices)} />

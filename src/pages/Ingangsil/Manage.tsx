@@ -1,7 +1,7 @@
 import css from '@emotion/css'
 import styled from '@emotion/styled'
 import React, { useCallback } from 'react'
-import { Card, PageWrapper, CardGroupHeader, ResponsiveWrapper, Divider, MoreCompactButton } from '../../components'
+import { Card, PageWrapper, CardGroupHeader, ResponsiveWrapper, Divider } from '../../components'
 import { ReactComponent as _DownloadIcon } from '../../assets/icons/download.svg'
 import { requestExcelFile } from '../../api/ingangsil'
 import { downloadFileFromDownloadble } from '../../functions/downloadById'

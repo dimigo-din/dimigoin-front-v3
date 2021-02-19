@@ -66,13 +66,17 @@ export interface IngangsilTicket extends SavedDocument {
     applier: Student;
 }
 
+export enum Permission {
+    "ingang-application" = "ingang-application"
+}
+
 export interface User {
     idx: number;
     username: string;
     userType: UserType;
     gender: Gender;
     name: string;
-    permissions: string[]
+    permissions: Permission[]
 }
 
 export interface Student extends Doc<User> {

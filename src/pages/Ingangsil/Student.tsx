@@ -1,15 +1,18 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
+import Skeleton from "react-loading-skeleton";
 import {
   PageWrapper, ResponsiveWrapper, Col, CardGroupHeader, Card,
   CardTitle, Divider, IngansilStatus, TextCardGroup
 } from "../../components";
 import { ReactComponent as CircleSvg } from "../../assets/icons/circle.svg";
 import { APIResource } from "../../api";
-import { IngangApplyPeriod, IngangsilTicket, NightSelfStudyTimeKey, SelfStudyTime } from "../../constants/types";
+import {
+  IngangApplyPeriod, IngangsilTicket,
+  NightSelfStudyTimeKey, Permission
+} from "../../constants/types";
 import { useMyData } from "../../hooks/api/useMyData";
-import Skeleton from "react-loading-skeleton";
 import { applyIngangsil, getMyIngangsilStatus, unapplyIngangsil } from "../../api/ingangsil";
 
 const timeRangeToString = ({ start, end }: IngangApplyPeriod) => (
@@ -19,14 +22,19 @@ const timeRangeToString = ({ start, end }: IngangApplyPeriod) => (
 
 const Ingangsil: React.FC = () => {
   const [myStatus, setFetchedMyStatus] = useState<APIResource["myIngangsilApplyStatus"]["res"]>()
+  const [groupedByTime, setGroupedByTime] = useState<Record<NightSelfStudyTimeKey, IngangsilTicket[]>>()
   const myData = useMyData()
-  const groupedByTime = myStatus?.applicationsInClass.reduce((acc, current) => {
-    acc[current.time] = [...(acc[current.time] || []), current]
-    return acc
-  }, {
-    [NightSelfStudyTimeKey.NSS1]: [],
-    [NightSelfStudyTimeKey.NSS2]: []
-  } as Record<NightSelfStudyTimeKey, IngangsilTicket[]>)
+
+  useEffect(() => {
+    const _groupedByTime = myStatus?.applicationsInClass.reduce((acc, current) => {
+      acc[current.time] = [...(acc[current.time] || []), current]
+      return acc
+    }, {
+      [NightSelfStudyTimeKey.NSS1]: [],
+      [NightSelfStudyTimeKey.NSS2]: []
+    } as Record<NightSelfStudyTimeKey, IngangsilTicket[]>)
+    setGroupedByTime(() => _groupedByTime)
+  }, [ myStatus ])
 
   const loadStatus = useCallback(() => {
     return getMyIngangsilStatus().then(setFetchedMyStatus)
@@ -152,10 +160,10 @@ const Ingangsil: React.FC = () => {
               ]}
             />
             <Divider horizontal small data-divider />
-            <CardGroupHeader subButton={{
+            <CardGroupHeader subButton={myData?.permissions.includes(Permission["ingang-application"]) ? {
               text: "인원관리",
               route: '/ingangsil/manager'
-            }}>우리반 신청자</CardGroupHeader>
+            } : undefined}>우리반 신청자</CardGroupHeader>
             {[...Array(2)].map((_, index) => {
               const currentTimeAppliers = groupedByTime?.[NightSelfStudyTimeKey[index === 0 ? "NSS1" : "NSS2"]]
               return (<Card leftBorder>

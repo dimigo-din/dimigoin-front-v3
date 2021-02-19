@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import React, { useCallback, useEffect, useState } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import {
-  Button, CardGroupHeader, Horizontal, MoreCompactButton, PageWrapper,
+  CardGroupHeader, Horizontal, MoreCompactButton, PageWrapper,
   ResponsiveWrapper, showModal, TextCardGroup, UnstyledLink
 } from '../../components'
 import { Doc, Notice, UserType } from '../../constants/types'

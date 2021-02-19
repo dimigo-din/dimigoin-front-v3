@@ -15,8 +15,7 @@ import {
 } from "../../components";
 import { Timeline } from "./Timeline";
 import {
-  AfterschoolSelfStudyTime, AttendanceLogWithStudent,
-  NightSelfStudyTimeKey, SelfStudyTime, Student
+  AttendanceLogWithStudent, SelfStudyTime, Student
 } from "../../constants/types";
 import { getWholeClassAttendanceLog } from "../../api";
 import { useMyData } from "../../hooks/api/useMyData";
