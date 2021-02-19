@@ -60,7 +60,7 @@ export const NoticeEditingModal: React.FC<{ closeModal(): void; } & Partial<Doc<
                 })
                 .catch(() => toast.success("공지를 등록하지 못했습니다"))
         }
-    }, [titleValue, contentValue, grade1Checkbox, grade2Checkbox, grade3Checkbox, dates, closeModal])
+    }, [ titleValue, contentValue, grade1Checkbox, grade2Checkbox, grade3Checkbox, dates, closeModal, originNotice._id ])
 
     return <NoticeModalWrapper>
         <HeaderWrapper>

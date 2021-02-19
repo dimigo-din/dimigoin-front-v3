@@ -112,7 +112,7 @@ const Container = styled.div<CardContainerProps>`
     clickable &&
     css`
       &:active {
-        filter: blur(0.6px);
+        opacity: 0.7;
         transform: scale(0.99);
       }
     `};

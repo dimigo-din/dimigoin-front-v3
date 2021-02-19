@@ -4,61 +4,55 @@ import css, { SerializedStyles } from "@emotion/css";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { ReactComponent as DeskIcon } from "../../assets/icons/desk.svg";
-import { ReactComponent as LaundryIcon } from "../../assets/icons/laundry.svg";
-import { ReactComponent as RefreshIcon } from "../../assets/icons/refresh.svg";
-import { ReactComponent as HistoryIcon } from "../../assets/icons/history.svg";
+import { ReactComponent as OtherIcon } from "../../assets/icons/other.svg";
+import { ReactComponent as InsangsilIcon } from "../../assets/icons/ingangsil.svg";
+import { ReactComponent as CircleIcon } from "../../assets/icons/circle.svg";
+import { ReactComponent as AbsentIcon } from "../../assets/icons/close.svg";
 import { ReactComponent as IconLogo } from "../../assets/brand.svg";
-import { Button, ButtonProps, Horizontal, noBreak,
-        PageWrapper, showModal, NamedSection } from "../../components";
+import {
+  Button, Horizontal, noBreak, PageWrapper, showModal,
+  ResponsiveWrapper, Divider, UnstyledLink
+} from "../../components";
 import { Timeline } from "./Timeline";
-import MoveClass from "./MoveClass";
+import {
+  AfterschoolSelfStudyTime, AttendanceLogWithStudent, Gender,
+  NightSelfStudyTime, SelfStudyTime, Student
+} from "../../constants/types";
+import { getWholeClassAttendanceLog } from "../../api";
+import { OtherPlaceModal } from "../Main/OtherPlaceModal";
+import { useMyData } from "../../hooks/api/useMyData";
+import Skeleton from "react-loading-skeleton";
+import { getSelfStudyPeriod } from "../../utils";
 
 interface TopBarProps {
-  klassName: string;
-  jaseupName: string;
+  clasName?: string;
+  selfStudyName: string;
 }
 
 interface LabelCardProps {
-  title: string;
+  title: string | boolean;
   contentCss?: SerializedStyles;
   width?: number;
+  hasLabel?: boolean;
   ref?: ((instance: HTMLDivElement | null) => void) | RefObject<HTMLDivElement> | null;
 }
 
-interface SelfStudyStatusByLabel {
-  label: string;
-  icon: JSX.Element;
-  students: {
-    name: string;
-    number: string;
-  }[];
-}
-
-interface ClassSelfStudyData {
-  type: SelfStudyPlaceState;
-  name: string;
-  labels: SelfStudyStatusByLabel[];
-}
-
-enum SelfStudyPlaceState {
-  AVAILABLE = "AVAILABLE",
-  NOTAVAILABLE = "NOTAVAILABLE"
-}
-
 const ROW_COLOR = {
-  [SelfStudyPlaceState.AVAILABLE]: "var(--main-theme-accent)",
-  [SelfStudyPlaceState.NOTAVAILABLE]: "#B8B8B8",
+  AVAILABLE: "var(--main-theme-accent)",
+  NOTAVAILABLE: "#B8B8B8",
 };
 
-const TopBar: React.FC<TopBarProps> = ({ klassName, jaseupName }) => (
+const TopBar: React.FC<TopBarProps> = ({ clasName, selfStudyName }) => (
   <Horizontal
     css={css`
       align-items: center;
     `}
   >
-    <IconLogo height={48} width={32} />
-    <ClassName>{klassName}</ClassName>
-    <JaseupName>{jaseupName}</JaseupName>
+    <UnstyledLink to="/">
+      <IconLogo height={48} width={32} />
+    </UnstyledLink>
+    <ClassName>{clasName || <Skeleton width={300} />}</ClassName>
+    <SelfStudyName>{selfStudyName}</SelfStudyName>
   </Horizontal>
 );
 
@@ -67,48 +61,74 @@ const LabelCard: React.FC<LabelCardProps> = React.forwardRef(({
   title,
   contentCss,
   width,
+  hasLabel,
   ...props
 }, ref) => {
   return (
     <LabelWrapper {...props} width={width} ref={ref}>
-      <LabelTitle>{title}</LabelTitle>
-      <ContentWrapper css={contentCss}>{children}</ContentWrapper>
+      {title && <LabelTitle visible={!!hasLabel}>{title}</LabelTitle>}
+      <ContentWrapper hasLabel={!!(title && hasLabel)} css={contentCss}>{children}</ContentWrapper>
     </LabelWrapper>
   )
 });
 
-const StudentName: React.FC = ({ children }) => {
+const openTimelineByStudent = (student: Student) => {
+  showModal(close => <Timeline student={student} close={close} />, {
+    wrapperProps: {
+      css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px; width: 100%;`
+    }
+  })
+}
+
+const DraggableStudent: React.FC<{
+  student: Student;
+  additionalInfo: string;
+  freeWidth: boolean;
+}> = ({ student, additionalInfo, children, freeWidth }) => {
   const [, draggable] = useDrag({
     item: {
-      type: "STUDENT"
+      type: "STUDENT",
+      student
     },
     collect: state => ({
       isDragging: state.isDragging()
     })
   })
   return (
-    <StudentWrapper>
-      <p ref={draggable}>{children}</p>
+    <StudentWrapper
+      freeWidth={freeWidth}
+      onClick={() => openTimelineByStudent(student)}
+    >
+      <p ref={draggable}>
+        {children}
+      </p>
+      <Chip>{additionalInfo}</Chip>
     </StudentWrapper>
   )
 };
 
-
-
 const StudentList: React.FC<{
-  students: SelfStudyStatusByLabel['students']
+  log?: AttendanceLogWithStudent[];
+  hasLabel: boolean;
+  moveStudent(student: Student): void;
+  isOtherRow: boolean;
 }> = ({
-  students
+  log,
+  hasLabel,
+  moveStudent,
+  isOtherRow
 }) => {
-    const [, droppable] = useDrop({
-      accept: 'STUDENT'
+    const [, droppable] = useDrop<{ type: 'STUDENT', student: Student }, unknown, unknown>({
+      accept: 'STUDENT',
+      drop: ({ student }) => moveStudent(student)
     })
     return (
       <LabelCard
         title="이름"
+        hasLabel={hasLabel}
         css={css`
-        flex: 1;
-      `}
+          flex: 1;
+        `}
         contentCss={css`
         align-items: flex-start;
       `}
@@ -116,126 +136,207 @@ const StudentList: React.FC<{
       >
         <Horizontal
           css={css`
-          margin: -20px;
+          margin: -10px;
           flex-wrap: wrap;
         `}
         >
-          {students.map((student) => (
-            <StudentName key={student.number}>
-              {student.number} {student.name}
-            </StudentName>
-          ))}
+          {log ? log.map((student) => (
+            <DraggableStudent
+              freeWidth={isOtherRow}
+              key={student.student._id}
+              student={student.student}
+              additionalInfo={`${student.log?.place.name || "장소를 등록하지 않았습니다"}${student.log?.remark ? `(${student.log?.remark})` : ''}`}
+            >
+              {student.student.number} {student.student.name} {isOtherRow && <EtcInfo>
+                {student.log?.place.name}, {student.log?.remark}
+              </EtcInfo>}
+            </DraggableStudent>
+          )) : [...Array(Math.floor(Math.random() * 10) + 3)].map((_, index) => <StudentWrapper key={`index${index}`}>
+            <Skeleton width={80} />
+          </StudentWrapper>)}
         </Horizontal>
       </LabelCard>
     )
   }
 
-const ButtonWithIcon: React.FC<Partial<ButtonProps> & {
-  icon: React.FunctionComponent;
-  label: string;
-}> = ({ icon: Icon, label, ...props }) => {
-  return (<Button {...props}>
-    <Icon css={[iconStyle, css`
-        fill: white;
-        margin-right: 6px;
-      `]} />
-    {label}
-  </Button>)
+// const ButtonWithIcon: React.FC<Partial<ButtonProps> & {
+//   icon: React.FunctionComponent;
+//   label: string;
+// }> = ({ icon: Icon, label, ...props }) => {
+//   return (<ButtonWithIconWrapper {...props} >
+//     <Icon css={[iconStyle, css`
+//         fill: white;
+//         margin-right: 6px;
+//       `]} />
+//     {label}
+//   </ButtonWithIconWrapper>)
+// }
+
+interface DisplayPlace {
+  name: string;
+  type: string;
+  icon: JSX.Element;
+  isAvailable: boolean;
+  fallback?: boolean;
+  initial?: boolean;
 }
 
+const iconStyle = css`
+  width: 24px;
+  fill: var(--row-color);
+`
+
+interface DisplayPlaceWithStudents extends DisplayPlace {
+  students: AttendanceLogWithStudent[]
+}
+
+const groupedPlaces: DisplayPlace[] = [{
+  icon: <DeskIcon css={iconStyle} />,
+  type: "CLASSROOM",
+  name: "교실",
+  isAvailable: true,
+  initial: true,
+}, {
+  icon: <InsangsilIcon css={iconStyle} />,
+  type: "INGANG",
+  name: "인강실",
+  isAvailable: false,
+}, {
+  icon: <CircleIcon css={iconStyle} />,
+  type: "CIRCLE",
+  name: "동아리실",
+  isAvailable: false,
+}, {
+  icon: <OtherIcon css={iconStyle} />,
+  type: "ETC",
+  name: "기타",
+  isAvailable: false,
+  fallback: true,
+}, {
+  icon: <AbsentIcon css={iconStyle} />,
+  type: "ABSENT",
+  name: "결석",
+  isAvailable: false,
+}]
+
+const isRealData = (d: DisplayPlace): d is DisplayPlaceWithStudents => (d as any).students
+
+const OTHER_INDEX = groupedPlaces.findIndex(p => p.fallback)
+const INITIAL_INDEX = groupedPlaces.findIndex(p => p.initial)
+
+const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeName }: DisplayPlace) => new Promise<{
+  placeId: string;
+  reason?: string;
+}>((success) => {
+  if (placeName === '인강실')
+    return success({
+      placeId: ["601fe6b4a40ac010e7a64968", "601fe6b4a40ac010e7a64961"][student.grade - 1]
+    })
+  if (placeName === '세탁')
+    return success({
+      placeId: student.gender === Gender.F ? "601fe6b4a40ac010e7a64967" : "601fe6b4a40ac010e7a64966"
+    })
+  if (placeName === '안정실') return success({
+    placeId: "601fe6b4a40ac010e7a64962"
+  })
+  if (placeName === '동아리실')
+    showModal((close) => <OtherPlaceModal showOnly="CIRCLE" onSubmit={(name, placeId, reason) => {
+      success({
+        placeId,
+        reason
+      })
+      close()
+    }} />, {
+      wrapperProps: {
+        css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
+      }
+    })
+  if (placeName === '기타') return showModal((close) => <OtherPlaceModal onSubmit={(name, placeId, reason) => {
+    success({
+      placeId,
+      reason
+    })
+    close()
+  }} />, {
+    wrapperProps: {
+      css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
+    }
+  })
+})
+
 const SelfStudyDisplay: React.FC = () => {
-  const [selfStudyData, setSelfStudyData] = useState<ClassSelfStudyData[]>();
-  const [currentStudentQuentity, setCurrentStudentQuentity] = useState<{
-    [key in keyof typeof SelfStudyPlaceState]: number
+  const [selfStudyStatus, setSelfStudyStatus] = useState<{
+    available: DisplayPlaceWithStudents[];
+    notAvailable: DisplayPlaceWithStudents[]
   }>()
-  useEffect(() => {
-    setSelfStudyData(() => [
-      {
-        name: "현원",
-        type: SelfStudyPlaceState.AVAILABLE,
-        labels: [
-          {
-            icon: <DeskIcon css={iconStyle} />,
-            label: "교실",
-            students: [
-              {
-                name: "강예원",
-                number: "01",
-              },
-            ],
+
+  const [studentQuantity, setStudentQuantity] = useState<{
+    available: number,
+    notAvailable: number
+  }>()
+
+  const [currentSelfStudyTime, setCurrentSelfStudyTime] = useState<SelfStudyTime | null>(getSelfStudyPeriod())
+
+  const myData = useMyData()
+
+  const updateSelfStudyTimeLabel = useCallback(() => {
+    setCurrentSelfStudyTime(() => getSelfStudyPeriod())
+  }, [setCurrentSelfStudyTime])
+
+  const fetchData = useCallback(async () => {
+    if (!myData) return
+    const [available, notAvailable] = (await getWholeClassAttendanceLog(myData.grade, myData.class))
+      .reduce((grouped, current) => {
+        const placeGroupIndex = current.log?.place.type !== undefined ? grouped.findIndex(p => p.type === current.log?.place.type) : INITIAL_INDEX
+        const matchedIndex = (placeGroupIndex !== -1) ? placeGroupIndex : OTHER_INDEX
+        return [
+          ...grouped.slice(0, matchedIndex), {
+            ...grouped[matchedIndex],
+            students: [...(grouped[matchedIndex].students || []), current]
           },
-          {
-            icon: <DeskIcon css={iconStyle} />,
-            label: "이동반",
-            students: [
-              {
-                name: "강예투",
-                number: "02",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        name: "결원",
-        type: SelfStudyPlaceState.NOTAVAILABLE,
-        labels: [
-          {
-            icon: <LaundryIcon css={iconStyle} />,
-            label: "세탁",
-            students: [
-              {
-                name: "박정한",
-                number: "10",
-              },
-            ],
-          },
-        ],
-      },
-    ]);
-  }, []);
-  useEffect(() => {
-    if (!selfStudyData) return
-    const [available, notAvailable] = (selfStudyData.map(status => status.labels.reduce((acc, place) => place.students.length + acc, 0)))
-    setCurrentStudentQuentity(() => ({
-      AVAILABLE: available,
-      NOTAVAILABLE: notAvailable
+          ...grouped.slice(matchedIndex + 1)
+        ]
+      }, groupedPlaces.map(g => ({ ...g, students: [] })) as DisplayPlaceWithStudents[])
+      .reduce((grouped, current) => {
+        if (current.isAvailable) return [[...grouped[0], current], grouped[1]]
+        return [grouped[0], [...grouped[1], current]]
+      }, [[], []] as DisplayPlaceWithStudents[][])
+    setSelfStudyStatus(() => ({ available, notAvailable }))
+    setStudentQuantity(() => ({
+      available: available.reduce((acc, current) => acc + current.students.length, 0),
+      notAvailable: notAvailable.reduce((acc, current) => acc + current.students.length, 0)
     }))
-  }, [selfStudyData])
+  }, [setSelfStudyStatus, myData])
 
-  const openMoveClassDisplay = useCallback(() => {
-    showModal(() => <NamedSection css={css`
-      padding: 20px;
-    `} sections={[{
-        name: "방과후 1실",
-        component: <MoveClass />
-      }, {
-        name: "방과후 2실",
-        component: <div>
-          대충2번정보
-      </div>
-      }]} />, {
-      wrapperProps: {
-        css: css`max-width: 1080px; padding: 60px 20px 20px; width: 100%;`
-      }
-    })
+  const moveStudentPlaceTo = useCallback(async (student: Student, place: DisplayPlace) => {
+    // const parsedPlace = await getTargetPlaceByLabelAndStudent(student, place)
   }, [])
 
-  const openTimeline = useCallback(() => {
-    showModal(() => <NamedSection sections={[{
-      name: "1타임",
-      component: <Timeline />
-    }, {
-      name: "2타임",
-      component: <div>
-        대충2번정보
-    </div>
-    }]} />, {
-      wrapperProps: {
-        css: css`max-width: 1080px; padding: 60px 20px 20px; width: 100%;`
-      }
-    })
-  }, [])
+  // const openMoveClassDisplay = useCallback(() => {
+  //   showModal(() => <NamedSection css={css`
+  //     padding: 20px;
+  //   `} sections={[{
+  //       name: "방과후 1실",
+  //       component: <MoveClass />
+  //     }, {
+  //       name: "방과후 2실",
+  //       component: <MoveClass />
+  //     }]} />, {
+  //     wrapperProps: {
+  //       css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px; width: 100%;`
+  //     }
+  //   })
+  // }, [])
+
+  useEffect(() => {
+    fetchData()
+    const timer = setInterval(() => fetchData(), 1000)
+    const timeNameTimer = setInterval(() => updateSelfStudyTimeLabel(), 1000 * 60 * 5)
+    return () => {
+      clearInterval(timer)
+      clearInterval(timeNameTimer)
+    }
+  }, [ fetchData, updateSelfStudyTimeLabel ])
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -244,54 +345,88 @@ const SelfStudyDisplay: React.FC = () => {
           padding-top: 40px;
         `}
       >
-        <TopBar klassName="1학년 3반" jaseupName="방과후 자율학습 1타임" />
+        <TopBar
+          clasName={myData && `${myData.grade}학년 ${myData.class}반`}
+          selfStudyName={
+            currentSelfStudyTime ? ({
+              [NightSelfStudyTime.NSS1]: "야간자율학습 1타임",
+              [NightSelfStudyTime.NSS2]: "야간자율학습 2타임",
+              [AfterschoolSelfStudyTime.BSS1]: "방과후자율학습 1타임",
+              [AfterschoolSelfStudyTime.BSS2]: "방과후자율학습 2타임"
+            })[currentSelfStudyTime] : "자율학습시간이 아닙니다"
+          } />
         <TableWrapper>
           <div>
-            {selfStudyData?.map((row) => (
-              <Horizontal
+            {[{
+              color: selfStudyStatus ? ROW_COLOR.AVAILABLE : ROW_COLOR.NOTAVAILABLE,
+              label: "현원",
+              places: selfStudyStatus?.available
+            }, {
+              color: ROW_COLOR.NOTAVAILABLE,
+              label: "결원",
+              places: selfStudyStatus?.notAvailable
+            }].map((type, typeIndex) =>
+              <ResponsiveWrapper
+                key={type.label}
+                threshold={800}
                 css={css`
                   align-items: stretch;
-                  --row-color: ${ROW_COLOR[row.type]};
+                  --row-color: ${type.color};
                   margin-top: 20px;
                 `}
-                key={row.name}
               >
-                <RowLable css={noBreak}>{row.name}</RowLable>
-
-                <div
+                <RowLable css={noBreak}> {type.label} </RowLable>
+                <Divider data-divider smaller />
+                <ResponsiveWrapper
+                  threshold={800}
                   css={css`
-                    margin-top: -15px;
+                    flex-direction: column;
                     flex: 1;
                   `}
                 >
-                  {row.labels.map((label) => (
-                    <Horizontal key={label.label} css={css`
-                      &>*{margin-left: 15px;}`
-                    }>
-                      <LabelCard title="위치" width={125} css={noBreak} contentCss={locationLabelStyle}>
-                        {label.icon}
-                        <LocationLabelText>
-                          {label.label}
-                        </LocationLabelText>
-                      </LabelCard>
-                      <LabelCard title="인원" width={70}>
-                        {label.students.length}
-                      </LabelCard>
-                      <StudentList students={label.students} />
-                    </Horizontal>
-                  ))}
-                </div>
-              </Horizontal>
-            ))}
+                  {
+                    (type.places || groupedPlaces).map((place, placeIndex) => {
+                      const hasLabel = typeIndex === 0 && placeIndex === 0
+
+                      return (
+                        <React.Fragment key={place.name}>
+                          {placeIndex !== 0 && <Divider data-divider horizontal smaller />}
+                          <ResponsiveWrapper
+                            threshold={800}
+                            key={place.name}
+                          >
+                            <ResponsiveWrapper threshold={0}>
+                              <LabelCard title="위치" hasLabel={hasLabel} css={[noBreak, responsiveLabelCardWidth(160)]} contentCss={locationLabelStyle}>
+                                {place.icon}
+                                <LocationLabelText>
+                                  {isRealData(place) ? place.name : <Skeleton width={50} />}
+                                </LocationLabelText>
+                              </LabelCard>
+                              <Divider data-divider smaller />
+                              <LabelCard title="인원" hasLabel={hasLabel} css={responsiveLabelCardWidth(75)}>
+                                {isRealData(place) ? place.students.length : <Skeleton width={50} />}
+                              </LabelCard>
+                            </ResponsiveWrapper>
+                            <Divider data-divider smaller />
+                            <StudentList hasLabel={hasLabel} isOtherRow={place.type === 'ETC'} log={isRealData(place) ? place.students : undefined} moveStudent={place && (student => moveStudentPlaceTo(student, place))} />
+                          </ResponsiveWrapper>
+                        </React.Fragment>
+                      )
+                    })
+                  }
+                </ResponsiveWrapper>
+              </ResponsiveWrapper>)}
           </div>
         </TableWrapper>
-
-        <Horizontal css={css`
-          margin-top: 20px;
+        <ResponsiveWrapper css={css`
+          flex-direction: column;
+        `}>
+          <Divider data-divider smaller horizontal />
+          <ResponsiveWrapper css={css`
           align-items: flex-start;
         `}>
-          {currentStudentQuentity && <Horizontal
-            css={css`
+            <Horizontal
+              css={css`
               align-items: stretch;
               --row-color: ${ROW_COLOR.AVAILABLE};
               flex: 1;
@@ -302,27 +437,29 @@ const SelfStudyDisplay: React.FC = () => {
                 margin-top: 0px;
               }
             `}
-          >
-            <LabelCard title="총원" width={70}>
-              {currentStudentQuentity.AVAILABLE + currentStudentQuentity.NOTAVAILABLE}
-            </LabelCard>
-            <LabelCard title="현원" width={70}>
-              {currentStudentQuentity?.AVAILABLE}
-            </LabelCard>
-            <LabelCard title="결원" width={70} css={css`--row-color: ${ROW_COLOR.NOTAVAILABLE};`}>
-              {currentStudentQuentity?.NOTAVAILABLE}
-            </LabelCard>
-          </Horizontal>}
-          <Horizontal css={css`
-            &>*+* {
-              margin-left: 12px;
-            }
-          `}>
-            <ButtonWithIcon icon={RefreshIcon} label="새로고침" disabled />
-            <ButtonWithIcon icon={DeskIcon} label="이동반" onClick={openMoveClassDisplay} />
-            <ButtonWithIcon icon={HistoryIcon} label="히스토리" onClick={openTimeline} />
-          </Horizontal>
-        </Horizontal>
+            >
+              <LabelCard title="총원" hasLabel width={70}>
+                {studentQuantity ? (studentQuantity.available + studentQuantity.notAvailable) : <Skeleton width={30} />}
+              </LabelCard>
+              <LabelCard title="현원" hasLabel width={70}>
+                {studentQuantity ? studentQuantity.available : <Skeleton width={30} />}
+              </LabelCard>
+              <LabelCard title="결원" hasLabel width={70} css={css`--row-color: ${ROW_COLOR.NOTAVAILABLE};`}>
+                {studentQuantity ? studentQuantity.notAvailable : <Skeleton width={30} />}
+              </LabelCard>
+            </Horizontal>
+            {/* <ResponsiveWrapper css={css`
+              flex-direction: column;
+                &>*+* {
+                  margin-left: 12px;
+                }
+            `}> */}
+            {/* <ButtonWithIcon icon={DeskIcon} label="이동반" onClick={openMoveClassDisplay} /> */}
+            {/* <ButtonWithIcon icon={HistoryIcon} label="히스토리" onClick={openTimeline} /> */}
+            {/* </ResponsiveWrapper> */}
+          </ResponsiveWrapper>
+
+        </ResponsiveWrapper>
       </PageWrapper>
     </DndProvider>
   );
@@ -346,7 +483,7 @@ const RowLable = styled.div`
 const LabelWrapper = styled.div<{ width?: number }>`
   display: flex;
   flex-direction: column;
-  margin-top: 15px;
+  /* margin-top: 15px; */
   ${({ width }) =>
     width &&
     css`
@@ -354,7 +491,7 @@ const LabelWrapper = styled.div<{ width?: number }>`
     `}
 `;
 
-const LabelTitle = styled.h3`
+const LabelTitle = styled.h3<{ visible: boolean }>`
   color: white;
   background-color: var(--row-color);
   padding: 8px;
@@ -363,9 +500,15 @@ const LabelTitle = styled.h3`
   text-align: center;
   font-weight: 700;
   font-size: 18px;
+  
+  ${({ visible }) => !visible && css`
+    @media screen and (min-width: 800px) {
+      display: none;
+    }
+  `}
 `;
 
-const ContentWrapper = styled.div`
+const ContentWrapper = styled.div<{ hasLabel: boolean; }>`
   border: 1px solid var(--row-color);
   padding: 14px;
   color: var(--row-color);
@@ -380,6 +523,8 @@ const ContentWrapper = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  
+  ${({ hasLabel }) => !hasLabel && css`border-radius: 5px;`}
 `;
 
 const ClassName = styled.h1`
@@ -389,30 +534,74 @@ const ClassName = styled.h1`
   margin-left: 20px;
 `;
 
-const JaseupName = styled.h2`
+const SelfStudyName = styled.h2`
   font-size: 26px;
   margin-left: 20px;
 `;
 
-const StudentWrapper = styled.h3`
-  padding: 20px;
+const EtcInfo = styled.span`
+  font-size: 18px;
+  font-weight: 700;
+`
+
+const StudentWrapper = styled.h3<{ freeWidth?: boolean }>`
+  padding: 15px;
   color: var(--row-color);
   font-size: 23px;
   font-weight: 700;
+  ${({ freeWidth }) => !freeWidth && css`width: 100px;`}
+  &:hover {
+    &>div {
+      opacity: 1;
+      margin-top: 0px;
+      visibility: visible;
+    }
+  }
 `;
 
-const iconStyle = css`
-  width: 24px;
-  fill: var(--row-color);
+const Chip = styled.div`
+  display: block;
+  visibility: hidden;
+  content: attr("data-additional-info");
+  padding: 12px;
+  opacity: 0;
+  position: absolute;
+  background-color: white;
+  color: black;
+  box-shadow: 0px 0px 36px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+  max-width: 120px;
+  line-height: 24px;
+  border-radius: 8px;
+  margin-top: -12px;
+  transition: 300ms cubic-bezier(0, 0.46, 0.12, 0.98);
 `
 
 const locationLabelStyle = css`
   flex-direction: row;
 `
 
+const responsiveLabelCardWidth = (width: number) => css`
+  /* width: calc(var(--responsive-horizontal) * ${width}); */
+  width: ${width}px;
+  @media screen and (max-width: 800px) {
+    width: unset;
+    flex: 1;
+  }
+`
+
 const LocationLabelText = styled.p`
   flex: 1;
-  text-align: center; 
+  text-align: right; 
+  @media screen and (max-width: 800px) {
+    flex: unset;
+    margin-left: 6px;
+  }
+`
+
+const ButtonWithIconWrapper = styled(Button)`
+  align-items: center;
+  display: flex;
 `
 
 export default SelfStudyDisplay;

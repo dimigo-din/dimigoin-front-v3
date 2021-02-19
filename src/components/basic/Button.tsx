@@ -27,6 +27,8 @@ const style = {
     text-decoration: none;
     justify-content: center;
     align-items: center;
+    text-align: center;
+    transition: 1s cubic-bezier(0, 0.76, 0.12, 0.98);
   `,
   gray: css`
     background-color: #f3f3f3;
@@ -68,7 +70,7 @@ export const Button: React.FC<ButtonProps> = ({
     gray && style.gray,
     text && style.text,
     (loading || !active) && style.disableCurser,
-    disabled && style.disable,
+    (!active || disabled) && style.disable,
     large && style.large,
     small && style.small,
   ].filter(Boolean);

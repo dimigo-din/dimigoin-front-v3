@@ -36,6 +36,13 @@ export enum NightSelfStudyTime {
     NSS2 = "NSS2"
 }
 
+export enum AfterschoolSelfStudyTime {
+    BSS1 = "BSS1",
+    BSS2 = "BSS2"
+}
+
+export type SelfStudyTime = NightSelfStudyTime | AfterschoolSelfStudyTime
+
 export interface IngangsilTicket extends SavedDocument {
     date: string;
     time: keyof typeof NightSelfStudyTime;
@@ -64,6 +71,25 @@ export interface Notice {
     content: string;
     startDate: Date;
     endDate: Date;
+}
+
+export interface Place {
+    label: string;
+    type: string;
+    name: string;
+    location: string;
+}
+
+export interface AttendanceLog {
+    student: Doc<Student>;
+    date: string;
+    place: Doc<Place>;
+    remark: string;
+}
+
+export interface AttendanceLogWithStudent {
+    student: Doc<Student>;
+    log: AttendanceLog | null;
 }
 
 export interface Teacher extends Doc<User> {

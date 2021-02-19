@@ -2,7 +2,7 @@ import css from "@emotion/css"
 import styled from "@emotion/styled"
 import React, { useState, useEffect } from "react"
 import { getNoticeById } from "../../api/notice"
-import { Card, Title, Divider, Horizontal, CompactButton } from "../../components"
+import { Card, Title, Divider, Horizontal, CompactButton, cardModalTopBorder } from "../../components"
 import { Doc, Notice } from "../../constants/types"
 import { formatReadibleDate } from "../../utils"
 
@@ -16,11 +16,7 @@ export const ArticleModal: React.FC<{ articleId: string, goBack(): void, article
       })
   }, [articleId, goBack, article])
   if (!articleData) return <></>
-  return (<Card css={css`
-    border-top: 5px solid var(--main-theme-accent);
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-    `}>
+  return (<Card css={cardModalTopBorder}>
     <Title css={css`
           word-break: break-all;
           flex-shrink: 1;

@@ -16,6 +16,7 @@ interface DividerProps {
   small?: boolean;
   size?: number;
   horizontal?: boolean;
+  smaller?: boolean;
 }
 
 export const Divider = styled.div<DividerProps>`
@@ -25,6 +26,9 @@ export const Divider = styled.div<DividerProps>`
   `}
   ${({ size }) => size && css`
     --divider-width: ${size}px;
+  `}
+  ${({ smaller }) => smaller && css`
+  --divider-width: 5px;
   `}
   margin: 0px var(--divider-width);
   ${({ horizontal }) => horizontal &&
@@ -58,7 +62,7 @@ export const ResponsiveWrapper = styled.div<{ threshold?: number }>`
   @media screen and (max-width: ${({ threshold }) => threshold || MOBILD_DEFAULT_THRESHOLD}px) {
     flex-direction: column;
     & > [data-divider] {
-      margin: 15px 0px;
+      margin: var(--divider-width, 15px) 0px;
     }
   }
 `;

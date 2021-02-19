@@ -1,72 +1,58 @@
 import styled from '@emotion/styled';
 import React, { useEffect, useState } from 'react'
-import { BriefStudent } from '../../constants/types';
+import { toast } from 'react-toastify';
+import { getTimelineByStudent } from '../../api';
+import { getPlaceById } from '../../api/place';
+import { Card } from '../../components';
+import { BriefStudent, Student } from '../../constants/types';
 
 async function getUserClass(): Promise<[number, number]> {
     return [1, 3]
 }
 
 interface TimelineRow {
-    subject: BriefStudent;
-    target?: BriefStudent;
-    location: {
-        from?: string;
-        to: string;
-    };
-    date: Date;
-    isNew: boolean;
+    subject: string;
+    target?: string;
+    from?: string;
+    to: string;
+    time: string;
+    id: string;
 }
 
-async function getTimeline(classInfo: [number, number]): Promise<TimelineRow[]> {
-    return [{
-        subject: {
-            name: "전형서",
-            studentId: "2048",
-            userId: "2048"
-        },
-        location: {
-            from: "화장실",
-            to: "교실"
-        },
-        date: new Date(),
-        isNew: false
-    }, {
-        subject: {
-            name: "서주현",
-            studentId: "2018",
-            userId: "2018"
-        },
-        target: {
-            name: "현주서",
-            studentId: "2021",
-            userId: "2021"
-        },
-        location: {
-            to: "교실"
-        },
-        date: new Date('2021-01-08'),
-        isNew: true
-    }]
-}
-
-export const Timeline: React.FC = () => {
+export const Timeline: React.FC<{ student: Student; close(): void }> = ({ student, close }) => {
     const [timelineData, setTimelineData] = useState<TimelineRow[]>();
 
     useEffect(() => {
         (async () => {
-            const fetchedTimelineData = await getTimeline(await getUserClass())
-            setTimelineData(() => fetchedTimelineData)
+            const fetchedTimelineData = await getTimelineByStudent(student._id)
+            if(fetchedTimelineData.length === 0) {
+                toast.info("위치 이동 기록이 없습니다")
+                close()
+                return
+            }
+            const parsedTimeline = await Promise.all(fetchedTimelineData.map(async row => {
+                const thisPlace = await getPlaceById(row.place)
+                const parsedTime = new Date(row.createdAt)
+                const formattedTime = `${parsedTime.getHours().toString().padStart(2, '0')}:${parsedTime.getMinutes().toString().padStart(2, '0')}`
+                console.log(parsedTime)
+                return ({
+                    subject: student.name,
+                    to: thisPlace?.name || "알수없는장소",
+                    time: formattedTime,
+                    id: row._id
+                })
+            }))
+
+            setTimelineData(() => parsedTimeline)
         })()
-    }, [])
-    
-    useEffect(() => console.log(timelineData), [ timelineData ])
+    }, [ student, close ])
 
     return <Wrapper>
-        {timelineData?.map(timelineRow => <Timerow key={timelineRow.date.getMilliseconds().toString()}>
-            <Time>[ {timelineRow.date.getHours().toString().padStart(2, '0')}:{timelineRow.date.getMinutes().toString().padStart(2, '0')} ]</Time> &nbsp;
-            {timelineRow.subject.name}님({timelineRow.subject.studentId.slice(2)})이&nbsp;
-            {timelineRow.target?.studentId ? <><Accent>{timelineRow.target.name}({timelineRow.target.studentId.slice(2)})</Accent>님</> : <Accent>본인</Accent>}의 현황을&nbsp;
-            {timelineRow.location.from ? <><Accent>{timelineRow.location.from}</Accent>에서 <Accent>{timelineRow.location.to}</Accent>로 옮겼습니다.</> : <><Accent>{timelineRow.location.to}</Accent>로 등록했습니다</>}
+        {timelineData?.map(timelineRow => <Timerow key={timelineRow.id}>
+            <Time>[ {timelineRow.time} ]</Time> &nbsp;
+            {timelineRow.subject}님이&nbsp;
+            {timelineRow.target ? timelineRow.target + "님" : "본인"}의 현황을&nbsp;
+            {timelineRow.from ? <><Accent>{timelineRow.from}</Accent>에서 <Accent>{timelineRow.to}</Accent>로 옮겼습니다.</> : <><Accent>{timelineRow.to}</Accent>로 변경했습니다</>}
         </Timerow>)}
     </Wrapper>
 }
@@ -89,7 +75,7 @@ const Accent = styled.span`
     font-weight: 900;
 `
 
-const Wrapper = styled.div`
+const Wrapper = styled(Card)`
     height: 50vh;
     overflow-y: scroll;
 `
