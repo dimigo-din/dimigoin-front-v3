@@ -79,7 +79,7 @@ const openTimelineByStudent = (student: Student) => {
   })
 }
 
-const DraggableStudent: React.FC<{ student: Student }> = ({ student }) => {
+const DraggableStudent: React.FC<{ student: Student; additionalInfo: string }> = ({ student, additionalInfo }) => {
   const [, draggable] = useDrag({
     item: {
       type: "STUDENT",
@@ -90,10 +90,13 @@ const DraggableStudent: React.FC<{ student: Student }> = ({ student }) => {
     })
   })
   return (
-    <StudentWrapper onClick={() => openTimelineByStudent(student)}>
+    <StudentWrapper
+      onClick={() => openTimelineByStudent(student)}
+      >
       <p ref={draggable}>
         {student.number} {student.name}
       </p>
+      <Chip>{additionalInfo}</Chip>
     </StudentWrapper>
   )
 };
@@ -116,8 +119,8 @@ const StudentList: React.FC<{
         title="이름"
         hasLabel={hasLabel}
         css={css`
-        flex: 1;
-      `}
+          flex: 1;
+        `}
         contentCss={css`
         align-items: flex-start;
       `}
@@ -130,7 +133,7 @@ const StudentList: React.FC<{
         `}
         >
           {log ? log.map((student) => (
-            <DraggableStudent key={student.student._id} student={student.student} />
+            <DraggableStudent key={student.student._id} student={student.student} additionalInfo={`${student.log?.place.name || "장소를 등록하지 않았습니다"}${student.log?.remark ? `(${student.log?.remark})` : ''}`} />
           )) : [...Array(Math.floor(Math.random() * 10) + 3)].map(() => <StudentWrapper>
             <Skeleton width={80} />
           </StudentWrapper>)}
@@ -209,7 +212,7 @@ const INITIAL_INDEX = groupedPlaces.findIndex(p => p.initial)
 const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeName }: DisplayPlace) => new Promise<{
   placeId: string;
   reason?: string;
-}>((success, error) => {
+}>((success) => {
   if (placeName === '인강실')
     return success({
       placeId: ["601fe6b4a40ac010e7a64968", "601fe6b4a40ac010e7a64961"][student.grade - 1]
@@ -510,7 +513,32 @@ const StudentWrapper = styled.h3`
   font-size: 23px;
   font-weight: 700;
   width: 100px;
+  &:hover {
+    &>div {
+      opacity: 1;
+      margin-top: 0px;
+      visibility: visible;
+    }
+  }
 `;
+
+const Chip = styled.div`
+  display: block;
+  visibility: hidden;
+  content: attr("data-additional-info");
+  padding: 12px;
+  opacity: 0;
+  position: absolute;
+  background-color: white;
+  color: black;
+  box-shadow: 0px 0px 36px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+  max-width: 120px;
+  line-height: 24px;
+  border-radius: 8px;
+  margin-top: -12px;
+  transition: 300ms cubic-bezier(0, 0.46, 0.12, 0.98);
+`
 
 const locationLabelStyle = css`
   flex-direction: row;
