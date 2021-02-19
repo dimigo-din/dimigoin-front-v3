@@ -1,24 +1,20 @@
-import React, { RefObject, useCallback, useDebugValue, useEffect, useState } from "react";
+import React, { RefObject, useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import css, { SerializedStyles } from "@emotion/css";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend"
 import { ReactComponent as DeskIcon } from "../../assets/icons/desk.svg";
-import { ReactComponent as HealingsilIcon } from "../../assets/icons/healingsil.svg";
 import { ReactComponent as OtherIcon } from "../../assets/icons/other.svg";
 import { ReactComponent as InsangsilIcon } from "../../assets/icons/ingangsil.svg";
 import { ReactComponent as CircleIcon } from "../../assets/icons/circle.svg";
 import { ReactComponent as RefreshIcon } from "../../assets/icons/refresh.svg";
-import { ReactComponent as LaundryIcon } from "../../assets/icons/laundry.svg";
 import { ReactComponent as AbsentIcon } from "../../assets/icons/close.svg";
-import { ReactComponent as HistoryIcon } from "../../assets/icons/history.svg";
 import { ReactComponent as IconLogo } from "../../assets/brand.svg";
 import {
   Button, ButtonProps, Horizontal, noBreak,
-  PageWrapper, showModal, NamedSection, ResponsiveWrapper, Divider
+  PageWrapper, showModal, ResponsiveWrapper, Divider
 } from "../../components";
 import { Timeline } from "./Timeline";
-import MoveClass from "./MoveClass";
 import { AttendanceLogWithStudent, Gender, Student } from "../../constants/types";
 import { getWholeClassAttendanceLog } from "../../api";
 import { OtherPlaceModal } from "../Main/OtherPlaceModal";
@@ -26,7 +22,7 @@ import { useMyData } from "../../hooks/api/useMyData";
 import Skeleton from "react-loading-skeleton";
 
 interface TopBarProps {
-  klassName?: string;
+  clasName?: string;
   jaseupName: string;
 }
 
@@ -43,14 +39,14 @@ const ROW_COLOR = {
   NOTAVAILABLE: "#B8B8B8",
 };
 
-const TopBar: React.FC<TopBarProps> = ({ klassName, jaseupName }) => (
+const TopBar: React.FC<TopBarProps> = ({ clasName, jaseupName }) => (
   <Horizontal
     css={css`
       align-items: center;
     `}
   >
     <IconLogo height={48} width={32} />
-    <ClassName>{klassName || <Skeleton width={300} />}</ClassName>
+    <ClassName>{clasName || <Skeleton width={300} />}</ClassName>
     <JaseupName>{jaseupName}</JaseupName>
   </Horizontal>
 );
@@ -79,7 +75,11 @@ const openTimelineByStudent = (student: Student) => {
   })
 }
 
-const DraggableStudent: React.FC<{ student: Student; additionalInfo: string }> = ({ student, additionalInfo }) => {
+const DraggableStudent: React.FC<{
+  student: Student;
+  additionalInfo: string;
+  freeWidth: boolean;
+}> = ({ student, additionalInfo, children, freeWidth }) => {
   const [, draggable] = useDrag({
     item: {
       type: "STUDENT",
@@ -91,10 +91,11 @@ const DraggableStudent: React.FC<{ student: Student; additionalInfo: string }> =
   })
   return (
     <StudentWrapper
+      freeWidth={freeWidth}
       onClick={() => openTimelineByStudent(student)}
-      >
+    >
       <p ref={draggable}>
-        {student.number} {student.name}
+        {children}
       </p>
       <Chip>{additionalInfo}</Chip>
     </StudentWrapper>
@@ -105,10 +106,12 @@ const StudentList: React.FC<{
   log?: AttendanceLogWithStudent[];
   hasLabel: boolean;
   moveStudent(student: Student): void;
+  isOtherRow: boolean;
 }> = ({
   log,
   hasLabel,
-  moveStudent
+  moveStudent,
+  isOtherRow
 }) => {
     const [, droppable] = useDrop<{ type: 'STUDENT', student: Student }, unknown, unknown>({
       accept: 'STUDENT',
@@ -133,8 +136,17 @@ const StudentList: React.FC<{
         `}
         >
           {log ? log.map((student) => (
-            <DraggableStudent key={student.student._id} student={student.student} additionalInfo={`${student.log?.place.name || "장소를 등록하지 않았습니다"}${student.log?.remark ? `(${student.log?.remark})` : ''}`} />
-          )) : [...Array(Math.floor(Math.random() * 10) + 3)].map(() => <StudentWrapper>
+            <DraggableStudent
+            freeWidth={isOtherRow}
+              key={student.student._id}
+              student={student.student}
+              additionalInfo={`${student.log?.place.name || "장소를 등록하지 않았습니다"}${student.log?.remark ? `(${student.log?.remark})` : ''}`}
+            >
+              {student.student.number} {student.student.name} {isOtherRow && <EtcInfo>
+                {student.log?.place.name}, {student.log?.remark}
+              </EtcInfo>}
+            </DraggableStudent>
+          )) : [...Array(Math.floor(Math.random() * 10) + 3)].map((_, index) => <StudentWrapper  key={`index${index}`}>
             <Skeleton width={80} />
           </StudentWrapper>)}
         </Horizontal>
@@ -172,8 +184,6 @@ const iconStyle = css`
 interface DisplayPlaceWithStudents extends DisplayPlace {
   students: AttendanceLogWithStudent[]
 }
-
-const INIT_PLACE_KEY = "HOMEROOM"
 
 const groupedPlaces: DisplayPlace[] = [{
   icon: <DeskIcon css={iconStyle} />,
@@ -288,7 +298,7 @@ const SelfStudyDisplay: React.FC = () => {
   }, [setSelfStudyStatus, myData])
 
   const moveStudentPlaceTo = useCallback(async (student: Student, place: DisplayPlace) => {
-    const parsedPlace = await getTargetPlaceByLabelAndStudent(student, place)
+    // const parsedPlace = await getTargetPlaceByLabelAndStudent(student, place)
   }, [])
 
   // const openMoveClassDisplay = useCallback(() => {
@@ -320,11 +330,11 @@ const SelfStudyDisplay: React.FC = () => {
           padding-top: 40px;
         `}
       >
-        <TopBar klassName={myData && `${myData.grade}학년 ${myData.class}반`} jaseupName="방과후 자율학습 1타임" />
+        <TopBar clasName={myData && `${myData.grade}학년 ${myData.class}반`} jaseupName="방과후 자율학습 1타임" />
         <TableWrapper>
           <div>
             {[{
-              color: ROW_COLOR.AVAILABLE,
+              color: selfStudyStatus ? ROW_COLOR.AVAILABLE : ROW_COLOR.NOTAVAILABLE,
               label: "현원",
               places: selfStudyStatus?.available
             }, {
@@ -333,7 +343,7 @@ const SelfStudyDisplay: React.FC = () => {
               places: selfStudyStatus?.notAvailable
             }].map((type, typeIndex) =>
               <ResponsiveWrapper
-                key={type.color}
+                key={type.label}
                 threshold={800}
                 css={css`
                   align-items: stretch;
@@ -355,7 +365,7 @@ const SelfStudyDisplay: React.FC = () => {
                       const hasLabel = typeIndex === 0 && placeIndex === 0
 
                       return (
-                        <>
+                        <React.Fragment key={place.name}>
                           {placeIndex !== 0 && <Divider data-divider horizontal smaller />}
                           <ResponsiveWrapper
                             threshold={800}
@@ -365,7 +375,7 @@ const SelfStudyDisplay: React.FC = () => {
                               <LabelCard title="위치" hasLabel={hasLabel} css={[noBreak, responsiveLabelCardWidth(160)]} contentCss={locationLabelStyle}>
                                 {place.icon}
                                 <LocationLabelText>
-                                  {place.name}
+                                  {isRealData(place) ? place.name : <Skeleton width={50} />}
                                 </LocationLabelText>
                               </LabelCard>
                               <Divider data-divider smaller />
@@ -374,9 +384,9 @@ const SelfStudyDisplay: React.FC = () => {
                               </LabelCard>
                             </ResponsiveWrapper>
                             <Divider data-divider smaller />
-                            <StudentList hasLabel={hasLabel} log={isRealData(place) ? place.students : undefined} moveStudent={place && (student => moveStudentPlaceTo(student, place))} />
+                            <StudentList hasLabel={hasLabel} isOtherRow={place.type === 'ETC'} log={isRealData(place) ? place.students : undefined} moveStudent={place && (student => moveStudentPlaceTo(student, place))} />
                           </ResponsiveWrapper>
-                        </>
+                        </React.Fragment>
                       )
                     })
                   }
@@ -415,11 +425,11 @@ const SelfStudyDisplay: React.FC = () => {
             </LabelCard>
             </Horizontal>
             <ResponsiveWrapper css={css`
-          flex-direction: column;
-            &>*+* {
-              margin-left: 12px;
-            }
-          `}>
+              flex-direction: column;
+                &>*+* {
+                  margin-left: 12px;
+                }
+            `}>
               <Divider data-divider smaller />
               <ButtonWithIcon icon={RefreshIcon} label="새로고침" onClick={() => fetchData()} />
               {/* <ButtonWithIcon icon={DeskIcon} label="이동반" onClick={openMoveClassDisplay} /> */}
@@ -507,12 +517,17 @@ const JaseupName = styled.h2`
   margin-left: 20px;
 `;
 
-const StudentWrapper = styled.h3`
+const EtcInfo = styled.span`
+  font-size: 18px;
+  font-weight: 700;
+`
+
+const StudentWrapper = styled.h3<{freeWidth?: boolean}>`
   padding: 15px;
   color: var(--row-color);
   font-size: 23px;
   font-weight: 700;
-  width: 100px;
+  ${({ freeWidth }) => !freeWidth && css`width: 100px;`}
   &:hover {
     &>div {
       opacity: 1;
