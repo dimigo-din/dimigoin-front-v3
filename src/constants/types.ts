@@ -36,6 +36,13 @@ export enum NightSelfStudyTime {
     NSS2 = "NSS2"
 }
 
+export enum AfterschoolSelfStudyTime {
+    BSS1 = "BSS1",
+    BSS2 = "BSS2"
+}
+
+export type SelfStudyTime = NightSelfStudyTime | AfterschoolSelfStudyTime
+
 export interface IngangsilTicket extends SavedDocument {
     date: string;
     time: keyof typeof NightSelfStudyTime;

@@ -7,23 +7,26 @@ import { ReactComponent as DeskIcon } from "../../assets/icons/desk.svg";
 import { ReactComponent as OtherIcon } from "../../assets/icons/other.svg";
 import { ReactComponent as InsangsilIcon } from "../../assets/icons/ingangsil.svg";
 import { ReactComponent as CircleIcon } from "../../assets/icons/circle.svg";
-import { ReactComponent as RefreshIcon } from "../../assets/icons/refresh.svg";
 import { ReactComponent as AbsentIcon } from "../../assets/icons/close.svg";
 import { ReactComponent as IconLogo } from "../../assets/brand.svg";
 import {
-  Button, ButtonProps, Horizontal, noBreak,
-  PageWrapper, showModal, ResponsiveWrapper, Divider
+  Button, Horizontal, noBreak, PageWrapper, showModal,
+  ResponsiveWrapper, Divider
 } from "../../components";
 import { Timeline } from "./Timeline";
-import { AttendanceLogWithStudent, Gender, Student } from "../../constants/types";
+import {
+  AfterschoolSelfStudyTime, AttendanceLogWithStudent, Gender,
+  NightSelfStudyTime, SelfStudyTime, Student
+} from "../../constants/types";
 import { getWholeClassAttendanceLog } from "../../api";
 import { OtherPlaceModal } from "../Main/OtherPlaceModal";
 import { useMyData } from "../../hooks/api/useMyData";
 import Skeleton from "react-loading-skeleton";
+import { getSelfStudyPeriod } from "../../utils";
 
 interface TopBarProps {
   clasName?: string;
-  jaseupName: string;
+  selfStudyName: string;
 }
 
 interface LabelCardProps {
@@ -39,7 +42,7 @@ const ROW_COLOR = {
   NOTAVAILABLE: "#B8B8B8",
 };
 
-const TopBar: React.FC<TopBarProps> = ({ clasName, jaseupName }) => (
+const TopBar: React.FC<TopBarProps> = ({ clasName, selfStudyName }) => (
   <Horizontal
     css={css`
       align-items: center;
@@ -47,7 +50,7 @@ const TopBar: React.FC<TopBarProps> = ({ clasName, jaseupName }) => (
   >
     <IconLogo height={48} width={32} />
     <ClassName>{clasName || <Skeleton width={300} />}</ClassName>
-    <JaseupName>{jaseupName}</JaseupName>
+    <SelfStudyName>{selfStudyName}</SelfStudyName>
   </Horizontal>
 );
 
@@ -137,7 +140,7 @@ const StudentList: React.FC<{
         >
           {log ? log.map((student) => (
             <DraggableStudent
-            freeWidth={isOtherRow}
+              freeWidth={isOtherRow}
               key={student.student._id}
               student={student.student}
               additionalInfo={`${student.log?.place.name || "장소를 등록하지 않았습니다"}${student.log?.remark ? `(${student.log?.remark})` : ''}`}
@@ -146,7 +149,7 @@ const StudentList: React.FC<{
                 {student.log?.place.name}, {student.log?.remark}
               </EtcInfo>}
             </DraggableStudent>
-          )) : [...Array(Math.floor(Math.random() * 10) + 3)].map((_, index) => <StudentWrapper  key={`index${index}`}>
+          )) : [...Array(Math.floor(Math.random() * 10) + 3)].map((_, index) => <StudentWrapper key={`index${index}`}>
             <Skeleton width={80} />
           </StudentWrapper>)}
         </Horizontal>
@@ -154,18 +157,18 @@ const StudentList: React.FC<{
     )
   }
 
-const ButtonWithIcon: React.FC<Partial<ButtonProps> & {
-  icon: React.FunctionComponent;
-  label: string;
-}> = ({ icon: Icon, label, ...props }) => {
-  return (<ButtonWithIconWrapper {...props} >
-    <Icon css={[iconStyle, css`
-        fill: white;
-        margin-right: 6px;
-      `]} />
-    {label}
-  </ButtonWithIconWrapper>)
-}
+// const ButtonWithIcon: React.FC<Partial<ButtonProps> & {
+//   icon: React.FunctionComponent;
+//   label: string;
+// }> = ({ icon: Icon, label, ...props }) => {
+//   return (<ButtonWithIconWrapper {...props} >
+//     <Icon css={[iconStyle, css`
+//         fill: white;
+//         margin-right: 6px;
+//       `]} />
+//     {label}
+//   </ButtonWithIconWrapper>)
+// }
 
 interface DisplayPlace {
   name: string;
@@ -265,12 +268,18 @@ const SelfStudyDisplay: React.FC = () => {
     notAvailable: DisplayPlaceWithStudents[]
   }>()
 
-  const [ studentQuantity, setStudentQuantity ] = useState<{
+  const [studentQuantity, setStudentQuantity] = useState<{
     available: number,
     notAvailable: number
   }>()
 
+  const [currentSelfStudyTime, setCurrentSelfStudyTime] = useState<SelfStudyTime | null>(getSelfStudyPeriod())
+
   const myData = useMyData()
+
+  const updateSelfStudyTimeLabel = useCallback(() => {
+    setCurrentSelfStudyTime(() => getSelfStudyPeriod())
+  }, [setCurrentSelfStudyTime])
 
   const fetchData = useCallback(async () => {
     if (!myData) return
@@ -320,8 +329,12 @@ const SelfStudyDisplay: React.FC = () => {
   useEffect(() => {
     fetchData()
     const timer = setInterval(() => fetchData(), 1000)
-    return () => clearInterval(timer)
-  }, [fetchData])
+    const timeNameTimer = setInterval(() => updateSelfStudyTimeLabel(), 1000 * 60 * 5)
+    return () => {
+      clearInterval(timer)
+      clearInterval(timeNameTimer)
+    }
+  }, [ fetchData, updateSelfStudyTimeLabel ])
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -330,7 +343,16 @@ const SelfStudyDisplay: React.FC = () => {
           padding-top: 40px;
         `}
       >
-        <TopBar clasName={myData && `${myData.grade}학년 ${myData.class}반`} jaseupName="방과후 자율학습 1타임" />
+        <TopBar
+          clasName={myData && `${myData.grade}학년 ${myData.class}반`}
+          selfStudyName={
+            currentSelfStudyTime ? ({
+              [NightSelfStudyTime.NSS1]: "야간자율학습 1타임",
+              [NightSelfStudyTime.NSS2]: "야간자율학습 2타임",
+              [AfterschoolSelfStudyTime.BSS1]: "방과후자율학습 1타임",
+              [AfterschoolSelfStudyTime.BSS2]: "방과후자율학습 2타임"
+            })[currentSelfStudyTime] : "자율학습시간이 아닙니다"
+          } />
         <TableWrapper>
           <div>
             {[{
@@ -416,25 +438,23 @@ const SelfStudyDisplay: React.FC = () => {
             >
               <LabelCard title="총원" hasLabel width={70}>
                 {studentQuantity ? (studentQuantity.available + studentQuantity.notAvailable) : <Skeleton width={30} />}
-            </LabelCard>
+              </LabelCard>
               <LabelCard title="현원" hasLabel width={70}>
-              {studentQuantity ? studentQuantity.available : <Skeleton width={30} />}
-            </LabelCard>
+                {studentQuantity ? studentQuantity.available : <Skeleton width={30} />}
+              </LabelCard>
               <LabelCard title="결원" hasLabel width={70} css={css`--row-color: ${ROW_COLOR.NOTAVAILABLE};`}>
-              {studentQuantity ? studentQuantity.notAvailable : <Skeleton width={30} />}
-            </LabelCard>
+                {studentQuantity ? studentQuantity.notAvailable : <Skeleton width={30} />}
+              </LabelCard>
             </Horizontal>
-            <ResponsiveWrapper css={css`
+            {/* <ResponsiveWrapper css={css`
               flex-direction: column;
                 &>*+* {
                   margin-left: 12px;
                 }
-            `}>
-              <Divider data-divider smaller />
-              <ButtonWithIcon icon={RefreshIcon} label="새로고침" onClick={() => fetchData()} />
-              {/* <ButtonWithIcon icon={DeskIcon} label="이동반" onClick={openMoveClassDisplay} /> */}
-              {/* <ButtonWithIcon icon={HistoryIcon} label="히스토리" onClick={openTimeline} /> */}
-            </ResponsiveWrapper>
+            `}> */}
+            {/* <ButtonWithIcon icon={DeskIcon} label="이동반" onClick={openMoveClassDisplay} /> */}
+            {/* <ButtonWithIcon icon={HistoryIcon} label="히스토리" onClick={openTimeline} /> */}
+            {/* </ResponsiveWrapper> */}
           </ResponsiveWrapper>
 
         </ResponsiveWrapper>
@@ -512,7 +532,7 @@ const ClassName = styled.h1`
   margin-left: 20px;
 `;
 
-const JaseupName = styled.h2`
+const SelfStudyName = styled.h2`
   font-size: 26px;
   margin-left: 20px;
 `;
@@ -522,7 +542,7 @@ const EtcInfo = styled.span`
   font-weight: 700;
 `
 
-const StudentWrapper = styled.h3<{freeWidth?: boolean}>`
+const StudentWrapper = styled.h3<{ freeWidth?: boolean }>`
   padding: 15px;
   color: var(--row-color);
   font-size: 23px;
