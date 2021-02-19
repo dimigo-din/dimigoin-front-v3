@@ -11,7 +11,7 @@ import { ReactComponent as AbsentIcon } from "../../assets/icons/close.svg";
 import { ReactComponent as IconLogo } from "../../assets/brand.svg";
 import {
   Button, Horizontal, noBreak, PageWrapper, showModal,
-  ResponsiveWrapper, Divider
+  ResponsiveWrapper, Divider, UnstyledLink
 } from "../../components";
 import { Timeline } from "./Timeline";
 import {
@@ -48,7 +48,9 @@ const TopBar: React.FC<TopBarProps> = ({ clasName, selfStudyName }) => (
       align-items: center;
     `}
   >
-    <IconLogo height={48} width={32} />
+    <UnstyledLink to="/">
+      <IconLogo height={48} width={32} />
+    </UnstyledLink>
     <ClassName>{clasName || <Skeleton width={300} />}</ClassName>
     <SelfStudyName>{selfStudyName}</SelfStudyName>
   </Horizontal>
