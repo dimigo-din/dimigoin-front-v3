@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify';
 import { getTimelineByStudent } from '../../api';
 import { getPlaceById } from '../../api/place';
 import { Card } from '../../components';
@@ -18,13 +19,17 @@ interface TimelineRow {
     id: string;
 }
 
-export const Timeline: React.FC<{ student: Student }> = ({ student }) => {
+export const Timeline: React.FC<{ student: Student; close(): void }> = ({ student, close }) => {
     const [timelineData, setTimelineData] = useState<TimelineRow[]>();
 
     useEffect(() => {
         (async () => {
             const fetchedTimelineData = await getTimelineByStudent(student._id)
-            
+            if(fetchedTimelineData.length === 0) {
+                toast.info("위치 이동 기록이 없습니다")
+                close()
+                return
+            }
             const parsedTimeline = await Promise.all(fetchedTimelineData.map(async row => {
                 const thisPlace = await getPlaceById(row.place)
                 const parsedTime = new Date(row.createdAt)
@@ -40,9 +45,7 @@ export const Timeline: React.FC<{ student: Student }> = ({ student }) => {
 
             setTimelineData(() => parsedTimeline)
         })()
-    }, [])
-    
-    useEffect(() => console.log(timelineData), [ timelineData ])
+    }, [ student, close ])
 
     return <Wrapper>
         {timelineData?.map(timelineRow => <Timerow key={timelineRow.id}>

@@ -72,7 +72,7 @@ const LabelCard: React.FC<LabelCardProps> = React.forwardRef(({
 });
 
 const openTimelineByStudent = (student: Student) => {
-  showModal(() => <Timeline student={student} />, {
+  showModal(close => <Timeline student={student} close={close} />, {
     wrapperProps: {
       css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px; width: 100%;`
     }
