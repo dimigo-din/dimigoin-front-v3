@@ -15,7 +15,7 @@ import Skeleton from "react-loading-skeleton";
 import { IngangApplyPeriod } from '../api/interfaces/ingangsil';
 
 const timeRangeToString = ({ start, end }: IngangApplyPeriod) => (
-  `${start.hour.toString().padStart(2, '0')}:${start.minute.toString().padStart(2, '0')} ~` +
+  `${start.hour.toString().padStart(2, '0')}:${start.minute.toString().padStart(2, '0')} ~ ` +
   `${end.hour.toString().padStart(2, '0')}:${end.minute.toString().padStart(2, '0')}`
 );
 
@@ -64,7 +64,7 @@ const Ingangsil: React.FC = () => {
                       margin-bottom: 24px;
                     `}
                   >
-                    1학년 신청 시간
+                    {myData?.grade}학년 신청 시간
                   </CardTitle>
                   <Row>
                     <Time />

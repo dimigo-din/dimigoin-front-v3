@@ -26,7 +26,7 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }
 
   useEffect(() => {
     getAllTeachers().then(teacherList => setApproversList(() => teacherList.map(teacher => ({
-      name: teacher.name + ' 선생님',
+      name: [teacher.role, teacher.name, '선생님'].join(' '),
       key: teacher._id
     }))))
   }, [ setApproversList ]);
