@@ -1,4 +1,8 @@
-import { Doc, AfterschoolClass } from "../../constants/types";
+import { Doc, AfterschoolClass, Merge } from "../../constants/types";
+
+export type ReqAfterschoolClass = Merge<AfterschoolClass, {
+    teacher: string;
+}>
 
 export interface AfterschoolList {
     endpoint: '/afterschool';
@@ -12,7 +16,16 @@ export interface AfterschoolList {
 export interface EditAfterschoolClassInfo {
     endpoint: '/afterschool/:id';
     method: 'PATCH';
-    req: AfterschoolClass;
+    req: ReqAfterschoolClass;
+    res: {
+        afterschool: Doc<AfterschoolClass>
+    }
+}
+
+export interface RegisterNewAfterschoolClass {
+    endpoint: '/afterschool';
+    method: 'POST';
+    req: ReqAfterschoolClass;
     res: {
         afterschool: Doc<AfterschoolClass>
     }

@@ -37,6 +37,7 @@ const style = {
   `,
   text: css`
     background-color: transparent;
+    color: var(--main-theme-accent);
   `,
   disableCurser: css`
     cursor: not-allowed;

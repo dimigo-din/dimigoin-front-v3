@@ -2,7 +2,7 @@ import css from "@emotion/css"
 import styled from "@emotion/styled"
 import React, { useCallback, useEffect, useState } from "react"
 import { Afterschool } from ".."
-import { editAfterschoolClassInfo, getAfterschoolClassList } from "../../api/afterschool"
+import { editAfterschoolClassInfo, getAfterschoolClassList, registerNewAfterschoolClass } from "../../api/afterschool"
 import { getPlaceList } from "../../api/place"
 import { getAllTeachers } from "../../api/user"
 import { ReactComponent as _DownloadIcon } from '../../assets/icons/download.svg'
@@ -11,21 +11,28 @@ import { ReactComponent as _CloseIcon } from '../../assets/icons/close.svg'
 import {
     CardGroupHeader, Col, Data, HeadData, HeadRow, Horizontal,
     Row, MoreCompactButton, NoData, PageWrapper, ResponsiveWrapper,
-    Table, Card, Divider, FormHeader as _FormHeader, Input, Dropdown, DropdownItem, Checkbox, showModal, showCardModal
+    Table, Card, Divider, FormHeader as _FormHeader, Input, Dropdown, DropdownItem, Checkbox, showModal, showCardModal, Button
 } from "../../components"
 import { dayEngKorMapper, days } from "../../constants"
-import { AfterschoolClass, Doc, EngDay, Place, SelfStudyTime, SelfStudyTimeEngKor } from "../../constants/types"
+import { AfterschoolClass, Doc, EngDay, Grade, Place, SelfStudyTime, SelfStudyTimeEngKor } from "../../constants/types"
 import useInput, { useCheckbox } from "../../hooks/useInput"
+import { toast } from "react-toastify"
+
+const getCheckedIndex = (arr: {
+    checked: boolean;
+}[]): number[] => arr.map((checkbox, index) => checkbox.checked && index).filter((e): e is number => typeof e === 'number')
 
 const AfterschoolEditor: React.FC<{
-    type?: | "REGISTER" | "EDIT";
     data?: Doc<AfterschoolClass>;
     close(): void;
-}> = ({ type, data, close }) => {
+}> = ({ data, close }) => {
     const [teachersList, setTeachersList] = useState<DropdownItem[]>();
     const [places, setPlaces] = useState<Doc<Place>[]>()
     const placeDropdown = useInput<DropdownItem>();
-    const teacherDropdown = useInput<DropdownItem>();
+    const teacherDropdown = useInput<DropdownItem>(data ? {
+        key: data.teacher._id,
+        name: data.teacher.name
+    } : undefined);
     const afterschoolClassName = useInput(data?.name);
     const descriptionInput = useInput(data?.description);
     const capacityInput = useInput(data?.capacity.toString(), v => (+v).toString() === v || v === '');
@@ -52,10 +59,8 @@ const AfterschoolEditor: React.FC<{
     ]
 
     const timesCheckboxes = {
-        "방과후1": useCheckbox(data?.times?.includes(SelfStudyTime.AFSC1)),
-        "방과후2": useCheckbox(data?.times?.includes(SelfStudyTime.AFSC2)),
-        "야자1": useCheckbox(data?.times?.includes(SelfStudyTime.NSS1)),
-        "야자2": useCheckbox(data?.times?.includes(SelfStudyTime.NSS2)),
+        [SelfStudyTime.AFSC1]: useCheckbox(data?.times?.includes(SelfStudyTime.AFSC1)),
+        [SelfStudyTime.AFSC2]: useCheckbox(data?.times?.includes(SelfStudyTime.AFSC2)),
     }
 
     useEffect(() => {
@@ -72,17 +77,66 @@ const AfterschoolEditor: React.FC<{
         })()
     }, [])
 
-    // const register = useCallback(() => {
-    //     if(data) editAfterschoolClassInfo(data._id, {
-    //         capacity: capacityInput.value,
-    //         // class: class
-    //     })
-    // }, [])
+    const register = useCallback(() => {
+        // if(data) editAfterschoolClassInfo(data._id, )
+        const targetGrades = getCheckedIndex([grade1Checkbox, grade2Checkbox, grade3Checkbox])
+            .map(index => ([1, 2, 3] as Grade[])[index])
+        const times = getCheckedIndex(
+            [timesCheckboxes.AFSC1, timesCheckboxes.AFSC2]
+        ).map(index => [SelfStudyTime.AFSC1, SelfStudyTime.AFSC2, SelfStudyTime.NSS1, SelfStudyTime.NSS2][index])
+        const validations = [
+            !capacityInput.value && "정원",
+            days?.length === 0 && "요일",
+            !descriptionInput.value && "설명",
+            !afterschoolClassName.value && "강의명",
+            targetClassCheckboxes.length === 0 && "대상 반",
+            targetGrades.length === 0 && "대상 학년",
+            !teacherDropdown.value?.key && "담당 선생님",
+            times.length === 0 && "시간"
+        ].filter(Boolean)
+        if (validations.length) {
+            toast.error(validations.join(', ').을를 + " 다시 확인해주세요")
+            return
+        }
+
+        const newInfo = {
+            capacity: +capacityInput.value!!,
+            days: getCheckedIndex(weekdayCheckboxes).map(index => (Object.keys(EngDay) as EngDay[])[index]),
+            description: descriptionInput.value!!,
+            name: afterschoolClassName.value!!,
+            targetClasses: getCheckedIndex(targetClassCheckboxes).map(index => [1, 2, 3, 4, 5, 6][index]),
+            targetGrades,
+            teacher: teacherDropdown.value?.key!!,
+            times
+        };
+
+        (data ? editAfterschoolClassInfo(data._id, newInfo) : registerNewAfterschoolClass(newInfo))
+            .then(() => {
+                toast.success(data ? "방과후 정보를 업데이트했어요" : "새 방과후를 등록했어요")
+                close()
+            })
+            .catch(() => toast.error("방과후 정보를 업데이트하지 못했어요"))
+
+    }, [
+        afterschoolClassName.value,
+        capacityInput.value,
+        descriptionInput.value,
+        grade1Checkbox,
+        grade2Checkbox,
+        grade3Checkbox,
+        targetClassCheckboxes,
+        teacherDropdown.value,
+        timesCheckboxes.AFSC1,
+        timesCheckboxes.AFSC2,
+        weekdayCheckboxes,
+        data,
+        close
+    ])
 
     return (<>
         <Horizontal>
             <CardGroupHeader css={css`flex: 1;`}>
-                {type === 'EDIT' ? "정보 수정" : "새 방과후 추가"}
+                {data ? "정보 수정" : "새 방과후 추가"}
             </CardGroupHeader>
             <CloseIcon onClick={close} />
         </Horizontal>
@@ -109,7 +163,8 @@ const AfterschoolEditor: React.FC<{
         </Horizontal>
         <FormHeader>시간</FormHeader>
         <Horizontal>
-            {Object.entries(timesCheckboxes).map(([name, timeCheckbox]) => <Checkbox {...timeCheckbox} text={name} />)}
+        <Checkbox {...timesCheckboxes.AFSC1} text={SelfStudyTimeEngKor[SelfStudyTime.AFSC1]} />
+        <Checkbox {...timesCheckboxes.AFSC2} text={SelfStudyTimeEngKor[SelfStudyTime.AFSC2]} />
         </Horizontal>
         <FormHeader>대상 학년</FormHeader>
         <Horizontal>
@@ -133,25 +188,39 @@ const AfterschoolEditor: React.FC<{
             {...capacityInput}
             placeholder="정원을 입력해주세요"
         />
+        <RegisterButtonWrapper>
+            <Button text onClick={register}>등록</Button>
+        </RegisterButtonWrapper>
     </>)
 }
+
+const RegisterButtonWrapper = styled(Horizontal)`
+    justify-content: center;
+    margin-top: 24px;
+`
 
 const AfterschoolMangement: React.FC = () => {
     const [afterschoolClassList, setAfterschoolClassList] = useState<Doc<AfterschoolClass>[]>()
     const [sideDetail, setSideDetail] = useState<{
-        type: | "REGISTER" | "EDIT";
         data?: Doc<AfterschoolClass>;
     }>()
 
-    useEffect(() => {
+    const fetchData = useCallback(() => {
         getAfterschoolClassList()
             .then(setAfterschoolClassList)
-    }, [])
+    }, [setAfterschoolClassList])
 
-    const openEdit = useCallback((classData: Doc<AfterschoolClass>) => {
+    useEffect(() => {
+        fetchData()
+    }, [fetchData])
+
+    const openEdit = useCallback((classData?: Doc<AfterschoolClass>) => {
         if (window.innerWidth < 1300) {
             showModal(close => <Card css={css`flex: 1; overflow: auto;`}>
-                <AfterschoolEditor close={close} type="EDIT" data={classData} />
+                <AfterschoolEditor close={() => {
+                    fetchData()
+                    close()
+                }} data={classData} />
             </Card>, {
                 wrapperProps: {
                     css: css`max-width: min(720px, 100vw); width: 100vw; height: 100vh; display: flex; padding: 60px 20px 20px;`
@@ -163,11 +232,10 @@ const AfterschoolMangement: React.FC = () => {
         }
         else {
             setSideDetail(() => ({
-                type: "EDIT",
                 data: classData
             }))
         }
-    }, [])
+    }, [fetchData])
 
     return <PageWrapper>
         <ResponsiveWrapper>
@@ -181,7 +249,7 @@ const AfterschoolMangement: React.FC = () => {
                             <DownloadIcon />
                             엑셀 다운로드
                         </HeaderButton>
-                        <HeaderButton>
+                        <HeaderButton onClick={() => openEdit()}>
                             <NewIcon />
                             신규 등록
                         </HeaderButton>
@@ -225,12 +293,12 @@ const AfterschoolMangement: React.FC = () => {
                                 >
                                     <Data>{afterschoolClass.name}</Data>
                                     <Data>
-                                        {afterschoolClass.targetClasses.length === 6 ? "전" : afterschoolClass.targetClasses.join(', ')}학년&nbsp;
-                                        {afterschoolClass.targetGrades.length === 6 ? "모든" : afterschoolClass.targetGrades.join(', ')}반
+                                        {afterschoolClass.targetGrades.length === 3 ? "전" : afterschoolClass.targetGrades.join(', ')}학년&nbsp;
+                                        {afterschoolClass.targetClasses.length === 6 ? "모든" : afterschoolClass.targetClasses.join(', ')}반
                                     </Data>
                                     <Data>{afterschoolClass.teacher.name}</Data>
                                     <Data>
-                                        {afterschoolClass.days?.map(day => dayEngKorMapper[day])}, 
+                                        {afterschoolClass.days?.map(day => dayEngKorMapper[day])},
                                         {afterschoolClass.times.map(time => SelfStudyTimeEngKor[time])}
                                     </Data>
                                     <Data>방과후 3실</Data>
@@ -247,8 +315,10 @@ const AfterschoolMangement: React.FC = () => {
                 <Col width={5}>
                     <Card>
                         <AfterschoolEditor
-                            close={() => setSideDetail(() => undefined)}
-                            type={sideDetail?.type}
+                            close={() => {
+                                fetchData()
+                                setSideDetail(() => undefined)
+                            }}
                             data={sideDetail?.data}
                         />
                     </Card>
