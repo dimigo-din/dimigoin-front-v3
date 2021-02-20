@@ -9,16 +9,46 @@ import {
 } from "../../components";
 import { useMeal } from "../../hooks/api";
 import { useMyData } from "../../hooks/api/useMyData";
-import { Doc, Notice } from "../../constants/types";
+import { Doc, Notice, UserType } from "../../constants/types";
 import { getCurrentNotices, getTimetable } from "../../api";
 import { SelfStudyStatus } from "./SelfStudyStatus";
 
+const TodayMealCard: React.FC = () => {
+    const meals = useMeal()
+    return (
+        <Col width={4} css={fullHeight}>
+            <CardGroupHeader
+                subButton={{
+                    text: "더보기",
+                    action: () => showModal((close) => <MealList goBack={close} />, {
+                        wrapperProps: {
+                            css: css`
+                            max-width: 1600px;
+                            padding: 60px 20px 20px;
+                            @media screen and (max-width: 960px) {
+                                padding-top: 40px;
+                            }
+                        `
+                        }
+                    })
+                }}
+            >
+                오늘의 급식
+        </CardGroupHeader>
+            <TodayMeal meals={meals} />
+        </Col>
+    )
+}
+
 const Main: React.FC = () => {
     const [notice, setNotice] = useState<Doc<Notice>[]>();
-    // const [appliments, setAppliments] = useState<ApplimentStatus[]>();
     const [timetableData, setTimeTableData] = useState<string[][] | null>();
-    const meals = useMeal()
+
     const myData = useMyData()
+
+
+    const [isStudent, setIsStudent] = useState<boolean>(myData?.userType === UserType.S)
+
     useEffect(() => {
         getCurrentNotices().then(notices => setNotice(() => notices))
         if (myData) {
@@ -27,6 +57,10 @@ const Main: React.FC = () => {
                 .catch(() => setTimeTableData(() => null))
         }
     }, [myData]);
+
+    useEffect(() => {
+        setIsStudent(() => myData?.userType === UserType.S)
+    }, [myData])
 
     return (
         <>
@@ -69,54 +103,45 @@ const Main: React.FC = () => {
                         ) : <TextCardGroup content={[{ text: <NoData>공지사항이 없습니다</NoData> }]} />}
                     </Col>
                     <Divider data-divider />
-                    <Col width={5}>
-                        <CardGroupHeader subButton={{
-                            text: "우리반 현황 보기",
-                            route: "/selfstudydisplay"
-                        }}>자습 현황</CardGroupHeader>
-                        <SelfStudyStatus />
-                    </Col>
+                    {
+                        isStudent ?
+                            <Col width={5}>
+                                <CardGroupHeader subButton={{
+                                    text: "우리반 현황 보기",
+                                    route: "/selfstudydisplay"
+                                }}>자습 현황</CardGroupHeader>
+                                <SelfStudyStatus />
+                            </Col>
+                            : <TodayMealCard />
+                    }
                 </ResponsiveWrapper>
-                <Divider data-divider horizontal />
-                <ResponsiveWrapper threshold={1200}>
-                    <Col width={3} css={fullHeight}>
-                        <CardGroupHeader>시간표</CardGroupHeader>
-                        {timetableData !== null ? <TimeTable timetable={timetableData} /> : <TextCardGroup content={[{ text: <NoData>시간표 데이터가 없습니다</NoData> }]} />}
-                    </Col>
-                    <Divider data-divider />
-                    <Col width={3}>
-                        <CardGroupHeader>나의 신청현황</CardGroupHeader>
-                        {/* {appliments ? (
-                            appliments.map((myToday) => (
-                                <ApplimentStatus key={myToday.name} {...myToday} />
-                            ))
-                        ) : ( */}
-                                <TextCardGroup content={[{ text: <NoData>신청 현황이 없습니다</NoData> }]} />
-                            {/* )} */}
-                    </Col>
-                    <Divider data-divider />
-                    <Col width={4} css={fullHeight}>
-                        <CardGroupHeader
-                            subButton={{
-                                text: "더보기",
-                                action: () => showModal((close) => <MealList goBack={close} />, {
-                                    wrapperProps: {
-                                        css: css`
-                      max-width: 1600px;
-                      padding: 60px 20px 20px;
-                      @media screen and (max-width: 960px) {
-                        padding-top: 40px;
-                      }
-                    `
-                                    }
-                                })
-                            }}
-                        >
-                            오늘의 급식
-            </CardGroupHeader>
-                        <TodayMeal meals={meals} />
-                    </Col>
-                </ResponsiveWrapper>
+                {
+                    isStudent && <>
+                        <Divider data-divider horizontal />
+                        <ResponsiveWrapper threshold={1200}>
+                            <Col width={3} css={fullHeight}>
+                                <CardGroupHeader>시간표</CardGroupHeader>
+                                {timetableData !== null ? <TimeTable timetable={timetableData} /> : <TextCardGroup content={[{ text: <NoData>시간표 데이터가 없습니다</NoData> }]} />}
+                            </Col>
+                            <>
+                                <Divider data-divider />
+                                <Col width={3}>
+                                    <CardGroupHeader>나의 신청현황</CardGroupHeader>
+                                    {/* {appliments ? (
+                                appliments.map((myToday) => (
+                                    <ApplimentStatus key={myToday.name} {...myToday} />
+                                ))
+                            ) : ( */}
+                                    <TextCardGroup content={[{ text: <NoData>신청 현황이 없습니다</NoData> }]} />
+                                    {/* )} */}
+                                </Col>
+                            </>
+                            <Divider data-divider />
+                            <TodayMealCard />
+                        </ResponsiveWrapper>
+
+                    </>
+                }
             </PageWrapper>
         </>
     );
