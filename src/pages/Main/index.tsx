@@ -51,12 +51,12 @@ const Main: React.FC = () => {
 
     useEffect(() => {
         getCurrentNotices().then(notices => setNotice(() => notices))
-        if (myData) {
+        if (isStudent && myData) {
             getTimetable(myData.grade, myData.class)
                 .then(table => setTimeTableData(() => table.map(day => day.sequence)))
                 .catch(() => setTimeTableData(() => null))
         }
-    }, [myData]);
+    }, [ myData, isStudent ]);
 
     useEffect(() => {
         setIsStudent(() => myData?.userType === UserType.S)
