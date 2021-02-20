@@ -15,8 +15,8 @@ export const NoticeEditingModal: React.FC<{ closeModal(): void; } & Partial<Doc<
     const contentInput = useInput(originNotice.content)
     // const noticeTypeInput = useInput<RadioButtonItem>()
     const grade1Checkbox = useCheckbox(originNotice.targetGrade?.includes(1)),
-        grade2Checkbox = useCheckbox(originNotice.targetGrade?.includes(1)),
-        grade3Checkbox = useCheckbox(originNotice.targetGrade?.includes(2))
+        grade2Checkbox = useCheckbox(originNotice.targetGrade?.includes(2)),
+        grade3Checkbox = useCheckbox(originNotice.targetGrade?.includes(3))
     const {
         element: TinyDateRangeSelector,
         dates

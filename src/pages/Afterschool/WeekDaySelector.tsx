@@ -4,6 +4,10 @@ import React from 'react'
 import { days } from '../../constants'
 import { EventFunction } from '../../hooks/useInput'
 
+// export const MultipleWeekdaySelector: React.FC = () => {
+
+// }
+
 export const WeekDaySelector: React.FC<{
     onChange: EventFunction<number>;
     value?: number;

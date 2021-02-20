@@ -6,7 +6,7 @@ import {
     AttendanceLogList, RegisterMovingHistory, PrimaryPlaceList, PlaceList,
     WholeClassAttendanceLog, TimelineByStudent, RequestExcelFile, EntireTicket
 } from "./interfaces";
-import { AfterschoolList as AfterschoolClassList } from "./interfaces/afterschool";
+import { AfterschoolList as AfterschoolClassList, EditAfterschoolClassInfo } from "./interfaces/afterschool";
 
 export interface APIResource {
     loginWithInfo: LoginWithInfo;
@@ -36,4 +36,5 @@ export interface APIResource {
     requestExcelFile: RequestExcelFile;
     entierTicket: EntireTicket;
     afterschoolClassList: AfterschoolClassList;
+    editAfterschoolClassInfo: EditAfterschoolClassInfo;
 }

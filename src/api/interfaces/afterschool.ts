@@ -8,3 +8,12 @@ export interface AfterschoolList {
         afterschools: Doc<AfterschoolClass>[]
     }
 }
+
+export interface EditAfterschoolClassInfo {
+    endpoint: '/afterschool/:id';
+    method: 'PATCH';
+    req: AfterschoolClass;
+    res: {
+        afterschool: Doc<AfterschoolClass>
+    }
+}
