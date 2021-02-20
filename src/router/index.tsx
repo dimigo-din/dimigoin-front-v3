@@ -80,7 +80,7 @@ const Router: React.FC = () => (
         <TopLine />
         <NavigationBar />
         <Route path="/ingangsil/manager" component={needPermission(Permission["ingang-application"], needAuth(IngangsilManager))} />
-        <Route path="/ingangsil" exact component={needAuthAndBranch<{}, {}>(Ingangsil)} />
+        <Route path="/ingangsil" exact component={needAuthAndBranch(Ingangsil)} />
         <Route path="/outgo" component={needAuth(Outgo)} />
         <Route path="/notices/:articleId" component={needAuth(Notices)} />
         <Route path="/notices" exact component={needAuth(Notices)} />
