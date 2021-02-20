@@ -21,6 +21,16 @@ export interface AuthTokens {
 
 export type Grade = | 1 | 2;
 
+export enum EngDay {
+    "mon",
+    "tue",
+    "wed",
+    "thu",
+    "fri",
+    "sat",
+    "sun"
+}
+
 export enum UserType {
     T = "T",
     S = "S",
@@ -130,5 +140,12 @@ export interface DownloadbleFile {
 }
 
 export interface AfterschoolClass {
-    
+    capacity: number;
+    class: number;
+    day: (keyof typeof EngDay)[];
+    description: string;
+    grade: Grade[]
+    name: string;
+    teacher: string;
+    time: SelfStudyTime[];
 }

@@ -4,12 +4,13 @@ import React, { useEffect, useState } from "react"
 import { getAfterschoolClassList } from "../../api/afterschool"
 import { ReactComponent as _DownloadIcon } from '../../assets/icons/download.svg'
 import { ReactComponent as _NewIcon } from '../../assets/icons/edit.svg'
-import { CardGroupHeader, Col, HeadData, HeadRow, Horizontal, MoreCompactButton, PageWrapper, ResponsiveWrapper, Row, Table } from "../../components"
+import { CardGroupHeader, Col, Data, HeadData, HeadRow, Horizontal, MoreCompactButton, NoData, PageWrapper, ResponsiveWrapper, Row, Table } from "../../components"
+import { dayEngKorMapper } from "../../constants"
 import { AfterschoolClass, Doc } from "../../constants/types"
 
 const AfterschoolMangement: React.FC = () => {
-    const [ afterschoolClassList, setAfterschoolClassList ] = useState<Doc<AfterschoolClass>[]>()
-    
+    const [afterschoolClassList, setAfterschoolClassList] = useState<Doc<AfterschoolClass>[]>()
+
     useEffect(() => {
         getAfterschoolClassList()
             .then(setAfterschoolClassList)
@@ -54,9 +55,17 @@ const AfterschoolMangement: React.FC = () => {
                             신청자
                         </HeadData>
                     </HeadRow>
-                    <Row>
-                        
-                    </Row>
+                    {afterschoolClassList?.length === 0 ?
+                        <NoData> 개설된 강의가 없습니다 </NoData>
+                        : afterschoolClassList?.map(afterschoolClass =>
+                            <Row key={afterschoolClass._id}>
+                                <Data>{afterschoolClass.name}</Data>
+                                <Data>{afterschoolClass.teacher} 선생님</Data>
+                                <Data>{afterschoolClass.day.map(day => dayEngKorMapper[day])}</Data>
+                                <Data>아직안나와요</Data>
+                                <Data>{afterschoolClass.capacity}</Data>
+                                <Data>아직안나와요</Data>
+                            </Row>)}
                 </Table>
             </Col>
         </ResponsiveWrapper>
@@ -66,7 +75,7 @@ const AfterschoolMangement: React.FC = () => {
 const HeaderWrapper = styled(Horizontal)`
     flex-wrap: wrap;
     flex: 1;
-    margin-bottom: 
+    margin-bottom: 14px;
 `
 
 const HeaderButton = styled(MoreCompactButton)`
