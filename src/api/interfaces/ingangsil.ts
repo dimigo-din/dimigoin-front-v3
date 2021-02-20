@@ -48,7 +48,7 @@ export interface EntireTicket {
 
 export interface RequestExcelFile {
     endpoint: '/ingang-application/export/grade/:grade';
-    method: 'GET';
+    method: 'POST';
     req: {};
     res: {
         exportedFile: Doc<DownloadbleFile>

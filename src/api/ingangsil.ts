@@ -15,6 +15,6 @@ export const unapplyIngangsil = (time: NightSelfStudyTimeKey) =>
 
 
 export const requestExcelFile = (grade: number) =>
-    api<"requestExcelFile">("GET", `/ingang-application/export/grade/${grade}`).then(e => e.exportedFile)
+    api<"requestExcelFile">("POST", `/ingang-application/export/grade/${grade}`).then(e => e.exportedFile)
 
 export const getEntireTicket = () => api<"entierTicket">("GET", "/ingang-application/entire").then(e => e.ingangApplications)
