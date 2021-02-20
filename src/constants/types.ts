@@ -128,3 +128,7 @@ export interface DownloadbleFile {
     _id: string;
     // id가 꼭 필요한 특수케이스입니다,,
 }
+
+export interface AfterschoolClass {
+    
+}
