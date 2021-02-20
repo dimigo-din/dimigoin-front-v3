@@ -1,4 +1,7 @@
-import { Doc, DownloadbleFile, IngangApplyPeriod, IngangsilTicket, NightSelfStudyTimeKey, SelfStudyTime, Student } from "../../constants/types";
+import {
+    Doc, DownloadbleFile, IngangApplyPeriod,
+    IngangsilTicket, SelfStudyTime
+} from "../../constants/types";
 
 export interface NightSelfStudyTimeRanges {
     NSS1: string;
