@@ -1,18 +1,19 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import NavigationBar from "../components/complex/NavigationBar";
 import css from "@emotion/css";
+import Skeleton from "react-loading-skeleton";
 import {
   PageWrapper, ResponsiveWrapper, Col, CardGroupHeader, Card,
   CardTitle, Divider, IngansilStatus, TextCardGroup
-} from "../components";
-import { ReactComponent as CircleSvg } from "../assets/icons/circle.svg";
-import ingangsil from "../api/ingangsil";
-import { APIResource } from "../api";
-import { IngangsilTicket, NightSelfStudyTime } from "../constants/types";
-import { useMyData } from "../hooks/api/useMyData";
-import Skeleton from "react-loading-skeleton";
-import { IngangApplyPeriod } from '../api/interfaces/ingangsil';
+} from "../../components";
+import { ReactComponent as CircleSvg } from "../../assets/icons/circle.svg";
+import { APIResource } from "../../api";
+import {
+  IngangApplyPeriod, IngangsilTicket,
+  NightSelfStudyTimeKey, Permission
+} from "../../constants/types";
+import { useMyData } from "../../hooks/api/useMyData";
+import { applyIngangsil, getMyIngangsilStatus, unapplyIngangsil } from "../../api/ingangsil";
 
 const timeRangeToString = ({ start, end }: IngangApplyPeriod) => (
   `${start.hour.toString().padStart(2, '0')}:${start.minute.toString().padStart(2, '0')} ~ ` +
@@ -21,17 +22,22 @@ const timeRangeToString = ({ start, end }: IngangApplyPeriod) => (
 
 const Ingangsil: React.FC = () => {
   const [myStatus, setFetchedMyStatus] = useState<APIResource["myIngangsilApplyStatus"]["res"]>()
+  const [groupedByTime, setGroupedByTime] = useState<Record<NightSelfStudyTimeKey, IngangsilTicket[]>>()
   const myData = useMyData()
-  const groupedByTime = myStatus?.applicationsInClass.reduce((acc, current) => {
-    acc[current.time] = [...(acc[current.time] || []), current]
-    return acc
-  }, {
-    [NightSelfStudyTime.NSS1]: [],
-    [NightSelfStudyTime.NSS2]: []
-  } as Record<NightSelfStudyTime, IngangsilTicket[]>)
+
+  useEffect(() => {
+    const _groupedByTime = myStatus?.applicationsInClass.reduce((acc, current) => {
+      acc[current.time] = [...(acc[current.time] || []), current]
+      return acc
+    }, {
+      [NightSelfStudyTimeKey.NSS1]: [],
+      [NightSelfStudyTimeKey.NSS2]: []
+    } as Record<NightSelfStudyTimeKey, IngangsilTicket[]>)
+    setGroupedByTime(() => _groupedByTime)
+  }, [ myStatus ])
 
   const loadStatus = useCallback(() => {
-    return ingangsil.getMyStatus().then(setFetchedMyStatus)
+    return getMyIngangsilStatus().then(setFetchedMyStatus)
   }, [setFetchedMyStatus])
   useEffect(() => {
     const timer = setInterval(() => loadStatus(), 1000)
@@ -42,7 +48,6 @@ const Ingangsil: React.FC = () => {
 
   return (
     <>
-      <NavigationBar />
       <PageWrapper>
         <ResponsiveWrapper threshold={1100} css={css`
           @media screen and (max-width: 1100px) {
@@ -155,9 +160,12 @@ const Ingangsil: React.FC = () => {
               ]}
             />
             <Divider horizontal small data-divider />
-            <CardGroupHeader withBubble>우리반 신청자</CardGroupHeader>
+            <CardGroupHeader subButton={myData?.permissions.includes(Permission["ingang-application"]) ? {
+              text: "인원관리",
+              route: '/ingangsil/manager'
+            } : undefined}>우리반 신청자</CardGroupHeader>
             {[...Array(2)].map((_, index) => {
-              const currentTimeAppliers = groupedByTime?.[NightSelfStudyTime[index === 0 ? "NSS1" : "NSS2"]]
+              const currentTimeAppliers = groupedByTime?.[NightSelfStudyTimeKey[index === 0 ? "NSS1" : "NSS2"]]
               return (<Card leftBorder>
                 <ResponsiveWrapper>
                   <IngangTime>{index + 1}타임</IngangTime>
@@ -181,7 +189,7 @@ const Ingangsil: React.FC = () => {
           <Divider data-divider />
           <Col width={5.5}>
             {[...Array(2)].map((_, index) => {
-              const selfStudyId = NightSelfStudyTime[index === 0 ? "NSS1" : "NSS2"]
+              const selfStudyId = NightSelfStudyTimeKey[index === 0 ? "NSS1" : "NSS2"]
               const currentTimeAppliers = groupedByTime?.[selfStudyId]
               const applied = myData && currentTimeAppliers?.map(e => e.applier._id).includes(myData?._id)
               return (<>
@@ -189,15 +197,15 @@ const Ingangsil: React.FC = () => {
                 <IngansilStatus
                   key={`ingangsil${index}`}
                   onSubmit={async () => {
-                    if (applied) await ingangsil.unapply(selfStudyId)
-                    else await ingangsil.apply(selfStudyId)
+                    if (applied) await unapplyIngangsil(selfStudyId)
+                    else await applyIngangsil(selfStudyId)
                     await loadStatus()
                   }}
                   name={`야간 자율학습 ${index + 1}타임`}
                   currentApplied={currentTimeAppliers?.length}
                   max={myStatus?.ingangMaxApplier}
                   isApplied={applied}
-                  time={myStatus?.nightSelfStudyTimes[selfStudyId]}
+                  time={myStatus?.selfStudyTimes[selfStudyId]}
                 /></>
               )
             })}

@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import React, { useCallback, useEffect, useState } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import {
-  Button, CardGroupHeader, Horizontal, NavigationBar, PageWrapper,
+  CardGroupHeader, Horizontal, MoreCompactButton, PageWrapper,
   ResponsiveWrapper, showModal, TextCardGroup, UnstyledLink
 } from '../../components'
 import { Doc, Notice, UserType } from '../../constants/types'
@@ -111,14 +111,13 @@ const Notices: React.FC<RouteComponentProps<{
   }
 
   return <>
-    <NavigationBar />
     <PageWrapper>
       <HeaderWrapper>
         <CardGroupHeader css={css`margin-bottom: 0px;`}>공지사항</CardGroupHeader>
-        {myData?.userType === UserType.T && <NewNoticeButton onClick={newNotice}>
+        {myData?.userType === UserType.T && <MoreCompactButton onClick={newNotice}>
           <NewNoticeButtonIcon />
           글쓰기
-        </NewNoticeButton>}
+        </MoreCompactButton>}
       </HeaderWrapper>
       {noticesData && <TextCardGroup
         content={noticesData.map(e => ({
@@ -193,10 +192,6 @@ const EditNoticeButtonIcon = styled(_EditIcon)`
 const NewNoticeButtonIcon = styled(_EditIcon)`
   margin-right: 12px;
   fill: white;
-`
-
-const NewNoticeButton = styled(Button)`
-  padding: 6px 18px;
 `
 
 const HeaderWrapper = styled(Horizontal)`

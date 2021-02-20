@@ -1,7 +1,6 @@
 import { AttendanceLog, Doc } from "../constants/types";
 import { formatRequestableDate } from "../utils";
 import { api } from "./api";
-import { getMyData } from "./user";
 
 export const getMyAttendanceLog = (): Promise<Doc<AttendanceLog>[]> =>
     api<"attendanceLogList">("GET", "/attendance").then(d => d.logs)

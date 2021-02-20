@@ -1,14 +1,7 @@
-import { Doc, NightSelfStudyTime, Student, User } from "../../constants/types";
-
-export interface HourAndMinute {
-    hour: number;
-    minute: string;
-}
-
-export interface IngangApplyPeriod {
-    start: HourAndMinute,
-    end: HourAndMinute,
-}
+import {
+    Doc, DownloadbleFile, IngangApplyPeriod,
+    IngangsilTicket, SelfStudyTime
+} from "../../constants/types";
 
 export interface NightSelfStudyTimeRanges {
     NSS1: string;
@@ -24,12 +17,8 @@ export interface MyApplyStatus {
         weeklyUsedTicket: number;
         weeklyRemainTicket: number;
         ingangMaxApplier: number;
-        applicationsInClass: Doc<{
-            date: string;
-            time: keyof typeof NightSelfStudyTime;
-            applier: Student;
-        }>[],
-        nightSelfStudyTimes: NightSelfStudyTimeRanges;
+        applicationsInClass: Doc<IngangsilTicket>[],
+        selfStudyTimes: Record<SelfStudyTime, IngangApplyPeriod>
         ingangApplyPeriod: IngangApplyPeriod;
     }
 }
@@ -37,21 +26,31 @@ export interface MyApplyStatus {
 export interface ApplyIngangsil {
     method: "POST";
     endpoint: "/ingang-application/time/:time",
+    res: IngangsilTicket;
     req: {};
-    res: {
-        date: string;
-        time: number;
-        applier: string;
-    }
 }
 
 export interface UnapplyIngangsil {
     method: "DELETE";
     endpoint: "/ingang-application/time/:time",
     req: {};
+    res: IngangsilTicket
+}
+
+export interface EntireTicket {
+    method: 'GET';
+    endpoint: '/ingang-application/entire';
+    req: {};
     res: {
-        date: string;
-        time: number;
-        applier: string;
+        ingangApplications: IngangsilTicket[]
+    }
+}
+
+export interface RequestExcelFile {
+    endpoint: '/ingang-application/export/grade/:grade';
+    method: 'GET';
+    req: {};
+    res: {
+        exportedFile: Doc<DownloadbleFile>
     }
 }

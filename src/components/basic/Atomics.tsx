@@ -70,4 +70,9 @@ export const CompactButton = styled(Button)`
   padding: 12px 30px;
 `
 
+export const MoreCompactButton = styled(Button)`
+  padding: 6px 18px;
+  
+`
+
 export const cardModalTopBorder = css`border-top: 10px solid var(--main-theme-accent);`

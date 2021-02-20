@@ -5,12 +5,12 @@ import CardGroupHeader from "../basic/CardGroupHeader";
 import Card from "../basic/Card";
 import Button from "../basic/Button";
 import Skeleton from "react-loading-skeleton";
-import { NightSelfStudyTime } from "../../constants/types";
+import { IngangApplyPeriod } from "../../constants/types";
 
 interface IngangsilStatusProps {
   currentApplied?: number;
   max?: number;
-  time?: string;
+  time?: IngangApplyPeriod;
   isApplied?: boolean;
   name: string;
   onSubmit(): void;
@@ -37,7 +37,8 @@ export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
     <>
       <CardGroupHeader
         subButton={{
-          text: time,
+          text: time && `${time.start.hour}:${time.start.minute} ~ ${time.end.hour}:${time.start.minute}`,
+          component: time ? undefined : <Skeleton width={70} />
         }}
       >
         {name}

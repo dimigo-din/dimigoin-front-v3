@@ -33,7 +33,7 @@ const Wrapper = styled.div`
     border-radius: 6px;
 `
 
-const Header = styled.div`
+export const Header = styled.div`
     justify-content: space-around;
     flex-direction: row;
     display: flex;
@@ -47,7 +47,7 @@ const ContentWrapper = styled.div`
     padding: 36px;
 `
 
-const SectionName = styled.p<{ selected?: boolean }>`
+export const SectionName = styled.p<{ selected?: boolean }>`
     padding: 20px;
     color: #9A9A9A;
     position: relative;

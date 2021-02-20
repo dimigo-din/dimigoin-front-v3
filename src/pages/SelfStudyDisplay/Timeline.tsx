@@ -4,11 +4,7 @@ import { toast } from 'react-toastify';
 import { getTimelineByStudent } from '../../api';
 import { getPlaceById } from '../../api/place';
 import { Card } from '../../components';
-import { BriefStudent, Student } from '../../constants/types';
-
-async function getUserClass(): Promise<[number, number]> {
-    return [1, 3]
-}
+import { Student } from '../../constants/types';
 
 interface TimelineRow {
     subject: string;

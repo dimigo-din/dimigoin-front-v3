@@ -1,8 +1,9 @@
 import css from '@emotion/css'
 import React, { useEffect, useState } from 'react'
-import { Button, Card, CardGroupHeader, Col, Data, Divider,
-        HeadData, HeadRow, Horizontal, NavigationBar, PageWrapper,
-        Row, Table } from '../components'
+import {
+    Button, Card, CardGroupHeader, Col, Data, Divider,
+    HeadData, HeadRow, Horizontal, PageWrapper, Row, Table
+} from '../components'
 import makeAlert from '../functions/makeAlert'
 
 interface MentoringSchedule {
@@ -39,7 +40,6 @@ const Mentoring: React.FC = () => {
         })
     }, []);
     return <>
-            <NavigationBar />
             <PageWrapper>
                 <Horizontal>
                     <Col width={3}>

@@ -1,10 +1,10 @@
 import css from "@emotion/css"
 import styled from "@emotion/styled"
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback } from "react"
 import { toast } from "react-toastify"
 import { editRegisteredNotice, registerNewNotice } from "../../api/notice"
 import {
-    Card, Checkbox, CompactButton, RadioButtonGroup, RadioButtonItem, ResponsiveWrapper
+    Card, Checkbox, CompactButton, ResponsiveWrapper
 } from "../../components"
 import { useTinyDateRangeSelector } from "../../components/complex/time/TinyDateRangeSelector"
 import { Doc, Grade, Notice } from "../../constants/types"
@@ -120,13 +120,6 @@ const NoticeModalWrapper = styled(Card)`
     display: flex;
     flex-direction: column;
     border-top: 5px solid var(--main-theme-accent);
-`
-
-const NoticeTypeRadioSelector = styled(RadioButtonGroup)`
-    flex-shrink: 0;
-    &>*+* {
-        margin-left: 12px;
-    }
 `
 
 const HeaderWrapper = styled.div`
