@@ -2,25 +2,32 @@ import css from "@emotion/css"
 import styled from "@emotion/styled"
 import React, { useCallback, useEffect, useState } from "react"
 import { getAfterschoolClassList } from "../../api/afterschool"
+import { getPlaceList } from "../../api/place"
 import { getAllTeachers } from "../../api/user"
 import { ReactComponent as _DownloadIcon } from '../../assets/icons/download.svg'
 import { ReactComponent as _NewIcon } from '../../assets/icons/edit.svg'
 import {
     CardGroupHeader, Col, Data, HeadData, HeadRow, Horizontal,
     Row, MoreCompactButton, NoData, PageWrapper, ResponsiveWrapper,
-    Table, Card, Divider, FormHeader as _FormHeader, Input, Dropdown, DropdownItem
+    Table, Card, Divider, FormHeader as _FormHeader, Input, Dropdown, DropdownItem, Checkbox
 } from "../../components"
-import { dayEngKorMapper } from "../../constants"
-import { AfterschoolClass, Doc } from "../../constants/types"
-import useInput from "../../hooks/useInput"
+import { dayEngKorMapper, days } from "../../constants"
+import { AfterschoolClass, Doc, Place } from "../../constants/types"
+import useInput, { useCheckbox } from "../../hooks/useInput"
 
 const AfterschoolEditor: React.FC<{
     type?: | "REGISTER" | "EDIT";
     data?: AfterschoolClass;
 }> = ({ type, data }) => {
     const [teachersList, setTeachersList] = useState<DropdownItem[]>();
-    const teacherSelect = useInput<DropdownItem>();
+    const [ places, setPlaces ] = useState<Doc<Place>[]>()
+    const placeDropdown = useInput<DropdownItem>();
+    const teacherDropdown = useInput<DropdownItem>();
     const afterschoolClassName = useInput(data?.name);
+    const descriptionInput = useInput(data?.description);
+    const capacityInput = useInput(data?.capacity.toString(), v => (+v).toString() === v || v === '');
+
+    const weekdayCheckboxes = [useCheckbox(), useCheckbox(), useCheckbox(), useCheckbox(), useCheckbox(), useCheckbox()]
 
     useEffect(() => {
         getAllTeachers().then(teacherList => setTeachersList(() => teacherList.map(teacher => ({
@@ -28,21 +35,54 @@ const AfterschoolEditor: React.FC<{
             key: teacher._id
         }))))
     }, [setTeachersList]);
+
+    useEffect(() => {
+        (async () => {
+            const placeList = await getPlaceList()
+            setPlaces(() => placeList)
+        })()
+    }, [])
+
+    const register = useCallback(() => {
+        
+    }, [])
+
     return (<>
         <CardGroupHeader>
             {type === 'EDIT' ? "정보 수정" : "새 방과후 추가"}
         </CardGroupHeader>
-        <FormHeader>강의명</FormHeader>
+        <FormHeader css={css`margin-top: 36px;`}>강의명</FormHeader>
         <Input
             {...afterschoolClassName}
             placeholder="강의명을 입력해주세요"
         />
-        <FormHeader>강의명</FormHeader>
+        <FormHeader css={css`margin-top: 36px;`}>설명</FormHeader>
+        <Input
+            {...descriptionInput}
+            placeholder="설명을 입력해주세요"
+        />
+        <FormHeader>선생님</FormHeader>
         <Dropdown
             initIndex={teachersList?.findIndex(teacher => teacher.key === data?.teacher._id)}
             placeholder="선생님을 선택해주세요"
             items={teachersList}
-            {...teacherSelect}
+            {...teacherDropdown}
+        />
+        <FormHeader>여일</FormHeader>
+        <Horizontal>
+            {days.slice(0, -1).map((day, i) => <Checkbox text={day} {...weekdayCheckboxes[i]} />)}
+        </Horizontal>
+        <FormHeader>강의실</FormHeader>
+        <Dropdown
+            initIndex={3}
+            placeholder="강의실을 선택해주세요"
+            items={places}
+            {...placeDropdown}
+        />
+        <FormHeader>정원</FormHeader>
+        <Input
+            {...capacityInput}
+            placeholder="정원을 입력해주세요"
         />
     </>)
 }
