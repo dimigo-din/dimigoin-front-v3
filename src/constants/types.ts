@@ -142,10 +142,10 @@ export interface DownloadbleFile {
 export interface AfterschoolClass {
     capacity: number;
     class: number;
-    day: (keyof typeof EngDay)[];
+    days: (keyof typeof EngDay)[];
     description: string;
     grade: Grade[]
     name: string;
-    teacher: string;
+    teacher: Teacher;
     time: SelfStudyTime[];
 }

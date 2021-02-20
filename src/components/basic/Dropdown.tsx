@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
 import { EventFunction } from "../../hooks/useInput";
@@ -13,11 +13,19 @@ interface DropdownProps {
   placeholder: string;
   requireMessage?: string;
   onChange?: EventFunction<DropdownItem>;
+  initIndex?: number;
 }
 
-export const Dropdown = ({ items, placeholder, onChange, requireMessage, ...props }: DropdownProps) => {
-  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+export const Dropdown = ({
+  items, placeholder,
+  onChange, requireMessage,
+  initIndex, ...props
+}: DropdownProps) => {
+  const [selectedIndex, setSelectedIndex] = useState<number>();
   const [opened, setOpened] = useState(false);
+
+  useEffect(() => setSelectedIndex(() => (typeof initIndex === 'number') ? initIndex : -1), [ initIndex ])
+
   const clickHandler = ({
     key,
     name,
