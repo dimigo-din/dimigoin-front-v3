@@ -1,15 +1,24 @@
 import css from '@emotion/css'
 import styled from '@emotion/styled'
-import React, { useCallback } from 'react'
-import { Card, PageWrapper, CardGroupHeader, ResponsiveWrapper, Divider } from '../../components'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Card, PageWrapper, CardGroupHeader, ResponsiveWrapper, Divider, NoData } from '../../components'
 import { ReactComponent as _DownloadIcon } from '../../assets/icons/download.svg'
-import { requestExcelFile } from '../../api/ingangsil'
+import { getEntireTicket, requestExcelFile } from '../../api/ingangsil'
 import { downloadFileFromDownloadble } from '../../functions/downloadById'
+import { NightSelfStudyTimeKey, Student } from '../../constants/types'
+import Skeleton from 'react-loading-skeleton'
+// import { group } from 'console'
 
-const ApplierListCard: React.FC<{ onClickDownload(): void }> = ({ onClickDownload }) => {
+const ApplierListCard: React.FC<{
+    students?: {
+        [key in NightSelfStudyTimeKey]: Student[]
+    };
+    grade: number;
+    onClickDownload(): void
+}> = ({ onClickDownload, students, grade }) => {
     return <Card disableSpace css={css`padding: 0px;`}>
         <CardTitle>
-            1학년
+            {grade}학년
             <DownloadIconWrapper>
                 <DownloadIcon onClick={() => onClickDownload()} />
             </DownloadIconWrapper>
@@ -19,71 +28,76 @@ const ApplierListCard: React.FC<{ onClickDownload(): void }> = ({ onClickDownloa
             <SectionName>2타임</SectionName>
         </SectionHeader>
         <SectionsWrapper>
-            <Section>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-            </Section>
-            <Section>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-                <Name>2414 박정한</Name>
-            </Section>
+            {(students?.NSS1.length === 0) && (students.NSS2.length === 0) ? <NoApplier>신청 인원이 없습니다</NoApplier> : (<>
+                <Section>
+                    {students ?
+                        students.NSS1.map(student => <Name>{student.serial} {student.name}</Name>)
+                        : <Skeleton width={148} />}
+                </Section>
+                <Section>
+                    {students ? students.NSS1.map(student => <Name>{student.serial} {student.name}</Name>) : <Skeleton width={148} />}
+                </Section>
+            </>
+            )}
         </SectionsWrapper>
     </Card>
 }
 
+interface TicketsGroupedByGradeAndTime {
+    [key: number]: {
+        [key in NightSelfStudyTimeKey]: Student[]
+    }
+}
+
 export const IngangsilManager: React.FC = () => {
+    const [ticketsByGrade, setTicketsByGrade] = useState<TicketsGroupedByGradeAndTime>()
     const downloadExcel = useCallback(async (grade: number) => {
         const request = await requestExcelFile(grade)
         downloadFileFromDownloadble(request)
     }, [])
+    useEffect(() => {
+        (async () => {
+            const entireTickets = await getEntireTicket()
+            const groupedTicket = entireTickets.reduce<TicketsGroupedByGradeAndTime>((grouped, current) => {
+                return {
+                    ...grouped,
+                    [current.applier.grade]: {
+                        ...grouped[current.applier.grade],
+                        [current.time]: [...grouped[current.applier.grade][current.time], current.applier]
+                    }
+                }
+            }, {
+                1: {
+                    [NightSelfStudyTimeKey.NSS1]: [],
+                    [NightSelfStudyTimeKey.NSS2]: [],
+                },
+                2: {
+                    [NightSelfStudyTimeKey.NSS1]: [],
+                    [NightSelfStudyTimeKey.NSS2]: [],
+                },
+                3: {
+                    [NightSelfStudyTimeKey.NSS1]: [],
+                    [NightSelfStudyTimeKey.NSS2]: [],
+                }
+            })
+            console.log(groupedTicket)
+            setTicketsByGrade(() => groupedTicket)
+        })()
+    }, [])
     return <PageWrapper>
         <CardGroupHeader>인강실 신청자</CardGroupHeader>
         <ResponsiveWrapper threshold={1200}>
-            <ApplierListCard onClickDownload={() => downloadExcel(1)} />
-            <Divider data-divider small />
-            <ApplierListCard onClickDownload={() => downloadExcel(2)} />
-            <Divider data-divider small />
-            <ApplierListCard onClickDownload={() => downloadExcel(3)} />
+            {
+                [...Array(3)].map((_, index) => <>
+                        {(index !== 0) && <Divider data-divider small />}
+                        <ApplierListCard
+                            onClickDownload={() => downloadExcel(index + 1)}
+                            students={ticketsByGrade?.[index + 1]}
+                            grade={index + 1}  
+                        />
+                    </>
+                )
+            }
         </ResponsiveWrapper>
     </PageWrapper>
 }
@@ -139,6 +153,12 @@ const Name = styled.div`
     color: #707070;
     text-align: center;
     white-space: nowrap;
+`
+
+export const NoApplier = styled(NoData)`
+    width: 300px;
+    box-sizing: border-box;
+    flex: 1;
 `
 
 export default IngangsilManager

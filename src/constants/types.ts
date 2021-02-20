@@ -62,7 +62,7 @@ export interface IngangApplyPeriod {
 
 export interface IngangsilTicket extends SavedDocument {
     date: string;
-    time: keyof typeof NightSelfStudyTimeKey;
+    time: NightSelfStudyTimeKey;
     applier: Student;
 }
 

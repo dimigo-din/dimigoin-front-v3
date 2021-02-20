@@ -4,7 +4,7 @@ import {
     ApplyIngangsil, UnapplyIngangsil, AllNotices, Timetable, GetNoticeById,
     RegisterNotice, CurrentNotices, RemoveNotice, EditRegisteredNotice,
     AttendanceLogList, RegisterMovingHistory, PrimaryPlaceList, PlaceList,
-    WholeClassAttendanceLog, TimelineByStudent, RequestExcelFile
+    WholeClassAttendanceLog, TimelineByStudent, RequestExcelFile, EntireTicket
 } from "./interfaces";
 
 export interface APIResource {
@@ -33,4 +33,5 @@ export interface APIResource {
     wholeClassAttendanceLog: WholeClassAttendanceLog;
     timelineByStudent: TimelineByStudent;
     requestExcelFile: RequestExcelFile;
+    entierTicket: EntireTicket;
 }

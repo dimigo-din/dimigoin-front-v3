@@ -1,4 +1,4 @@
-import { Doc, DownloadbleFile, IngangApplyPeriod, NightSelfStudyTimeKey, SelfStudyTime, Student } from "../../constants/types";
+import { Doc, DownloadbleFile, IngangApplyPeriod, IngangsilTicket, NightSelfStudyTimeKey, SelfStudyTime, Student } from "../../constants/types";
 
 export interface NightSelfStudyTimeRanges {
     NSS1: string;
@@ -14,11 +14,7 @@ export interface MyApplyStatus {
         weeklyUsedTicket: number;
         weeklyRemainTicket: number;
         ingangMaxApplier: number;
-        applicationsInClass: Doc<{
-            date: string;
-            time: NightSelfStudyTimeKey;
-            applier: Student;
-        }>[],
+        applicationsInClass: Doc<IngangsilTicket>[],
         selfStudyTimes: Record<SelfStudyTime, IngangApplyPeriod>
         ingangApplyPeriod: IngangApplyPeriod;
     }
@@ -27,22 +23,23 @@ export interface MyApplyStatus {
 export interface ApplyIngangsil {
     method: "POST";
     endpoint: "/ingang-application/time/:time",
+    res: IngangsilTicket;
     req: {};
-    res: {
-        date: string;
-        time: number;
-        applier: string;
-    }
 }
 
 export interface UnapplyIngangsil {
     method: "DELETE";
     endpoint: "/ingang-application/time/:time",
     req: {};
+    res: IngangsilTicket
+}
+
+export interface EntireTicket {
+    method: 'GET';
+    endpoint: '/ingang-application/entire';
+    req: {};
     res: {
-        date: string;
-        time: number;
-        applier: string;
+        ingangApplications: IngangsilTicket[]
     }
 }
 
