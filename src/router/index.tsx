@@ -85,7 +85,7 @@ const Router: React.FC = () => (
         <Route path="/notices/:articleId" component={needAuth(Notices)} />
         <Route path="/notices" exact component={needAuth(Notices)} />
         <Route path="/mentoring" component={needAuth(Mentoring)} />
-        <Route path="/afterschool" component={needAuth(Afterschool)} />
+        <Route path="/afterschool" component={needAuthAndBranch(Afterschool)} />
         <Route path="/" exact component={needAuth(Main)} />
       </Container>
     </Switch>

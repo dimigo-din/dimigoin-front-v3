@@ -8,7 +8,10 @@ export const Ingangsil = {
     Student: loadable(() => import('./Ingangsil/Student')),
     Teacher: IngangsilManager
 };
-export const Afterschool = loadable(() => import('./Afterschool/Student'))
+export const Afterschool = {
+    Student: loadable(() => import('./Afterschool/Student')),
+    Teacher: loadable(() => import('./Afterschool/Teacher'))
+}
 export const Outgo = loadable(() => import('./Outgo'));
 export const SelfStudyDisplay = loadable(() => import('./SelfStudyDisplay'));
 export const Mentoring = loadable(() => import('./Mentoring'));
