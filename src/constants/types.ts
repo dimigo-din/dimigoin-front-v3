@@ -158,3 +158,8 @@ export interface AfterschoolClass {
     place: Doc<Place>;
     applierCount: number;
 }
+
+export interface AfterschoolClassApplication {
+    applier: string;
+    afterschool: Doc<AfterschoolClass>;
+}

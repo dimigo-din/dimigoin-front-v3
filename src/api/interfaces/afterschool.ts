@@ -1,4 +1,4 @@
-import { Doc, AfterschoolClass, Merge, DownloadbleFile } from "../../constants/types";
+import { Doc, AfterschoolClass, Merge, DownloadbleFile, AfterschoolClassApplication } from "../../constants/types";
 
 export type ReqAfterschoolClass = Merge<AfterschoolClass, {
     teacher: string;
@@ -33,11 +33,47 @@ export interface RegisterNewAfterschoolClass {
     }
 }
 
+export interface RemoveAfterschoolClass {
+    endpoint: '/afterschool/:afterschoolId';
+    method: 'DELETE';
+    req: {};
+    res: {
+        afterschool: Doc<AfterschoolClass>
+    }
+}
+
 export interface RequestSheetByGrade {
     endpoint: '/afterschool-application/export/grade/:grade';
     method: 'POST';
     req: {};
     res: {
         exportedFile: DownloadbleFile
+    }
+}
+
+export interface AppliedAfterschoolClasses {
+    endpoint: '/afterschool-application',
+    method: 'GET',
+    req: {};
+    res: {
+        applications: Doc<AfterschoolClassApplication>[]
+    }
+}
+
+export interface ApplyAfterschoolClass {
+    endpoint: '/afterschool-application/:afterschoolId';
+    method: 'POST';
+    req: {};
+    res: {
+        afterschoolApplication: Doc<AfterschoolClassApplication>
+    }
+}
+
+export interface UnapplyAfterschoolClass {
+    endpoint: '/afterschool-application/:afterschoolId';
+    method: 'DELETE';
+    req: {};
+    res: {
+        afterschoolApplication: Doc<AfterschoolClassApplication>
     }
 }

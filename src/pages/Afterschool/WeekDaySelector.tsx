@@ -9,10 +9,18 @@ import { EventFunction } from '../../hooks/useInput'
 // }
 
 export const WeekDaySelector: React.FC<{
-    onChange: EventFunction<number>;
-    value?: number;
-}> = ({ value, onChange }) => {
-    return <Wrapper>
+    onChange: EventFunction<number | null>;
+    value?: number | null;
+}> = ({ value, onChange, ...props }) => {
+    return <Wrapper {...props}>
+        <Segment
+            selected={value === null}
+            onClick={() => onChange({
+                target: {
+                    value: null
+                }
+            })}
+        >전체</Segment>
         {days.slice(0, -1).map((e, i) =>
             <Segment
                 selected={i === value}
@@ -38,8 +46,10 @@ const Segment = styled.div<{ selected: boolean }>`
     font-size: 18px;
     color: #8B8B8B;
     font-weight: 900;
+    transition: 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
     ${({ selected }) => selected && css`
         background-color: #FFECF1;
+        color: #4E4E4E;
     `}
 `
 

@@ -12,21 +12,10 @@ import {
     Table, Card, Divider, showModal
 } from "../../components"
 import { dayEngKorMapper } from "../../constants"
-import { AfterschoolClass, Doc, SelfStudyTime, SelfStudyTimeEngKor } from "../../constants/types"
+import { AfterschoolClass, Doc } from "../../constants/types"
 import { downloadFileFromDownloadble } from "../../functions/downloadById"
+import { selfStudyTimesToString } from "../../utils"
 import { AfterschoolEditor } from "./AfterschoolEditor"
-
-const selfStudyTimesToString = (times: SelfStudyTime[]): string => {
-    console.log([...times]
-        .sort()
-        .map(time => SelfStudyTimeEngKor[time])
-        .reduce((acced, current) => acced[acced.length - 1]?.[0] === current[0] ? [...acced, current[current.length - 1]] : [...acced, current], [] as string[]))
-    return [...times]
-        .sort()
-        .map(time => SelfStudyTimeEngKor[time])
-        .reduce((acced, current) => acced[acced.length - 1]?.[0] === current[0] ? [...acced, current[current.length - 1]] : [...acced, current], [] as string[])
-        .join(', ')
-}
 
 const AfterschoolMangement: React.FC = () => {
     const [afterschoolClassList, setAfterschoolClassList] = useState<Doc<AfterschoolClass>[]>()
