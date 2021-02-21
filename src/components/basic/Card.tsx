@@ -74,12 +74,12 @@ interface CardContainerProps {
 }
 
 const Container = styled.div<CardContainerProps>`
-  /* position: relative; */
   padding: 25px;
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.03);
-  transition: 1s cubic-bezier(0, 0.46, 0.12, 0.98);
+  transition: box-shadow 1s cubic-bezier(0, 0.46, 0.12, 0.98);
+  /* transition: border-left none; */
 
   ${({ disableSpace }) => !disableSpace && css`
     & + & {

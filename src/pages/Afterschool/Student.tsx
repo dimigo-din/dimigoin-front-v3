@@ -1,23 +1,51 @@
 import css from "@emotion/css"
 import styled from "@emotion/styled"
 import React, { useCallback, useEffect, useState } from "react"
-import { getAfterschoolClassList } from "../../api"
-import { Card, CardGroupHeader, Col, Divider, PageWrapper, ResponsiveWrapper } from "../../components"
+import { toast } from "react-toastify"
+import { applyAfterschoolClass, getAfterschoolClassList, getAppliedClasses, unapplyAfterschoolClass } from "../../api"
+import { Card, CardGroupHeader, Col, Divider, NoData, PageWrapper, ResponsiveWrapper } from "../../components"
 import { dayEngKorMapper } from "../../constants"
-import { Doc, AfterschoolClass } from "../../constants/types"
+import { Doc, AfterschoolClass, AfterschoolClassApplication } from "../../constants/types"
 import useInput from "../../hooks/useInput"
 import { selfStudyTimesToString } from "../../utils"
 import { WeekDaySelector } from "./WeekDaySelector"
 
 const AfterschoolApply: React.FC = () => {
-    const [afterschoolClassList, setAfterschoolClassList] = useState<Doc<AfterschoolClass>[]>()
+    const [afterschoolClassList, setAfterschoolClassList] = useState<Doc<AfterschoolClass>[] | null>()
+    const [appliedClasses, setAppliedClasses] = useState<Doc<AfterschoolClassApplication>[] | null>()
     const weekDaySelectorInput = useInput<number | null>()
     const weekDaySelectorValue = weekDaySelectorInput.value
 
-    const fetchData = useCallback(() => {
+    const fetchClassListData = useCallback(() => {
         getAfterschoolClassList()
             .then(setAfterschoolClassList)
+            .catch(() => setAfterschoolClassList(null))
     }, [setAfterschoolClassList])
+
+    const fetchAppliedClassData = useCallback(() => {
+        getAppliedClasses()
+            .then(setAppliedClasses)
+            .catch(() => setAppliedClasses(null))
+    }, [])
+
+    const fetchData = useCallback(() => {
+        fetchClassListData()
+        fetchAppliedClassData()
+    }, [fetchClassListData, fetchAppliedClassData])
+
+    const applyClass = useCallback((classId: string, className: string) => {
+        applyAfterschoolClass(classId)
+            .then(() => toast.success(`"${className}" 강의를 신청했습니다`))
+            .catch(() => toast.info(`"${className}" 강의를 신청하지 못했습니다`))
+            .finally(() => fetchData())
+    }, [fetchData])
+
+    const unapplyClass = useCallback((classId: string, className: string) => {
+        unapplyAfterschoolClass(classId)
+            .then(() => toast.success(`"${className}" 강의 신청을 취소했습니다`))
+            .catch(() => toast.info(`"${className}" 강의 신청을 취소하지 못했습니다`))
+            .finally(() => fetchData())
+    }, [fetchData])
 
     useEffect(() => {
         fetchData()
@@ -25,8 +53,7 @@ const AfterschoolApply: React.FC = () => {
 
     return <PageWrapper>
         <ResponsiveWrapper>
-            <Col>
-
+            <Col width={8}>
                 <CardGroupHeader
                     subButton={{
                         text: "신청한 강좌는 빨간 선으로 표시됩니다"
@@ -38,9 +65,15 @@ const AfterschoolApply: React.FC = () => {
                     <WeekDaySelector {...weekDaySelectorInput} />
                     <Divider small data-divider />
                     <CardGridWrapper>
-                        {afterschoolClassList?.map(afterschoolClass =>
-                            <>
-                                <ClassCard disableSpace leftBorder>
+                        {afterschoolClassList?.map(afterschoolClass => {
+                            const applied = appliedClasses?.some(({ afterschool: registeredClass }) => registeredClass._id === afterschoolClass._id)
+                            return (
+                                <ClassCard
+                                    key={afterschoolClass._id}
+                                    onClick={() => (applied ? unapplyClass : applyClass)(afterschoolClass._id, afterschoolClass.name)}
+                                    disableSpace
+                                    leftBorder={applied}
+                                >
                                     <CardHeaderWrapper>
                                         <CardHeader>{afterschoolClass.name}</CardHeader>
                                         <CountDisplay>{afterschoolClass.applierCount}/{afterschoolClass.capacity}명</CountDisplay>
@@ -54,17 +87,28 @@ const AfterschoolApply: React.FC = () => {
                                         {afterschoolClass.description}
                                     </CardContent>
                                     <ContentPopup>{afterschoolClass.description}</ContentPopup>
-                                </ClassCard>
-                            </>
+                                </ClassCard>)
+                        }
                         )}
                     </CardGridWrapper>
                 </ResponsiveWrapper>
-
-            </Col><Divider small data-divider />
-            <Col>
+            </Col>
+            <Divider small data-divider />
+            <Col width={2}>
                 <CardGroupHeader>
                     신청목록
                 </CardGroupHeader>
+                {appliedClasses?.length
+                    ? appliedClasses?.map(({ afterschool: appliedClass }) =>
+                        <Card onClick={() => unapplyClass(appliedClass._id, appliedClass.name)}>
+                            <CardHeader>{appliedClass.name}</CardHeader>
+                            <CardDetailWrapper>
+                                <CardDetail>{appliedClass.teacher.name} 선생님,</CardDetail>
+                                <CardDetail>{appliedClass.days?.map(day => dayEngKorMapper[day]).join(' ')}요일,</CardDetail>
+                                <CardDetail>{selfStudyTimesToString(appliedClass.times)}타임</CardDetail>
+                            </CardDetailWrapper>
+                        </Card>)
+                    : <Card><NoData>신청한 강좌가 없습니다</NoData></Card>}
             </Col>
         </ResponsiveWrapper>
     </PageWrapper>
