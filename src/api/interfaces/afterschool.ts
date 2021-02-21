@@ -2,6 +2,7 @@ import { Doc, AfterschoolClass, Merge } from "../../constants/types";
 
 export type ReqAfterschoolClass = Merge<AfterschoolClass, {
     teacher: string;
+    place: string;
 }>
 
 export interface AfterschoolList {

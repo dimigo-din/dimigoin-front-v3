@@ -155,4 +155,5 @@ export interface AfterschoolClass {
     name: string;
     teacher: Teacher;
     times: SelfStudyTime[];
+    place: Doc<Place>;
 }
