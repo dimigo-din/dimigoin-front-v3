@@ -7,12 +7,18 @@ interface CheckboxProps {
   text?: string;
   checked?: boolean;
   onChange?(e: React.ChangeEvent<HTMLInputElement>): void;
+  defaultChecked?: boolean;
 }
 
-export const Checkbox: React.FC<CheckboxProps> = ({ text, onChange, checked, ...props }) => {
+export const Checkbox: React.FC<CheckboxProps> =({
+  text, onChange, checked, defaultChecked, ...props
+}) => {
   return (
     <Wrapper {...props}>
-      <InvisibleCheck checked={checked} onChange={onChange} />
+      <InvisibleCheck
+        checked={checked === undefined ? defaultChecked : checked}
+        onChange={onChange}
+      />
       <CheckWrapper checked={!!checked}>
         <Check visible={!!checked} />
       </CheckWrapper>

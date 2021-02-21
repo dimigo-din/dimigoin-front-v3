@@ -19,7 +19,17 @@ export interface AuthTokens {
     refreshToken: string;
 }
 
-export type Grade = | 1 | 2;
+export type Grade = | 1 | 2 | 3;
+
+export enum EngDay {
+    "mon" = "mon",
+    "tue" = "tue",
+    "wed" = "wed",
+    "thr" = "thr",
+    "fri" = "fri",
+    "sat" = "sat",
+    "sun" = "sun"
+}
 
 export enum UserType {
     T = "T",
@@ -51,6 +61,13 @@ export enum SelfStudyTime {
     AFSC2 = "AFSC2",
     NSS1 = "NSS1",
     NSS2 = "NSS2"
+}
+
+export enum SelfStudyTimeEngKor {
+    AFSC1 = "방과후1",
+    AFSC2 = "방과후2",
+    NSS1 = "야자1",
+    NSS2 = "야자2"
 }
 
 export interface IngangApplyPeriod {
@@ -127,4 +144,17 @@ export interface DownloadbleFile {
     owner: string;
     _id: string;
     // id가 꼭 필요한 특수케이스입니다,,
+}
+
+export interface AfterschoolClass {
+    capacity: number;
+    targetClasses: number[];
+    days: (keyof typeof EngDay)[];
+    description: string;
+    targetGrades: Grade[]
+    name: string;
+    teacher: Teacher;
+    times: SelfStudyTime[];
+    place: Doc<Place>;
+    applierCount: number;
 }

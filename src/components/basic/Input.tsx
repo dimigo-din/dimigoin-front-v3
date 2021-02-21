@@ -13,9 +13,14 @@ export const Input: React.FC<
       React.InputHTMLAttributes<HTMLInputElement>,
       HTMLInputElement
     >
-> = ({ errorMessage = '', error, ...props }) => (
+> = ({
+  errorMessage = '',
+  error,
+  defaultValue,
+  ...props
+}) => (
   <Wrapper>
-    <LogicalInput error={error} {...props} isSecret={props.type === 'password'} />
+    <LogicalInput error={error} {...props} defaultValue={defaultValue} value={props?.value} isSecret={props.type === 'password'} />
     {error && <ErrorMessage>{errorMessage}</ErrorMessage>}
   </Wrapper>
 );

@@ -1,5 +1,4 @@
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
-import useConsole from "./useConsole";
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 
 export type EventFunction<T> = (e: { target: { value: T } }) => any;
 
@@ -8,7 +7,7 @@ const useInput = <T = string>(
   inputValidation?: (value: T) => boolean
 ) => {
   const [value, setValue] = useState<T | undefined>(initValue);
-  useConsole("RECALL", "input recall" + value);
+
   const onChange = useCallback(({
     target: { value: willSetValue },
   }: {
@@ -19,27 +18,40 @@ const useInput = <T = string>(
       setValue(willSetValue);
   }, [inputValidation]);
   
-  return { value, onChange, setValue };
+  return { defaultValue: initValue, value, onChange, setValue };
 };
 
-export const useTextInput = (initialValue?: string): [{
+export const useTextInput = (
+  initValue?: string,
+  inputValidation?: (value: string) => boolean
+): [{
     error: boolean;
     errorMessage: string | undefined;
     value: string | undefined;
     onChange: ({ target: { value: willSetValue }, }: { target: { value: string; }; }) => void;
+    setValue: Dispatch<SetStateAction<string | undefined>>;
   }, Dispatch<SetStateAction<string | undefined>>] => {
-  const input = useInput(initialValue)
+  const { setValue, ...input } = useInput(initValue, inputValidation)
+  useEffect(() => {
+    setValue(() => initValue)
+    console.log("/", initValue)
+  }, [ initValue, setValue ])
+
   const [errorMessage, setErrorMessage] = useState<string>();
+  
   return [{
     ...input,
+    setValue,
     error: !!errorMessage,
     errorMessage
   }, setErrorMessage]
 }
 
 export const useCheckbox = (initValue?: boolean) => {
-  const [checked, setChecked] = useState(initValue || false);
+  const [checked, setChecked] = useState<boolean | undefined>(initValue || false);
+  useEffect(() => setChecked(() => initValue), [ initValue ])
   return {
+    defaultChecked: initValue,
     checked,
     onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
       setChecked(e.target.checked),

@@ -5,10 +5,10 @@ const cellStyle = css`
     padding: 15px;
     text-align: center;
     vertical-align: middle;
-    &:first-child {
+    &:first-of-type {
         padding-left: 30px;
     }
-    &:last-child {
+    &:last-of-type {
         padding-right: 30px;
     }
 `
@@ -24,10 +24,10 @@ export const Table = styled.table`
 `
 export const Row = styled.tr`
     margin-top: 12px;
-    &:nth-child(2) > td {
+    &:nth-of-type(2) > td {
         padding-top: 24px;
     }
-    &:last-child td {
+    &:last-of-type td {
         padding-bottom: 24px;
     }
 `

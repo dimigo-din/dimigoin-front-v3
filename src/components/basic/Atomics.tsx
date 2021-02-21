@@ -56,6 +56,7 @@ export const CardExplainContent = styled.div`
 `;
 
 export const NoData = styled.p`
+  flex: 1;
   font-size: 18px;
   font-weight: bold;
   color: #d1d1d1;

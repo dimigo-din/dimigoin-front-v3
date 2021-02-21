@@ -40,7 +40,7 @@ export const CardGroupHeader: React.FC<CardGroupheaderProps> = ({
               {subButton.text || <Skeleton width={120} />}
             </SubButton>
           ) : (
-                <SubButton>{subButton.text || <Skeleton width={120} />}</SubButton>
+                <SubButton noAction>{subButton.text || <Skeleton width={120} />}</SubButton>
               )
         ))}
       </Horizontal>
@@ -72,13 +72,17 @@ export const Title = styled.h1<{ withBubble?: boolean }>`
     `}
 `;
 
-const SubButton = styled.p`
+const SubButton = styled.p<{ noAction?: boolean }>`
   align-self: flex-end;
   font-weight: 800;
   color: #E83C77;
   margin-top: 12px;
   flex-basis: 1;
   flex-shrink: 0;
+
+  ${({ noAction }) => noAction && css`
+    color: #9A9A9A;
+  `}
 `;
 
 const Wrapper = styled.section`
