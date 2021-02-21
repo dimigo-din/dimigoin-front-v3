@@ -13,8 +13,8 @@ import { WeekDaySelector } from "./WeekDaySelector"
 const AfterschoolApply: React.FC = () => {
     const [afterschoolClassList, setAfterschoolClassList] = useState<Doc<AfterschoolClass>[] | null>()
     const [appliedClasses, setAppliedClasses] = useState<Doc<AfterschoolClassApplication>[] | null>()
-    const weekDaySelectorInput = useInput<number | null>()
-    const weekDaySelectorValue = weekDaySelectorInput.value
+    const weekDaySelectorInput = useInput<number | null>(null)
+    // const weekDaySelectorValue = weekDaySelectorInput.value
 
     const fetchClassListData = useCallback(() => {
         getAfterschoolClassList()
@@ -65,7 +65,7 @@ const AfterschoolApply: React.FC = () => {
                     <WeekDaySelector {...weekDaySelectorInput} />
                     <Divider small data-divider />
                     <CardGridWrapper>
-                        {afterschoolClassList?.map(afterschoolClass => {
+                        {afterschoolClassList?.filter(afterschoolClass => [weekDaySelectorInput.value])?.map(afterschoolClass => {
                             const applied = appliedClasses?.some(({ afterschool: registeredClass }) => registeredClass._id === afterschoolClass._id)
                             return (
                                 <ClassCard
