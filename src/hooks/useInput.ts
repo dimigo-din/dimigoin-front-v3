@@ -29,14 +29,19 @@ export const useTextInput = (
     errorMessage: string | undefined;
     value: string | undefined;
     onChange: ({ target: { value: willSetValue }, }: { target: { value: string; }; }) => void;
+    setValue: Dispatch<SetStateAction<string | undefined>>;
   }, Dispatch<SetStateAction<string | undefined>>] => {
-  const input = useInput(initValue, inputValidation)
-  useEffect(() => input.setValue(() => initValue), [ initValue, input ])
+  const { setValue, ...input } = useInput(initValue, inputValidation)
+  useEffect(() => {
+    setValue(() => initValue)
+    console.log("/", initValue)
+  }, [ initValue, setValue ])
 
   const [errorMessage, setErrorMessage] = useState<string>();
   
   return [{
     ...input,
+    setValue,
     error: !!errorMessage,
     errorMessage
   }, setErrorMessage]

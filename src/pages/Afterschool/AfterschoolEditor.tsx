@@ -24,7 +24,7 @@ export const AfterschoolEditor: React.FC<{
     close(): void;
 }> = ({ data, close }) => {
     const [ teachersList, setTeachersList ] = useState<DropdownItem[]>();
-    const [ places, setPlaces ] = useState<Doc<Place>[]>()
+    const [ places, setPlaces ] = useState<DropdownItem[]>()
     const placeDropdown = useInput<DropdownItem>();
     const teacherDropdown = useInput<DropdownItem>(data ? {
         key: data.teacher._id,
@@ -69,7 +69,10 @@ export const AfterschoolEditor: React.FC<{
 
     useEffect(() => {
         (async () => {
-            const placeList = await getPlaceList()
+            const placeList = (await getPlaceList()).map(place => ({
+                name: place.name,
+                key: place._id
+            }))
             setPlaces(() => placeList)
         })()
     }, [])
@@ -93,6 +96,7 @@ export const AfterschoolEditor: React.FC<{
             times.length === 0 && "시간"
         ].filter(Boolean)
         if (validations.length) {
+            console.log(placeDropdown.value)
             toast.error(validations.join(', ').을를 + " 다시 확인해주세요")
             return
         }
@@ -180,7 +184,7 @@ export const AfterschoolEditor: React.FC<{
         </Horizontal>
         <FormHeader>강의실</FormHeader>
         <Dropdown
-            initIndex={3}
+            initIndex={places?.findIndex(place => place.key === data?.place?._id)}
             placeholder="강의실을 선택해주세요"
             items={places}
             {...placeDropdown}

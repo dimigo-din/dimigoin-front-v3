@@ -20,7 +20,7 @@ export const Input: React.FC<
   ...props
 }) => (
   <Wrapper>
-    <LogicalInput error={error} {...props} value={props?.value || defaultValue} isSecret={props.type === 'password'} />
+    <LogicalInput error={error} {...props} defaultValue={defaultValue} value={props?.value} isSecret={props.type === 'password'} />
     {error && <ErrorMessage>{errorMessage}</ErrorMessage>}
   </Wrapper>
 );
