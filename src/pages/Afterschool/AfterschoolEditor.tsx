@@ -10,7 +10,7 @@ import {
     DropdownItem, Horizontal, Input, FormHeader as _FormHeader
 } from "../../components";
 import { days } from "../../constants";
-import { Doc, AfterschoolClass, Place, EngDay, SelfStudyTime, Grade, SelfStudyTimeEngKor } from "../../constants/types";
+import { Doc, AfterschoolClass, EngDay, SelfStudyTime, Grade, SelfStudyTimeEngKor } from "../../constants/types";
 import useInput, { useCheckbox, useTextInput } from "../../hooks/useInput";
 import { ReactComponent as _CloseIcon } from '../../assets/icons/close.svg'
 import styled from "@emotion/styled";
@@ -25,7 +25,10 @@ export const AfterschoolEditor: React.FC<{
 }> = ({ data, close }) => {
     const [ teachersList, setTeachersList ] = useState<DropdownItem[]>();
     const [ places, setPlaces ] = useState<DropdownItem[]>()
-    const placeDropdown = useInput<DropdownItem>();
+    const placeDropdown = useInput<DropdownItem>(data ? {
+        key: data.place._id,
+        name: data.place.name
+    } : undefined);
     const teacherDropdown = useInput<DropdownItem>(data ? {
         key: data.teacher._id,
         name: data.teacher.name

@@ -108,12 +108,15 @@ const AfterschoolMangement: React.FC = () => {
                                 >
                                     <Data>{afterschoolClass.name}</Data>
                                     <Data>
-                                        {afterschoolClass.targetGrades.length === 3 ? "전" : afterschoolClass.targetGrades.join(', ')}학년&nbsp;
+                                        {afterschoolClass.targetGrades.length !== 0 ?
+                                            (afterschoolClass.targetGrades.length === 3 ? "전" : afterschoolClass.targetGrades.join(', ')) + "학년"
+                                            : "학년정보없음,"
+                                        }&nbsp;
                                         {afterschoolClass.targetClasses.length === 6 ? "모든" : afterschoolClass.targetClasses.join(', ')}반
                                     </Data>
                                     <Data>{afterschoolClass.teacher.name}</Data>
                                     <Data>
-                                        {afterschoolClass.days?.map(day => dayEngKorMapper[day])},
+                                        {afterschoolClass.days?.map(day => dayEngKorMapper[day])},&nbsp;
                                         {afterschoolClass.times.map(time => SelfStudyTimeEngKor[time])}
                                     </Data>
                                     <Data>{afterschoolClass.place?.name || "정보없음"}</Data>
