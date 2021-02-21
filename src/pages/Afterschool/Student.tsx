@@ -4,8 +4,8 @@ import React, { useCallback, useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import { applyAfterschoolClass, getAfterschoolClassList, getAppliedClasses, unapplyAfterschoolClass } from "../../api"
 import { Card, CardGroupHeader, Col, Divider, NoData, PageWrapper, ResponsiveWrapper } from "../../components"
-import { dayEngKorMapper } from "../../constants"
-import { Doc, AfterschoolClass, AfterschoolClassApplication } from "../../constants/types"
+import { dayEngKorMapper, engDays } from "../../constants"
+import { Doc, AfterschoolClass, AfterschoolClassApplication, EngDay } from "../../constants/types"
 import useInput from "../../hooks/useInput"
 import { selfStudyTimesToString } from "../../utils"
 import { WeekDaySelector } from "./WeekDaySelector"
@@ -15,6 +15,16 @@ const AfterschoolApply: React.FC = () => {
     const [appliedClasses, setAppliedClasses] = useState<Doc<AfterschoolClassApplication>[] | null>()
     const weekDaySelectorInput = useInput<number | null>(null)
     // const weekDaySelectorValue = weekDaySelectorInput.value
+
+    const [ filteredClasses, setFilteredClasses ] = useState<Doc<AfterschoolClass>[] | null>()
+
+    useEffect(() => {
+        // console.log()
+        if(weekDaySelectorInput.value === null) setFilteredClasses(() => afterschoolClassList)
+        else setFilteredClasses(() => afterschoolClassList?.filter(afterschoolClass =>
+            afterschoolClass.days.includes(engDays[weekDaySelectorInput.value!!] as EngDay
+        )))
+    }, [ weekDaySelectorInput.value, afterschoolClassList ])
 
     const fetchClassListData = useCallback(() => {
         getAfterschoolClassList()
@@ -65,7 +75,7 @@ const AfterschoolApply: React.FC = () => {
                     <WeekDaySelector {...weekDaySelectorInput} />
                     <Divider small data-divider />
                     <CardGridWrapper>
-                        {afterschoolClassList?.filter(afterschoolClass => [weekDaySelectorInput.value])?.map(afterschoolClass => {
+                        {filteredClasses?.map(afterschoolClass => {
                             const applied = appliedClasses?.some(({ afterschool: registeredClass }) => registeredClass._id === afterschoolClass._id)
                             return (
                                 <ClassCard

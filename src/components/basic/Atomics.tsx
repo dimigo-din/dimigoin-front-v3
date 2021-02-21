@@ -76,4 +76,15 @@ export const MoreCompactButton = styled(Button)`
   
 `
 
+export const IconOnlyButton = css`
+  transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
+  fill: rgba(0, 0, 0, 0.2);
+  opacity: 0.5;
+  flex-shrink: 0;
+  &:hover {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+`
+
 export const cardModalTopBorder = css`border-top: 10px solid var(--main-theme-accent);`

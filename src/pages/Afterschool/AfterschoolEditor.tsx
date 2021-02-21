@@ -1,19 +1,22 @@
 import css from "@emotion/css";
 import React, { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
-import { editAfterschoolClassInfo, registerNewAfterschoolClass } from "../../api/afterschool";
+import { editAfterschoolClassInfo, registerNewAfterschoolClass, removeAfterschoolClass } from "../../api/afterschool";
 import { getPlaceList } from "../../api/place";
 import { getAllTeachers } from "../../api/user";
+import DangerIcon from "../../assets/icons/danger.svg"
 import {
-    Button, CardGroupHeader, Checkbox, Dropdown,
-    DropdownItem, Horizontal, Input, FormHeader as _FormHeader
+    Button, CardGroupHeader, Checkbox, Dropdown, DropdownItem,
+    Horizontal, Input, FormHeader as _FormHeader, IconOnlyButton
 } from "../../components";
 import { days } from "../../constants";
 import { Doc, AfterschoolClass, EngDay, SelfStudyTime, Grade, SelfStudyTimeEngKor } from "../../constants/types";
 import useInput, { useCheckbox, useTextInput } from "../../hooks/useInput";
 import { ReactComponent as _CloseIcon } from '../../assets/icons/close.svg'
+import { ReactComponent as _TrashIcon } from '../../assets/icons/trash.svg'
 import styled from "@emotion/styled";
 import { ReqAfterschoolClass } from "../../api";
+import { swal } from "../../functions/swal";
 
 const getCheckedIndex = (arr: {
     checked?: boolean;
@@ -23,8 +26,8 @@ export const AfterschoolEditor: React.FC<{
     data?: Doc<AfterschoolClass>;
     close(): void;
 }> = ({ data, close }) => {
-    const [ teachersList, setTeachersList ] = useState<DropdownItem[]>();
-    const [ places, setPlaces ] = useState<DropdownItem[]>()
+    const [teachersList, setTeachersList] = useState<DropdownItem[]>();
+    const [places, setPlaces] = useState<DropdownItem[]>()
     const placeDropdown = useInput<DropdownItem>(data ? {
         key: data.place._id,
         name: data.place.name
@@ -33,9 +36,9 @@ export const AfterschoolEditor: React.FC<{
         key: data.teacher._id,
         name: data.teacher.name
     } : undefined);
-    const [ afterschoolClassNameValue ] = useTextInput(data?.name);
-    const [ descriptionInput ] = useTextInput(data?.description);
-    const [ capacityInput ] = useTextInput(data?.capacity.toString(), v => (+v).toString() === v || v === '');
+    const [afterschoolClassNameValue] = useTextInput(data?.name);
+    const [descriptionInput] = useTextInput(data?.description);
+    const [capacityInput] = useTextInput(data?.capacity.toString(), v => (+v).toString() === v || v === '');
     const grade1Checkbox = useCheckbox(data?.targetGrades?.includes(1)),
         grade2Checkbox = useCheckbox(data?.targetGrades?.includes(2)),
         grade3Checkbox = useCheckbox(data?.targetGrades?.includes(3))
@@ -68,7 +71,7 @@ export const AfterschoolEditor: React.FC<{
             name: [teacher.name, '선생님'].join(' '),
             key: teacher._id
         }))))
-    }, [ setTeachersList ]);
+    }, [setTeachersList]);
 
     useEffect(() => {
         (async () => {
@@ -140,20 +143,46 @@ export const AfterschoolEditor: React.FC<{
         close
     ])
 
+    const showRemovePrompt = useCallback(async () => {
+        if (!data) return
+
+        const alertQuestionResult = await swal({
+            title: "강좌를 지우시겠어요?",
+            html: <>
+                <p>"{data?.name}"를 삭제해요.</p>
+                <p>이 작업은 취소할 수 없어요.</p>
+            </>,
+            imageUrl: DangerIcon,
+            showCancelButton: true,
+            focusCancel: true
+        })
+        if (!alertQuestionResult.isConfirmed) return
+        try {
+            const removeRequest = await removeAfterschoolClass(data._id)
+            if (removeRequest._id === data._id) toast.success("공지를 지웠어요")
+            else toast.error("강좌를 지우지 못했어요.")
+        } catch (e) {
+            toast.error("공지를 지우지 못했어요. 에러 : " + e)
+        } finally {
+            close()
+        }
+    }, [ close, data ])
+
     return (<>
-        <Horizontal>
-            <CardGroupHeader css={css`flex: 1;`}>
+        <HeaderWrapper>
+            <CardGroupHeader css={css`flex: 1; margin: 0px;`}>
                 {data ? "정보 수정" : "새 방과후 추가"}
             </CardGroupHeader>
+            {data && <TrachIcon onClick={() => showRemovePrompt()} />}
             <CloseIcon onClick={close} />
-        </Horizontal>
-        <FormHeader css={css`margin-top: 36px;`}>강의명</FormHeader>
+        </HeaderWrapper>
+        <FormHeader>강의명</FormHeader>
         <Input
             defaultValue={data?.name}
             {...afterschoolClassNameValue}
             placeholder="강의명을 입력해주세요"
         />
-        <FormHeader css={css`margin-top: 36px;`}>설명</FormHeader>
+        <FormHeader>설명</FormHeader>
         <Input
             defaultValue={data?.description}
             {...descriptionInput}
@@ -172,8 +201,8 @@ export const AfterschoolEditor: React.FC<{
         </Horizontal>
         <FormHeader>시간</FormHeader>
         <Horizontal>
-        <Checkbox {...timesCheckboxes.AFSC1} text={SelfStudyTimeEngKor[SelfStudyTime.AFSC1]} />
-        <Checkbox {...timesCheckboxes.AFSC2} text={SelfStudyTimeEngKor[SelfStudyTime.AFSC2]} />
+            <Checkbox {...timesCheckboxes.AFSC1} text={SelfStudyTimeEngKor[SelfStudyTime.AFSC1]} />
+            <Checkbox {...timesCheckboxes.AFSC2} text={SelfStudyTimeEngKor[SelfStudyTime.AFSC2]} />
         </Horizontal>
         <FormHeader>대상 학년</FormHeader>
         <Horizontal>
@@ -203,12 +232,24 @@ export const AfterschoolEditor: React.FC<{
     </>)
 }
 
+const HeaderWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    margin-top: 12px;
+`
+
 const FormHeader = styled(_FormHeader)`
     margin-top: 20px;
 `
 
 const CloseIcon = styled(_CloseIcon)`
-    /* justify-self: flex-end; */
+`
+
+const TrachIcon = styled(_TrashIcon)`
+    ${IconOnlyButton}
+    fill: rgba(0, 0, 0, 0.7);
+    width: 16px;
+    margin-right: 12px;
 `
 
 const RegisterButtonWrapper = styled(Horizontal)`

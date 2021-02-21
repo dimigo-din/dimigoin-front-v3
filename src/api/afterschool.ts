@@ -11,6 +11,9 @@ export const editAfterschoolClassInfo = (classId: string, info: ReqAfterschoolCl
 export const registerNewAfterschoolClass = (info: ReqAfterschoolClass) =>
     api<"registerNewAfterschoolClass">("POST", `/afterschool`, info).then(e => e.afterschool)
 
+export const removeAfterschoolClass = (classId: string) =>
+    api<"removeAfterschoolClass">("DELETE", `/afterschool/${classId}`).then(e => e.afterschool)
+
 export const requestSheetByGrade = (grade: number) =>
     api<"requestSheetByGrade">("POST", `/afterschool-application/export/grade/${grade}`).then(e => e.exportedFile)
 

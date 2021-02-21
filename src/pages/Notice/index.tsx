@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import React, { useCallback, useEffect, useState } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import {
-  CardGroupHeader, Horizontal, MoreCompactButton, PageWrapper,
+  CardGroupHeader, Horizontal, IconOnlyButton, MoreCompactButton, PageWrapper,
   ResponsiveWrapper, showModal, TextCardGroup, UnstyledLink
 } from '../../components'
 import { Doc, Notice, UserType } from '../../constants/types'
@@ -166,16 +166,9 @@ const NoticeContent = styled.p`
 `
 
 const NoticeListItemButtonIconStyle = css`
-  transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
-  fill: rgba(0, 0, 0, 0.2);
-  opacity: 0.5;
+  ${IconOnlyButton};
   height: 20px;
   width: 20px;
-  flex-shrink: 0;
-  &:hover {
-    transform: scale(1.1);
-    opacity: 1;
-  }
 `
 
 const RemoveNoticeButtonIcon = styled(_TrashIcon)`

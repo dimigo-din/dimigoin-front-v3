@@ -33,6 +33,15 @@ export interface RegisterNewAfterschoolClass {
     }
 }
 
+export interface RemoveAfterschoolClass {
+    endpoint: '/afterschool/:afterschoolId';
+    method: 'DELETE';
+    req: {};
+    res: {
+        afterschool: Doc<AfterschoolClass>
+    }
+}
+
 export interface RequestSheetByGrade {
     endpoint: '/afterschool-application/export/grade/:grade';
     method: 'POST';
@@ -68,4 +77,3 @@ export interface UnapplyAfterschoolClass {
         afterschoolApplication: Doc<AfterschoolClassApplication>
     }
 }
-
