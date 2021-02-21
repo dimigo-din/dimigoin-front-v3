@@ -11,8 +11,8 @@ import { EventFunction } from '../../hooks/useInput'
 export const WeekDaySelector: React.FC<{
     onChange: EventFunction<number | null>;
     value?: number | null;
-}> = ({ value, onChange }) => {
-    return <Wrapper>
+}> = ({ value, onChange, ...props }) => {
+    return <Wrapper {...props}>
         <Segment
             selected={value === null}
             onClick={() => onChange({

@@ -62,17 +62,16 @@ const AfterschoolApply: React.FC = () => {
     }, [fetchData])
 
     return <PageWrapper>
-        <ResponsiveWrapper>
-            <Col width={8}>
+        <RootWrapper mobildReverse threshold={780}>
+            <Col width={7}>
                 <CardGroupHeader
                     subButton={{
                         text: "신청한 강좌는 빨간 선으로 표시됩니다"
                     }}>
                     방과후
                 </CardGroupHeader>
-                <ResponsiveWrapper>
-
-                    <WeekDaySelector {...weekDaySelectorInput} />
+                <RegisterColumnWrapper>
+                    <ResponsiveWeekDaySelector {...weekDaySelectorInput} />
                     <Divider small data-divider />
                     <CardGridWrapper>
                         {filteredClasses?.map(afterschoolClass => {
@@ -101,10 +100,10 @@ const AfterschoolApply: React.FC = () => {
                         }
                         )}
                     </CardGridWrapper>
-                </ResponsiveWrapper>
+                </RegisterColumnWrapper>
             </Col>
             <Divider small data-divider />
-            <Col width={2}>
+            <Col width={3}>
                 <CardGroupHeader>
                     신청목록
                 </CardGroupHeader>
@@ -120,7 +119,7 @@ const AfterschoolApply: React.FC = () => {
                         </Card>)
                     : <Card><NoData>신청한 강좌가 없습니다</NoData></Card>}
             </Col>
-        </ResponsiveWrapper>
+        </RootWrapper>
     </PageWrapper>
 }
 
@@ -133,10 +132,21 @@ const ClassCard = styled(Card)`
     box-sizing: border-box;
 `
 
+const RootWrapper = styled(ResponsiveWrapper)`
+    /* flex-direction */
+`
+
+const RegisterColumnWrapper = styled(ResponsiveWrapper)`
+    align-items: flex-start;
+    @media screen and (max-width: 720px) {
+        align-items: stretch;
+    }
+`
+
 const CardGridWrapper = styled(ResponsiveWrapper)`
     flex-wrap: wrap;
     margin: -12px;
-    @media screen and (max-width: 900px) {
+    @media screen and (max-width: 1100px) {
         flex: 1;
         flex-direction: column;
         &>* {
@@ -212,5 +222,16 @@ const ContentPopup = styled.p`
     box-sizing: border-box;
     &:hover {
         opacity: 1;
+    }
+`
+
+const ResponsiveWeekDaySelector = styled(WeekDaySelector)`  
+    @media screen and (max-width: 720px) {
+        display: flex;
+        flex: 1;
+        &>div {
+            width: unset;
+            flex: 1;
+        }
     }
 `
