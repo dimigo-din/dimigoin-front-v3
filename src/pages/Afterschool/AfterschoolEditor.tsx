@@ -2,7 +2,6 @@ import css from "@emotion/css";
 import React, { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import { editAfterschoolClassInfo, registerNewAfterschoolClass } from "../../api/afterschool";
-import { ReqAfterschoolClass } from "../../api/interfaces/afterschool";
 import { getPlaceList } from "../../api/place";
 import { getAllTeachers } from "../../api/user";
 import {
@@ -14,6 +13,7 @@ import { Doc, AfterschoolClass, EngDay, SelfStudyTime, Grade, SelfStudyTimeEngKo
 import useInput, { useCheckbox, useTextInput } from "../../hooks/useInput";
 import { ReactComponent as _CloseIcon } from '../../assets/icons/close.svg'
 import styled from "@emotion/styled";
+import { ReqAfterschoolClass } from "../../api";
 
 const getCheckedIndex = (arr: {
     checked?: boolean;

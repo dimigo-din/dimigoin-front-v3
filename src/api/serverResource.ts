@@ -4,9 +4,10 @@ import {
     ApplyIngangsil, UnapplyIngangsil, AllNotices, Timetable, GetNoticeById,
     RegisterNotice, CurrentNotices, RemoveNotice, EditRegisteredNotice,
     AttendanceLogList, RegisterMovingHistory, PrimaryPlaceList, PlaceList,
-    WholeClassAttendanceLog, TimelineByStudent, RequestExcelFile, EntireTicket
+    WholeClassAttendanceLog, TimelineByStudent, RequestExcelFile, EntireTicket,
+    AfterschoolList as AfterschoolClassList, EditAfterschoolClassInfo,
+    RegisterNewAfterschoolClass, RequestSheetByGrade
 } from "./interfaces";
-import { AfterschoolList as AfterschoolClassList, EditAfterschoolClassInfo, RegisterNewAfterschoolClass } from "./interfaces/afterschool";
 
 export interface APIResource {
     loginWithInfo: LoginWithInfo;
@@ -38,4 +39,5 @@ export interface APIResource {
     afterschoolClassList: AfterschoolClassList;
     editAfterschoolClassInfo: EditAfterschoolClassInfo;
     registerNewAfterschoolClass: RegisterNewAfterschoolClass;
+    requestSheetByGrade: RequestSheetByGrade;
 }

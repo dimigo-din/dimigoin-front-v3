@@ -156,4 +156,5 @@ export interface AfterschoolClass {
     teacher: Teacher;
     times: SelfStudyTime[];
     place: Doc<Place>;
+    applierCount: number;
 }

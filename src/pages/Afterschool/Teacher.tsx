@@ -1,24 +1,39 @@
 import css from "@emotion/css"
 import styled from "@emotion/styled"
 import React, { useCallback, useEffect, useState } from "react"
-import { getAfterschoolClassList } from "../../api/afterschool"
+import Skeleton from "react-loading-skeleton"
+import { toast } from "react-toastify"
+import { getAfterschoolClassList, requestSheetByGrade } from "../../api"
 import { ReactComponent as _DownloadIcon } from '../../assets/icons/download.svg'
 import { ReactComponent as _NewIcon } from '../../assets/icons/edit.svg'
 import {
     CardGroupHeader, Col, Data, HeadData, HeadRow, Horizontal,
     Row, MoreCompactButton, NoData, PageWrapper, ResponsiveWrapper,
-    Table, Card, Divider, showModal} from "../../components"
+    Table, Card, Divider, showModal
+} from "../../components"
 import { dayEngKorMapper } from "../../constants"
-import { AfterschoolClass, Doc, SelfStudyTimeEngKor } from "../../constants/types"
-import Skeleton from "react-loading-skeleton"
+import { AfterschoolClass, Doc, SelfStudyTime, SelfStudyTimeEngKor } from "../../constants/types"
+import { downloadFileFromDownloadble } from "../../functions/downloadById"
 import { AfterschoolEditor } from "./AfterschoolEditor"
 
+const selfStudyTimesToString = (times: SelfStudyTime[]): string => {
+    console.log([...times]
+        .sort()
+        .map(time => SelfStudyTimeEngKor[time])
+        .reduce((acced, current) => acced[acced.length - 1]?.[0] === current[0] ? [...acced, current[current.length - 1]] : [...acced, current], [] as string[]))
+    return [...times]
+        .sort()
+        .map(time => SelfStudyTimeEngKor[time])
+        .reduce((acced, current) => acced[acced.length - 1]?.[0] === current[0] ? [...acced, current[current.length - 1]] : [...acced, current], [] as string[])
+        .join(', ')
+}
 
 const AfterschoolMangement: React.FC = () => {
     const [afterschoolClassList, setAfterschoolClassList] = useState<Doc<AfterschoolClass>[]>()
     const [sideDetail, setSideDetail] = useState<{
         data?: Doc<AfterschoolClass>;
     }>()
+    const [gradeButtonOpened, setGradeButtonOpenedState] = useState(false)
 
     const fetchData = useCallback(() => {
         getAfterschoolClassList()
@@ -52,6 +67,18 @@ const AfterschoolMangement: React.FC = () => {
         }
     }, [fetchData])
 
+    const downloadSheetByGrade = useCallback((grade: number, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        event.stopPropagation()
+        requestSheetByGrade(grade)
+            .then(downloadable => {
+                downloadFileFromDownloadble(downloadable)
+                toast.success("방과후 신청 내역 시트를 다운로드했어요")
+            }).catch(() => {
+                toast.error("파일을 다운로드하지 못했어요")
+            })
+        setGradeButtonOpenedState(() => false)
+    }, [])
+
     return <PageWrapper>
         <ResponsiveWrapper>
             <Col width={sideDetail ? 5 : 10}>
@@ -60,9 +87,14 @@ const AfterschoolMangement: React.FC = () => {
                         방과후 관리
                     </CardGroupHeader>
                     <Horizontal>
-                        <HeaderButton>
+                        <HeaderButton onClick={() => setGradeButtonOpenedState(beforeState => !beforeState)}>
                             <DownloadIcon />
                             엑셀 다운로드
+                            <GradeButtonWrapper isOpened={gradeButtonOpened}>
+                                <GradeButton onClick={event => downloadSheetByGrade(1, event)}>1</GradeButton>
+                                <GradeButton onClick={event => downloadSheetByGrade(2, event)}>2</GradeButton>
+                                <GradeButton onClick={event => downloadSheetByGrade(3, event)}>3</GradeButton>
+                            </GradeButtonWrapper>
                         </HeaderButton>
                         <HeaderButton onClick={() => openEdit()}>
                             <NewIcon />
@@ -117,11 +149,11 @@ const AfterschoolMangement: React.FC = () => {
                                     <Data>{afterschoolClass.teacher.name}</Data>
                                     <Data>
                                         {afterschoolClass.days?.map(day => dayEngKorMapper[day])},&nbsp;
-                                        {afterschoolClass.times.map(time => SelfStudyTimeEngKor[time])}
+                                        {selfStudyTimesToString(afterschoolClass.times)}
                                     </Data>
                                     <Data>{afterschoolClass.place?.name || "정보없음"}</Data>
                                     <Data>{afterschoolClass.capacity}명</Data>
-                                    <Data>X명</Data>
+                                    <Data>{afterschoolClass.applierCount}명</Data>
                                 </Row>
                             )}
                         </tbody> : <Row>
@@ -170,6 +202,39 @@ const DownloadIcon = styled(_DownloadIcon)`
 const NewIcon = styled(_NewIcon)`
     fill: white;
     margin-right: 12px;
+`
+
+const GradeButtonWrapper = styled.div<{ isOpened: boolean }>`
+    position: absolute;
+    box-shadow: 0px 0px 36px rgba(0, 0, 0, 0.2);
+    display: flex;
+    margin-bottom: -64px;
+    border-radius: 24px;
+    overflow: hidden;
+    transition: 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
+    ${({ isOpened }) => !isOpened && css`
+        margin-bottom: -48px;
+        visibility: hidden;
+        opacity: 0;
+    `}
+`
+
+const GradeButton = styled.div`
+    background-color: #fff;
+    color: black;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:first-of-type {
+        padding-left: 6px;
+    }
+
+    &:last-of-type {
+        padding-right: 6px;
+    }
 `
 
 export default AfterschoolMangement

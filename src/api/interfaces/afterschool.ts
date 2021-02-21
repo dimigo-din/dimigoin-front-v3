@@ -1,8 +1,9 @@
-import { Doc, AfterschoolClass, Merge } from "../../constants/types";
+import { Doc, AfterschoolClass, Merge, DownloadbleFile } from "../../constants/types";
 
 export type ReqAfterschoolClass = Merge<AfterschoolClass, {
     teacher: string;
     place: string;
+    applierCount?: number;
 }>
 
 export interface AfterschoolList {
@@ -29,5 +30,14 @@ export interface RegisterNewAfterschoolClass {
     req: ReqAfterschoolClass;
     res: {
         afterschool: Doc<AfterschoolClass>
+    }
+}
+
+export interface RequestSheetByGrade {
+    endpoint: '/afterschool-application/export/grade/:grade';
+    method: 'POST';
+    req: {};
+    res: {
+        exportedFile: DownloadbleFile
     }
 }
