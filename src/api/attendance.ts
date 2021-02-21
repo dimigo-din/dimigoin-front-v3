@@ -21,7 +21,7 @@ const todayString = formatRequestableDate(today)
 // const myClass = myData.then(d => d.class)
 
 export const getWholeClassAttendanceLog = (grade: number, clas: number) =>
-    api<"wholeClassAttendanceLog">("GET", `/attendance/date/${todayString}/grade/${grade}/class/${clas}`).then(e => e.status.sort((a, b) => a.student.serial - b.student.serial))
+    api<"wholeClassAttendanceLog">("GET", `/attendance/date/${todayString}/grade/${grade}/class/${clas}/status`).then(e => e.status.sort((a, b) => a.student.serial - b.student.serial))
 
 export const getTimelineByStudent = (studentId: string) => api<"timelineByStudent">("GET", `/attendance/date/${todayString}/student/${studentId}`).then(e => e.logs)
 
