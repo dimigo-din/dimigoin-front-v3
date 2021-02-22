@@ -84,7 +84,8 @@ export interface IngangsilTicket extends SavedDocument {
 }
 
 export enum Permission {
-    "ingang-application" = "ingang-application"
+    "ingang-application" = "ingang-application",
+    attendance = "attendance",
 }
 
 export interface User {
@@ -124,6 +125,7 @@ export interface AttendanceLog {
     date: string;
     place: Doc<Place>;
     remark: string;
+    updatedBy: User | null
 }
 
 export interface AttendanceLogWithStudent {

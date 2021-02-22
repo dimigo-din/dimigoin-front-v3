@@ -1,18 +1,21 @@
+import css from '@emotion/css';
 import styled from '@emotion/styled';
+import { getAdverbalSuffix1 } from 'josa-complete';
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import { getTimelineByStudent } from '../../api';
 import { getPlaceById } from '../../api/place';
-import { Card } from '../../components';
+import { Card, CardGroupHeader } from '../../components';
 import { Student } from '../../constants/types';
 
 interface TimelineRow {
-    subject: string;
-    target?: string;
+    subject?: string;
+    target: string;
     from?: string;
     to: string;
     time: string;
     id: string;
+    remark?: string;
 }
 
 export const Timeline: React.FC<{ student: Student; close(): void }> = ({ student, close }) => {
@@ -21,7 +24,7 @@ export const Timeline: React.FC<{ student: Student; close(): void }> = ({ studen
     useEffect(() => {
         (async () => {
             const fetchedTimelineData = await getTimelineByStudent(student._id)
-            if(fetchedTimelineData.length === 0) {
+            if (fetchedTimelineData.length === 0) {
                 toast.info("위치 이동 기록이 없습니다")
                 close()
                 return
@@ -32,23 +35,39 @@ export const Timeline: React.FC<{ student: Student; close(): void }> = ({ studen
                 const formattedTime = `${parsedTime.getHours().toString().padStart(2, '0')}:${parsedTime.getMinutes().toString().padStart(2, '0')}`
                 console.log(parsedTime)
                 return ({
-                    subject: student.name,
+                    subject: row.updatedBy?.name,
                     to: thisPlace?.name || "알수없는장소",
                     time: formattedTime,
-                    id: row._id
+                    id: row._id,
+                    remark: row.remark,
+                    target: student.name
                 })
             }))
 
-            setTimelineData(() => parsedTimeline)
+            setTimelineData(() => [...parsedTimeline].reverse())
         })()
-    }, [ student, close ])
+    }, [student, close])
 
     return <Wrapper>
-        {timelineData?.map(timelineRow => <Timerow key={timelineRow.id}>
+        <CardGroupHeader css={css`margin-bottom: 24px;`}>
+            {student.name}님의 히스토리
+        </CardGroupHeader>
+        {timelineData?.map((timelineRow) => <Timerow key={timelineRow.id}>
             <Time>[ {timelineRow.time} ]</Time> &nbsp;
-            {timelineRow.subject}님이&nbsp;
-            {timelineRow.target ? timelineRow.target + "님" : "본인"}의 현황을&nbsp;
-            {timelineRow.from ? <><Accent>{timelineRow.from}</Accent>에서 <Accent>{timelineRow.to}</Accent>로 옮겼습니다.</> : <><Accent>{timelineRow.to}</Accent>로 변경했습니다</>}
+            {
+                timelineRow.subject ? <>
+                    <Accent>{timelineRow.subject}</Accent>님이&nbsp;
+                    {timelineRow.target}님의 위치를
+                    
+                </> : <>
+                    본인의 위치를
+                </>
+            }&nbsp;
+            <Accent>{timelineRow.to}</Accent>{getAdverbalSuffix1(timelineRow.to)} 변경했습니다.
+            {timelineRow.remark && <>(사유 : {timelineRow.remark})</>} 
+            {/* {timelineRow.subject}님이&nbsp;
+            {timelineRow.target ? timelineRow.target + "님" : "본인"}의 위치를&nbsp;
+            <Accent>{timelineRow.to}</Accent>로 변경했습니다. {timelineRow.remark && <>(사유 : {timelineRow.remark})</>} */}
         </Timerow>)}
     </Wrapper>
 }

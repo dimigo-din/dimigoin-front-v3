@@ -15,12 +15,16 @@ import {
 } from "../../components";
 import { Timeline } from "./Timeline";
 import {
-  AttendanceLogWithStudent, SelfStudyTime, Student
+  AttendanceLogWithStudent, Gender, Permission, SelfStudyTime, Student
 } from "../../constants/types";
-import { getWholeClassAttendanceLog } from "../../api";
+import { getWholeClassAttendanceLog, registerOtherStudentMovingHistory } from "../../api";
 import { useMyData } from "../../hooks/api/useMyData";
 import Skeleton from "react-loading-skeleton";
 import { getSelfStudyPeriod } from "../../utils";
+import { OtherPlaceModal } from "../Main/OtherPlaceModal";
+import { getPrimaryPlaceList } from "../../api/place";
+import { toast } from "react-toastify";
+import { InputFormModal } from "../Main/InputFormModal";
 
 interface TopBarProps {
   clasName?: string;
@@ -82,7 +86,8 @@ const DraggableStudent: React.FC<{
   student: Student;
   additionalInfo: string;
   freeWidth: boolean;
-}> = ({ student, additionalInfo, children, freeWidth }) => {
+  isDraggable?: boolean;
+}> = ({ student, additionalInfo, children, freeWidth, isDraggable }) => {
   const [, draggable] = useDrag({
     item: {
       type: "STUDENT",
@@ -95,9 +100,9 @@ const DraggableStudent: React.FC<{
   return (
     <StudentWrapper
       freeWidth={freeWidth}
-      onClick={() => openTimelineByStudent(student)}
+      onClick={isDraggable ? () => openTimelineByStudent(student) : undefined}
     >
-      <p ref={draggable}>
+      <p ref={isDraggable ? draggable : undefined}>
         {children}
       </p>
       <Chip>{additionalInfo}</Chip>
@@ -109,16 +114,18 @@ const StudentList: React.FC<{
   log?: AttendanceLogWithStudent[];
   hasLabel: boolean;
   moveStudent(student: Student): void;
-  isOtherRow: boolean;
+  rowType: string;
+  isDraggable?: boolean;
 }> = ({
   log,
   hasLabel,
   moveStudent,
-  isOtherRow
+  rowType,
+  isDraggable
 }) => {
     const [, droppable] = useDrop<{ type: 'STUDENT', student: Student }, unknown, unknown>({
       accept: 'STUDENT',
-      drop: ({ student }) => moveStudent(student)
+      drop: isDraggable ? ({ student }) => moveStudent(student) : undefined
     })
     return (
       <LabelCard
@@ -140,14 +147,18 @@ const StudentList: React.FC<{
         >
           {log ? log.map((student) => (
             <DraggableStudent
-              freeWidth={isOtherRow}
+              isDraggable={isDraggable}
+              freeWidth={['ABSENT', 'ETC', 'CIRCLE',].includes(rowType) || !!student.log?.remark}
               key={student.student._id}
               student={student.student}
               additionalInfo={`${student.log?.place.name || "장소를 등록하지 않았습니다"}${student.log?.remark ? `(${student.log?.remark})` : ''}`}
             >
-              {student.student.number} {student.student.name} {isOtherRow && <EtcInfo>
+              {student.student.number} {student.student.name}
+              {['ETC', 'CIRCLE'].includes(rowType) ? <EtcInfo>&nbsp;
                 {student.log?.place.name}, {student.log?.remark}
-              </EtcInfo>}
+              </EtcInfo> : student.log?.remark && <EtcInfo>&nbsp;
+                  {student.log.remark}
+                </EtcInfo>}
             </DraggableStudent>
           )) : [...Array(Math.floor(Math.random() * 10) + 3)].map((_, index) => <StudentWrapper key={`index${index}`}>
             <Skeleton width={80} />
@@ -219,48 +230,71 @@ const groupedPlaces: DisplayPlace[] = [{
 
 const isRealData = (d: DisplayPlace): d is DisplayPlaceWithStudents => (d as any).students
 
+const primaryPlaces = getPrimaryPlaceList().then(e => e.find(place => place.label === '교실'))
+
 const OTHER_INDEX = groupedPlaces.findIndex(p => p.fallback)
 const INITIAL_INDEX = groupedPlaces.findIndex(p => p.initial)
 
-// const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeName }: DisplayPlace) => new Promise<{
-//   placeId: string;
-//   reason?: string;
-// }>((success) => {
-//   if (placeName === '인강실')
-//     return success({
-//       placeId: ["601fe6b4a40ac010e7a64968", "601fe6b4a40ac010e7a64961"][student.grade - 1]
-//     })
-//   if (placeName === '세탁')
-//     return success({
-//       placeId: student.gender === Gender.F ? "601fe6b4a40ac010e7a64967" : "601fe6b4a40ac010e7a64966"
-//     })
-//   if (placeName === '안정실') return success({
-//     placeId: "601fe6b4a40ac010e7a64962"
-//   })
-//   if (placeName === '동아리실')
-//     showModal((close) => <OtherPlaceModal showOnly="CIRCLE" onSubmit={(name, placeId, reason) => {
-//       success({
-//         placeId,
-//         reason
-//       })
-//       close()
-//     }} />, {
-//       wrapperProps: {
-//         css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
-//       }
-//     })
-//   if (placeName === '기타') return showModal((close) => <OtherPlaceModal onSubmit={(name, placeId, reason) => {
-//     success({
-//       placeId,
-//       reason
-//     })
-//     close()
-//   }} />, {
-//     wrapperProps: {
-//       css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
-//     }
-//   })
-// })
+const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeName }: DisplayPlace) => new Promise<{
+  placeId: string;
+  reason?: string;
+}>((success) => {
+  if (placeName === '교실') primaryPlaces.then(e => e ? success({
+    placeId: e._id
+  }) : toast.error("교실 정보를 불러올 수 없어요"))
+  if (placeName === '인강실')
+    return success({
+      placeId: ["601fe6b4a40ac010e7a64968", "601fe6b4a40ac010e7a64961"][student.grade - 1]
+    })
+  if (placeName === '세탁')
+    return success({
+      placeId: student.gender === Gender.F ? "601fe6b4a40ac010e7a64967" : "601fe6b4a40ac010e7a64966"
+    })
+  if (placeName === '안정실') return success({
+    placeId: "601fe6b4a40ac010e7a64962"
+  })
+  if (placeName === '동아리실')
+    showModal((close) => <OtherPlaceModal showOnly="CIRCLE" onSubmit={(name, placeId, reason) => {
+      success({
+        placeId,
+        reason
+      })
+      close()
+    }} />, {
+      wrapperProps: {
+        css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
+      }
+    })
+  if (placeName === '기타') return showModal((close) => <OtherPlaceModal onSubmit={(name, placeId, reason) => {
+    success({
+      placeId,
+      reason
+    })
+    close()
+  }} />, {
+    wrapperProps: {
+      css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
+    }
+  })
+  if (placeName === '결석') return showModal((close) => <InputFormModal
+    form={[{
+      label: "사유",
+      placeholder: "사유를 입력해주세요",
+      required: true
+    }]}
+    onSubmit={(values) => {
+      success({
+        placeId: '6033cc7dcc46510024fa8ff5',
+        reason: values[0]
+      })
+      close()
+    }} />, {
+    wrapperProps: {
+      css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
+    }
+  })
+  toast.error("장소 불러오기를 실패했어요")
+})
 
 const SelfStudyDisplay: React.FC = () => {
   const [selfStudyStatus, setSelfStudyStatus] = useState<{
@@ -307,8 +341,15 @@ const SelfStudyDisplay: React.FC = () => {
   }, [setSelfStudyStatus, myData])
 
   const moveStudentPlaceTo = useCallback(async (student: Student, place: DisplayPlace) => {
-    // const parsedPlace = await getTargetPlaceByLabelAndStudent(student, place)
-  }, [])
+    if (!myData?.permissions.includes(Permission.attendance)) return
+
+    const parsedPlace = await getTargetPlaceByLabelAndStudent(student, place)
+    await registerOtherStudentMovingHistory(student._id, {
+      place: parsedPlace.placeId,
+      remark: parsedPlace.reason
+    })
+    await fetchData()
+  }, [myData, fetchData])
 
   // const openMoveClassDisplay = useCallback(() => {
   //   showModal(() => <NamedSection css={css`
@@ -328,13 +369,13 @@ const SelfStudyDisplay: React.FC = () => {
 
   useEffect(() => {
     fetchData()
-    const timer = setInterval(() => fetchData(), 1000)
+    const timer = setInterval(() => fetchData(), 5000)
     const timeNameTimer = setInterval(() => updateSelfStudyTimeLabel(), 1000 * 60 * 5)
     return () => {
       clearInterval(timer)
       clearInterval(timeNameTimer)
     }
-  }, [ fetchData, updateSelfStudyTimeLabel ])
+  }, [fetchData, updateSelfStudyTimeLabel])
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -406,7 +447,13 @@ const SelfStudyDisplay: React.FC = () => {
                               </LabelCard>
                             </ResponsiveWrapper>
                             <Divider data-divider smaller />
-                            <StudentList hasLabel={hasLabel} isOtherRow={place.type === 'ETC'} log={isRealData(place) ? place.students : undefined} moveStudent={place && (student => moveStudentPlaceTo(student, place))} />
+                            <StudentList
+                              hasLabel={hasLabel}
+                              rowType={place.type}
+                              log={isRealData(place) ? place.students : undefined}
+                              moveStudent={place && (student => moveStudentPlaceTo(student, place))}
+                              isDraggable={myData?.permissions.includes(Permission.attendance)}
+                            />
                           </ResponsiveWrapper>
                         </React.Fragment>
                       )
