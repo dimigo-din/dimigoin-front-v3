@@ -19,7 +19,7 @@ export interface RegisterMovingHistory {
     endpoint: '/attendance';
     req: RegisteringAttendanceLog;
     res: {
-        attendanceLog: Doc<AttendanceLog>
+        attendanceLog: Doc<AttendanceLog & { place: string }>
     }
 }
 
