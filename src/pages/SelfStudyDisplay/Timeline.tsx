@@ -1,14 +1,16 @@
+import css from '@emotion/css';
 import styled from '@emotion/styled';
+import { getAdverbalSuffix1 } from 'josa-complete';
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import { getTimelineByStudent } from '../../api';
 import { getPlaceById } from '../../api/place';
-import { Card } from '../../components';
+import { Card, CardGroupHeader } from '../../components';
 import { Student } from '../../constants/types';
 
 interface TimelineRow {
-    subject: JSX.Element;
-    target?: string;
+    subject?: string;
+    target: string;
     from?: string;
     to: string;
     time: string;
@@ -33,11 +35,12 @@ export const Timeline: React.FC<{ student: Student; close(): void }> = ({ studen
                 const formattedTime = `${parsedTime.getHours().toString().padStart(2, '0')}:${parsedTime.getMinutes().toString().padStart(2, '0')}`
                 console.log(parsedTime)
                 return ({
-                    subject: <Accent>{row.updatedBy?.name}</Accent> || student.name,
+                    subject: row.updatedBy?.name,
                     to: thisPlace?.name || "알수없는장소",
                     time: formattedTime,
                     id: row._id,
                     remark: row.remark,
+                    target: student.name
                 })
             }))
 
@@ -46,11 +49,25 @@ export const Timeline: React.FC<{ student: Student; close(): void }> = ({ studen
     }, [student, close])
 
     return <Wrapper>
-        {timelineData?.map((timelineRow, index) => <Timerow key={timelineRow.id}>
+        <CardGroupHeader css={css`margin-bottom: 24px;`}>
+            {student.name}님의 히스토리
+        </CardGroupHeader>
+        {timelineData?.map((timelineRow) => <Timerow key={timelineRow.id}>
             <Time>[ {timelineRow.time} ]</Time> &nbsp;
-            {timelineRow.subject}님이&nbsp;
+            {
+                timelineRow.subject ? <>
+                    <Accent>{timelineRow.subject}</Accent>님이&nbsp;
+                    {timelineRow.target}님의 위치를
+                    
+                </> : <>
+                    본인의 위치를
+                </>
+            }&nbsp;
+            <Accent>{timelineRow.to}</Accent>{getAdverbalSuffix1(timelineRow.to)} 변경했습니다.
+            {timelineRow.remark && <>(사유 : {timelineRow.remark})</>} 
+            {/* {timelineRow.subject}님이&nbsp;
             {timelineRow.target ? timelineRow.target + "님" : "본인"}의 위치를&nbsp;
-            <Accent>{timelineRow.to}</Accent>로 변경했습니다. {timelineRow.remark && <>(사유 : {timelineRow.remark})</>}
+            <Accent>{timelineRow.to}</Accent>로 변경했습니다. {timelineRow.remark && <>(사유 : {timelineRow.remark})</>} */}
         </Timerow>)}
     </Wrapper>
 }

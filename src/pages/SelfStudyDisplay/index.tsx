@@ -24,6 +24,7 @@ import { getSelfStudyPeriod } from "../../utils";
 import { OtherPlaceModal } from "../Main/OtherPlaceModal";
 import { getPrimaryPlaceList } from "../../api/place";
 import { toast } from "react-toastify";
+import { InputFormModal } from "../Main/InputFormModal";
 
 interface TopBarProps {
   clasName?: string;
@@ -113,13 +114,13 @@ const StudentList: React.FC<{
   log?: AttendanceLogWithStudent[];
   hasLabel: boolean;
   moveStudent(student: Student): void;
-  isOtherRow: boolean;
+  rowType: string;
   isDraggable?: boolean;
 }> = ({
   log,
   hasLabel,
   moveStudent,
-  isOtherRow,
+  rowType,
   isDraggable
 }) => {
     const [, droppable] = useDrop<{ type: 'STUDENT', student: Student }, unknown, unknown>({
@@ -147,14 +148,16 @@ const StudentList: React.FC<{
           {log ? log.map((student) => (
             <DraggableStudent
               isDraggable={isDraggable}
-              freeWidth={isOtherRow}
+              freeWidth={['ABSENT', 'ETC'].includes(rowType)}
               key={student.student._id}
               student={student.student}
               additionalInfo={`${student.log?.place.name || "장소를 등록하지 않았습니다"}${student.log?.remark ? `(${student.log?.remark})` : ''}`}
             >
-              {student.student.number} {student.student.name} {isOtherRow && <EtcInfo>
+              {student.student.number} {student.student.name} {rowType === 'ETC' ? <EtcInfo>
                 {student.log?.place.name}, {student.log?.remark}
-              </EtcInfo>}
+              </EtcInfo> : <EtcInfo>
+                  {student.log?.remark}
+                </EtcInfo>}
             </DraggableStudent>
           )) : [...Array(Math.floor(Math.random() * 10) + 3)].map((_, index) => <StudentWrapper key={`index${index}`}>
             <Skeleton width={80} />
@@ -272,6 +275,24 @@ const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeName }: 
       css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
     }
   })
+  if (placeName === '결석') return showModal((close) => <InputFormModal
+    form={[{
+      label: "사유",
+      placeholder: "사유를 입력해주세요",
+      required: true
+    }]}
+    onSubmit={(values) => {
+      success({
+        placeId: '6033cc7dcc46510024fa8ff5',
+        reason: values[0]
+      })
+      close()
+    }} />, {
+    wrapperProps: {
+      css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
+    }
+  })
+  toast.error("장소 불러오기를 실패했어요")
 })
 
 const SelfStudyDisplay: React.FC = () => {
@@ -319,14 +340,15 @@ const SelfStudyDisplay: React.FC = () => {
   }, [setSelfStudyStatus, myData])
 
   const moveStudentPlaceTo = useCallback(async (student: Student, place: DisplayPlace) => {
-    if(!myData?.permissions.includes(Permission.attendance)) return
+    if (!myData?.permissions.includes(Permission.attendance)) return
 
     const parsedPlace = await getTargetPlaceByLabelAndStudent(student, place)
-    registerOtherStudentMovingHistory(student._id, {
+    await registerOtherStudentMovingHistory(student._id, {
       place: parsedPlace.placeId,
       remark: parsedPlace.reason
     })
-  }, [ myData ])
+    await fetchData()
+  }, [myData, fetchData])
 
   // const openMoveClassDisplay = useCallback(() => {
   //   showModal(() => <NamedSection css={css`
@@ -352,7 +374,7 @@ const SelfStudyDisplay: React.FC = () => {
       clearInterval(timer)
       clearInterval(timeNameTimer)
     }
-  }, [ fetchData, updateSelfStudyTimeLabel ])
+  }, [fetchData, updateSelfStudyTimeLabel])
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -426,7 +448,7 @@ const SelfStudyDisplay: React.FC = () => {
                             <Divider data-divider smaller />
                             <StudentList
                               hasLabel={hasLabel}
-                              isOtherRow={place.type === 'ETC'}
+                              rowType={place.type}
                               log={isRealData(place) ? place.students : undefined}
                               moveStudent={place && (student => moveStudentPlaceTo(student, place))}
                               isDraggable={myData?.permissions.includes(Permission.attendance)}
