@@ -7,12 +7,13 @@ import { Card } from '../../components';
 import { Student } from '../../constants/types';
 
 interface TimelineRow {
-    subject: string;
+    subject: JSX.Element;
     target?: string;
     from?: string;
     to: string;
     time: string;
     id: string;
+    remark?: string;
 }
 
 export const Timeline: React.FC<{ student: Student; close(): void }> = ({ student, close }) => {
@@ -21,7 +22,7 @@ export const Timeline: React.FC<{ student: Student; close(): void }> = ({ studen
     useEffect(() => {
         (async () => {
             const fetchedTimelineData = await getTimelineByStudent(student._id)
-            if(fetchedTimelineData.length === 0) {
+            if (fetchedTimelineData.length === 0) {
                 toast.info("위치 이동 기록이 없습니다")
                 close()
                 return
@@ -32,23 +33,24 @@ export const Timeline: React.FC<{ student: Student; close(): void }> = ({ studen
                 const formattedTime = `${parsedTime.getHours().toString().padStart(2, '0')}:${parsedTime.getMinutes().toString().padStart(2, '0')}`
                 console.log(parsedTime)
                 return ({
-                    subject: student.name,
+                    subject: <Accent>{row.updatedBy?.name}</Accent> || student.name,
                     to: thisPlace?.name || "알수없는장소",
                     time: formattedTime,
-                    id: row._id
+                    id: row._id,
+                    remark: row.remark,
                 })
             }))
 
-            setTimelineData(() => parsedTimeline)
+            setTimelineData(() => [...parsedTimeline].reverse())
         })()
-    }, [ student, close ])
+    }, [student, close])
 
     return <Wrapper>
-        {timelineData?.map(timelineRow => <Timerow key={timelineRow.id}>
+        {timelineData?.map((timelineRow, index) => <Timerow key={timelineRow.id}>
             <Time>[ {timelineRow.time} ]</Time> &nbsp;
             {timelineRow.subject}님이&nbsp;
-            {timelineRow.target ? timelineRow.target + "님" : "본인"}의 현황을&nbsp;
-            {timelineRow.from ? <><Accent>{timelineRow.from}</Accent>에서 <Accent>{timelineRow.to}</Accent>로 옮겼습니다.</> : <><Accent>{timelineRow.to}</Accent>로 변경했습니다</>}
+            {timelineRow.target ? timelineRow.target + "님" : "본인"}의 위치를&nbsp;
+            <Accent>{timelineRow.to}</Accent>로 변경했습니다. {timelineRow.remark && <>(사유 : {timelineRow.remark})</>}
         </Timerow>)}
     </Wrapper>
 }
