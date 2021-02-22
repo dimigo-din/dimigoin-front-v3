@@ -15,7 +15,7 @@ import {
 } from "../../components";
 import { Timeline } from "./Timeline";
 import {
-  AttendanceLogWithStudent, Gender, SelfStudyTime, Student
+  AttendanceLogWithStudent, Gender, Permission, SelfStudyTime, Student
 } from "../../constants/types";
 import { getWholeClassAttendanceLog, registerOtherStudentMovingHistory } from "../../api";
 import { useMyData } from "../../hooks/api/useMyData";
@@ -85,7 +85,8 @@ const DraggableStudent: React.FC<{
   student: Student;
   additionalInfo: string;
   freeWidth: boolean;
-}> = ({ student, additionalInfo, children, freeWidth }) => {
+  isDraggable?: boolean;
+}> = ({ student, additionalInfo, children, freeWidth, isDraggable }) => {
   const [, draggable] = useDrag({
     item: {
       type: "STUDENT",
@@ -98,9 +99,9 @@ const DraggableStudent: React.FC<{
   return (
     <StudentWrapper
       freeWidth={freeWidth}
-      onClick={() => openTimelineByStudent(student)}
+      onClick={isDraggable ? () => openTimelineByStudent(student) : undefined}
     >
-      <p ref={draggable}>
+      <p ref={isDraggable ? draggable : undefined}>
         {children}
       </p>
       <Chip>{additionalInfo}</Chip>
@@ -113,15 +114,17 @@ const StudentList: React.FC<{
   hasLabel: boolean;
   moveStudent(student: Student): void;
   isOtherRow: boolean;
+  isDraggable?: boolean;
 }> = ({
   log,
   hasLabel,
   moveStudent,
-  isOtherRow
+  isOtherRow,
+  isDraggable
 }) => {
     const [, droppable] = useDrop<{ type: 'STUDENT', student: Student }, unknown, unknown>({
       accept: 'STUDENT',
-      drop: ({ student }) => moveStudent(student)
+      drop: isDraggable ? ({ student }) => moveStudent(student) : undefined
     })
     return (
       <LabelCard
@@ -143,6 +146,7 @@ const StudentList: React.FC<{
         >
           {log ? log.map((student) => (
             <DraggableStudent
+              isDraggable={isDraggable}
               freeWidth={isOtherRow}
               key={student.student._id}
               student={student.student}
@@ -315,12 +319,14 @@ const SelfStudyDisplay: React.FC = () => {
   }, [setSelfStudyStatus, myData])
 
   const moveStudentPlaceTo = useCallback(async (student: Student, place: DisplayPlace) => {
+    if(!myData?.permissions.includes(Permission.attendance)) return
+
     const parsedPlace = await getTargetPlaceByLabelAndStudent(student, place)
     registerOtherStudentMovingHistory(student._id, {
       place: parsedPlace.placeId,
       remark: parsedPlace.reason
     })
-  }, [])
+  }, [ myData ])
 
   // const openMoveClassDisplay = useCallback(() => {
   //   showModal(() => <NamedSection css={css`
@@ -340,7 +346,7 @@ const SelfStudyDisplay: React.FC = () => {
 
   useEffect(() => {
     fetchData()
-    const timer = setInterval(() => fetchData(), 1000)
+    const timer = setInterval(() => fetchData(), 5000)
     const timeNameTimer = setInterval(() => updateSelfStudyTimeLabel(), 1000 * 60 * 5)
     return () => {
       clearInterval(timer)
@@ -418,7 +424,13 @@ const SelfStudyDisplay: React.FC = () => {
                               </LabelCard>
                             </ResponsiveWrapper>
                             <Divider data-divider smaller />
-                            <StudentList hasLabel={hasLabel} isOtherRow={place.type === 'ETC'} log={isRealData(place) ? place.students : undefined} moveStudent={place && (student => moveStudentPlaceTo(student, place))} />
+                            <StudentList
+                              hasLabel={hasLabel}
+                              isOtherRow={place.type === 'ETC'}
+                              log={isRealData(place) ? place.students : undefined}
+                              moveStudent={place && (student => moveStudentPlaceTo(student, place))}
+                              isDraggable={myData?.permissions.includes(Permission.attendance)}
+                            />
                           </ResponsiveWrapper>
                         </React.Fragment>
                       )

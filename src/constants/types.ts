@@ -84,7 +84,8 @@ export interface IngangsilTicket extends SavedDocument {
 }
 
 export enum Permission {
-    "ingang-application" = "ingang-application"
+    "ingang-application" = "ingang-application",
+    attendance = "attendance",
 }
 
 export interface User {
