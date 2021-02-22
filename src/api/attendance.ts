@@ -1,6 +1,7 @@
 import { AttendanceLog, Doc } from "../constants/types";
 import { formatRequestableDate } from "../utils";
 import { api } from "./api";
+import { RegisteringAttendanceLog } from "./interfaces";
 
 export const getMyAttendanceLog = (): Promise<Doc<AttendanceLog>[]> =>
     api<"attendanceLogList">("GET", "/attendance").then(d => d.logs)
@@ -24,5 +25,8 @@ export const getWholeClassAttendanceLog = (grade: number, clas: number) =>
     api<"wholeClassAttendanceLog">("GET", `/attendance/date/${todayString}/grade/${grade}/class/${clas}/status`).then(e => e.status.sort((a, b) => a.student.serial - b.student.serial))
 
 export const getTimelineByStudent = (studentId: string) => api<"timelineByStudent">("GET", `/attendance/date/${todayString}/student/${studentId}`).then(e => e.logs)
+
+export const registerOtherStudentMovingHistory = (studentId: string, log: RegisteringAttendanceLog) =>
+    api<"registerOtherStudentMovingHistory">("POST", `/attendance/student/${studentId}`, log).then(e => e.attendanceLog)
 
 // export const getMyClassAttendanceLog = async () => getWholeClassAttendanceLog(await myGrade, await myClass)

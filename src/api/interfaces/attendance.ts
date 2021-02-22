@@ -1,5 +1,10 @@
 import { AttendanceLog, AttendanceLogWithStudent, Doc } from "../../constants/types";
 
+export interface RegisteringAttendanceLog {
+    place: string;
+    remark?: string;
+}
+
 export interface AttendanceLogList {
     method: 'GET';
     endpoint: '/attendance';
@@ -12,10 +17,7 @@ export interface AttendanceLogList {
 export interface RegisterMovingHistory {
     method: 'POST';
     endpoint: '/attendance';
-    req: {
-        place: string;
-        remark?: string;
-    };
+    req: RegisteringAttendanceLog;
     res: {
         attendanceLog: Doc<AttendanceLog>
     }
@@ -39,5 +41,14 @@ export interface TimelineByStudent {
             place: string;
             student: string;
         })[]
+    }
+}
+
+export interface RegisterOtherStudentMovingHistory {
+    endpoint: '/attendance/student/:studentId';
+    method: 'POST';
+    req: RegisteringAttendanceLog;
+    res: {
+        attendanceLog: Doc<AttendanceLog>
     }
 }

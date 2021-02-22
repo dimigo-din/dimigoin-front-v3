@@ -15,12 +15,15 @@ import {
 } from "../../components";
 import { Timeline } from "./Timeline";
 import {
-  AttendanceLogWithStudent, SelfStudyTime, Student
+  AttendanceLogWithStudent, Gender, SelfStudyTime, Student
 } from "../../constants/types";
-import { getWholeClassAttendanceLog } from "../../api";
+import { getWholeClassAttendanceLog, registerOtherStudentMovingHistory } from "../../api";
 import { useMyData } from "../../hooks/api/useMyData";
 import Skeleton from "react-loading-skeleton";
 import { getSelfStudyPeriod } from "../../utils";
+import { OtherPlaceModal } from "../Main/OtherPlaceModal";
+import { getPrimaryPlaceList } from "../../api/place";
+import { toast } from "react-toastify";
 
 interface TopBarProps {
   clasName?: string;
@@ -219,48 +222,53 @@ const groupedPlaces: DisplayPlace[] = [{
 
 const isRealData = (d: DisplayPlace): d is DisplayPlaceWithStudents => (d as any).students
 
+const primaryPlaces = getPrimaryPlaceList().then(e => e.find(place => place.label === '교실'))
+
 const OTHER_INDEX = groupedPlaces.findIndex(p => p.fallback)
 const INITIAL_INDEX = groupedPlaces.findIndex(p => p.initial)
 
-// const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeName }: DisplayPlace) => new Promise<{
-//   placeId: string;
-//   reason?: string;
-// }>((success) => {
-//   if (placeName === '인강실')
-//     return success({
-//       placeId: ["601fe6b4a40ac010e7a64968", "601fe6b4a40ac010e7a64961"][student.grade - 1]
-//     })
-//   if (placeName === '세탁')
-//     return success({
-//       placeId: student.gender === Gender.F ? "601fe6b4a40ac010e7a64967" : "601fe6b4a40ac010e7a64966"
-//     })
-//   if (placeName === '안정실') return success({
-//     placeId: "601fe6b4a40ac010e7a64962"
-//   })
-//   if (placeName === '동아리실')
-//     showModal((close) => <OtherPlaceModal showOnly="CIRCLE" onSubmit={(name, placeId, reason) => {
-//       success({
-//         placeId,
-//         reason
-//       })
-//       close()
-//     }} />, {
-//       wrapperProps: {
-//         css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
-//       }
-//     })
-//   if (placeName === '기타') return showModal((close) => <OtherPlaceModal onSubmit={(name, placeId, reason) => {
-//     success({
-//       placeId,
-//       reason
-//     })
-//     close()
-//   }} />, {
-//     wrapperProps: {
-//       css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
-//     }
-//   })
-// })
+const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeName }: DisplayPlace) => new Promise<{
+  placeId: string;
+  reason?: string;
+}>((success) => {
+  if (placeName === '교실') primaryPlaces.then(e => e ? success({
+    placeId: e._id
+  }) : toast.error("교실 정보를 불러올 수 없어요"))
+  if (placeName === '인강실')
+    return success({
+      placeId: ["601fe6b4a40ac010e7a64968", "601fe6b4a40ac010e7a64961"][student.grade - 1]
+    })
+  if (placeName === '세탁')
+    return success({
+      placeId: student.gender === Gender.F ? "601fe6b4a40ac010e7a64967" : "601fe6b4a40ac010e7a64966"
+    })
+  if (placeName === '안정실') return success({
+    placeId: "601fe6b4a40ac010e7a64962"
+  })
+  if (placeName === '동아리실')
+    showModal((close) => <OtherPlaceModal showOnly="CIRCLE" onSubmit={(name, placeId, reason) => {
+      success({
+        placeId,
+        reason
+      })
+      close()
+    }} />, {
+      wrapperProps: {
+        css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
+      }
+    })
+  if (placeName === '기타') return showModal((close) => <OtherPlaceModal onSubmit={(name, placeId, reason) => {
+    success({
+      placeId,
+      reason
+    })
+    close()
+  }} />, {
+    wrapperProps: {
+      css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
+    }
+  })
+})
 
 const SelfStudyDisplay: React.FC = () => {
   const [selfStudyStatus, setSelfStudyStatus] = useState<{
@@ -307,7 +315,11 @@ const SelfStudyDisplay: React.FC = () => {
   }, [setSelfStudyStatus, myData])
 
   const moveStudentPlaceTo = useCallback(async (student: Student, place: DisplayPlace) => {
-    // const parsedPlace = await getTargetPlaceByLabelAndStudent(student, place)
+    const parsedPlace = await getTargetPlaceByLabelAndStudent(student, place)
+    registerOtherStudentMovingHistory(student._id, {
+      place: parsedPlace.placeId,
+      remark: parsedPlace.reason
+    })
   }, [])
 
   // const openMoveClassDisplay = useCallback(() => {
