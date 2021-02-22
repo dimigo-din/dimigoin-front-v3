@@ -6,7 +6,7 @@ import { RegisteringAttendanceLog } from "./interfaces";
 export const getMyAttendanceLog = (): Promise<Doc<AttendanceLog>[]> =>
     api<"attendanceLogList">("GET", "/attendance").then(d => d.logs)
 
-export const registerMovingHistory = (placeId: string, reason?: string): Promise<Doc<AttendanceLog>> =>
+export const registerMovingHistory = (placeId: string, reason?: string) =>
     api<"registerMovingHistory">("POST", "/attendance", {
         place: placeId,
         ...(reason && {

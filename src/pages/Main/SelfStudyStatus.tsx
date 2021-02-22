@@ -6,7 +6,7 @@ import { getAdverbalSuffix1 } from "josa-complete";
 import Card from "../../components/basic/Card";
 import { getMyAttendanceLog, registerMovingHistory } from "../../api/attendance";
 import { getPrimaryPlaceList } from "../../api/place";
-import { AttendanceLog, Doc, Place } from "../../constants/types";
+import { AttendanceLog, Doc, Merge, Place } from "../../constants/types";
 import { ReactComponent as IngangsilSvg } from "../../assets/icons/ingangsil.svg";
 import { ReactComponent as HealingsilSvg } from "../../assets/icons/healingsil.svg";
 import { ReactComponent as OtherSvg } from "../../assets/icons/other.svg";
@@ -36,13 +36,19 @@ const PlaceIcon: React.FC<{ placeLabel: string }> = ({ placeLabel }) => {
 }
 
 export const SelfStudyStatus: React.FC = () => {
-  const [currentPlaceLog, setCurrentPlaceLog] = useState<Doc<AttendanceLog>>();
+  const [currentPlaceLog, setCurrentPlaceLog] = useState<Doc<Merge<AttendanceLog, { place: string }>>>();
+  const [placeName, setPlaceName] = useState<string>()
   const [places, setPlaces] = useState<Doc<Place>[]>();
 
-  const isOther = places && currentPlaceLog && (!places.some(e => e._id === currentPlaceLog.place._id) || !!currentPlaceLog.remark)
+  const isOther = places && currentPlaceLog && (!places.some(e => e._id === currentPlaceLog.place) || !!currentPlaceLog.remark)
 
-  const refetchCurrentPlaceId = useCallback(() => {
-    getMyAttendanceLog().then(log => setCurrentPlaceLog(() => log[0]))
+  const refetchCurrentPlaceId = useCallback(async () => {
+    const [ log ] = await getMyAttendanceLog()
+    setCurrentPlaceLog(() => ({
+      ...log,
+      place: log.place._id
+    }))
+    setPlaceName(() => log.place.name)
   }, [setCurrentPlaceLog])
 
   useEffect(() => {
@@ -50,11 +56,12 @@ export const SelfStudyStatus: React.FC = () => {
     getPrimaryPlaceList().then(setPlaces)
   }, [refetchCurrentPlaceId])
 
-  const submitNewLocation = useCallback(async (placeName: string, placeId: string, reason?: string) => {
+  const submitNewLocation = useCallback(async (requestedPlaceName: string, placeId: string, reason?: string) => {
     return registerMovingHistory(placeId, reason).then(successRes => {
       setCurrentPlaceLog(() => successRes)
-      toast.success(`장소를 ${placeName}${(successRes.place.name && (successRes.place.name !== placeName) && `(${successRes.place.name})`) || ""
-        }${getAdverbalSuffix1(placeName)} 이동했어요`)
+      setPlaceName(() => requestedPlaceName)
+      toast.success(`장소를 ${requestedPlaceName}${(successRes.place.name && (successRes.place.name !== requestedPlaceName) && `(${successRes.place.name})`) || ""
+        }${getAdverbalSuffix1(requestedPlaceName)} 이동했어요`)
     })
   }, [])
 
@@ -79,7 +86,7 @@ export const SelfStudyStatus: React.FC = () => {
         {places && <>
           {places.map(place => (
             <Button
-              selected={!isOther && place._id === currentPlaceLog?.place._id}
+              selected={!isOther && place._id === currentPlaceLog?.place}
               onClick={() => submitNewLocation(place.label, place._id)}
               key={place._id}
             >
@@ -92,7 +99,7 @@ export const SelfStudyStatus: React.FC = () => {
           onClick={submitOtherPlace}
         >
           <OtherSvg />
-          <ButtonText>기타 {isOther && `(${currentPlaceLog?.place.name})`}</ButtonText>
+          <ButtonText>기타 {isOther && placeName && `(${placeName})`}</ButtonText>
         </Button>
         </>}
       </ButtonsWrapper>
