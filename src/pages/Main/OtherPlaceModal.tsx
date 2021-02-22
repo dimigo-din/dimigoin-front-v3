@@ -13,21 +13,25 @@ const orderTypeFirst = (places: Doc<Place>[], priority: string) =>
         return [acc[0], [...acc[1], current]]
     }, [[], []]).flat()
 
+const toDropdownList = (items: Doc<Place>[]) => items.map(e => ({
+    name: e.name,
+    key: e._id
+}))
 
 export const OtherPlaceModal: React.FC<{
     onSubmit(placeId: string, placeName: string, reason: string): void;
     priority?: string;
     showOnly?: string;
 }> = ({ onSubmit, priority, showOnly }) => {
-    const [ places, setPlaces ] = useState<Doc<Place>[]>()
+    const [ places, setPlaces ] = useState<DropdownItem[]>()
     const placeDropdown = useInput<DropdownItem>();
     const reasonInput = useInput();
 
     useEffect(() => {
         (async () => {
             const placeList = await getPlaceList()
-            if(showOnly) setPlaces(() => placeList.filter(place => place.type === showOnly))
-            else setPlaces(() => priority ? orderTypeFirst(placeList, priority) : placeList)
+            if(showOnly) setPlaces(() => toDropdownList(placeList.filter(place => place.type === showOnly)))
+            else setPlaces(() => toDropdownList(priority ? orderTypeFirst(placeList, priority) : placeList))
         })()
     }, [ setPlaces, showOnly, priority ])
 
@@ -54,10 +58,7 @@ export const OtherPlaceModal: React.FC<{
             <Dropdown
                 {...placeDropdown}
                 placeholder="장소를 입력해주세요"
-                items={places?.map(e => ({
-                    name: e.name,
-                    key: e._id
-                }))}
+                items={places}
             />
         </FormRow>
         <FormRow>
@@ -69,7 +70,6 @@ export const OtherPlaceModal: React.FC<{
         </FormRow>
         <Caution>
             ※ 사전 허가된 활동 또는 감독 교사 승인 외 임의로 등록할 경우 불이익을 받을 수 있습니다
-            ※ 동아리 활동은 사유에 "동아리" 단어를 포함시켜주세요. 동아리실리 아닌 장소로 등록해도 사유에 동아리가 포함되면 동아리로 표시됩니다.
         </Caution>
         </MarginWrapper>
         <SubmitButton

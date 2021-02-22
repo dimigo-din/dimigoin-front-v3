@@ -148,15 +148,16 @@ const StudentList: React.FC<{
           {log ? log.map((student) => (
             <DraggableStudent
               isDraggable={isDraggable}
-              freeWidth={['ABSENT', 'ETC'].includes(rowType)}
+              freeWidth={['ABSENT', 'ETC', 'CIRCLE',].includes(rowType) || !!student.log?.remark}
               key={student.student._id}
               student={student.student}
               additionalInfo={`${student.log?.place.name || "장소를 등록하지 않았습니다"}${student.log?.remark ? `(${student.log?.remark})` : ''}`}
             >
-              {student.student.number} {student.student.name} {rowType === 'ETC' ? <EtcInfo>
+              {student.student.number} {student.student.name}
+              {['ETC', 'CIRCLE'].includes(rowType) ? <EtcInfo>&nbsp;
                 {student.log?.place.name}, {student.log?.remark}
-              </EtcInfo> : <EtcInfo>
-                  {student.log?.remark}
+              </EtcInfo> : student.log?.remark && <EtcInfo>&nbsp;
+                  {student.log.remark}
                 </EtcInfo>}
             </DraggableStudent>
           )) : [...Array(Math.floor(Math.random() * 10) + 3)].map((_, index) => <StudentWrapper key={`index${index}`}>
