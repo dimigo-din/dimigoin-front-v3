@@ -1,9 +1,4 @@
-export interface DailyMeal {
-    breakfast: string[];
-    lunch: string[];
-    dinner: string[];
-    date: string;
-}
+import { DailyMeal } from "../../constants/types";
 
 export interface AllMeal {
     method: 'GET';
@@ -22,5 +17,14 @@ export interface GetDailyMeal {
     req: {};
     res: {
         meal: DailyMeal;
+    }
+}
+
+export interface WeeklyMeals {
+    method: 'GET';
+    endpoint: '/meal/weekly';
+    req: {};
+    res: {
+        meals: DailyMeal[];
     }
 }

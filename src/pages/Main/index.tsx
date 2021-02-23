@@ -25,6 +25,7 @@ const TodayMealCard: React.FC = () => {
                         wrapperProps: {
                             css: css`
                             max-width: 1600px;
+                            width: 100%;
                             padding: 60px 20px 20px;
                             @media screen and (max-width: 960px) {
                                 padding-top: 40px;

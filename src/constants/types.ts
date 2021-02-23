@@ -113,6 +113,13 @@ export interface Notice {
     endDate: Date;
 }
 
+export interface DailyMeal {
+    breakfast: string[];
+    lunch: string[];
+    dinner: string[];
+    date: string;
+}
+
 export interface Place {
     label: string;
     type: string;
