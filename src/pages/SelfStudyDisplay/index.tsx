@@ -9,7 +9,8 @@ import { ReactComponent as InsangsilIcon } from "../../assets/icons/ingangsil.sv
 import { ReactComponent as CircleIcon } from "../../assets/icons/circle.svg";
 import { ReactComponent as AbsentIcon } from "../../assets/icons/close.svg";
 import {
-  Horizontal, noBreak, PageWrapper, ResponsiveWrapper, Divider} from "../../components";
+  Horizontal, noBreak, PageWrapper, ResponsiveWrapper, Divider, Card
+} from "../../components";
 import {
   AttendanceLogWithStudent, Permission, SelfStudyTime, Student
 } from "../../constants/types";
@@ -22,6 +23,7 @@ import { getTargetPlaceByLabelAndStudent } from "./getTargetPlaceByLabelAndStude
 import { LabelCard } from "./LabelCard";
 import { TopBar } from "./TopBar";
 import { StudentList } from "./StudentList";
+import { CardHeader } from "../../components/basic/CardComponent";
 
 
 
@@ -113,8 +115,8 @@ const SelfStudyDisplay: React.FC = () => {
   const myData = useMyData()
 
   useEffect(() => {
-    if(!myData) return
-    if(isStudent(myData))
+    if (!myData) return
+    if (isStudent(myData))
       setClassInfo(() => [myData.class, myData.class])
     else setClassInfo(() => null)
   }, [myData])
@@ -146,7 +148,7 @@ const SelfStudyDisplay: React.FC = () => {
       available: available.reduce((acc, current) => acc + current.students.length, 0),
       notAvailable: notAvailable.reduce((acc, current) => acc + current.students.length, 0)
     }))
-  }, [setSelfStudyStatus, myData])
+  }, [setSelfStudyStatus, myData, classInfo])
 
   const moveStudentPlaceTo = useCallback(async (student: Student, place: DisplayPlace) => {
     if (!myData?.permissions.includes(Permission.attendance)) return
@@ -270,7 +272,15 @@ const SelfStudyDisplay: React.FC = () => {
                   }
                 </ResponsiveWrapper>
               </ResponsiveWrapper>) : <ClassSelectGrid>
-
+                {[...Array(3)].map((_, gradeIndex) => <>
+                  <GridRow>
+                    {[...Array(6)].map((__, classIndex) => <>
+                      <ClassCard disableSpace>
+                        <CardHeader>{gradeIndex + 1}학년 {classIndex + 1}반</CardHeader>
+                      </ClassCard>
+                    </>)}
+                  </GridRow>
+                </>)}
               </ClassSelectGrid>}
           </div>
         </TableWrapper>
@@ -364,7 +374,15 @@ const LocationLabelText = styled.p`
 // `
 
 const ClassSelectGrid = styled.div`
+margin: -20px -12px;
+`
 
+const GridRow = styled.div`
+  display: flex;
+`
+
+const ClassCard = styled(Card)`
+  margin: 20px 12px;
 `
 
 export default SelfStudyDisplay;
