@@ -10,7 +10,7 @@ import { ReactComponent as CircleSvg } from "../../assets/icons/circle.svg";
 import { APIResource } from "../../api";
 import {
   IngangApplyPeriod, IngangsilTicket,
-  NightSelfStudyTimeKey, Permission
+  NightSelfStudyTimeKey, Permission, Student
 } from "../../constants/types";
 import { useMyData } from "../../hooks/api/useMyData";
 import { applyIngangsil, getMyIngangsilStatus, unapplyIngangsil } from "../../api/ingangsil";
@@ -23,7 +23,7 @@ const timeRangeToString = ({ start, end }: IngangApplyPeriod) => (
 const Ingangsil: React.FC = () => {
   const [myStatus, setFetchedMyStatus] = useState<APIResource["myIngangsilApplyStatus"]["res"]>()
   const [groupedByTime, setGroupedByTime] = useState<Record<NightSelfStudyTimeKey, IngangsilTicket[]>>()
-  const myData = useMyData()
+  const myData = useMyData() as Student
 
   useEffect(() => {
     const _groupedByTime = myStatus?.applicationsInClass.reduce((acc, current) => {

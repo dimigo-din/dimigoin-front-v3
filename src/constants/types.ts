@@ -95,6 +95,7 @@ export interface User {
     gender: Gender;
     name: string;
     permissions: Permission[]
+    photos: string[];
 }
 
 export interface Student extends Doc<User> {
@@ -102,7 +103,6 @@ export interface Student extends Doc<User> {
     grade: Grade;
     number: number;
     serial: number;
-    photos: string[];
 }
 
 export interface Notice {
