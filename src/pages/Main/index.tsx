@@ -12,6 +12,7 @@ import { useMyData } from "../../hooks/api/useMyData";
 import { Doc, Notice, UserType } from "../../constants/types";
 import { getCurrentNotices, getTimetable } from "../../api";
 import { SelfStudyStatus } from "./SelfStudyStatus";
+import { isStudent as letUserStudent } from '../../utils/isStudent'
 
 const TodayMealCard: React.FC = () => {
     const meals = useMeal()
@@ -51,7 +52,7 @@ const Main: React.FC = () => {
 
     useEffect(() => {
         getCurrentNotices().then(notices => setNotice(() => notices))
-        if (isStudent && myData) {
+        if (isStudent && myData && letUserStudent(myData) && myData) {
             getTimetable(myData.grade, myData.class)
                 .then(table => setTimeTableData(() => table.map(day => day.sequence)))
                 .catch(() => setTimeTableData(() => null))
