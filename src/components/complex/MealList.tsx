@@ -3,36 +3,62 @@ import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { ReactComponent as CloseSvg } from '../../assets/icons/close.svg'
 import useConsole from '../../hooks/useConsole'
-import { HeaderIconWrapper, Horizontal } from '../basic/Atomics'
+import { HeaderIconWrapper, Horizontal, NoData } from '../basic/Atomics'
 import { Title as CardTitle } from '../basic/CardGroupHeader'
 import Card from '../basic/Card'
 import { ResponsiveWrapper } from '../layout/Cols'
 import { getThisWeek } from '../../utils'
+import { getWeeklyMeals } from '../../api'
+import { days } from '../../constants'
 
 export interface DailyMealProps {
   header: string;
-  meals: string[];
+  meals?: string[];
   highlighted?: boolean;
+  greyDivision: boolean;
 }
-const DailyMeal: React.FC<DailyMealProps> = ({ header, meals, highlighted }) => <DailyMealWrapper highlighted={highlighted} threshold={960}>
-  <DailyMealHeader>{header}요일</DailyMealHeader>
-  {meals.map(meal =>
-    <>
-      <div css={css`
+
+const PERIOD_LABEL = ["아침", "점심", "저녁"]
+
+const DailyMeal: React.FC<DailyMealProps> = ({
+  header, meals, highlighted, greyDivision
+}) =>
+  <DailyMealWrapper
+    highlighted={highlighted}
+    threshold={960}
+    greyDivision={greyDivision}
+  >
+    <DailyMealHeader>{header}요일</DailyMealHeader>
+    {meals ? meals.map((meal, index) =>
+      <>
+        <Label>{PERIOD_LABEL[index]}</Label>
+        <DailyMealItem>
+          {meal || <NoMealData>정보가 없습니다</NoMealData>}
+        </DailyMealItem>
+        <div css={css`
       margin: 0px 15px;
       @media screen and (max-width: 960px) {
         margin: 6px 0px;
       }
       `} />
-      <DailyMealItem>
-        {meal}
-      </DailyMealItem>
-    </>
-  )}
+      </>
+    ) : <NoMealData>정보가 없습니다</NoMealData>}
+  </DailyMealWrapper>
 
-</DailyMealWrapper>
+const NoMealData = styled(NoData)`
+  @media screen and (max-width: 960px) {
+    padding: 24px 0px;
+  }
+`
 
-const DailyMealWrapper = styled(ResponsiveWrapper) <{ highlighted?: boolean }>`
+const Label = styled.p`
+  font-weight: 700;
+  font-size: 18px;
+  margin: 12px 0px 8px;
+  display: none;
+`
+
+const DailyMealWrapper = styled(ResponsiveWrapper) <{ highlighted?: boolean; greyDivision: boolean }>`
   padding: 24px 72px;
   justify-content: space-between;
   align-items: center;
@@ -41,8 +67,14 @@ const DailyMealWrapper = styled(ResponsiveWrapper) <{ highlighted?: boolean }>`
   }
   @media screen and (max-width: 960px) {
     align-items: unset;
-    padding: 12px 36px;
+    padding: 24px 36px;
+    &>p {
+      display: block;
+    }
   }
+  ${({greyDivision}) => greyDivision && css`
+    background-color: #FBFBFB;
+  `}
   ${({ highlighted }) => highlighted && css`
     background-color: var(--main-theme-accent-background);
     & h2 {
@@ -69,16 +101,22 @@ const DailyMealItem = styled.p`
   @media screen and (max-width: 960px) {
     max-width: unset;
   }
-` 
+`
+const date = new Date()
+const day = date.getDay() - 1
 
 export const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
   const [meals, setMeals] = useState<DailyMealProps[]>();
-  const date = new Date()
   useEffect(() => {
-    // getWeeklyMeals(date)
-    //   .then(setMeals)
-    //   .catch(goBack)
-  }, [ date, goBack ])
+    getWeeklyMeals(date)
+      .then(meals => setMeals(() => meals.map((meal, index) => ({
+        header: days[index],
+        meals: meal && [meal.breakfast, meal.lunch, meal.dinner].map(meals => meals.join(' | ')),
+        highlighted: day === index,
+        greyDivision: index % 2 === 0
+      }))))
+      .catch(goBack)
+  }, [goBack])
   useConsole('meals', meals)
   if (!meals) return <></>
   return <Card css={css`

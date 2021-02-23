@@ -3,10 +3,10 @@ import styled from "@emotion/styled";
 import css from "@emotion/css";
 import Card from "../basic/Card";
 import { DAILY_TIME_PERIOD, getTimePeriod } from "../../utils";
-import { DailyMeal } from "../../api";
 import { NoData } from "../basic";
 import useConsole from "../../hooks/useConsole";
 import Skeleton from "react-loading-skeleton";
+import { DailyMeal } from "../../constants/types";
 
 const MealItem: React.FC<MealItemSelected> = ({
   highlight: selected = false,

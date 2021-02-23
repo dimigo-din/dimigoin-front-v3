@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import { DailyMeal, getDailyMeal } from "../../api"
+import { getDailyMeal } from "../../api"
+import { DailyMeal } from "../../constants/types"
 
 export const useMeal = (date?: Date) => {
     const [meal, setMeal] = useState<DailyMeal | undefined | null>(undefined)

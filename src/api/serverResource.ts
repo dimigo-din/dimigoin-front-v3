@@ -6,7 +6,9 @@ import {
     AttendanceLogList, RegisterMovingHistory, PrimaryPlaceList, PlaceList,
     WholeClassAttendanceLog, TimelineByStudent, RequestExcelFile, EntireTicket,
     AfterschoolList as AfterschoolClassList, EditAfterschoolClassInfo,
-    RegisterNewAfterschoolClass, RequestSheetByGrade, AppliedAfterschoolClasses, ApplyAfterschoolClass, UnapplyAfterschoolClass, RemoveAfterschoolClass, RegisterOtherStudentMovingHistory
+    RegisterNewAfterschoolClass, RequestSheetByGrade, AppliedAfterschoolClasses,
+    ApplyAfterschoolClass, UnapplyAfterschoolClass, RemoveAfterschoolClass,
+    RegisterOtherStudentMovingHistory, WeeklyMeals
 } from "./interfaces";
 
 export interface APIResource {
@@ -45,4 +47,5 @@ export interface APIResource {
     unapplyAfterschoolClass: UnapplyAfterschoolClass;
     removeAfterschoolClass: RemoveAfterschoolClass;
     registerOtherStudentMovingHistory: RegisterOtherStudentMovingHistory;
+    weeklyMeals: WeeklyMeals;
 }
