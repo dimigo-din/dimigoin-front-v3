@@ -24,6 +24,7 @@ import { LabelCard } from "./LabelCard";
 import { TopBar } from "./TopBar";
 import { StudentList } from "./StudentList";
 import { CardHeader } from "../../components/basic/CardComponent";
+import useInput from "../../hooks/useInput";
 
 
 
@@ -111,14 +112,37 @@ const SelfStudyDisplay: React.FC = () => {
 
   const [currentSelfStudyTime, setCurrentSelfStudyTime] = useState<SelfStudyTime | null>(getSelfStudyPeriod())
   const [classInfo, setClassInfo] = useState<number[] | null>()
+  const [hasUserClassInfo, setHasUserClassInfo] = useState<boolean>()
+
+  const {
+    setValue: setTopBarOpenedState,
+    ...topbarOpenStatus
+  } = useInput<boolean>(true)
 
   const myData = useMyData()
+
+  useEffect(() => {
+    if(topbarOpenStatus.value) setClassInfo(() => null)
+  }, [topbarOpenStatus.value])
+
+  useEffect(() => {
+    if(classInfo === null) {
+      console.log(classInfo, 'Cleared')
+      setSelfStudyStatus(() => undefined)
+    }
+  }, [ classInfo ])
 
   useEffect(() => {
     if (!myData) return
     if (isStudent(myData))
       setClassInfo(() => [myData.class, myData.class])
     else setClassInfo(() => null)
+  }, [myData])
+
+  useEffect(() => {
+    if (myData && isStudent(myData))
+      setHasUserClassInfo(() => !!myData.class)
+    else setHasUserClassInfo(() => false)
   }, [myData])
 
   const updateSelfStudyTimeLabel = useCallback(() => {
@@ -195,7 +219,9 @@ const SelfStudyDisplay: React.FC = () => {
         `}
       >
         <TopBar
+          {...topbarOpenStatus}
           hasClassInfo={classInfo === undefined ? undefined : !!classInfo}
+          canSelectOtherClass={!hasUserClassInfo}
           clasName={classInfo ? `${classInfo[0]}학년 ${classInfo[1]}반` : undefined}
           selfStudyName={
             currentSelfStudyTime ? ({
@@ -275,7 +301,13 @@ const SelfStudyDisplay: React.FC = () => {
                 {[...Array(3)].map((_, gradeIndex) => <>
                   <GridRow>
                     {[...Array(6)].map((__, classIndex) => <>
-                      <ClassCard disableSpace>
+                      <ClassCard
+                        disableSpace
+                        clickable
+                        onClick={() => {
+                          setTopBarOpenedState(() => false)
+                          setClassInfo(() => [gradeIndex + 1, classIndex + 1])
+                        }}>
                         <CardHeader>{gradeIndex + 1}학년 {classIndex + 1}반</CardHeader>
                       </ClassCard>
                     </>)}
