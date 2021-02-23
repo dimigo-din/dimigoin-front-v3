@@ -374,7 +374,7 @@ const LocationLabelText = styled.p`
 // `
 
 const ClassSelectGrid = styled.div`
-margin: -20px -12px;
+margin: -20px -8px;
 `
 
 const GridRow = styled.div`
@@ -382,7 +382,7 @@ const GridRow = styled.div`
 `
 
 const ClassCard = styled(Card)`
-  margin: 20px 12px;
+  margin: 20px 8px;
 `
 
 export default SelfStudyDisplay;
