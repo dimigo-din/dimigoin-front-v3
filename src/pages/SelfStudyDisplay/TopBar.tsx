@@ -44,7 +44,9 @@ export const TopBar: React.FC<TopBarProps> = ({
             <UnstyledLink to="/">
                 <IconLogo height={48} width={32} />
             </UnstyledLink>
-            <Arrow isDownArrow={isOpened} />
+            <ArrowWrapper isDownArrow={isOpened}>
+                <Arrow />
+            </ArrowWrapper>
             <ClassName>{hasClassInfo === true ? clasName || <Skeleton width={300} /> : "학급을 선택해주세요"}</ClassName>
             <SelfStudyName>{selfStudyName}</SelfStudyName>
         </Horizontal>
@@ -62,11 +64,16 @@ const SelfStudyName = styled.h2`
   margin-left: 20px;
 `;
 
-const Arrow = styled(_ArrowDown) <{ isDownArrow?: boolean }>`
+const ArrowWrapper = styled.div<{ isDownArrow?: boolean }>`
     margin-left: 20px;
-        transform: rotate(0deg);
-  transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
     ${({ isDownArrow: isOpened }) => isOpened && css`
-    transform: rotate(180deg);
+    & svg {
+        transform: rotate(180deg);
+    }
     `}
+`
+
+const Arrow = styled(_ArrowDown)`
+    transform: rotate(0deg);
+    transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
 `

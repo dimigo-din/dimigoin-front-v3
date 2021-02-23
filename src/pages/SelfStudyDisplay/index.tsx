@@ -26,8 +26,6 @@ import { StudentList } from "./StudentList";
 import { CardHeader } from "../../components/basic/CardComponent";
 import useInput from "../../hooks/useInput";
 
-
-
 const ROW_COLOR = {
   AVAILABLE: "var(--main-theme-accent)",
   NOTAVAILABLE: "#B8B8B8",
@@ -122,15 +120,14 @@ const SelfStudyDisplay: React.FC = () => {
   const myData = useMyData()
 
   useEffect(() => {
-    if(topbarOpenStatus.value) setClassInfo(() => null)
+    if (topbarOpenStatus.value) setClassInfo(() => null)
   }, [topbarOpenStatus.value])
 
   useEffect(() => {
-    if(classInfo === null) {
-      console.log(classInfo, 'Cleared')
+    if (classInfo === null) 
       setSelfStudyStatus(() => undefined)
-    }
-  }, [ classInfo ])
+    
+  }, [classInfo])
 
   useEffect(() => {
     if (!myData) return
@@ -298,10 +295,11 @@ const SelfStudyDisplay: React.FC = () => {
                   }
                 </ResponsiveWrapper>
               </ResponsiveWrapper>) : <ClassSelectGrid>
-                {[...Array(3)].map((_, gradeIndex) => <>
-                  <GridRow>
-                    {[...Array(6)].map((__, classIndex) => <>
+                {[...Array(3)].map((_, gradeIndex) =>
+                  <GridRow key={`grade${gradeIndex}`}>
+                    {[...Array(6)].map((__, classIndex) =>
                       <ClassCard
+                        key={`class${classIndex}`}
                         disableSpace
                         clickable
                         onClick={() => {
@@ -310,9 +308,9 @@ const SelfStudyDisplay: React.FC = () => {
                         }}>
                         <CardHeader>{gradeIndex + 1}학년 {classIndex + 1}반</CardHeader>
                       </ClassCard>
-                    </>)}
+                    )}
                   </GridRow>
-                </>)}
+                )}
               </ClassSelectGrid>}
           </div>
         </TableWrapper>
