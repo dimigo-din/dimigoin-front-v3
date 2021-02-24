@@ -135,7 +135,7 @@ const Outgo: React.FC = () => {
     }
 
     requestOutgo(outgoRequestForm).then(() => toast.success("외출 신청을 완료했습니다!"))
-  }, [applierValue, applyFormValue, dateSelectorValue, isTimeSelected]);
+  }, [applierValue, applyFormValue, dateSelectorValue, isTimeSelected, agreementCheckbox.checked]);
 
   return (
     <>
@@ -204,7 +204,7 @@ const Outgo: React.FC = () => {
                     }
                     <br /> 외출을 신청합니다
                   </Info> : null}
-                  <CardExplainContent css={isTimeSelected && css`margin-top: 36px;`}>
+                  <CardExplainContent css={[isTimeSelected && css`margin-top: 36px;`, css`flex: 1;`]}>
                     <h2>이용방법</h2>
                     <p>외출시, 정문 외출 인식기에 외출시간을 입력합니다.</p>
                     <p>귀교시, 정문 외출 인식기에 귀교시간을 입력합니다.</p>
