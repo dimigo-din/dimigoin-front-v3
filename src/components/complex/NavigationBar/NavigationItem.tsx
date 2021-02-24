@@ -27,7 +27,7 @@ const NavigationItem: React.FC<NavigationItem & {
         }}
         css={css`
         display: inline-block;    
-        margin-left: 32px;
+        margin-left: 64px;
         line-height: 90px;
         height: 90px;
         overflow: hidden;
