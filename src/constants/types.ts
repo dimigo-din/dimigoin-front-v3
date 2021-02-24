@@ -86,6 +86,7 @@ export interface IngangsilTicket extends SavedDocument {
 export enum Permission {
     "ingang-application" = "ingang-application",
     attendance = "attendance",
+    "circle-applier-selection" = "circle-applier-selection",
 }
 
 export interface User {
@@ -171,4 +172,31 @@ export interface AfterschoolClass {
 export interface AfterschoolClassApplication {
     applier: string;
     afterschool: Doc<AfterschoolClass>;
+}
+
+export enum CirclePeriod {
+    application = 'APPLICATION',
+    interview = 'INTERVIEW',
+    final = 'FINAL',
+}
+
+export enum OutgoRequestStatus {
+    applied = 'APPLIED',
+    rejected = 'REJECTED',
+    approved = 'APPROVED',
+}
+
+export interface ServiceConfig {
+    CIRCLE_PERIOD: CirclePeriod;
+    CIRCLE_MAX_APPLY: number;
+}
+
+export interface Circle {
+    name: string;
+    imageUrl: string;
+    description: string
+    chair: Doc<Student>
+    viceChair: Doc<Student>
+    category: string;
+    applied?: boolean
 }
