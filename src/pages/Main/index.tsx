@@ -5,7 +5,7 @@ import Skeleton from "react-loading-skeleton";
 import {
     CardGroupHeader, Col, Divider, MealList,
     PageWrapper, ResponsiveWrapper, showModal,
-    TextCardGroup, TimeTable, TodayMeal, NoData
+    TextCardGroup, TimeTable, TodayMeal, NoData, TextCard
 } from "../../components";
 import { useMeal } from "../../hooks/api";
 import { useMyData } from "../../hooks/api/useMyData";
@@ -37,7 +37,7 @@ const TodayMealCard: React.FC = () => {
             >
                 오늘의 급식
         </CardGroupHeader>
-            <TodayMeal meals={meals} />
+            <TodayMeal css={css`flex: 1;`} meals={meals} />
         </Col>
     )
 }
@@ -58,7 +58,7 @@ const Main: React.FC = () => {
                 .then(table => setTimeTableData(() => table.map(day => day.sequence)))
                 .catch(() => setTimeTableData(() => null))
         }
-    }, [ myData, isStudent ]);
+    }, [myData, isStudent]);
 
     useEffect(() => {
         setIsStudent(() => myData?.userType === UserType.S)
@@ -134,7 +134,10 @@ const Main: React.FC = () => {
                                     <ApplimentStatus key={myToday.name} {...myToday} />
                                 ))
                             ) : ( */}
-                                    <TextCardGroup content={[{ text: <NoData>신청 현황이 없습니다</NoData> }]} />
+                                    {/* <TextCardGroup content={[{ text:  }]} /> */}
+                                    <TextCard css={css`flex: 1;display: flex;`}>
+                                        <NoData>신청 현황이 없습니다</NoData>
+                                    </TextCard>
                                     {/* )} */}
                                 </Col>
                             </>

@@ -1,0 +1,16 @@
+.Toastify__toast-container {
+    width: 480px;
+}
+
+.Toastify__toast {
+    border-radius: 5px;
+    padding: 16px 24px 16px 16px;
+}
+
+.Toastify__toast-body {
+    margin-right: 4px;
+    line-height: 28px;
+    font-family: NanumSquare;
+    font-size: 18px;
+    font-weight: 700;
+}

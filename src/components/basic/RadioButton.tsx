@@ -70,10 +70,10 @@ const RadioButtonGroupItemWrapper = styled.div`
 const Circle = styled.div<{ disabled?: boolean }>`
   width: 26px;
   height: 26px;
-  border: 1.5px solid #8A8A8A;
+  border: 1px solid #8A8A8A;
   border-radius: 13px;
   box-sizing: border-box;
-  transition: 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
+  transition: 300ms;
 `;
 const LogicalButton = styled.input`
   /* position: absolute; */
@@ -81,10 +81,10 @@ const LogicalButton = styled.input`
   width: 0px;
   cursor: pointer;
   &:checked+div {
-    border-width: 7px;
+    border-width: 6px;
     border-color: var(--main-theme-accent);
   }
-  &:focus+div {
+  &:not(:checked):focus+div {
     box-shadow: inset 0px 0px 0px 2px var(--main-theme-accent);
   }
 `;

@@ -8,6 +8,7 @@ import useInput, { EventFunction } from "../../hooks/useInput";
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { fetchAllStudents, getMyData } from "../../api/user";
 import useConsole from "../../hooks/useConsole";
+import { toast } from "react-toastify";
 
 interface OutgoApplierProps {
   onChange: EventFunction<Doc<BriefStudent>[]>;
@@ -40,6 +41,7 @@ const InputChip: React.FC<{
           if (e.key === 'ArrowDown') return setFocusIndex(_index => _index + 1)
           if (e.key === 'ArrowUp') return setFocusIndex(_index => _index - 1)
           if (e.key === 'Enter') queriedStudents && onSubmit(queriedStudents[focusedIndex])
+          if (e.key === 'Escape') return setTypingState(false)
         }} />
         {
           queriedStudents ? queriedStudents
@@ -68,6 +70,10 @@ export const OutgoApplier: React.FC<OutgoApplierProps> = ({ onChange, value }) =
   const [studentsList, setStudentsList] = useState<Doc<BriefStudent>[]>()
   const [appliers, setAppliers] = useState<Doc<BriefStudent>[] | null>(value ?? null);
   const addApplier = (d: Doc<BriefStudent>) => {
+    if(appliers?.some(applier => applier._id === d._id)) {
+      toast.info("이미 선택된 학생입니다")
+      return
+    }
     setAppliers(_appliers => [...(_appliers || []), d])
   }
   const removeApplier = (index: number) => {
@@ -130,6 +136,7 @@ export const OutgoApplier: React.FC<OutgoApplierProps> = ({ onChange, value }) =
 const Wrapper = styled(Card)`
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   padding: -6px;
 `
 

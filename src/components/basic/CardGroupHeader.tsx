@@ -27,7 +27,7 @@ export const CardGroupHeader: React.FC<CardGroupheaderProps> = ({
         flex-wrap: wrap;
       `}>
         <Title withBubble={withBubble}>{children}</Title>
-        <Divider small />
+        <Divider smaller />
         {subButton && (subButton.component || (
           subButton.route ? (
             <SubButton>
@@ -79,6 +79,7 @@ const SubButton = styled.p<{ noAction?: boolean }>`
   margin-top: 12px;
   flex-basis: 1;
   flex-shrink: 0;
+  font-size: 15px;
 
   ${({ noAction }) => noAction && css`
     color: #9A9A9A;
