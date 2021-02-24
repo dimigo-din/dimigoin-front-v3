@@ -6,13 +6,24 @@ import { circleApplicationStatusKorMapper, CircleApplicationStatusValues } from 
 import { Circle, CirclePeriod } from "../../constants/types"
 import { CircleWithApplyStatus } from "./Applier"
 
+const statusLabelMap = {
+    applied: "결과 대기중",
+    "document-fail": "수고하셨습니다",
+    "document-pass": "자세히 보기",
+    "interview-fail": "수고하셨습니다",
+    "interview-pass": "자세히 보기",
+    "final": "수고하셨습니다"
+}
+
+
 export const CircleCard: React.FC<CircleWithApplyStatus> = ({
     imageUrl,
     name,
     category,
-    status
+    status,
+    ...props
 }) => {
-    return <Wrapper>
+    return <Wrapper {...props}>
         <PaddingWrapper>
             <Logo src={imageUrl} />
             <Category>{category}</Category>
@@ -27,7 +38,7 @@ export const CircleCard: React.FC<CircleWithApplyStatus> = ({
             </Content>
         </PaddingWrapper>
         <ApplyButton status={status}>
-            지원하기
+            {status ? statusLabelMap[status] : "자세히보기"}
         </ApplyButton>
     </Wrapper>
 }
@@ -47,7 +58,6 @@ const statusColorMap = {
     "interview-pass": "#57B894",
     "final": "#E83C77"
 }
-
 const ApplyButton = styled.div<{ status?: typeof CircleApplicationStatusValues[number] | null }>`
     background-color: ${({ status }) => status ? (statusColorMap)[status] : "#E83C77"};
     padding: 16px 0px;

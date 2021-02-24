@@ -1,10 +1,11 @@
+import css from "@emotion/css"
 import React, { useCallback, useEffect, useState } from "react"
 import Skeleton from "react-loading-skeleton"
-import { getAppliedClasses } from "../../api"
+import styled from "styled-components"
 import { getAllCircles, getAppliedCircles } from "../../api/circle"
 import { CardGroupHeader, PageWrapper } from "../../components"
 import { CircleApplicationStatusValues } from "../../constants"
-import { Circle, CircleApplication, CirclePeriod, Doc } from "../../constants/types"
+import { Circle, CircleApplication, CirclePeriod } from "../../constants/types"
 import { useConfig } from "../../hooks/api"
 import { CircleCard } from "./CircleCard"
 
@@ -57,9 +58,20 @@ export const Applier: React.FC = () => {
             } : {
                     component: <Skeleton />
                 }}>동아리 지원</CardGroupHeader>
-            {circles?.map(circle => <CircleCard {...circle} />)}
+            <GridWrapper>
+                {circles?.map(circle =>
+                    <CircleCard
+                        css={css`margin: 40px;`}
+                        {...circle}
+                    />)}
+            </GridWrapper>
         </PageWrapper>
     )
 }
+
+const GridWrapper = styled.div`
+    margin: -40px;
+    padding-top: 14px;
+`
 
 export default Applier
