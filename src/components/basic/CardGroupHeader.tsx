@@ -27,7 +27,7 @@ export const CardGroupHeader: React.FC<CardGroupheaderProps> = ({
         flex-wrap: wrap;
       `}>
         <Title withBubble={withBubble}>{children}</Title>
-        <Divider small />
+        <Divider smaller />
         {subButton && (subButton.component || (
           subButton.route ? (
             <SubButton>
