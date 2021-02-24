@@ -7,6 +7,7 @@ const navigations: NavigationItem[] = [
   { title: "멘토링", route: "/mentoring" },
   { title: "방과후", route: "/afterschool" },
   { title: "DETS", route: "/dets" },
+  { title: "동아리", route: "/circle" },
 ];
 
 export default navigations;

@@ -12,6 +12,10 @@ export const Afterschool = {
     Student: loadable(() => import('./Afterschool/Student')),
     Teacher: loadable(() => import('./Afterschool/Teacher'))
 }
+export const Circle = {
+    Student: loadable(() => import('./Circle/Student')),
+    Teacher: loadable(() => import('./Circle/Teacher'))
+}
 export const Outgo = loadable(() => import('./Outgo'));
 export const SelfStudyDisplay = loadable(() => import('./SelfStudyDisplay'));
 export const Mentoring = loadable(() => import('./Mentoring'));
