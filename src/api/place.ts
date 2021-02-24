@@ -21,7 +21,7 @@ export const getPrimaryPlaceList = async () => {
     }
     const fetched = (await api<"primaryPlaceList">("GET", "/place/primary")).places
     localCached[CacheKeys.PRIMARY_PLACE] = fetched
-    // 일주일간 캐시
+    // 5일간 캐시
     cacheItem(CacheKeys.PRIMARY_PLACE, fetched, +new Date() + 1000 * 60 * 60 * 24 * 5)
     return fetched
 }

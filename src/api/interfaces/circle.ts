@@ -1,4 +1,4 @@
-import { Circle, CircleApplication, Doc } from "../../constants/types";
+import { Circle, CircleApplication, CircleApplyQuestionItem, Doc } from "../../constants/types";
 
 export interface AllCircle {
     endpoint: '/circle';
@@ -16,5 +16,14 @@ export interface AppliedCircle {
     res: {
         maxApplyCount: number;
         applications: Doc<CircleApplication>[]
+    }
+}
+
+export interface ApplyQuestion {
+    endpoint: '/circle-application/form';
+    method: 'GET';
+    req: {};
+    res: {
+        form: Doc<CircleApplyQuestionItem>[]
     }
 }

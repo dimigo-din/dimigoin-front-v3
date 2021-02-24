@@ -1,3 +1,4 @@
+import css from "@emotion/css";
 import styled from "@emotion/styled";
 
 export const Textarea = styled.textarea`
@@ -14,9 +15,11 @@ export const Textarea = styled.textarea`
   &::placeholder {
     color: #D1D1D1;
   }
-  &:hover {
-    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.14);
-  }
+  ${({ disabled }) => !disabled && css`
+    &:hover {
+      box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.14);
+    }
+  `}
   &:focus {
     border-color: var(--main-theme-accent);
     box-shadow: 0px 0px 6px rgba(var(--main-theme-accent-rgb), 0.3);

@@ -204,3 +204,8 @@ export interface CircleApplication {
     form: Record<string, string>;
     applier: string;
 }
+
+export interface CircleApplyQuestionItem {
+    question: string;
+    maxLength: number;
+  }

@@ -1,10 +1,10 @@
 import css from "@emotion/css"
 import styled from "@emotion/styled"
 import React from "react"
-import { Card } from "../../components"
-import { circleApplicationStatusKorMapper, CircleApplicationStatusValues } from "../../constants"
-import { Circle, CirclePeriod } from "../../constants/types"
-import { CircleWithApplyStatus } from "./Applier"
+import { Card } from "../../../components"
+import { circleApplicationStatusKorMapper, CircleApplicationStatusValues } from "../../../constants"
+import { Circle, CirclePeriod } from "../../../constants/types"
+import { CircleWithApplication } from "."
 
 const statusLabelMap = {
     applied: "결과 대기중",
@@ -15,12 +15,14 @@ const statusLabelMap = {
     "final": "수고하셨습니다"
 }
 
-
-export const CircleCard: React.FC<CircleWithApplyStatus> = ({
+export const CircleCard: React.FC<CircleWithApplication & {
+    openSideDetail(): void;
+}> = ({
     imageUrl,
     name,
     category,
     status,
+    openSideDetail,
     ...props
 }) => {
     return <Wrapper {...props}>
@@ -37,7 +39,7 @@ export const CircleCard: React.FC<CircleWithApplyStatus> = ({
                 </Description>}
             </Content>
         </PaddingWrapper>
-        <ApplyButton status={status}>
+        <ApplyButton status={status} onClick={openSideDetail}>
             {status ? statusLabelMap[status] : "자세히보기"}
         </ApplyButton>
     </Wrapper>
