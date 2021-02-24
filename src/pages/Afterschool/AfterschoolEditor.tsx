@@ -7,7 +7,7 @@ import { getAllTeachers } from "../../api/user";
 import DangerIcon from "../../assets/icons/danger.svg"
 import {
     Button, CardGroupHeader, Checkbox, Dropdown, DropdownItem,
-    Horizontal, Input, FormHeader as _FormHeader, IconOnlyButton
+    Horizontal, Input, FormHeader as _FormHeader, IconOnlyButton, HeaderWrapper
 } from "../../components";
 import { days } from "../../constants";
 import { Doc, AfterschoolClass, EngDay, SelfStudyTime, Grade, SelfStudyTimeEngKor } from "../../constants/types";
@@ -231,13 +231,6 @@ export const AfterschoolEditor: React.FC<{
         </RegisterButtonWrapper>
     </>)
 }
-
-const HeaderWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    margin-top: 12px;
-`
-
 const FormHeader = styled(_FormHeader)`
     margin-top: 20px;
 `

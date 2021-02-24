@@ -27,9 +27,14 @@ const CircleDetailBrancher: React.FC<{
     circle: Doc<CircleWithApplication>;
     type: | "DETAIL" | "NEW_APPLY" | "VIEW_APPLICATION";
     close(): void;
-}> = ({ circle, type, close }) => {
+    isModal: boolean;
+}> = ({ circle, type, close, isModal }) => {
     return {
-        DETAIL: <CircleDetail {...circle} />,
+        DETAIL: <CircleDetail
+            close={close}
+            isModal={isModal}
+            {...circle}
+        />,
         NEW_APPLY: <NewApply {...circle} />,
         VIEW_APPLICATION: <MyApplication
             name={circle.name}
@@ -45,7 +50,8 @@ export const Applier: React.FC = () => {
     const [circles, setCircles] = useState<Doc<CircleWithApplication>[] | null>()
     const [sideDetail, setSideDetail] = useState<{
         type: | "DETAIL" | "NEW_APPLY" | "VIEW_APPLICATION",
-        selectedIndex: number
+        selectedIndex: number,
+        title?: string;
     } | null>(null)
 
     const fetchData = useCallback(async () => {
@@ -75,21 +81,22 @@ export const Applier: React.FC = () => {
         if (!circles) return
         const type = circles[index].applied ? "VIEW_APPLICATION" : "DETAIL"
         if (window.innerWidth < 1100) {
-            showModal(close => <Card css={css`flex: 1; overflow: auto;`}>
+            showModal(close =>
                 <CircleDetailBrancher
+                    isModal
                     circle={circles[index]}
                     type={type}
                     close={() => {
                         close()
                     }} />
-            </Card>, {
-                wrapperProps: {
-                    css: css`max-width: min(720px, 100vw); width: 100vw; height: 100vh; display: flex; padding: 60px 20px 20px;`
-                },
-                backdropProps: {
-                    css: css`overflow-y: auto;`
-                }
-            })
+                , {
+                    wrapperProps: {
+                        css: css`max-width: min(720px, 100vw); width: 100vw; height: 100vh; display: flex; padding: 60px 20px 20px;`
+                    },
+                    backdropProps: {
+                        css: css`overflow-y: auto;`
+                    }
+                })
         }
         else setSideDetail(() => ({
             type,
@@ -124,13 +131,14 @@ export const Applier: React.FC = () => {
                     </GridWrapper>
                 </Col>
                 {sideDetail && circles && <Col width={5}>
-                    <Card>
-                        <CircleDetailBrancher
-                            circle={circles[sideDetail.selectedIndex]}
-                            type={sideDetail.type}
-                            close={() => setSideDetail(() => null)}
-                        />
-                    </Card>
+                    {/* <Card> */}
+                    <CircleDetailBrancher
+                        isModal={false}
+                        circle={circles[sideDetail.selectedIndex]}
+                        type={sideDetail.type}
+                        close={() => setSideDetail(() => null)}
+                    />
+                    {/* </Card> */}
                 </Col>}
             </ResponsiveWrapper>
         </PageWrapper>

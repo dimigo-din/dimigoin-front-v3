@@ -8,3 +8,10 @@ export const FormHeader = styled.h2`
     margin-top: 36px;
   }
 `;
+
+export const HeaderWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    margin-top: 12px;
+`
+
