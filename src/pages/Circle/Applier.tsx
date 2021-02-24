@@ -1,8 +1,12 @@
-import React from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import Skeleton from "react-loading-skeleton"
+import { getAppliedClasses } from "../../api"
+import { getAllCircles, getAppliedCircles } from "../../api/circle"
 import { CardGroupHeader, PageWrapper } from "../../components"
-import { CirclePeriod } from "../../constants/types"
+import { CircleApplicationStatusValues } from "../../constants"
+import { Circle, CircleApplication, CirclePeriod, Doc } from "../../constants/types"
 import { useConfig } from "../../hooks/api"
+import { CircleCard } from "./CircleCard"
 
 const getSubheaderText = (currentPeriod: CirclePeriod, maxApplyAmount: number) => ({
     [CirclePeriod.application]: `동아리 지원은 3월 10일 ~ 3월 20일까지, 최대 ${maxApplyAmount}개까지 가능합니다.`,
@@ -10,8 +14,39 @@ const getSubheaderText = (currentPeriod: CirclePeriod, maxApplyAmount: number) =
     [CirclePeriod.final]: "최종 선택은 되돌릴 수 없으니 신중하게 생각해주세요."
 })[currentPeriod]
 
+export interface CircleWithApplyStatus extends Circle {
+    status?: typeof CircleApplicationStatusValues[number] | null
+}
+
 export const Applier: React.FC = () => {
     const config = useConfig()
+    const [circles, setCircles] = useState<CircleWithApplyStatus[] | null>()
+
+    const fetchData = useCallback(async () => {
+        const fetchedCircles = await getAllCircles()
+        const fetchedAppliedCircles = (await getAppliedCircles()).applications.reduce((matched, current) => {
+            return {
+                ...matched,
+                [current.circle._id]: current
+            }
+        }, {} as {
+            [key: string]: CircleApplication | undefined
+        })
+        const circlesListWithAppliedStatus = (fetchedCircles.reduce<CircleWithApplyStatus[]>((matched, current, index) => [
+            ...matched.slice(0, index),
+            {
+                ...current,
+                status: fetchedAppliedCircles[current._id]?.status || null
+            },
+            ...matched.slice(index + 1),
+        ], fetchedCircles))
+        setCircles(() => circlesListWithAppliedStatus)
+    }, [])
+
+    useEffect(() => {
+        fetchData()
+    }, [fetchData])
+
     return (
         <PageWrapper>
             <CardGroupHeader subButton={config ? {
@@ -20,9 +55,9 @@ export const Applier: React.FC = () => {
                     config.CIRCLE_MAX_APPLY
                 ),
             } : {
-                component: <Skeleton />
-            }}>동아리 지원</CardGroupHeader>
-            
+                    component: <Skeleton />
+                }}>동아리 지원</CardGroupHeader>
+            {circles?.map(circle => <CircleCard {...circle} />)}
         </PageWrapper>
     )
 }

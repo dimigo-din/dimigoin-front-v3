@@ -10,7 +10,7 @@ import {
     ApplyAfterschoolClass, UnapplyAfterschoolClass, RemoveAfterschoolClass,
     RegisterOtherStudentMovingHistory, WeeklyMeals
 } from "./interfaces";
-import { AllCircle } from "./interfaces/circle";
+import { AllCircle, AppliedCircle } from "./interfaces/circle";
 import { Config } from "./interfaces/config";
 
 export interface APIResource {
@@ -52,4 +52,5 @@ export interface APIResource {
     weeklyMeals: WeeklyMeals;
     config: Config;
     allCircle: AllCircle;
+    appliedCircle: AppliedCircle;
 }

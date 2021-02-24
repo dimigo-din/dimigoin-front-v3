@@ -1,3 +1,5 @@
+import { CircleApplicationStatusValues } from ".";
+
 export type Merge<M, N> = Omit<M, Extract<keyof M, keyof N>> & N;
 
 interface SavedDocument {
@@ -180,11 +182,6 @@ export enum CirclePeriod {
     final = 'FINAL',
 }
 
-export enum OutgoRequestStatus {
-    applied = 'APPLIED',
-    rejected = 'REJECTED',
-    approved = 'APPROVED',
-}
 
 export interface ServiceConfig {
     CIRCLE_PERIOD: CirclePeriod;
@@ -199,4 +196,11 @@ export interface Circle {
     viceChair: Doc<Student>
     category: string;
     applied?: boolean
+}
+
+export interface CircleApplication {
+    status: typeof CircleApplicationStatusValues[number];
+    circle: Doc<Circle>;
+    form: Record<string, string>;
+    applier: string;
 }
