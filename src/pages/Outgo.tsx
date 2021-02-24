@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import {
   CardExplainContent, OutgoApplyInput, WeekCalendar, LargeTimeSelector,
   SelectingTime, PageWrapper, ResponsiveWrapper, Col, CardGroupHeader,
-  OutgoApplyForm, Divider, OutgoApplier, Card, Checkbox, Button, TextCardGroup
+  OutgoApplyForm, Divider, OutgoApplier, Card, Checkbox, Button, TextCardGroup, TextCard
 } from "../components";
 import useInput, { EventFunction, useCheckbox } from "../hooks/useInput";
 import { BriefStudent, Doc } from "../constants/types";
@@ -33,7 +33,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ onChange }) => {
     target: {
       value: dayInput.value!!
     }
-  }), [ dayInput.value, onChange ])
+  }), [dayInput.value, onChange])
 
   useEffect(() => {
     if (!onChange || !dayInput.value) return
@@ -76,6 +76,7 @@ const Outgo: React.FC = () => {
   const applyFormInput = useInput<OutgoApplyInput>();
   const { setValue: setAppliers, ...applierInput } = useInput<Doc<BriefStudent>[]>()
   const dateSelectorInput = useInput<[Date, Date]>()
+  const agreementCheckbox = useCheckbox()
 
   const applierValue = applierInput.value
   const applyFormValue = applyFormInput.value
@@ -93,15 +94,15 @@ const Outgo: React.FC = () => {
       createdAt: myData.createdAt,
       updatedAt: myData.updatedAt
     }]))
-  }, [ setAppliers ])
-  
+  }, [setAppliers])
+
   useEffect(() => {
-    if(applyFormValue?.outgoType === 'alone') applyMe()
-  }, [ applyMe, applyFormValue ])
+    if (applyFormValue?.outgoType === 'alone') applyMe()
+  }, [applyMe, applyFormValue])
 
   useEffect(() => {
     applyMe()
-  }, [ applyMe ])
+  }, [applyMe])
 
   const submitHandler = useCallback(() => {
     const alerts = [
@@ -111,9 +112,10 @@ const Outgo: React.FC = () => {
       (!applyFormValue?.outgoReason && "외출 사유"),
       ((!dateSelectorValue?.[0] || !+dateSelectorValue[0]) && "외출 시간"),
       ((!dateSelectorValue?.[1] || !+dateSelectorValue[1]) && "귀가 시간"),
-      (isTimeSelected && (+(dateSelectorValue?.[0] || 0) >= +(dateSelectorValue?.[1] || 0))) && "시간 범위"
+      (isTimeSelected && (+(dateSelectorValue?.[0] || 0) >= +(dateSelectorValue?.[1] || 0))) && "시간 범위",
+      (!agreementCheckbox.checked && "주의사항")
     ].filter<string>((e): e is string => !!e)
-    
+
     console.log(isTimeSelected, +(dateSelectorValue?.[0] || 0), +(dateSelectorValue?.[1] || 0))
 
     if (alerts.length) {
@@ -121,7 +123,7 @@ const Outgo: React.FC = () => {
       return
     }
 
-    const outgoRequestForm: OutgoRequestForm =  {
+    const outgoRequestForm: OutgoRequestForm = {
       applier: applierValue!!.map(e => e._id),
       approver: applyFormValue!!.approver!!,
       reason: applyFormValue!!.outgoReason!!,
@@ -139,7 +141,7 @@ const Outgo: React.FC = () => {
     <>
       <PageWrapper>
         <ResponsiveWrapper threshold={1200}>
-          <Col width={3.5}>
+          <Col width={3}>
             <CardGroupHeader
               subButton={{
                 text: "평일(월~금) 15:00까지 신청 가능",
@@ -157,24 +159,26 @@ const Outgo: React.FC = () => {
             />
           </Col>
           <Divider data-divider />
-          <Col width={6.5}>
+          <Col width={7}>
             <CardGroupHeader>신청자</CardGroupHeader>
-            {applyFormValue?.outgoType === 'group' ? <OutgoApplier {...applierInput} /> : <TextCardGroup content={[{
-              text: <>
-                <p>현재 외출 유형이 개인 외출로 지정되어있습니다.</p>
-                <p>신청자를 추가하려면 유형을 단체 외출로 변경해주세요.</p>
-              </>
-            }]} /> }
+            {applyFormValue?.outgoType === 'group' ? <OutgoApplier {...applierInput} /> : <TextCard
+              css={css`
+                padding: 17px 24px;
+                margin-top: 0px;
+              `}>
+              <p>현재 외출 유형이 개인 외출로 지정되어있습니다.</p>
+              <p>신청자를 추가하려면 유형을 단체 외출로 변경해주세요.</p>
+            </TextCard>}
             <Divider data-divider small horizontal />
             <ResponsiveWrapper threshold={1400}>
-              <Col width={4}>
+              <Col width={6}>
                 <CardGroupHeader>외출시간</CardGroupHeader>
                 <Card leftBorder>
                   <DateSelector {...dateSelectorInput} />
                 </Card>
               </Col>
               <Divider data-divider small />
-              <Col width={6}>
+              <Col width={4}>
                 <CardGroupHeader>주의사항</CardGroupHeader>
                 <Card
                   css={css`
@@ -192,10 +196,10 @@ const Outgo: React.FC = () => {
                         <DateHighlight>{dateSelectorValue!![1].getMonth() + 1}월 {dateSelectorValue!![1].getDate()}일 </DateHighlight>
                         {dateSelectorValue!![1].getHours()}시 {dateSelectorValue!![1].getMinutes()}분 까지{" "}
                       </> : <>
-                        {dateSelectorValue!![0].getMonth() + 1}월 {dateSelectorValue!![0].getDate()}일,
+                          {dateSelectorValue!![0].getMonth() + 1}월 {dateSelectorValue!![0].getDate()}일,
                         <br />
-                        <DateHighlight>{dateSelectorValue!![0].getHours()}시 {dateSelectorValue!![0].getMinutes()}분</DateHighlight> 부터{" "}
-                        <DateHighlight>{dateSelectorValue!![1].getHours()}시 {dateSelectorValue!![1].getMinutes()}분</DateHighlight> 까지
+                          <DateHighlight>{dateSelectorValue!![0].getHours()}시 {dateSelectorValue!![0].getMinutes()}분</DateHighlight> 부터{" "}
+                          <DateHighlight>{dateSelectorValue!![1].getHours()}시 {dateSelectorValue!![1].getMinutes()}분</DateHighlight> 까지
                       </>
                     }
                     <br /> 외출을 신청합니다
@@ -210,6 +214,7 @@ const Outgo: React.FC = () => {
                     <p>허위 기재된 내용이 있다면 불이익을 받을 수 있습니다.</p>
                   </CardExplainContent>
                   <Checkbox
+                    {...agreementCheckbox}
                     css={css`
                       margin-top: 12px;
                     `}

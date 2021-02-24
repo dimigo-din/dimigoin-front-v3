@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
 import Dimigoincon from "./Dimigoincon";
+import { Horizontal } from ".";
 
 interface CheckboxProps {
   text?: string;
@@ -10,7 +11,7 @@ interface CheckboxProps {
   defaultChecked?: boolean;
 }
 
-export const Checkbox: React.FC<CheckboxProps> =({
+export const Checkbox: React.FC<CheckboxProps> = ({
   text, onChange, checked, defaultChecked, ...props
 }) => {
   return (
@@ -19,13 +20,15 @@ export const Checkbox: React.FC<CheckboxProps> =({
         checked={checked === undefined ? defaultChecked : checked}
         onChange={onChange}
       />
-      <CheckWrapper checked={!!checked}>
-        <Check visible={!!checked} />
-      </CheckWrapper>
-      <span css={css`
+      <Horizontal>
+        <CheckWrapper checked={!!checked}>
+          <Check visible={!!checked} />
+        </CheckWrapper>
+        <p css={css`
   vertical-align: middle;`}>
-        {text}
-      </span>
+          {text}
+        </p>
+      </Horizontal>
     </Wrapper>
   );
 };
@@ -42,7 +45,7 @@ const InvisibleCheck = styled.input`
   /* display: none; */
   opacity: 0;
   width: 0px;
-  &:focus+div {
+  &:focus+div>div {
     box-shadow: inset 0px 0px 0px 2px var(--main-theme-accent);
   }
 `;

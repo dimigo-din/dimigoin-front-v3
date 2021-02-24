@@ -39,7 +39,7 @@ export const TextCardGroup: React.FC<TextCardGroupProps> = ({
   );
 };
 
-const TextCard = styled(Card)`
+export const TextCard = styled(Card)`
   font-weight: 400;
   font-size: 18px;
   font-family: "NanumSquare" !important;

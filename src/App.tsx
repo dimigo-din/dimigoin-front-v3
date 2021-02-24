@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
-import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+import './toastStyle.css'
 
 import Router from "./router";
 import GlobalStyle from "./components/GlobalStyle";
