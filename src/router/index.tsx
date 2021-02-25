@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Switch, Route, Redirect, HashRouter, RouteComponentProps } from "react-router-dom";
-import { Main, Notices, Ingangsil, Mentoring, Outgo, SelfStudyDisplay, IngangsilManager, Afterschool } from "../pages";
+import { Main, Notices, Ingangsil, Mentoring, Outgo, SelfStudyDisplay, IngangsilManager, Afterschool, Circle } from "../pages";
 import { LoadableComponent } from "@loadable/component";
 import { getAccessToken, getRefreshToken, loginWithRefreshToken } from "../api";
 import styled from "@emotion/styled";
@@ -86,6 +86,7 @@ const Router: React.FC = () => (
         <Route path="/notices" exact component={needAuth(Notices)} />
         <Route path="/mentoring" component={needAuth(Mentoring)} />
         <Route path="/afterschool" component={needAuthAndBranch(Afterschool)} />
+        <Route path="/circle" component={needAuthAndBranch(Circle)} />
         <Route path="/" exact component={needAuth(Main)} />
       </Container>
     </Switch>

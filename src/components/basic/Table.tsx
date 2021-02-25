@@ -18,7 +18,7 @@ export const Table = styled.table`
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 0 20px 0 rgba(146, 146, 146, 0.09);
-    transition: 1s cubic-bezier(0, 0.46, 0.12, 0.98);
+    transition: 300ms cubic-bezier(0, 0.46, 0.12, 0.98);
     font-size: 18px;
     color: #707070;
 `
@@ -27,7 +27,7 @@ export const Row = styled.tr`
     &:nth-of-type(2) > td {
         padding-top: 24px;
     }
-    &:last-of-type td {
+    &:last-of-type:not(:first-of-type) td {
         padding-bottom: 24px;
     }
 `

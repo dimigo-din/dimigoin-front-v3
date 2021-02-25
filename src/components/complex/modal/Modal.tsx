@@ -8,7 +8,7 @@ export interface ModalOption {
 }
 
 export let showModal: (
-  el: (close: () => void) => ReactNode,
+  el: (close: () => Promise<void>) => ReactNode,
   props?: ModalOption,
   onClose?: () => void
 ) => void;
@@ -18,30 +18,33 @@ export const ModalContainer = () => {
   const [visible, setVisivility] = useState(false);
   const [onClose, setOnClose] = useState<() => void>();
   const [disappearingAnimation, setDisappearingAnimation] = useState(false);
-  const disappear = useCallback(() => {
+  const disappear = useCallback(() => new Promise<void>((suc) => {
     onClose && onClose();
     setDisappearingAnimation(true);
-    setTimeout(() => setVisivility(false), 600);
-  }, [ onClose ]);
+    setTimeout(() => {
+      setVisivility(false)
+      suc()
+    }, 600);
+  }), [onClose]);
   useEffect(() => {
     showModal = (
-      el: (close: () => void) => ReactNode,
+      el: (close: () => Promise<void>) => ReactNode,
       props?: ModalOption,
       onCloseListener?
     ) => {
       if (onCloseListener) setOnClose(() => onCloseListener);
       else setOnClose(undefined);
       setModalElement(
-        el(() => {
-          disappear();
-        })
+        el(() =>
+          disappear()
+        )
       );
       setVisivility(true);
       setDisappearingAnimation(false);
       if (props) setProps(props);
       console.log(props);
     };
-  }, [ disappear ]);
+  }, [disappear]);
   return visible && ModalElement ? (
     <Backdrop
       onClick={disappear}

@@ -1,3 +1,5 @@
+import { CircleApplicationStatusValues } from ".";
+
 export type Merge<M, N> = Omit<M, Extract<keyof M, keyof N>> & N;
 
 interface SavedDocument {
@@ -86,6 +88,7 @@ export interface IngangsilTicket extends SavedDocument {
 export enum Permission {
     "ingang-application" = "ingang-application",
     attendance = "attendance",
+    "circle-applier-selection" = "circle-applier-selection",
 }
 
 export interface User {
@@ -172,3 +175,37 @@ export interface AfterschoolClassApplication {
     applier: string;
     afterschool: Doc<AfterschoolClass>;
 }
+
+export enum CirclePeriod {
+    application = 'APPLICATION',
+    interview = 'INTERVIEW',
+    final = 'FINAL',
+}
+
+
+export interface ServiceConfig {
+    CIRCLE_PERIOD: CirclePeriod;
+    CIRCLE_MAX_APPLY: number;
+}
+
+export interface Circle {
+    name: string;
+    imageUrl: string;
+    description: string
+    chair: Doc<Student>
+    viceChair: Doc<Student>
+    category: string;
+    applied?: boolean
+}
+
+export interface CircleApplication {
+    status: typeof CircleApplicationStatusValues[number];
+    circle: Doc<Circle>;
+    form: Record<string, string>;
+    applier: string;
+}
+
+export interface CircleApplyQuestionItem {
+    question: string;
+    maxLength: number;
+  }
