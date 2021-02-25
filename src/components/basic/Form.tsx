@@ -13,5 +13,6 @@ export const HeaderWrapper = styled.div`
     display: flex;
     align-items: center;
     margin-top: 12px;
+    margin-bottom: 24px;
 `
 

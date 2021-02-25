@@ -101,7 +101,7 @@ export const NewApply: React.FC<Doc<Circle> & {
     if (isModal)
         return <Card css={wrapperStyle}>
             <HeaderWrapper>
-                <CardGroupHeader css={css`flex: 1; margin: 0px 0px 24px 0px;`}>
+                <CardGroupHeader css={css`flex: 1; margin: 0px;`}>
                     {circle.name}
                 </CardGroupHeader>
                 <CloseIcon onClick={close} />

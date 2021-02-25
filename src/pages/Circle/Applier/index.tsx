@@ -46,6 +46,7 @@ const CircleDetailBrancher: React.FC<{
             name={circle.name}
             form={circle.form ? circle.form : undefined}
             close={close}
+            isModal={isModal}
         />
     }[type]
 }
