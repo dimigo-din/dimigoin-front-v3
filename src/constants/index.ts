@@ -1,8 +1,14 @@
-import { EngDay } from "./types";
+import { CirclePeriod, EngDay } from "./types";
 
 export const days = ["월", "화", "수", "목", "금", "토", "일"];
 
 export const CircleApplicationStatusValues = ['applied', 'document-fail', 'document-pass', 'interview-fail', 'interview-pass', 'final'] as const;
+
+export const CircleApplicationStatusLevelTree = {
+    [CirclePeriod.application]: [CircleApplicationStatusValues[1], CircleApplicationStatusValues[2]],
+    [CirclePeriod.interview]: [CircleApplicationStatusValues[3], CircleApplicationStatusValues[4]],
+    [CirclePeriod.final]: null
+}
 
 export const dayEngKorMapper = {
     "mon": "월",

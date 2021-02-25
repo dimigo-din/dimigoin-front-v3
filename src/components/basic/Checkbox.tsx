@@ -9,25 +9,30 @@ interface CheckboxProps {
   checked?: boolean;
   onChange?(e: React.ChangeEvent<HTMLInputElement>): void;
   defaultChecked?: boolean;
+  disabled?: boolean;
 }
 
 export const Checkbox: React.FC<CheckboxProps> = ({
-  text, onChange, checked, defaultChecked, ...props
+  text, onChange, checked, defaultChecked, disabled, ...props
 }) => {
   return (
     <Wrapper {...props}>
       <InvisibleCheck
+        disabled={disabled}
         checked={checked === undefined ? defaultChecked : checked}
         onChange={onChange}
       />
       <Horizontal>
-        <CheckWrapper checked={!!checked}>
+        <CheckWrapper
+          checked={!!checked}
+          disabled={!!disabled}
+        >
           <Check visible={!!checked} />
         </CheckWrapper>
-        <p css={css`
+        {text && <p css={css`
   vertical-align: middle;`}>
           {text}
-        </p>
+        </p>}
       </Horizontal>
     </Wrapper>
   );
@@ -43,14 +48,17 @@ const Wrapper = styled.label`
 
 const InvisibleCheck = styled.input`
   /* display: none; */
+  position: absolute;
   opacity: 0;
   width: 0px;
+  height: 0px;
+  margin: 0px;
   &:focus+div>div {
     box-shadow: inset 0px 0px 0px 2px var(--main-theme-accent);
   }
 `;
 
-const CheckWrapper = styled.div<{ checked: boolean }>`
+const CheckWrapper = styled.div<{ checked: boolean; disabled: boolean; }>`
   width: 18px;
   height: 18px;
   display: inline-grid;
@@ -67,6 +75,10 @@ const CheckWrapper = styled.div<{ checked: boolean }>`
     css`
       border-color: var(--main-theme-accent);
     `}
+
+  ${({ disabled }) => disabled && css`
+    border-color: #D1D1D1;
+  `}
 `;
 InvisibleCheck.defaultProps = { type: "checkbox" };
 

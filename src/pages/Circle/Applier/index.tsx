@@ -2,15 +2,18 @@ import css from "@emotion/css"
 import React, { useCallback, useEffect, useState } from "react"
 import Skeleton from "react-loading-skeleton"
 import styled from "styled-components"
-import { getAllCircles, getAppliedCircles } from "../../../api/circle"
-import { showModal, Card, PageWrapper, ResponsiveWrapper, Col, CardGroupHeader } from "../../../components"
+import { getAllCircles, getAppliedCircles, finalSelect as _finalSelect } from "../../../api/circle"
+import { showModal, Card, PageWrapper, ResponsiveWrapper, Col, CardGroupHeader, Divider, NoData, TextCard } from "../../../components"
 import { CircleApplicationStatusValues } from "../../../constants"
 import { CirclePeriod, Circle, Doc, CircleApplication } from "../../../constants/types"
+import { swal } from "../../../functions/swal"
 import { useConfig } from "../../../hooks/api"
-import { CircleCard } from "./CircleCard"
+import DangerIcon from "../../../assets/icons/danger.svg"
+import { CircleCard, DummyCircleCard } from "./CircleCard"
 import { CircleDetail } from "./CircleDetail"
 import { MyApplication } from "./MyApplication"
 import { NewApply } from "./NewApply"
+import { toast } from "react-toastify"
 
 const getSubheaderText = (currentPeriod: CirclePeriod, maxApplyAmount: number) => ({
     [CirclePeriod.application]: `동아리 지원은 3월 10일 ~ 3월 20일까지, 최대 ${maxApplyAmount}개까지 가능합니다.`,
@@ -19,8 +22,9 @@ const getSubheaderText = (currentPeriod: CirclePeriod, maxApplyAmount: number) =
 })[currentPeriod]
 
 export interface CircleWithApplication extends Circle {
-    status?: typeof CircleApplicationStatusValues[number] | null
-    form?: Record<string, string> | null
+    status?: typeof CircleApplicationStatusValues[number] | null;
+    form?: Record<string, string> | null;
+    applicationId?: string | null;
 }
 
 const CircleDetailBrancher: React.FC<{
@@ -43,7 +47,7 @@ const CircleDetailBrancher: React.FC<{
             {...circle}
         />,
         VIEW_APPLICATION: <MyApplication
-            name={circle.name}
+            name={`${circle.name} 지원서류`}
             form={circle.form ? circle.form : undefined}
             close={close}
             isModal={isModal}
@@ -64,6 +68,7 @@ export const Applier: React.FC = () => {
     } | null>(null)
 
     const fetchData = useCallback(async () => {
+        if(!config) return
         const fetchedCircles = await getAllCircles()
         const fetchedAppliedCircles = (await getAppliedCircles()).applications.reduce((matched, current) => {
             return {
@@ -71,19 +76,23 @@ export const Applier: React.FC = () => {
                 [current.circle._id]: current
             }
         }, {} as {
-            [key: string]: CircleApplication | undefined
+            [key: string]: Doc<CircleApplication> | undefined
         })
         const circlesListWithAppliedStatus = (fetchedCircles.reduce<Doc<CircleWithApplication>[]>((matched, current, index) => [
             ...matched.slice(0, index),
             {
                 ...current,
                 status: fetchedAppliedCircles[current._id]?.status || null,
-                form: fetchedAppliedCircles[current._id]?.form || null
+                form: fetchedAppliedCircles[current._id]?.form || null,
+                applicationId: fetchedAppliedCircles[current._id]?._id || null
             },
             ...matched.slice(index + 1),
         ], fetchedCircles))
-        setCircles(() => circlesListWithAppliedStatus)
-    }, [])
+        if (config.CIRCLE_PERIOD === CirclePeriod.application)
+            setCircles(() => circlesListWithAppliedStatus)
+        else
+            setCircles(() => circlesListWithAppliedStatus.filter(circle => circle.applied))
+    }, [config])
 
     const openDetail = useCallback((index: number, type: SIDE_DETAIL_TYPE = circles?.[index].applied ? "VIEW_APPLICATION" : "DETAIL") => {
         console.log(circles, index)
@@ -96,7 +105,6 @@ export const Applier: React.FC = () => {
                     type={type}
                     goApply={() => {
                         close().then(() => openDetail(index, "NEW_APPLY"))
-                        // setTimeout(() => )
                     }}
                     close={() => {
                         fetchData()
@@ -115,7 +123,29 @@ export const Applier: React.FC = () => {
             type,
             selectedIndex: index
         }))
-    }, [circles])
+    }, [circles, fetchData])
+
+    const finalSelect = useCallback(async (index: number) => {
+        const selected = circles?.[index]
+        if (!selected) return
+        if (!selected.applicationId) {
+            toast.error("해당 동아리에 지원한 이력이 없어요")
+            return
+        }
+        const { isConfirmed } = await swal({
+            title: `${selected.name}을 선택하시겠어요?`,
+            html: <>
+                <p>"{selected.name}"를 최종 동아리로 선택해요.</p>
+                <p>이 작업은 취소할 수 없어요.</p>
+            </>,
+            imageUrl: DangerIcon,
+            showCancelButton: true,
+            focusCancel: true
+        })
+        if (!isConfirmed) return
+        await _finalSelect(selected.applicationId)
+        await fetchData()
+    }, [circles, fetchData])
 
     useEffect(() => {
         fetchData()
@@ -133,33 +163,48 @@ export const Applier: React.FC = () => {
                     } : {
                             component: <Skeleton />
                         }}>동아리 지원</CardGroupHeader>
-                    <GridWrapper>
-                        {circles?.map((circle, index) =>
-                            <CircleCard
-                                key={circle._id}
-                                css={css`margin: 40px;`}
-                                {...circle}
-                                openSideDetail={() => openDetail(index)}
-                            />)}
-                    </GridWrapper>
+
+                    {circles ? circles.length ? <GridWrapper>{circles.map((circle, index) =>
+                        <CircleCard
+                            key={circle._id}
+                            css={css`margin: 40px;`}
+                            {...circle}
+                            finalSelect={() => finalSelect(index)}
+                            openSideDetail={() => openDetail(index)}
+                        />)}
+                    </GridWrapper> : <TextCard>
+                            <NoData>
+                                {config?.CIRCLE_PERIOD === CirclePeriod.application ? "신청" : "상태 변경"} 가능한 동아리가 없어요 {circles.length}
+                            </NoData>
+                        </TextCard> : <>
+                            <GridWrapper>
+                                {[...Array(20)].map((_, index) =>
+                                    <DummyCircleCard
+                                        key={`dummy${index}`}
+                                        css={css`margin: 40px;`} />)}
+                            </GridWrapper>
+                        </>}
+
                 </Col>
-                {sideDetail && circles && <Col width={5}>
-                    {/* <Card> */}
-                    <CircleDetailBrancher
-                        isModal={false}
-                        goApply={() => {
-                            setSideDetail(() => null)
-                            openDetail(sideDetail.selectedIndex, "NEW_APPLY")
-                        }}
-                        circle={circles[sideDetail.selectedIndex]}
-                        type={sideDetail.type}
-                        close={() => {
-                            fetchData()
-                            setSideDetail(() => null)
-                        }}
-                    />
-                    {/* </Card> */}
-                </Col>}
+                {sideDetail && circles && <>
+                    <Divider data-divider />
+                    <Col width={5}>
+                        {/* <Card> */}
+                        <CircleDetailBrancher
+                            isModal={false}
+                            goApply={() => {
+                                setSideDetail(() => null)
+                                openDetail(sideDetail.selectedIndex, "NEW_APPLY")
+                            }}
+                            circle={circles[sideDetail.selectedIndex]}
+                            type={sideDetail.type}
+                            close={() => {
+                                fetchData()
+                                setSideDetail(() => null)
+                            }}
+                        />
+                        {/* </Card> */}
+                    </Col></>}
             </ResponsiveWrapper>
         </PageWrapper>
     )
@@ -167,7 +212,7 @@ export const Applier: React.FC = () => {
 
 const GridWrapper = styled.div`
     margin: -40px;
-    padding-top: 14px;
+    /* padding-top: 14px; */
 `
 
 export default Applier

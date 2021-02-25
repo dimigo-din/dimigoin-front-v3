@@ -51,7 +51,7 @@ export const MyApplication: React.FC<{
         return <Card css={wrapperStyle}>
             <HeaderWrapper>
                 <CardGroupHeader css={css`flex: 1; margin: 0px;`}>
-                    {name} 지원서류
+                    {name}
                 </CardGroupHeader>
                 <CloseIcon onClick={close} />
             </HeaderWrapper>
@@ -62,9 +62,9 @@ export const MyApplication: React.FC<{
         </Card>
     else return (
         <div css={wrapperStyle}>
-            <HeaderWrapper css={css`margin-top: 0px;`}>
-                <CardGroupHeader css={css`flex: 1;`}>
-                    {name} 지원서류
+            <HeaderWrapper css={css`margin-top: 0px; margin-bottom: 14px;`}>
+                <CardGroupHeader css={css`flex: 1; margin-bottom: 0px;`}>
+                    {name}
                 </CardGroupHeader>
                 <CloseIcon onClick={close} />
             </HeaderWrapper>

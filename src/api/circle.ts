@@ -2,6 +2,7 @@ import { api } from "./api";
 import { cacheItem, getCachedItem } from "../functions/localCache";
 import { CacheKeys } from "../constants/cacheKey";
 import { Doc, CircleApplyQuestionItem } from "../constants/types";
+import { CircleApplicationStatusValues } from "../constants";
 
 export const getAllCircles = () =>
     api<"allCircle">("GET", "/circle").then(e => e.circles)
@@ -23,3 +24,11 @@ export const applyCircle = async (circleId: string, form: Record<string, string>
         form: form
     }).then(e => e.circleApplication)
 
+export const getApplications = () =>
+    api<"circleApplications">("GET", "/circle-applier-selection").then(e => e.applications)
+
+export const setApplicationStatus = (id: string, state: typeof CircleApplicationStatusValues[number]) =>
+    api<"setApplicationStatus">("PATCH", `/circle-applier-selection/${id}`, { status: state }).then(e => e.application)
+
+export const finalSelect = (circleId: string) =>
+    api<"finalSelect">("PATCH", `/circle-application/${circleId}/final`).then(e => e.application)
