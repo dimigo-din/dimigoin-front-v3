@@ -3,13 +3,15 @@ import React, { useCallback, useEffect, useState } from "react"
 import { Card, CardGroupHeader, FormHeader, HeaderWrapper, Textarea } from "../../../components"
 import { Circle, CircleApplyQuestionItem, Doc } from "../../../constants/types"
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close.svg'
+import DangerIcon from "../../../assets/icons/danger.svg"
 import { ContentWrapper, TextButton, wrapperStyle } from "./atomics"
-import { getApplyQuestion } from "../../../api/circle"
+import { applyCircle, getApplyQuestion } from "../../../api/circle"
 import Skeleton from "react-loading-skeleton"
 import styled from "@emotion/styled"
 import { toast } from "react-toastify"
+import { swal } from "../../../functions/swal"
 
-const Content: React.FC<Circle> = () => {
+const Content: React.FC<Doc<Circle> & { close(): void }> = ({ _id, name, close }) => {
     const [questions, setQuestions] = useState<Doc<CircleApplyQuestionItem>[] | null>()
     const [answers, setAnswers] = useState<Record<string, string | null>>()
 
@@ -18,13 +20,32 @@ const Content: React.FC<Circle> = () => {
             toast.info("문항을 다시 확인해주세요")
             return
         }
+
         const checks = Object.values(answers).map((answer, index) => !answer && index + 1).filter(isWrong => typeof isWrong !== 'boolean')
         if (checks.length) {
             toast.info(`${checks.join(', ')}번 문항을 다시 확인해주세요`)
             return
         }
-        console.log(answers)
-    }, [answers])
+
+        swal({
+            title: "동아리에 지원하시겠어요?",
+            html: <>
+                <p>{name} 동아리에 지원해요.</p>
+                <p>이 작업은 취소할 수 없어요.</p>
+            </>,
+            imageUrl: DangerIcon,
+            showCancelButton: true,
+            focusCancel: true,
+        }).then(questionResult => {
+            if(!questionResult.isConfirmed) return
+            return applyCircle(_id, answers as Record<string, string>)
+        }).then(apply => {
+            if(apply?.circle !== _id) throw new Error("")
+            toast.success(`${name} 동아리에 지원했어요`)
+        }).catch(() => {
+            toast.error(`${name} 동아리에 지원하지 못했어요. 다시 시도해주세요.`)
+        }).finally(() => close())
+    }, [ answers, name, _id, close ])
 
     useEffect(() => {
         getApplyQuestion()
@@ -53,7 +74,7 @@ const Content: React.FC<Circle> = () => {
                             [_id]: value
                         }))}
                 />
-                <LengthCounter>{answers?.[index]?.length || 0} / {maxLength}</LengthCounter>
+                <LengthCounter>{answers?.[_id]?.length || 0} / {maxLength}</LengthCounter>
             </>)}
         </FormWrapper>
         <TextButton text onClick={submit}>제출</TextButton>
@@ -68,7 +89,7 @@ const LengthCounter = styled.p`
     color: #9A9A9A;
 `
 
-export const NewApply: React.FC<Circle & {
+export const NewApply: React.FC<Doc<Circle> & {
     close(): void;
     isModal?: boolean;
 }> = ({ close, isModal, ...circle }) => {
@@ -80,7 +101,7 @@ export const NewApply: React.FC<Circle & {
                 </CardGroupHeader>
                 <CloseIcon onClick={close} />
             </HeaderWrapper>
-            <Content {...circle} />
+            <Content close={close} {...circle} />
         </Card>
     else return (
         <div css={wrapperStyle}>
@@ -89,7 +110,7 @@ export const NewApply: React.FC<Circle & {
                 <CloseIcon onClick={close} />
             </HeaderWrapper>
             <Card>
-                <Content {...circle} />
+                <Content close={close} {...circle} />
             </Card>
         </div>
     )

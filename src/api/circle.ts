@@ -11,8 +11,15 @@ export const getAppliedCircles = () =>
 
 export const getApplyQuestion = async () => {
     const cached = getCachedItem<Doc<CircleApplyQuestionItem>[]>(CacheKeys.CIRCLE_APPLY_QUESTION)
-    if(cached) return cached
+    if (cached) return cached
     const fetched = (await api<"applyQuestion">("GET", "/circle-application/form")).form
     cacheItem(CacheKeys.CIRCLE_APPLY_QUESTION, fetched, +new Date() + 1000 * 60 * 60 * 24 * 3)
     return fetched
 }
+
+export const applyCircle = async (circleId: string, form: Record<string, string>) =>
+    api<"applyCircle">("POST", "/circle-application", {
+        circle: circleId,
+        form: form
+    }).then(e => e.circleApplication)
+

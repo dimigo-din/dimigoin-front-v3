@@ -98,6 +98,7 @@ export const Applier: React.FC = () => {
                         // setTimeout(() => )
                     }}
                     close={() => {
+                        fetchData()
                         close()
                     }} />
                 , {
@@ -151,7 +152,10 @@ export const Applier: React.FC = () => {
                         }}
                         circle={circles[sideDetail.selectedIndex]}
                         type={sideDetail.type}
-                        close={() => setSideDetail(() => null)}
+                        close={() => {
+                            fetchData()
+                            setSideDetail(() => null)
+                        }}
                     />
                     {/* </Card> */}
                 </Col>}

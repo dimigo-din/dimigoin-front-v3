@@ -27,3 +27,17 @@ export interface ApplyQuestion {
         form: Doc<CircleApplyQuestionItem>[]
     }
 }
+
+export interface ApplyCircle {
+    endpoint: '/circle-application';
+    method: 'POST';
+    req: {
+        circle: string;
+        form: Record<string, string>;
+    }
+    res: {
+        circleApplication: Doc<CircleApplication & {
+            circle: string;
+        }>;
+    };
+}
