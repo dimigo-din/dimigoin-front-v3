@@ -37,15 +37,15 @@ const Content: React.FC<Doc<Circle> & { close(): void }> = ({ _id, name, close }
             showCancelButton: true,
             focusCancel: true,
         }).then(questionResult => {
-            if(!questionResult.isConfirmed) return
+            if (!questionResult.isConfirmed) return
             return applyCircle(_id, answers as Record<string, string>)
         }).then(apply => {
-            if(apply?.circle !== _id) throw new Error("")
+            if (apply?.circle !== _id) throw new Error("")
             toast.success(`${name} 동아리에 지원했어요`)
         }).catch(() => {
             toast.error(`${name} 동아리에 지원하지 못했어요. 다시 시도해주세요.`)
         }).finally(() => close())
-    }, [ answers, name, _id, close ])
+    }, [answers, name, _id, close])
 
     useEffect(() => {
         getApplyQuestion()
@@ -61,21 +61,26 @@ const Content: React.FC<Doc<Circle> & { close(): void }> = ({ _id, name, close }
 
     return <ContentWrapper>
         <FormWrapper>
-            {questions && questions.map(({ question, maxLength, _id }, index) => <>
-                <FormHeader>
-                    {`${question} (최대 ${maxLength}자)`
-                        || <Skeleton width={100} />}
-                </FormHeader>
-                <Textarea
-                    maxLength={maxLength}
-                    onChange={({ target: { value } }) =>
-                        setAnswers(beforeState => ({
-                            ...beforeState,
-                            [_id]: value
-                        }))}
-                />
-                <LengthCounter>{answers?.[_id]?.length || 0} / {maxLength}</LengthCounter>
-            </>)}
+            {questions && questions.map(({ question, maxLength, _id }, index) =>
+                <React.Fragment
+                    key={_id}
+                >
+                    <FormHeader>
+                        {`${question} (최대 ${maxLength}자)`
+                            || <Skeleton width={100} />}
+                    </FormHeader>
+                    <Textarea
+                        maxLength={maxLength}
+                        onChange={({ target: { value } }) =>
+                            setAnswers(beforeState => ({
+                                ...beforeState,
+                                [_id]: value
+                            }))}
+                    />
+                    <LengthCounter>
+                        {answers?.[_id]?.length || 0} / {maxLength}
+                    </LengthCounter>
+                </React.Fragment>)}
         </FormWrapper>
         <TextButton text onClick={submit}>제출</TextButton>
     </ContentWrapper>
