@@ -28,14 +28,20 @@ const CircleDetailBrancher: React.FC<{
     type: | "DETAIL" | "NEW_APPLY" | "VIEW_APPLICATION";
     close(): void;
     isModal: boolean;
-}> = ({ circle, type, close, isModal }) => {
+    goApply(): void;
+}> = ({ circle, type, close, isModal, goApply }) => {
     return {
         DETAIL: <CircleDetail
             close={close}
             isModal={isModal}
+            goApply={goApply}
             {...circle}
         />,
-        NEW_APPLY: <NewApply {...circle} />,
+        NEW_APPLY: <NewApply
+            close={close}
+            isModal={isModal}
+            {...circle}
+        />,
         VIEW_APPLICATION: <MyApplication
             name={circle.name}
             form={circle.form ? circle.form : undefined}
@@ -43,6 +49,8 @@ const CircleDetailBrancher: React.FC<{
         />
     }[type]
 }
+
+type SIDE_DETAIL_TYPE = | "DETAIL" | "NEW_APPLY" | "VIEW_APPLICATION"
 
 export const Applier: React.FC = () => {
     const config = useConfig()
@@ -76,16 +84,19 @@ export const Applier: React.FC = () => {
         setCircles(() => circlesListWithAppliedStatus)
     }, [])
 
-    const openDetail = useCallback((index: number) => {
+    const openDetail = useCallback((index: number, type: SIDE_DETAIL_TYPE = circles?.[index].applied ? "VIEW_APPLICATION" : "DETAIL") => {
         console.log(circles, index)
         if (!circles) return
-        const type = circles[index].applied ? "VIEW_APPLICATION" : "DETAIL"
         if (window.innerWidth < 1100) {
             showModal(close =>
                 <CircleDetailBrancher
                     isModal
                     circle={circles[index]}
                     type={type}
+                    goApply={() => {
+                        close().then(() => openDetail(index, "NEW_APPLY"))
+                        // setTimeout(() => )
+                    }}
                     close={() => {
                         close()
                     }} />
@@ -134,6 +145,10 @@ export const Applier: React.FC = () => {
                     {/* <Card> */}
                     <CircleDetailBrancher
                         isModal={false}
+                        goApply={() => {
+                            setSideDetail(() => null)
+                            openDetail(sideDetail.selectedIndex, "NEW_APPLY")
+                        }}
                         circle={circles[sideDetail.selectedIndex]}
                         type={sideDetail.type}
                         close={() => setSideDetail(() => null)}
