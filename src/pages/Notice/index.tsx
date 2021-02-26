@@ -16,6 +16,7 @@ import { NoticeEditingModal } from './NoticeEditorModal'
 import { useMyData } from '../../hooks/api/useMyData'
 import { swal } from '../../functions/swal'
 import { toast } from 'react-toastify'
+import { SMALL_SCREEN_THRESHOLD } from '../../constants'
 
 interface NoticeListItemProps extends Notice {
   editable: boolean;
@@ -68,7 +69,13 @@ const Notices: React.FC<RouteComponentProps<{
       close()
     }} articleId={articleId} />, {
       wrapperProps: {
-        css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
+        css: css`
+          max-width: min(1080px, 100vw);
+          padding: 60px 20px 20px;
+          @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+            padding: 0px;
+          }
+        `
       }
     }, () => history.push('/notices'))
   }, [articleId, history])
@@ -143,6 +150,9 @@ const NoticeTitle = styled.h2`
   color: #8A8A8A;
   flex-basis: 1;
   flex-shrink: 0;
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+      font-size: 16px;
+  }
 `
 
 const NoticeContent = styled.p`
@@ -162,6 +172,11 @@ const NoticeContent = styled.p`
     word-wrap:break-word; 
     -webkit-line-clamp:2;
     -webkit-box-orient:vertical;
+  }
+
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 14px;
+    line-height: 18px;
   }
 `
 
@@ -193,7 +208,7 @@ const HeaderWrapper = styled(Horizontal)`
 `
 
 const NoticeListItemWrapper = styled(ResponsiveWrapper)`
-  align-items: center;
+  /* align-items: center; */
   &:hover svg {
     fill: var(--main-theme-accent);
   }

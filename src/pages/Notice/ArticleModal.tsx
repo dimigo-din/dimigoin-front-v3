@@ -3,6 +3,7 @@ import styled from "@emotion/styled"
 import React, { useState, useEffect } from "react"
 import { getNoticeById } from "../../api/notice"
 import { Card, Title, Divider, Horizontal, CompactButton, cardModalTopBorder } from "../../components"
+import { SMALL_SCREEN_THRESHOLD } from "../../constants"
 import { Doc, Notice } from "../../constants/types"
 import { formatReadibleDate } from "../../utils"
 
@@ -22,7 +23,7 @@ export const ArticleModal: React.FC<{ articleId: string, goBack(): void, article
           flex-shrink: 1;
         `}>{articleData?.title}</Title>
     <div css={css`padding: 12px 0px;`}>
-      <Divider visible horizontal size={7} />
+      <Divider visible horizontal size={7} small />
       {articleData.startDate && <Horizontal css={css`flex-wrap: wrap;`}>
         <Horizontal css={css`flex-wrap: wrap;`}>
           <Info css={css`flex-shrink: 0; flex-basis: 1;`}>
@@ -33,7 +34,7 @@ export const ArticleModal: React.FC<{ articleId: string, goBack(): void, article
             <Info>{articleData.author}</Info>
           </Horizontal> */}
       </Horizontal>}
-      <Divider visible horizontal size={7} />
+      <Divider visible horizontal size={7} small />
     </div>
     {articleData.content.split('\n').map(e => <Content>{e}</Content>)}
     <div css={css`margin-top: 12px; text-align: right;`}>
@@ -49,10 +50,21 @@ const Content = styled.p`
   &+&{
     margin-top: 12px;
   }
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 14px;
+    line-height: 24px;
+    &+& {
+      margin-top: 6px;
+    }
+  }
 `
 
 const Info = styled.p`
   margin: 12px 6px;
   color: #D1D1D1;
   font-size: 18px;
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    margin: 0px;
+    font-size: 14px;
+  }
 `

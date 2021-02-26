@@ -49,6 +49,7 @@ export const TextCard = styled(Card)`
 
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     font-size: 14px;
+    padding: 16px;
   }
 `;
 
