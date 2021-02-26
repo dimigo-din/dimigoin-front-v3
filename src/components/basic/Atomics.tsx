@@ -87,4 +87,17 @@ export const IconOnlyButton = css`
   }
 `
 
+export const CardGroupHeaderWrapper = styled(Horizontal)`
+    flex-wrap: wrap;
+    /* flex: 1; */
+    margin-bottom: 14px;
+`
+
+export const CardGroupHeaderButton = styled(MoreCompactButton)`
+    flex-shrink: 0;
+    &+& {
+        margin-left: 12px;
+    }
+`
+
 export const cardModalTopBorder = css`border-top: 10px solid var(--main-theme-accent);`

@@ -9,7 +9,7 @@ import { ReactComponent as _NewIcon } from '../../assets/icons/edit.svg'
 import {
     CardGroupHeader, Col, Data, HeadData, HeadRow, Horizontal,
     Row, MoreCompactButton, NoData, PageWrapper, ResponsiveWrapper,
-    Table, Card, Divider, showModal
+    Table, Card, Divider, showModal, CardGroupHeaderButton, CardGroupHeaderWrapper
 } from "../../components"
 import { dayEngKorMapper } from "../../constants"
 import { AfterschoolClass, Doc } from "../../constants/types"
@@ -71,12 +71,12 @@ const AfterschoolMangement: React.FC = () => {
     return <PageWrapper>
         <ResponsiveWrapper>
             <Col width={sideDetail ? 5 : 10}>
-                <HeaderWrapper css={css`flex-grow: 0;`}>
+                <CardGroupHeaderWrapper css={css`flex-grow: 0;`}>
                     <CardGroupHeader css={css`flex: 1;`}>
                         방과후 관리
                     </CardGroupHeader>
                     <Horizontal>
-                        <HeaderButton onClick={() => setGradeButtonOpenedState(beforeState => !beforeState)}>
+                        <CardGroupHeaderButton onClick={() => setGradeButtonOpenedState(beforeState => !beforeState)}>
                             <DownloadIcon />
                             엑셀 다운로드
                             <GradeButtonWrapper isOpened={gradeButtonOpened}>
@@ -84,13 +84,13 @@ const AfterschoolMangement: React.FC = () => {
                                 <GradeButton onClick={event => downloadSheetByGrade(2, event)}>2</GradeButton>
                                 <GradeButton onClick={event => downloadSheetByGrade(3, event)}>3</GradeButton>
                             </GradeButtonWrapper>
-                        </HeaderButton>
-                        <HeaderButton onClick={() => openEdit()}>
+                        </CardGroupHeaderButton>
+                        <CardGroupHeaderButton onClick={() => openEdit()}>
                             <NewIcon />
                             신규 등록
-                        </HeaderButton>
+                        </CardGroupHeaderButton>
                     </Horizontal>
-                </HeaderWrapper>
+                </CardGroupHeaderWrapper>
                 <Table>
                     <HeadRow>
                         <tr>
@@ -169,19 +169,6 @@ const AfterschoolMangement: React.FC = () => {
         </ResponsiveWrapper>
     </PageWrapper>
 }
-
-const HeaderWrapper = styled(Horizontal)`
-    flex-wrap: wrap;
-    flex: 1;
-    margin-bottom: 14px;
-`
-
-const HeaderButton = styled(MoreCompactButton)`
-    flex-shrink: 0;
-    &+& {
-        margin-left: 12px;
-    }
-`
 
 const DownloadIcon = styled(_DownloadIcon)`
     stroke: white;

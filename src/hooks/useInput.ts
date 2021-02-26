@@ -34,7 +34,6 @@ export const useTextInput = (
   const { setValue, ...input } = useInput(initValue, inputValidation)
   useEffect(() => {
     setValue(() => initValue)
-    console.log("/", initValue)
   }, [ initValue, setValue ])
 
   const [errorMessage, setErrorMessage] = useState<string>();

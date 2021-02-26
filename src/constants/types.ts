@@ -208,4 +208,27 @@ export interface CircleApplication {
 export interface CircleApplyQuestionItem {
     question: string;
     maxLength: number;
-  }
+}
+
+export interface Mentoring {
+    days: EngDay[];
+    targetGrade: Grade;
+    name: string;
+    teacher: Teacher;
+    subject: string;
+    duration: {
+        start: HourAndMinute;
+        end: HourAndMinute;
+    }
+}
+
+export interface MentoringSchedule extends Mentoring {
+    date: string;
+    applied: boolean;
+}
+
+export interface MentoringApplication {
+    date: string;
+    applier: Student;
+    mentoring: Mentoring;
+}
