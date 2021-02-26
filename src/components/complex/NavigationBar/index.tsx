@@ -8,6 +8,7 @@ import navigations from "./navigations";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { UnstyledLink } from "../../basic/Atomics";
 import { useMyData } from "../../../hooks/api/useMyData";
+import { SMALL_SCREEN_THRESHOLD } from "../../../constants";
 
 const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
   const scrollerRef = useRef<HTMLDivElement>(null)
@@ -27,7 +28,7 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
     <Wrapper>
       <Container>
         <UnstyledLink to="/">
-          <IconLogo height={37} width={32} />
+          <Logo height={37} width={32} />
         </UnstyledLink>
         <Scroller ref={scrollerRef}>
           {navigations.map(({ title, image, route }) =>
@@ -44,7 +45,7 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
         <ProfileContainer>
           <ProfileImage src={profileImageURI} />
           <UnstyledLink to="/auth/login">
-            <LogoutLogo height={26.5} width={26.5} />
+            <Logout height={26.5} width={26.5} />
           </UnstyledLink>
         </ProfileContainer>
       </Container>
@@ -54,6 +55,21 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
 
 export const NavigationBar = withRouter(TopNavbar);
 export default NavigationBar
+
+const Logo = styled(IconLogo)`
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    width: 24px;
+  }
+`
+
+const Logout = styled(LogoutLogo)`
+  height: 26px;
+  width: 26px;
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+      width: 18px;
+      height: 18px;
+  }
+`
 
 const Wrapper = styled.div`
   width: 100%;
@@ -84,6 +100,11 @@ const ProfileImage = styled.img`
   border-radius: 50%;
   border: solid 2px var(--main-theme-accent);
   margin-right: 38.2px;
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    width: 28px;
+    height: 28px;
+    margin-right: 18px;
+  }
 `;
 
 const Scroller = styled.div`

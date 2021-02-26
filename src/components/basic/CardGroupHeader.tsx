@@ -4,6 +4,7 @@ import css from "@emotion/css";
 import { Horizontal, UnstyledLink } from "./Atomics";
 import { Divider } from "../layout/Cols";
 import Skeleton from "react-loading-skeleton";
+import { SMALL_SCREEN_THRESHOLD } from "../../constants";
 
 interface CardGroupheaderProps {
   withBubble?: boolean;
@@ -55,6 +56,9 @@ export const Title = styled.h1<{ withBubble?: boolean }>`
   color: #333333;
   flex-basis: 1;
   flex-shrink: 0;
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 20px;
+  }
   ${({ withBubble }) =>
     withBubble &&
     css`
@@ -80,6 +84,10 @@ const SubButton = styled.p<{ noAction?: boolean }>`
   flex-basis: 1;
   flex-shrink: 0;
   font-size: 15px;
+
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 12px;
+  }
 
   ${({ noAction }) => noAction && css`
     color: #9A9A9A;

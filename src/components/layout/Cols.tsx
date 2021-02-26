@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import css from "@emotion/css";
+import { SMALL_SCREEN_THRESHOLD } from "../../constants";
 
 export const Col = styled.div<{ width?: number }>`
   display: flex;
@@ -21,14 +22,23 @@ interface DividerProps {
 
 export const Divider = styled.div<DividerProps>`
   --divider-width: 30px;
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+      --divider-width: 20px;
+    }
   ${({ small }) => small && css`
     --divider-width: 15px;
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+      --divider-width: 10px;
+    }
   `}
   ${({ size }) => size && css`
     --divider-width: ${size}px;
   `}
   ${({ smaller }) => smaller && css`
-  --divider-width: 5px;
+    --divider-width: 5px;
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+      --divider-width: 3px;
+    }
   `}
   margin: 0px var(--divider-width);
   ${({ horizontal }) => horizontal &&

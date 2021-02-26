@@ -14,3 +14,14 @@
     font-size: 18px;
     font-weight: 700;
 }
+
+@media screen and (max-width: 840px) {
+    .Toastify__toast-body {
+        font-size: 12px;
+    }
+
+    .Toastify__toast {
+        border-radius: 0px;
+        padding: 12px;
+    }
+}

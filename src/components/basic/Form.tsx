@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { SMALL_SCREEN_THRESHOLD } from "../../constants";
 
 export const FormHeader = styled.h2`
   font-size: 20px;
@@ -6,6 +7,9 @@ export const FormHeader = styled.h2`
   margin-bottom: 18px;
   &:not(:first-of-type) {
     margin-top: 36px;
+  }
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 16px;
   }
 `;
 

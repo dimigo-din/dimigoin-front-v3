@@ -1,5 +1,6 @@
 import css from "@emotion/css";
 import styled from "@emotion/styled";
+import { SMALL_SCREEN_THRESHOLD } from "../../constants";
 
 export const Textarea = styled.textarea`
   border-radius: 6px;
@@ -23,5 +24,8 @@ export const Textarea = styled.textarea`
   &:focus {
     border-color: var(--main-theme-accent);
     box-shadow: 0px 0px 6px rgba(var(--main-theme-accent-rgb), 0.3);
+  }
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 14px;
   }
 `;

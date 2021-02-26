@@ -6,6 +6,7 @@ import Card from "../basic/Card";
 import Button from "../basic/Button";
 import Skeleton from "react-loading-skeleton";
 import { IngangApplyPeriod } from "../../constants/types";
+import { SMALL_SCREEN_THRESHOLD } from "../../constants";
 
 interface IngangsilStatusProps {
   currentApplied?: number;
@@ -75,12 +76,18 @@ const NumberCommonStyle = css`
 const NumberName = styled.h2`
   font-size: 30px;
   ${NumberCommonStyle}
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 18px;
+  }
 `;
 
 const NumberDisplay = styled.h1`
   font-size: 50px;
   margin-top: 9px;
   ${NumberCommonStyle}
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 32px;
+  }
 `;
 
 const active = css`

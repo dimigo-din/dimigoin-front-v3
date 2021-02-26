@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { SMALL_SCREEN_THRESHOLD } from "../../constants";
 
 
 export const CardHeader = styled.h2`
@@ -7,6 +8,9 @@ export const CardHeader = styled.h2`
     flex: 1;
     word-break: keep-all;
     line-height: 24px;
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+        font-size: 16px;
+    }
 `
 
 export const CardDetail = styled.p`
@@ -14,6 +18,9 @@ export const CardDetail = styled.p`
     font-weight: 700;
     margin-top: 6px;
     color: #393939;
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+        font-size: 14px;
+    }
 `
 
 export const CardContent = styled.p`
@@ -34,5 +41,8 @@ export const CardContent = styled.p`
 
     &:hover+p {
         opacity: 1;
+    }
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+        font-size: 14px;
     }
 `

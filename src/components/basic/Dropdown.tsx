@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
 import { EventFunction } from "../../hooks/useInput";
+import { SMALL_SCREEN_THRESHOLD } from "../../constants";
 
 export interface DropdownItem {
   name: string;
@@ -136,4 +137,8 @@ const Item = styled.div<{ highlighted?: boolean; visible?: boolean }>`
       padding: 0px 16px;
       height: 0px;
     `}
+
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 14px;
+  }
 `;

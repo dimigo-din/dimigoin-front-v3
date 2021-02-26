@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import css from "@emotion/css";
 import Card, { CardProps } from "./Card";
 import { UnstyledLink } from "./Atomics";
+import { SMALL_SCREEN_THRESHOLD } from "../../constants";
 
 interface TextCardGroupProps {
   content: (CardProps & {
@@ -45,6 +46,10 @@ export const TextCard = styled(Card)`
   font-family: "NanumSquare" !important;
   line-height: 32px;
   margin-top: 10px;
+
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 14px;
+  }
 `;
 
 const shadow = css`

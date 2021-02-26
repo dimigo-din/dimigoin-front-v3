@@ -7,8 +7,7 @@ import { useMeal } from "../hooks/api";
 import { useTextInput } from "../hooks/useInput";
 import { clearTokens, loginWithInfo } from "../api";
 import { useHistory } from "react-router-dom";
-
-const SMALL_SCREEN_THRESHOLD = 840
+import { SMALL_SCREEN_THRESHOLD } from "../constants";
 
 const Login: React.FC = () => {
   const todayMeal = useMeal()
@@ -52,7 +51,7 @@ const BrandWithText = styled(_BrandWithText)`
   width: 216px;
   height: 60px;
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
-    width: 160px;
+    width: 120px;
   }
 `
 

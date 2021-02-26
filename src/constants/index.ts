@@ -31,6 +31,8 @@ export const circleApplicationStatusKorMapper = {
 
 export const engDays = Object.keys(dayEngKorMapper)
 
+export const SMALL_SCREEN_THRESHOLD = 840
+
 export const SCHOOL_API_SERVER = process.env.REACT_APP_SCHOOL_API_SERVER || (() => {
     throw new Error("Cannot find School API Server URI (Student Database)")
 })()

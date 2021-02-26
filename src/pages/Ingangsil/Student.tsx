@@ -14,6 +14,7 @@ import {
 } from "../../constants/types";
 import { useMyData } from "../../hooks/api/useMyData";
 import { applyIngangsil, getMyIngangsilStatus, unapplyIngangsil } from "../../api/ingangsil";
+import { SMALL_SCREEN_THRESHOLD } from "../../constants";
 
 const timeRangeToString = ({ start, end }: IngangApplyPeriod) => (
   `${start.hour.toString().padStart(2, '0')}:${start.minute.toString().padStart(2, '0')} ~ ` +
@@ -113,10 +114,10 @@ const Ingangsil: React.FC = () => {
                   </Row>
                   <Row>
                     <Info>
-                      <p>티켓을 모두 소진하면 신청할 수 없습니다.</p>
                       <p>
-                        인강실 사용이 꼭 <b>필요할 때만 신청</b>하시기 바랍니다.{" "}
-                      </p>
+                        티켓을 모두 소진하면 신청할 수 없습니다. <br></br>
+                        인강실 사용이 꼭 <b>필요할 때만 신청</b>하시기 바랍니다.
+                        </p>
                     </Info>
                   </Row>
                 </Col>
@@ -223,6 +224,13 @@ const Row = styled.div`
 
   & + div {
     margin-top: 24px;
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+      margin-top: 12px;
+    }
+  }
+
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 14px;
   }
 `;
 
@@ -357,8 +365,8 @@ const Info = styled.div`
 const Inganger = styled.div`
   color: #8a8a8a;
   margin: 8px;
-  &{
-    
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 14px;
   }
 `;
 

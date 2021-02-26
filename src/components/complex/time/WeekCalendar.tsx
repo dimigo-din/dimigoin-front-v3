@@ -90,11 +90,11 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange, rang
           const date = new Date(timestamp);
           const isBetween = selectedDates[0] < timestamp && timestamp < selectedDates[1]
           return (
-            <DayWrapper
-              isEnd={Boolean(selectedDates[0] && (selectedDates[1] === timestamp))}
-              isStart={Boolean(selectedDates[1] && (selectedDates[0] === timestamp))}
-              isBetween={isBetween}
-            >
+            // <DayWrapper
+            //   isEnd={Boolean(selectedDates[0] && (selectedDates[1] === timestamp))}
+            //   isStart={Boolean(selectedDates[1] && (selectedDates[0] === timestamp))}
+            //   isBetween={isBetween}
+            // >
               <Day
                 key={timestamp}
                 selected={selectedDates.includes(timestamp)}
@@ -103,7 +103,7 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange, rang
               >
                 {date.getDate()}
               </Day>
-            </DayWrapper>
+            // </DayWrapper>
           );
         })}
       </WeekWrapper>
@@ -169,12 +169,19 @@ const Day = styled.div<{ selected: boolean; rangeBetweed: boolean; }>`
   /* background-color: white; */
   transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
   border-radius: 15px;
+  /* flex: 1; */
   
   ${({ selected }) =>
     selected &&
     css`
       background-color: var(--main-theme-accent);
       color: white;
+      border-radius: 24px;
+    `}
+
+    ${({ rangeBetweed }) => rangeBetweed && css`
+      background-color: rgba(var(--main-theme-accent-rgb), 0.1);
+      /* color: white; */
       border-radius: 24px;
     `}
 
@@ -186,12 +193,20 @@ const Day = styled.div<{ selected: boolean; rangeBetweed: boolean; }>`
 
 const DayWrapper = styled.div<{isStart?: boolean; isEnd?: boolean; isBetween: boolean}>`
   transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   ${({isBetween, isStart, isEnd}) => (isBetween || isStart || isEnd) && css`
-    background-color: rgba(var(--main-theme-accent-rgb), 0.1);
+      background-color: var(--main-theme-accent);
   `}
+  /* ${({ isBetween }) => isBetween && css`
+    flex: 1;
+  `} */
   ${({isStart}) => isStart && css`
     border-top-left-radius: 24px;
     border-bottom-left-radius: 24px;
+    padding-left: 
   `}
   ${({isEnd}) => isEnd && css`
     border-top-right-radius: 24px;

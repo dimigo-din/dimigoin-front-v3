@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import css from '@emotion/css';
+import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 
 type MouseEventHandler = (event: React.MouseEvent<HTMLDivElement>) => void;
 type FocusEventHandler = (event: React.FocusEvent<HTMLDivElement>) => void;
@@ -81,6 +82,9 @@ const Container = styled.div<CardContainerProps>`
   transition: box-shadow 1s cubic-bezier(0, 0.46, 0.12, 0.98);
   /* transition: border-left none; */
 
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    padding: 24px 18px;
+  }
   ${({ disableSpace }) => !disableSpace && css`
     & + & {
       margin-top: 10px;
@@ -145,4 +149,7 @@ export const CardTitle = styled.h1`
   font-size: 20px;
   font-weight: 900;
   margin-bottom: 12px;
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 15px;
+  }
 `;

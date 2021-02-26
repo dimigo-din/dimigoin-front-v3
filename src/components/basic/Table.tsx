@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import css from '@emotion/css'
+import { SMALL_SCREEN_THRESHOLD } from '../../constants'
 
 const cellStyle = css`
     padding: 15px;
@@ -21,6 +22,9 @@ export const Table = styled.table`
     transition: 300ms cubic-bezier(0, 0.46, 0.12, 0.98);
     font-size: 18px;
     color: #707070;
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+        font-size: 14px;
+    }
 `
 export const Row = styled.tr`
     margin-top: 12px;

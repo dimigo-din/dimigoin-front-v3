@@ -1,6 +1,7 @@
 import css from "@emotion/css";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
+import { SMALL_SCREEN_THRESHOLD } from "../../constants";
 import Button from "./Button";
 
 export const UnstyledLink = styled(Link)`
@@ -42,6 +43,10 @@ export const CardExplainContent = styled.div`
   color: #8a8a8a;
   font-size: 18px;
   line-height: 30px;
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 14px;
+    line-height: 24px;
+  }
   & h2+p{
     margin-top: 12px;
   }
@@ -49,6 +54,9 @@ export const CardExplainContent = styled.div`
     font-weight: 900;
     font-size: 20px;
     color: black;
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+      font-size: 16px;
+    }
   }
   & *+h2 {
     margin-top: 12px;
@@ -65,6 +73,10 @@ export const NoData = styled.p`
   justify-content: center;
   display: flex;
   padding: 24px 36px;
+
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 15px;
+  }
 `
 
 export const CompactButton = styled(Button)`

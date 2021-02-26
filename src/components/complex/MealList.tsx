@@ -9,7 +9,7 @@ import Card from '../basic/Card'
 import { ResponsiveWrapper } from '../layout/Cols'
 import { getThisWeek } from '../../utils'
 import { getWeeklyMeals } from '../../api'
-import { days } from '../../constants'
+import { days, SMALL_SCREEN_THRESHOLD } from '../../constants'
 
 export interface DailyMealProps {
   header: string;
@@ -56,6 +56,10 @@ const Label = styled.p`
   font-size: 18px;
   margin: 12px 0px 8px;
   display: none;
+
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 16px;
+  }
 `
 
 const DailyMealWrapper = styled(ResponsiveWrapper) <{ highlighted?: boolean; greyDivision: boolean }>`
@@ -88,10 +92,14 @@ const DailyMealWrapper = styled(ResponsiveWrapper) <{ highlighted?: boolean; gre
 `
 const DailyMealHeader = styled.h2`
   color: #8a8a8a;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 22px;
   flex-basis: 1;
   flex-shrink: 0;
+
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 16px;
+  }
 `
 const DailyMealItem = styled.p` 
   font-size: 18px;
@@ -100,6 +108,10 @@ const DailyMealItem = styled.p`
   max-width: 20vw;
   @media screen and (max-width: 960px) {
     max-width: unset;
+  }
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 14px;
+    line-height: 20px;
   }
 `
 const date = new Date()

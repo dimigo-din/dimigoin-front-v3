@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import css from "@emotion/css";
 import Dimigoincon from "./Dimigoincon";
 import { Horizontal } from ".";
+import { SMALL_SCREEN_THRESHOLD } from "../../constants";
 
 interface CheckboxProps {
   text?: string;
@@ -22,7 +23,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         checked={checked === undefined ? defaultChecked : checked}
         onChange={onChange}
       />
-      <Horizontal>
+      <LabelWrapper>
         <CheckWrapper
           checked={!!checked}
           disabled={!!disabled}
@@ -33,10 +34,15 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   vertical-align: middle;`}>
           {text}
         </p>}
-      </Horizontal>
+      </LabelWrapper>
     </Wrapper>
   );
 };
+
+const LabelWrapper = styled.div`
+  align-items: center;
+  display: flex;
+`
 
 const Wrapper = styled.label`
   font-weight: 700;
@@ -46,6 +52,9 @@ const Wrapper = styled.label`
   flex-shrink: 0;
   &+& {
     margin-left: 12px;
+  }
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 14px;
   }
 `;
 
@@ -57,7 +66,7 @@ const InvisibleCheck = styled.input`
   height: 0px;
   margin: 0px;
   &:focus+div>div {
-    box-shadow: inset 0px 0px 0px 2px var(--main-theme-accent);
+    box-shadow: inset 0px 0px 0px 1px var(--main-theme-accent);
   }
 `;
 
@@ -82,6 +91,11 @@ const CheckWrapper = styled.div<{ checked: boolean; disabled: boolean; }>`
   ${({ disabled }) => disabled && css`
     border-color: #D1D1D1;
   `}
+
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    width: 12px;
+    height: 12px;
+  }
 `;
 InvisibleCheck.defaultProps = { type: "checkbox" };
 
@@ -96,6 +110,9 @@ const Check = styled(Dimigoincon) <{ visible: boolean }>`
       opacity: 1;
       transform: scale(1);
     `}
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 6px;
+  }
 `;
 Check.defaultProps = {
   icon: "ok",

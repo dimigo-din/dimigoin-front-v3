@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import css from '@emotion/css';
+import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 
 interface InputProps {
   errorMessage?: string;
@@ -77,6 +78,11 @@ const LogicalInput = styled.input<LogicalInputProps>`
     font-family: pass;
   `}
   outline: 0;
+
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    padding: 16px 20px;
+    font-size: 15px;
+  }
 `;
 
 const ErrorMessage = styled.p`

@@ -1,5 +1,6 @@
 import React from 'react';
 import css from '@emotion/css';
+import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 
 export interface ButtonProps {
   gray?: boolean;
@@ -29,6 +30,10 @@ const style = {
     align-items: center;
     text-align: center;
     transition: 1s cubic-bezier(0, 0.76, 0.12, 0.98);
+
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+      font-size: 15px;
+    }
   `,
   gray: css`
     background-color: #f3f3f3;

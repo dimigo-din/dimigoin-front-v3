@@ -4,7 +4,7 @@ import Skeleton from "react-loading-skeleton"
 import styled from "styled-components"
 import { getAllCircles, getAppliedCircles, finalSelect as _finalSelect } from "../../../api/circle"
 import { showModal, Card, PageWrapper, ResponsiveWrapper, Col, CardGroupHeader, Divider, NoData, TextCard } from "../../../components"
-import { CircleApplicationStatusValues } from "../../../constants"
+import { CircleApplicationStatusValues, SMALL_SCREEN_THRESHOLD } from "../../../constants"
 import { CirclePeriod, Circle, Doc, CircleApplication } from "../../../constants/types"
 import { swal } from "../../../functions/swal"
 import { useConfig } from "../../../hooks/api"
@@ -167,7 +167,6 @@ export const Applier: React.FC = () => {
                     {circles ? circles.length ? <GridWrapper>{circles.map((circle, index) =>
                         <CircleCard
                             key={circle._id}
-                            css={css`margin: 40px;`}
                             {...circle}
                             finalSelect={() => finalSelect(index)}
                             openSideDetail={() => openDetail(index)}
@@ -180,8 +179,7 @@ export const Applier: React.FC = () => {
                             <GridWrapper>
                                 {[...Array(20)].map((_, index) =>
                                     <DummyCircleCard
-                                        key={`dummy${index}`}
-                                        css={css`margin: 40px;`} />)}
+                                        key={`dummy${index}`} />)}
                             </GridWrapper>
                         </>}
 
@@ -213,6 +211,12 @@ export const Applier: React.FC = () => {
 const GridWrapper = styled.div`
     margin: -40px;
     /* padding-top: 14px; */
+    display: flex;
+    flex-wrap: wrap;
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+        flex-direction: column;
+        margin: 0px;
+    }
 `
 
 export default Applier

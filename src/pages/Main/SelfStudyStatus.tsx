@@ -14,6 +14,7 @@ import { ReactComponent as LaundrySvg } from "../../assets/icons/laundry.svg";
 import { ReactComponent as DeskSvg } from "../../assets/icons/desk.svg";
 import { showModal } from "../../components/complex/modal";
 import { OtherPlaceModal } from "./OtherPlaceModal";
+import { SMALL_SCREEN_THRESHOLD } from "../../constants";
 
 const IconPlaceMap = [{
   label: "교실",
@@ -99,7 +100,7 @@ export const SelfStudyStatus: React.FC = () => {
           selected={isOther}
           onClick={submitOtherPlace}
         >
-          <OtherSvg />
+          <OtherSvg css={iconStyle} />
           <ButtonText>기타 {isOther && placeName && `(${placeName})`}</ButtonText>
         </Button>
         </>}
@@ -120,6 +121,11 @@ const ButtonsWrapper = styled.div`
 const iconStyle = css`
   height: 36px;
   width: 36px;
+
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    width: 24px;
+    height: 24px;
+  }
 `;
 
 const Button = styled.div<{ selected?: boolean }>`
@@ -153,6 +159,11 @@ const ButtonText = styled.div`
   font-size: 22px;
   font-weight: 700;
   margin-top: 18px;
+
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 15px;
+    margin-top: 6px;
+  }
 `;
 
 export default SelfStudyStatus;

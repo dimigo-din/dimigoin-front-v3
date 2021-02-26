@@ -5,7 +5,7 @@ import { toast } from "react-toastify"
 import { applyAfterschoolClass, getAfterschoolClassList, getAppliedClasses, unapplyAfterschoolClass } from "../../api"
 import { Card, CardGroupHeader, Col, Divider, NoData, PageWrapper, ResponsiveWrapper } from "../../components"
 import { CardHeader, CardDetail, CardContent } from "../../components/basic/CardComponent"
-import { dayEngKorMapper, engDays } from "../../constants"
+import { dayEngKorMapper, engDays, SMALL_SCREEN_THRESHOLD } from "../../constants"
 import { Doc, AfterschoolClass, AfterschoolClassApplication, EngDay } from "../../constants/types"
 import useInput from "../../hooks/useInput"
 import { selfStudyTimesToString } from "../../utils"
@@ -185,8 +185,13 @@ const ContentPopup = styled.p`
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.03);
     padding: 12px;
     box-sizing: border-box;
-    &:hover {
-        opacity: 1;
+    @media screen and (min-width: ${SMALL_SCREEN_THRESHOLD}px) {
+        &:hover {
+            opacity: 1;
+        }
+    }
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+        font-size: 14px;
     }
 `
 

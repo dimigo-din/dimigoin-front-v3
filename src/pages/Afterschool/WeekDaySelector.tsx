@@ -1,7 +1,7 @@
 import css from '@emotion/css'
 import styled from '@emotion/styled'
 import React from 'react'
-import { days } from '../../constants'
+import { days, SMALL_SCREEN_THRESHOLD } from '../../constants'
 import { EventFunction } from '../../hooks/useInput'
 
 // export const MultipleWeekdaySelector: React.FC = () => {
@@ -51,5 +51,9 @@ const Segment = styled.div<{ selected: boolean }>`
         background-color: #FFECF1;
         color: #4E4E4E;
     `}
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+        font-size: 14px;
+        height: 50px;
+    }
 `
 

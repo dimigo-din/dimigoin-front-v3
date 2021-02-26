@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { EventFunction } from "../../hooks/useInput";
+import { SMALL_SCREEN_THRESHOLD } from "../../constants";
 
 interface RadioButtonProps {
   onChange?: (...p: any[]) => any;
@@ -82,6 +83,10 @@ const Circle = styled.div<{ disabled?: boolean }>`
   border-radius: 13px;
   box-sizing: border-box;
   transition: 300ms;
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    width: 18px;
+    height: 18px;
+  }
 `;
 const LogicalButton = styled.input`
   /* position: absolute; */
@@ -109,6 +114,10 @@ const Label = styled.p`
   margin-left: 15px;
   color: #8A8A8A;
   white-space: pre;
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 14px;
+    margin-left: 6px;
+  }
 `
 
 export default RadioButtonGroup;

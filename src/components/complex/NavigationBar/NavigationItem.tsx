@@ -2,6 +2,7 @@ import React from "react";
 import { NavigationTitle, BottomBar } from "./NavigationItem.style";
 import css from "@emotion/css";
 import { UnstyledLink } from "../../basic/Atomics";
+import { SMALL_SCREEN_THRESHOLD } from "../../../constants";
 
 export interface NavigationItem {
   title?: string;
@@ -33,6 +34,11 @@ const NavigationItem: React.FC<NavigationItem & {
         overflow: hidden;
         flex-basis: 1;
         flex-shrink: 0;
+        @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+          height: 60px;
+          line-height: 60px;
+          margin-left: 18px;
+        }
       `}
       >
         <NavigationTitle selected={selected}>{title}

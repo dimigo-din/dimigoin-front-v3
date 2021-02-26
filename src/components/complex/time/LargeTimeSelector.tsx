@@ -16,8 +16,8 @@ const TimeSelector: React.FC<TimeSelectorProps> = ({
   onChange,
   rangeTag
 }) => {
-  const hourInput = useInput(defaultHour + "", (value) => +value <= 24);
-  const minuteInput = useInput(defaultMinute + "", (value) => +value <= 60);
+  const hourInput = useInput(defaultHour + "", (value) => +value < 24);
+  const minuteInput = useInput(defaultMinute + "", (value) => +value < 60);
 
   useEffect(() => {
     onChange &&
@@ -143,7 +143,7 @@ const Indicator = styled.input`
   text-align: center;
   font: inherit;
   @media screen and (max-width: 500px) {
-    padding: 4px 6px;
+    padding: 14px 6px;
     width: 40px;
   }
 `;

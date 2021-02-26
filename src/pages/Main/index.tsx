@@ -13,6 +13,7 @@ import { Doc, Notice, UserType } from "../../constants/types";
 import { getCurrentNotices, getTimetable } from "../../api";
 import { SelfStudyStatus } from "./SelfStudyStatus";
 import { isStudent as letUserStudent } from '../../utils/isStudent'
+import { SMALL_SCREEN_THRESHOLD } from "../../constants";
 
 const TodayMealCard: React.FC = () => {
     const meals = useMeal()
@@ -29,6 +30,9 @@ const TodayMealCard: React.FC = () => {
                             padding: 60px 20px 20px;
                             @media screen and (max-width: 960px) {
                                 padding-top: 40px;
+                            }
+                            @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+                                padding: 0px;
                             }
                         `
                         }

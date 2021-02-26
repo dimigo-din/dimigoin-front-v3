@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import css from "@emotion/css";
+import { SMALL_SCREEN_THRESHOLD } from "../../../constants";
 
 export const NavigationContainer = styled.div`
   cursor: pointer;
@@ -20,6 +21,9 @@ export const NavigationTitle = styled.span<{ selected?: boolean }>`
     color: var(--main-theme-accent);
     font-weight: 700;
     `}
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 15px;
+  }
 `;
 
 export const NavigationImage = styled.img`
