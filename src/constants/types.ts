@@ -186,6 +186,7 @@ export enum CirclePeriod {
 export interface ServiceConfig {
     CIRCLE_PERIOD: CirclePeriod;
     CIRCLE_MAX_APPLY: number;
+    IS_MOVING_CLASS_SYSTEM: boolean;
 }
 
 export interface Circle {
