@@ -44,9 +44,9 @@ export const TopBar: React.FC<TopBarProps> = ({
             <UnstyledLink to="/">
                 <IconLogo height={48} width={32} />
             </UnstyledLink>
-            <ArrowWrapper isDownArrow={isOpened}>
+            {canSelectOtherClass === true && <ArrowWrapper isDownArrow={isOpened}>
                 <Arrow />
-            </ArrowWrapper>
+            </ArrowWrapper>}
             <ClassName>{hasClassInfo === true ? clasName || <Skeleton width={300} /> : "학급을 선택해주세요"}</ClassName>
             <SelfStudyName>{selfStudyName}</SelfStudyName>
         </Horizontal>

@@ -4,6 +4,7 @@ import { toast } from "react-toastify"
 import { DisplayPlace } from "."
 import { getPrimaryPlaceList } from "../../api/place"
 import { showModal } from "../../components"
+import { LocalstorageKeys } from "../../constants/localstorageKeys"
 import { Student, Gender } from "../../constants/types"
 import { InputFormModal } from "../Main/InputFormModal"
 import { OtherPlaceModal } from "../Main/OtherPlaceModal"
@@ -13,7 +14,7 @@ const primaryPlaces = getPrimaryPlaceList().then(e => e.find(place => place.labe
 export const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeName }: DisplayPlace) => new Promise<{
     placeId: string;
     reason?: string;
-}>((success) => {
+}>((success, fail) => {
     if (placeName === '교실') primaryPlaces.then(e => e ? success({
         placeId: e._id
     }) : toast.error("교실 정보를 불러올 수 없어요"))
@@ -69,5 +70,27 @@ export const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeN
             css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
         }
     })
-    toast.error("장소 불러오기를 실패했어요")
+    if (placeName === '이동반') {
+        const rawStored = localStorage.getItem(LocalstorageKeys.MOVINGCLASS)
+        if (!rawStored) {
+            toast.info('이동반 정보를 찾을 수 없어요. 이동반 위치를 지정해주세요.')
+            showModal((close) => <OtherPlaceModal presetReason="이동반" onSubmit={(name, placeId, reason) => {
+                localStorage.setItem(LocalstorageKeys.MOVINGCLASS, placeId)
+                success({
+                    placeId,
+                    reason
+                })
+                close()
+            }} />, {
+                wrapperProps: {
+                    css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
+                }
+            })
+            return
+        }
+        return success({
+            placeId: rawStored,
+            reason: "이동반"
+        })
+    }
 })

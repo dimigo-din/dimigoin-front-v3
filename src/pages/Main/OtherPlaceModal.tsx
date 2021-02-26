@@ -5,7 +5,7 @@ import { toast } from "react-toastify"
 import { getPlaceList } from "../../api/place"
 import { Button, Card, CardGroupHeader, cardModalTopBorder, Dropdown, DropdownItem, Input } from "../../components"
 import { Doc, Place } from "../../constants/types"
-import useInput from "../../hooks/useInput"
+import useInput, { useTextInput } from "../../hooks/useInput"
 
 const orderTypeFirst = (places: Doc<Place>[], priority: string) => 
     places.reduce<Doc<Place>[][]>((acc, current) => {
@@ -22,10 +22,11 @@ export const OtherPlaceModal: React.FC<{
     onSubmit(placeId: string, placeName: string, reason: string): void;
     priority?: string;
     showOnly?: string;
-}> = ({ onSubmit, priority, showOnly }) => {
+    presetReason?: string;
+}> = ({ onSubmit, priority, showOnly, presetReason }) => {
     const [ places, setPlaces ] = useState<DropdownItem[]>()
     const placeDropdown = useInput<DropdownItem>();
-    const reasonInput = useInput();
+    const [ reasonInput ] = useTextInput(presetReason);
 
     useEffect(() => {
         (async () => {
@@ -65,6 +66,7 @@ export const OtherPlaceModal: React.FC<{
             <Label>사유</Label>
             <Input
                 {...reasonInput}
+                disabled={!!presetReason}
                 placeholder="사유를 입력해주세요"
             />
         </FormRow>

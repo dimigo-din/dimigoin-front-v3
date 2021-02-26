@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const WHITELIST: string[] = ["ASDF"];
+const WHITELIST: string[] = ["SDFFDS"];
 
 const useConsole = (name: string, value: any) => {
   useEffect(() => {

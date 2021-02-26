@@ -19,7 +19,8 @@ export const DraggableStudent: React.FC<{
     additionalInfo: string;
     freeWidth: boolean;
     isDraggable?: boolean;
-}> = ({ student, additionalInfo, children, freeWidth, isDraggable }) => {
+    hasLogged?: boolean;
+}> = ({ student, additionalInfo, children, isDraggable, ...props }) => {
     const [, draggable] = useDrag({
         item: {
             type: "STUDENT",
@@ -29,27 +30,28 @@ export const DraggableStudent: React.FC<{
             isDragging: state.isDragging()
         })
     })
-    return (
+    return (<>
         <StudentWrapper
-            freeWidth={freeWidth}
             onClick={isDraggable ? () => openTimelineByStudent(student) : undefined}
+            {...props}
         >
             <p ref={isDraggable ? draggable : undefined}>
                 {children}
             </p>
-            <Chip>{additionalInfo}</Chip>
         </StudentWrapper>
+        <Chip>{additionalInfo}</Chip></>
     )
 };
 
-export const StudentWrapper = styled.h3<{ freeWidth?: boolean }>`
+export const StudentWrapper = styled.h3<{ freeWidth?: boolean; hasLogged?: boolean; }>`
   padding: 15px;
   color: var(--row-color);
   font-size: 23px;
   font-weight: 700;
   ${({ freeWidth }) => !freeWidth && css`width: 100px;`}
+  ${({ hasLogged }) => !hasLogged && css`opacity: 0.5;`}
   &:hover {
-    &>div {
+    &+div {
       opacity: 1;
       margin-top: 0px;
       visibility: visible;
@@ -60,17 +62,19 @@ export const StudentWrapper = styled.h3<{ freeWidth?: boolean }>`
 const Chip = styled.div`
   display: block;
   visibility: hidden;
-  content: attr("data-additional-info");
-  padding: 12px;
+  padding: 18px;
   opacity: 0;
   position: absolute;
   background-color: white;
   color: black;
-  box-shadow: 0px 0px 36px rgba(0, 0, 0, 0.2);
-  font-size: 16px;
-  max-width: 120px;
+  box-shadow: 0px 0px 36px rgba(0, 0, 0, 0.1);
+  font-size: 18px;
+  /* max-width: 120px; */
   line-height: 24px;
-  border-radius: 8px;
-  margin-top: -12px;
+  border-radius: 16px;
+  margin-top: -18px;
+  top: 50px;
+  left: 50%;
+  transform:translateX(-50%);
   transition: 300ms cubic-bezier(0, 0.46, 0.12, 0.98);
 `

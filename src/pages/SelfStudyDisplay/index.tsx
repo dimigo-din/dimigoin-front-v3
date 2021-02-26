@@ -9,7 +9,7 @@ import { ReactComponent as InsangsilIcon } from "../../assets/icons/ingangsil.sv
 import { ReactComponent as CircleIcon } from "../../assets/icons/circle.svg";
 import { ReactComponent as AbsentIcon } from "../../assets/icons/close.svg";
 import {
-  Horizontal, noBreak, PageWrapper, ResponsiveWrapper, Divider, Card
+  Horizontal, noBreak, PageWrapper, ResponsiveWrapper, Divider, Card, Button, ButtonProps
 } from "../../components";
 import {
   AttendanceLogWithStudent, Permission, SelfStudyTime, Student
@@ -25,24 +25,29 @@ import { TopBar } from "./TopBar";
 import { StudentList } from "./StudentList";
 import { CardHeader } from "../../components/basic/CardComponent";
 import useInput from "../../hooks/useInput";
+import useConsole from "../../hooks/useConsole";
+import { useConfig } from "../../hooks/api";
+import { LocalstorageKeys } from "../../constants/localstorageKeys";
 
 const ROW_COLOR = {
   AVAILABLE: "var(--main-theme-accent)",
   NOTAVAILABLE: "#B8B8B8",
 };
 
-// const ButtonWithIcon: React.FC<Partial<ButtonProps> & {
-//   icon: React.FunctionComponent;
-//   label: string;
-// }> = ({ icon: Icon, label, ...props }) => {
-//   return (<ButtonWithIconWrapper {...props} >
-//     <Icon css={[iconStyle, css`
-//         fill: white;
-//         margin-right: 6px;
-//       `]} />
-//     {label}
-//   </ButtonWithIconWrapper>)
-// }
+const ButtonWithIcon: React.FC<Partial<ButtonProps> & {
+  icon: React.FunctionComponent;
+  label: string;
+}> = ({ icon: Icon, label, ...props }) => {
+  return (<ButtonWithIconWrapper {...props} >
+    <Icon css={[iconStyle, css`
+        fill: white;
+        margin-right: 6px;
+      `]} />
+    {label}
+  </ButtonWithIconWrapper>)
+}
+
+const clearMovingClass = () => localStorage.removeItem(LocalstorageKeys.MOVINGCLASS)
 
 export interface DisplayPlace {
   name: string;
@@ -60,6 +65,13 @@ const iconStyle = css`
 
 interface DisplayPlaceWithStudents extends DisplayPlace {
   students: AttendanceLogWithStudent[]
+}
+
+const movingClass = {
+  icon: <DeskIcon css={iconStyle} />,
+  type: "MOVING_CLASS",
+  name: "이동반",
+  isAvailable: true,
 }
 
 const groupedPlaces: DisplayPlace[] = [{
@@ -91,11 +103,13 @@ const groupedPlaces: DisplayPlace[] = [{
   isAvailable: false,
 }]
 
+const groupedPlacesIncludingMovingClass = [...groupedPlaces, movingClass]
+
 const isRealData = (d: DisplayPlace): d is DisplayPlaceWithStudents => (d as any).students
 
 const OTHER_INDEX = groupedPlaces.findIndex(p => p.fallback)
+const MOVING_CLASS_INDEX = groupedPlaces.length
 const INITIAL_INDEX = groupedPlaces.findIndex(p => p.initial)
-
 
 const SelfStudyDisplay: React.FC = () => {
   const [selfStudyStatus, setSelfStudyStatus] = useState<{
@@ -109,35 +123,46 @@ const SelfStudyDisplay: React.FC = () => {
   }>()
 
   const [currentSelfStudyTime, setCurrentSelfStudyTime] = useState<SelfStudyTime | null>(getSelfStudyPeriod())
+
+  // 반 정보 불러오기 전 : undefined
+  // 반 정보가 없을때 : null
+  // 불러왔을때 : number[]
   const [classInfo, setClassInfo] = useState<number[] | null>()
   const [hasUserClassInfo, setHasUserClassInfo] = useState<boolean>()
 
   const {
     setValue: setTopBarOpenedState,
     ...topbarOpenStatus
-  } = useInput<boolean>(true)
+  } = useInput<boolean>(false)
 
   const myData = useMyData()
+  const { IS_MOVING_CLASS_SYSTEM = true } = useConfig() || {}
+
+  useConsole('SDFFDS', hasUserClassInfo)
 
   useEffect(() => {
+    console.log('네??', topbarOpenStatus.value)
     if (topbarOpenStatus.value) setClassInfo(() => null)
   }, [topbarOpenStatus.value])
 
   useEffect(() => {
-    if (classInfo === null) 
+    if (classInfo === null)
       setSelfStudyStatus(() => undefined)
-    
+
   }, [classInfo])
 
   useEffect(() => {
     if (!myData) return
-    if (isStudent(myData))
-      setClassInfo(() => [myData.class, myData.class])
+    if (isStudent(myData)) {
+      console.log(myData)
+      setClassInfo(() => [myData.grade, myData.class])
+    }
     else setClassInfo(() => null)
   }, [myData])
 
   useEffect(() => {
-    if (myData && isStudent(myData))
+    if (!myData) return
+    if (isStudent(myData))
       setHasUserClassInfo(() => !!myData.class)
     else setHasUserClassInfo(() => false)
   }, [myData])
@@ -151,15 +176,18 @@ const SelfStudyDisplay: React.FC = () => {
     const [available, notAvailable] = (await getWholeClassAttendanceLog(classInfo[0], classInfo[1]))
       .reduce((grouped, current) => {
         const placeGroupIndex = current.log?.place.type !== undefined ? grouped.findIndex(p => p.type === current.log?.place.type) : INITIAL_INDEX
-        const matchedIndex = (placeGroupIndex !== -1) ? placeGroupIndex : OTHER_INDEX
+        const isMovingClass = current.log?.remark === '이동반'
+        const matchedIndex = isMovingClass ? (IS_MOVING_CLASS_SYSTEM ? MOVING_CLASS_INDEX : OTHER_INDEX) : ((placeGroupIndex !== -1) ? placeGroupIndex : OTHER_INDEX)
+        console.log(IS_MOVING_CLASS_SYSTEM, matchedIndex, groupedPlaces, groupedPlaces[matchedIndex])
         return [
-          ...grouped.slice(0, matchedIndex), {
+          ...grouped.slice(0, matchedIndex),
+          {
             ...grouped[matchedIndex],
             students: [...(grouped[matchedIndex].students || []), current]
           },
           ...grouped.slice(matchedIndex + 1)
         ]
-      }, groupedPlaces.map(g => ({ ...g, students: [] })) as DisplayPlaceWithStudents[])
+      }, (IS_MOVING_CLASS_SYSTEM ? groupedPlacesIncludingMovingClass : groupedPlaces).map(g => ({ ...g, students: [] })) as DisplayPlaceWithStudents[])
       .reduce((grouped, current) => {
         if (current.isAvailable) return [[...grouped[0], current], grouped[1]]
         return [grouped[0], [...grouped[1], current]]
@@ -169,7 +197,7 @@ const SelfStudyDisplay: React.FC = () => {
       available: available.reduce((acc, current) => acc + current.students.length, 0),
       notAvailable: notAvailable.reduce((acc, current) => acc + current.students.length, 0)
     }))
-  }, [setSelfStudyStatus, myData, classInfo])
+  }, [setSelfStudyStatus, myData, classInfo, IS_MOVING_CLASS_SYSTEM])
 
   const moveStudentPlaceTo = useCallback(async (student: Student, place: DisplayPlace) => {
     if (!myData?.permissions.includes(Permission.attendance)) return
@@ -218,7 +246,7 @@ const SelfStudyDisplay: React.FC = () => {
         <TopBar
           {...topbarOpenStatus}
           hasClassInfo={classInfo === undefined ? undefined : !!classInfo}
-          canSelectOtherClass={!hasUserClassInfo}
+          canSelectOtherClass={hasUserClassInfo === undefined ? undefined : !hasUserClassInfo}
           clasName={classInfo ? `${classInfo[0]}학년 ${classInfo[1]}반` : undefined}
           selfStudyName={
             currentSelfStudyTime ? ({
@@ -230,7 +258,7 @@ const SelfStudyDisplay: React.FC = () => {
           } />
         <TableWrapper>
           <div>
-            {classInfo ? [{
+            {classInfo !== null ? [{
               color: selfStudyStatus ? ROW_COLOR.AVAILABLE : ROW_COLOR.NOTAVAILABLE,
               label: "현원",
               places: selfStudyStatus?.available
@@ -258,7 +286,7 @@ const SelfStudyDisplay: React.FC = () => {
                   `}
                 >
                   {
-                    (type.places || groupedPlaces).map((place, placeIndex) => {
+                    (type.places || (IS_MOVING_CLASS_SYSTEM ? groupedPlacesIncludingMovingClass : groupedPlaces)).map((place, placeIndex) => {
                       const hasLabel = typeIndex === 0 && placeIndex === 0
 
                       return (
@@ -344,15 +372,18 @@ const SelfStudyDisplay: React.FC = () => {
                   {studentQuantity ? studentQuantity.notAvailable : <Skeleton width={30} />}
                 </LabelCard>
               </Horizontal>}
-            {/* <ResponsiveWrapper css={css`
+            <ResponsiveWrapper css={css`
               flex-direction: column;
                 &>*+* {
                   margin-left: 12px;
                 }
-            `}> */}
-            {/* <ButtonWithIcon icon={DeskIcon} label="이동반" onClick={openMoveClassDisplay} /> */}
-            {/* <ButtonWithIcon icon={HistoryIcon} label="히스토리" onClick={openTimeline} /> */}
-            {/* </ResponsiveWrapper> */}
+            `}>
+              <ButtonWithIcon
+                icon={DeskIcon}
+                label="이동반 위치 초기화"
+                onClick={() => clearMovingClass()}
+              />
+            </ResponsiveWrapper>
           </ResponsiveWrapper>
 
         </ResponsiveWrapper>
@@ -398,10 +429,10 @@ const LocationLabelText = styled.p`
   }
 `
 
-// const ButtonWithIconWrapper = styled(Button)`
-//   align-items: center;
-//   display: flex;
-// `
+const ButtonWithIconWrapper = styled(Button)`
+  align-items: center;
+  display: flex;
+`
 
 const ClassSelectGrid = styled.div`
 margin: -20px -8px;
