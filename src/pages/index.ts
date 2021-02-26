@@ -18,4 +18,7 @@ export const Circle = {
 }
 export const Outgo = loadable(() => import('./Outgo'));
 export const SelfStudyDisplay = loadable(() => import('./SelfStudyDisplay'));
-export const Mentoring = loadable(() => import('./Mentoring'));
+export const Mentoring = {
+    Student: loadable(() => import('./Mentoring/Student')),
+    Teacher: loadable(() => import('./Mentoring/Teacher')),
+}

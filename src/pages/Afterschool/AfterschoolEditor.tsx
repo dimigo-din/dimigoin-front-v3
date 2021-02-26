@@ -18,7 +18,7 @@ import styled from "@emotion/styled";
 import { ReqAfterschoolClass } from "../../api";
 import { swal } from "../../functions/swal";
 
-const getCheckedIndex = (arr: {
+export const getCheckedIndex = (arr: {
     checked?: boolean;
 }[]): number[] => arr.map((checkbox, index) => checkbox.checked && index).filter((e): e is number => typeof e === 'number')
 
@@ -245,7 +245,7 @@ const TrachIcon = styled(_TrashIcon)`
     margin-right: 12px;
 `
 
-const RegisterButtonWrapper = styled(Horizontal)`
+export const RegisterButtonWrapper = styled(Horizontal)`
     justify-content: center;
     margin-top: 24px;
 `

@@ -8,3 +8,5 @@ export * from "./timetable"
 export * from "./attendance"
 export * from "./place"
 export * from "./afterschool"
+export * from './circle'
+export * from './mentoring'

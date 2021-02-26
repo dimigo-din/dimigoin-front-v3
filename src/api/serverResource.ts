@@ -8,9 +8,11 @@ import {
     AfterschoolList as AfterschoolClassList, EditAfterschoolClassInfo,
     RegisterNewAfterschoolClass, RequestSheetByGrade, AppliedAfterschoolClasses,
     ApplyAfterschoolClass, UnapplyAfterschoolClass, RemoveAfterschoolClass,
-    RegisterOtherStudentMovingHistory, WeeklyMeals
+    RegisterOtherStudentMovingHistory, WeeklyMeals, AllCircle, AppliedCircle,
+    ApplyCircle, ApplyQuestion, CircleApplications, FinalSelect, SetApplicationStatus,
+    ApplyMentoring, DeleteMentoringProgram, EditMentoringInfo, MentoringList,
+    NewMentoringProgram, RequestableMentoringList
 } from "./interfaces";
-import { AllCircle, AppliedCircle, ApplyCircle, ApplyQuestion, CircleApplications, FinalSelect, SetApplicationStatus } from "./interfaces/circle";
 import { Config } from "./interfaces/config";
 
 export interface APIResource {
@@ -58,4 +60,10 @@ export interface APIResource {
     circleApplications: CircleApplications;
     setApplicationStatus: SetApplicationStatus;
     finalSelect: FinalSelect;
+    mentoringList: MentoringList;
+    requestableMentoringList: RequestableMentoringList;
+    applyMentoring: ApplyMentoring;
+    newMentoringProgram: NewMentoringProgram;
+    editMentoringInfo: EditMentoringInfo;
+    deleteMentoringProgram: DeleteMentoringProgram;
 }

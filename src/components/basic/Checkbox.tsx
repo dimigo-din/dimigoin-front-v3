@@ -44,6 +44,9 @@ const Wrapper = styled.label`
   display: block;
   color: #8a8a8a;
   flex-shrink: 0;
+  &+& {
+    margin-left: 12px;
+  }
 `;
 
 const InvisibleCheck = styled.input`

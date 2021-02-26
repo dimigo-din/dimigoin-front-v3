@@ -9,13 +9,18 @@ interface RadioButtonProps {
 }
 
 export const RadioButton: React.FC<
-React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & RadioButtonProps
-> = ({ disabled, children, id, checked, ...props }) => {
+  React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & RadioButtonProps
+> = ({ disabled, children, checked, ...props }) => {
   return (
     <Wrapper>
-      <LogicalButton type="radio" {...props} disabled={disabled} id={id} />
+      <LogicalButton
+        type="radio"
+        defaultChecked={checked}
+        disabled={disabled}
+        {...props}
+      />
       <Circle disabled={disabled} />
-      {children && <Label>{children}</Label>} 
+      {children && <Label>{children}</Label>}
     </Wrapper>
   );
 };
@@ -33,7 +38,10 @@ interface RadioButtonsGroupProps {
   value?: RadioButtonItem;
 }
 
-export const RadioButtonGroup: React.FC<RadioButtonsGroupProps> = ({ items, name, onChange,  }) => {
+export const RadioButtonGroup: React.FC<RadioButtonsGroupProps> = ({
+  items, name, onChange, value
+}) => {
+  console.log(items, value)
   return (
     <RadioButtonGroupWrapper
     >
@@ -43,6 +51,7 @@ export const RadioButtonGroup: React.FC<RadioButtonsGroupProps> = ({ items, name
             name={name}
             key={item.key}
             disabled={item.disabled}
+            checked={item.key === value?.key}
             onClick={() =>
               onChange && item.key && onChange({ target: { value: item } })
             }
