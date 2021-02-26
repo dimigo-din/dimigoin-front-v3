@@ -41,7 +41,6 @@ interface RadioButtonsGroupProps {
 export const RadioButtonGroup: React.FC<RadioButtonsGroupProps> = ({
   items, name, onChange, value
 }) => {
-  console.log(items, value)
   return (
     <RadioButtonGroupWrapper
     >

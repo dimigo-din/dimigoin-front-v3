@@ -4,7 +4,7 @@ import { getMentoringList } from "../../api/mentoring"
 import {
     Card,
     CardGroupHeader, CardGroupHeaderButton, CardGroupHeaderWrapper,
-    Col, Data, Divider, HeadData, HeaderWrapper, HeadRow, PageWrapper,
+    Col, Data, Divider, HeadData, HeaderWrapper, HeadRow, NoData, PageWrapper,
     ResponsiveWrapper, Row, showModal, Table
 } from "../../components"
 import { Doc, Mentoring } from "../../constants/types"
@@ -13,6 +13,7 @@ import styled from "@emotion/styled"
 import { AfterschoolEditor } from "../Afterschool/AfterschoolEditor"
 import { MentoringEditor } from "./MentoringEditor"
 import { dayEngKorMapper } from "../../constants"
+import Skeleton from "react-loading-skeleton"
 
 const Teacher: React.FC = () => {
     const [mentoringList, setMentoringList] = useState<Doc<Mentoring>[] | null>()
@@ -47,7 +48,7 @@ const Teacher: React.FC = () => {
         else {
             setSideDetail(() => classData || null)
         }
-    }, [ fetchData ])
+    }, [fetchData])
 
     useEffect(() => {
         fetchData()
@@ -78,7 +79,7 @@ const Teacher: React.FC = () => {
                         </tr>
                     </HeadRow>
                     <tbody>
-                        {mentoringList?.map(mentoring =>
+                        {mentoringList ? mentoringList.length !== 0 ? mentoringList.map(mentoring =>
                             <Row
                                 key={mentoring._id}
                                 onClick={() => openEdit(mentoring)}
@@ -90,7 +91,27 @@ const Teacher: React.FC = () => {
                                 <Data>{mentoring.days.map(day => dayEngKorMapper[day])}</Data>
                                 <Data>{mentoring.duration.start.hour}:{mentoring.duration.start.minute} ~ {mentoring.duration.end.hour}:{mentoring.duration.end.minute}</Data>
                             </Row>
-                        )}
+                        ) : <Row>
+                                <Data colSpan={6}>
+                                    <NoData> 개설된 강의가 없습니다 </NoData>
+                                </Data>
+                            </Row> : <>
+                                <Row>
+                                    <Data><Skeleton width={100} /></Data>
+                                    <Data><Skeleton width={100} /></Data>
+                                    <Data><Skeleton width={100} /></Data>
+                                    <Data><Skeleton width={100} /></Data>
+                                    <Data><Skeleton width={100} /></Data>
+                                    <Data><Skeleton width={100} /></Data>
+                                </Row><Row>
+                                    <Data><Skeleton width={100} /></Data>
+                                    <Data><Skeleton width={100} /></Data>
+                                    <Data><Skeleton width={100} /></Data>
+                                    <Data><Skeleton width={100} /></Data>
+                                    <Data><Skeleton width={100} /></Data>
+                                    <Data><Skeleton width={100} /></Data>
+                                </Row>
+                            </>}
                     </tbody>
                 </Table>
             </Col>
@@ -99,7 +120,10 @@ const Teacher: React.FC = () => {
                 <Col width={5}>
                     <Card>
                         <MentoringEditor
-                            fetchData={fetchData}
+                            fetchData={() => {
+                                fetchData()
+                                setSideDetail(() => undefined)
+                            }}
                             data={sideDetail}
                             close={() => setSideDetail(() => undefined)}
                         />
