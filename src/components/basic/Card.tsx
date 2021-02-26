@@ -82,9 +82,9 @@ const Container = styled.div<CardContainerProps>`
   transition: box-shadow 1s cubic-bezier(0, 0.46, 0.12, 0.98);
   /* transition: border-left none; */
 
-  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+  /* @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     padding: 24px 18px;
-  }
+  } */
   ${({ disableSpace }) => !disableSpace && css`
     & + & {
       margin-top: 10px;

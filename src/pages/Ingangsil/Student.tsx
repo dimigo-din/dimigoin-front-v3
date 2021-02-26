@@ -60,6 +60,9 @@ const Ingangsil: React.FC = () => {
             <Card
               css={css`
                 padding: 36px;
+                @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+                  padding: 24px 18px;
+                }
               `}
               leftBorder
             >
@@ -167,7 +170,7 @@ const Ingangsil: React.FC = () => {
             } : undefined}>우리반 신청자</CardGroupHeader>
             {[...Array(2)].map((_, index) => {
               const currentTimeAppliers = groupedByTime?.[NightSelfStudyTimeKey[index === 0 ? "NSS1" : "NSS2"]]
-              return (<Card leftBorder>
+              return (<IngangsilApplierWrapper leftBorder>
                 <ResponsiveWrapper>
                   <IngangTime>{index + 1}타임</IngangTime>
                   <Divider small data-divider />
@@ -184,7 +187,7 @@ const Ingangsil: React.FC = () => {
                       </>}
                   </IngangerWrapper>
                 </ResponsiveWrapper>
-              </Card>)
+              </IngangsilApplierWrapper>)
             })}
           </Col>
           <Divider data-divider />
@@ -380,6 +383,12 @@ const IngangerWrapper = styled.div`
   margin: -8px;
   display: flex;
   flex-wrap: wrap;
+`
+
+const IngangsilApplierWrapper = styled(Card)`
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    padding: 24px 18px;
+  }
 `
 
 export default Ingangsil

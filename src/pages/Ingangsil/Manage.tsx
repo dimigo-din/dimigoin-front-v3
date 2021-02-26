@@ -7,6 +7,7 @@ import { getEntireTicket, requestExcelFile } from '../../api/ingangsil'
 import { downloadFileFromDownloadble } from '../../functions/downloadById'
 import { NightSelfStudyTimeKey, Student } from '../../constants/types'
 import Skeleton from 'react-loading-skeleton'
+import { SMALL_SCREEN_THRESHOLD } from '../../constants'
 // import { group } from 'console'
 
 const ApplierListCard: React.FC<{
@@ -109,6 +110,10 @@ const CardTitle = styled.h2`
     text-align: center;
     padding-top: 20px;
     justify-content: center;
+
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+        font-size: 16px;
+    }
 `
 
 const SectionHeader = styled.div`
@@ -118,11 +123,19 @@ const SectionHeader = styled.div`
     color: #9A9A9A;
     padding: 10px 40px;
     border-bottom: 1px solid #D1D1D1;
+
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+        margin-top: 12px;
+    }
 `
 
 const SectionName = styled.h3`
     font-size: 18px;
     font-weight: 700;
+
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+        font-size: 14px;
+    }
 `
 
 const SectionsWrapper = styled.div`
@@ -135,8 +148,9 @@ const Section = styled.div`
 `
 
 const DownloadIconWrapper = styled.div`
-    position: absolute;
-    margin-right: -90px;
+    /* position: absolute;
+    margin-right: -90px; */
+    margin-left: 12px;
     width: 16px;
     height: 16px;
     display: block;
