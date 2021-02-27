@@ -30,10 +30,9 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         >
           <Check visible={!!checked} />
         </CheckWrapper>
-        {text && <p css={css`
-  vertical-align: middle;`}>
+        {text && <Label>
           {text}
-        </p>}
+        </Label>}
       </LabelWrapper>
     </Wrapper>
   );
@@ -114,5 +113,10 @@ const Check = styled(CheckIcon) <{ visible: boolean }>`
     width: 10px;
   }
 `;
+
+const Label = styled.p`
+  vertical-align: middle;
+  line-height: 22px;
+`
 
 export default Checkbox;
