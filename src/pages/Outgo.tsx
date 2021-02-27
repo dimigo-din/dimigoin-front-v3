@@ -58,7 +58,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ onChange }) => {
     <>
       <Checkbox
         text="당일외출이 아님"
-        css={css`margin-bottom: 12px;`}
+        css={css`margin-bottom: 25px;`}
         {...isNotDailyCheckbox}
       />
       <WeekCalendar {...dayInput} rangeSelect={isNotDailyCheckbox.checked} />
