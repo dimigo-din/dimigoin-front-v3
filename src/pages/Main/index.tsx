@@ -124,7 +124,7 @@ const Main: React.FC = () => {
                 {
                     isStudent && <>
                         <Divider data-divider horizontal />
-                        <ResponsiveWrapper threshold={1200}>
+                        <ResponsiveWrapper threshold={1200} css={css`flex: 1;`}>
                             <Col width={3} css={fullHeight}>
                                 <CardGroupHeader>시간표</CardGroupHeader>
                                 {timetableData !== null ? <TimeTable timetable={timetableData} /> : <TextCardGroup content={[{ text: <NoData>시간표 데이터가 없습니다</NoData> }]} />}

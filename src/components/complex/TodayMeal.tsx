@@ -33,7 +33,7 @@ export const TodayMeal: React.FC<TodayMealProps> = ({ meals, ...props }) => {
   const period = getTimePeriod()
   useConsole('MEALMEAL', meals)
   return (
-    <MealCard {...props}>
+    <MealCard {...props} css={meals === null && css`padding: 25px;`}>
       {
         (meals?.breakfast.length || meals?.dinner.length || meals?.lunch.length) ? (
           <>
