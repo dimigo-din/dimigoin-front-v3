@@ -9,6 +9,8 @@ import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { fetchAllStudents, getMyData } from "../../api/user";
 import useConsole from "../../hooks/useConsole";
 import { toast } from "react-toastify";
+import { useMyData } from "../../hooks/api";
+import { isStudent } from "../../utils/isStudent";
 
 interface OutgoApplierProps {
   onChange: EventFunction<Doc<BriefStudent>[]>;
@@ -69,6 +71,9 @@ interface OutgoProcessingUser extends Doc<BriefStudent> {
 export const OutgoApplier: React.FC<OutgoApplierProps> = ({ onChange, value }) => {
   const [studentsList, setStudentsList] = useState<Doc<BriefStudent>[]>()
   const [appliers, setAppliers] = useState<Doc<BriefStudent>[] | null>(value ?? null);
+
+  const myData = useMyData()
+
   const addApplier = (d: Doc<BriefStudent>) => {
     if(appliers?.some(applier => applier._id === d._id)) {
       toast.info("이미 선택된 학생입니다")
@@ -82,6 +87,7 @@ export const OutgoApplier: React.FC<OutgoApplierProps> = ({ onChange, value }) =
   useConsole('ADF', value);
   useEffect(() => {
     (async () => {
+      if(!(myData && isStudent(myData))) return
       const students = await fetchAllStudents()
       // 학번이 없는(졸업생, 자퇴생) 학생을 필터링합니다
       // 메모리 할당을 줄이기 위해 불필요한 프로퍼티를 제거한 인터페이스로 재구조화합니다
@@ -101,7 +107,6 @@ export const OutgoApplier: React.FC<OutgoApplierProps> = ({ onChange, value }) =
       // 혹시 더 나은 로직이 있다면 수정 부탁드립니다 :)
       // 배열의 원본을 수정하는 mutable method(push 등..)은 사용하지 마세요!
       // *현재는 O(n)
-      const myData = await getMyData()
       // setAppliers(() => [{
       //   name: myData.name,
       //   studentId: String(myData.serial),

@@ -13,6 +13,7 @@ import { OutgoRequestForm } from "../api";
 import { requestOutgo } from "../api/outgo";
 import { getMyData } from "../api/user";
 import { toast } from "react-toastify";
+import { isStudent } from "../utils/isStudent";
 
 interface DateSelectorProps {
   onChange: EventFunction<[Date, Date]>
@@ -86,7 +87,7 @@ const Outgo: React.FC = () => {
   const isDateRange = dateSelectorValue?.[0].getDate() !== dateSelectorValue?.[1].getDate()
 
   const applyMe = useCallback(() => {
-    getMyData().then(myData => setAppliers(() => [{
+    getMyData().then(myData => isStudent(myData) && setAppliers(() => [{
       name: myData.name,
       studentId: myData.serial.toString(),
       userId: myData.idx.toString(),

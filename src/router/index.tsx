@@ -5,7 +5,7 @@ import { LoadableComponent } from "@loadable/component";
 import { getAccessToken, getRefreshToken, loginWithRefreshToken } from "../api";
 import styled from "@emotion/styled";
 import Login from "../pages/Login";
-import { Permission, Student, UserType } from "../constants/types";
+import { Permission, Student, User, UserType } from "../constants/types";
 import { getMyData } from "../api/user";
 import { NavigationBar } from "../components";
 import { toast } from "react-toastify";
@@ -35,7 +35,7 @@ const needAuthAndBranch = <TeacherProps, StudentProps>({
   Student: LoadableComponent<StudentProps>;
 }): React.FC<StudentProps & TeacherProps> => {
   return function C(props) {
-    const [myData, setMyData] = React.useState<Student | null>();
+    const [myData, setMyData] = React.useState<User | null>();
     React.useEffect(() => {
       getMyData().then(setMyData).catch(() => setMyData(null))
     }, [])

@@ -35,7 +35,7 @@ export const loginWithInfo = async ({
             username
         })
         setTokens(res)
-        saveMyData(await fetchMyData())
+        await fetchMyData()
         return true
     } catch(e) {
         return false
