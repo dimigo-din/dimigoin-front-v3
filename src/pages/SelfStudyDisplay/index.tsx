@@ -296,7 +296,7 @@ const SelfStudyDisplay: React.FC = () => {
                             threshold={800}
                             key={place.name}
                           >
-                            <ResponsiveWrapper threshold={0}>
+                            <ResponsiveWrapper css={css`min-height: 67px;`} threshold={0}>
                               <LabelCard title="위치" hasLabel={hasLabel} css={[noBreak, responsiveLabelCardWidth(160)]} contentCss={locationLabelStyle}>
                                 {place.icon}
                                 <LocationLabelText>
