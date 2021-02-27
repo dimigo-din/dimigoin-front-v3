@@ -1,67 +1,39 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "@emotion/styled";
 import Card from "../basic/Card";
 import css from "@emotion/css";
 import { days } from "../../constants";
 import Skeleton from "react-loading-skeleton";
-
-const today = 2;
+import { NoData } from "..";
 
 interface TimeTableProps {
   timetable?: string[][];
 }
 
-// const TABLE = [
-//   ["미술", "진로", "플밍A", "플밍A", "미술"],
-//   ["미술", "과학", "컴시", "수학", "과학"],
-//   ["수학", "사회", "사회", "체육", "영어"],
-//   ["국어", "컴시", "플밍B", "영어", "국어"],
-//   ["플밍A", "체육", "플밍B", "과학", "수학"],
-//   ["플밍A", "동아리", "영어", "국어", "플밍B"],
-//   ["컴시", "동아리", " ", "HR", "사회"],
-// ];
-
 export const TimeTable: React.FC<TimeTableProps> = ({ timetable, ...props }) => {
+  const today = useMemo(() => (new Date()).getDay() - 1, [])
   return (
     <WrapperCard {...props}>
-      <div
-        css={css`
-          padding: 0px 24px 0px;
-          height: 100%;
-          @media screen and (max-width: 450px) {
-            padding: 0px 12px 0px;
-          }
-        `}
+      <table
+        css={[css`width: 100%;`
+          , timetable?.length && css`height: 100%;`]}
       >
-        <table
-          css={css`
-            width: 100%;
-            height: 100%;
-          `}
-        >
-          <DaysHeader>
-            <tr>
-              {days.slice(0, 5).map((day, index) => (
-                <Day key={day} colored={today === index}>
-                  {day}
-                </Day>
-              ))}
-            </tr>
-          </DaysHeader>
-          <ContentWrapper>
-            {timetable ?
-            // timetable.map((day) => (
-            //   <Row key={day.join("")}>
-            //     {day.map(
-            //       (item, index) =>
-            //         item && (
-            //           <Item key={`${index}${item}`} colored={today === index}>
-            //             {item.length > 3 ? item.slice(0, 2) + '...' : item}
-            //           </Item>
-            //         )
-            //     )}
-            //   </Row>))
-            Array(7).fill([...Array(5)])
+        <DaysHeader>
+          <tr>
+            {days.slice(0, 5).map((day, index) => (
+              <Day
+                key={day}
+                colored={!!timetable?.length && today === index}
+                width="20%"
+              >
+                {day}
+              </Day>
+            ))}
+          </tr>
+        </DaysHeader>
+        <ContentWrapper>
+          {timetable ?
+            timetable.length ? Array(7).fill([...Array(5)])
               .map((times, timeIndex) =>
                 <Row>
                   {(times as undefined[]).map((_, dayIndex) => {
@@ -71,11 +43,12 @@ export const TimeTable: React.FC<TimeTableProps> = ({ timetable, ...props }) => 
                     </Item>
                   })}
                 </Row>
-                )
-             : Array(7).fill(Array(5)).map(day => <Row>{day.fill((() => <Item><Skeleton /></Item>)())}</Row>)}
-          </ContentWrapper>
-        </table>
-      </div>
+              ) : undefined
+            : Array(7).fill(Array(5)).map(day => <Row>{day.fill((() => <Item><Skeleton /></Item>)())}</Row>)}
+        </ContentWrapper>
+      </table>
+      {timetable?.length === 0 &&
+        <NoData>시간표 정보가 없습니다</NoData>}
     </WrapperCard>
   );
 };
@@ -83,7 +56,15 @@ export const TimeTable: React.FC<TimeTableProps> = ({ timetable, ...props }) => 
 const WrapperCard = styled(Card)`
   color: #d1d1d1;
   font-family: NanumSquare;
-  padding: 0px;
+  /* padding: 0px; */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0px 24px 0px;
+  /* height: 100%; */
+  @media screen and (max-width: 450px) {
+    padding: 0px 12px 0px;
+  }
 `;
 
 const DaysHeader = styled.thead`

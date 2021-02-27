@@ -6,6 +6,9 @@ export const PageWrapper = styled.div`
   margin: 0 auto;
   width: 90%;
   padding-top: 70px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
       padding-top: 40px;
