@@ -22,14 +22,16 @@ export const TextCardGroup: React.FC<TextCardGroupProps> = ({
   return (
     <div css={spaceBetweenCards || shadow} {...props}>
       {content.map((i) => (
-        i.to ? <UnstyledLink to={i.to} css={spaceBetweenCards && spaceBetweenLinksStyle}>
-          <TextCard
-            children={i?.text}
-            css={spaceBetweenCards || cancelHover}
-            {...i}
-            key={i.key || i.text?.toString()}
-          />
-        </UnstyledLink> : <TextCard
+        i.to ?
+          <UnstyledLink to={i.to} css={spaceBetweenCards && spaceBetweenLinksStyle}>
+            <TextCard
+              children={i?.text}
+              css={spaceBetweenCards || cancelHover}
+              {...i}
+              key={i.key || i.text?.toString()}
+            />
+          </UnstyledLink>
+          : <TextCard
             children={i?.text}
             css={spaceBetweenCards || cancelHover}
             {...i}
@@ -46,6 +48,10 @@ export const TextCard = styled(Card)`
   font-family: "NanumSquare" !important;
   line-height: 32px;
   margin-top: 10px;
+
+  &:first-child {
+    margin-top: 0px;
+  }
 
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     font-size: 14px;
@@ -65,6 +71,9 @@ const cancelHover = css`
 const spaceBetweenLinksStyle = css`
   display: block;
   margin-top: 10px;
+  &:first-of-type {
+    margin-top: 0px;
+  }
 `
 
 export default TextCardGroup;

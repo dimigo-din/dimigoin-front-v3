@@ -114,6 +114,7 @@ export interface Notice {
     content: string;
     startDate: Date;
     endDate: Date;
+    author?: User;
 }
 
 export interface DailyMeal {

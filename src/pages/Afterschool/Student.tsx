@@ -63,7 +63,7 @@ const AfterschoolApply: React.FC = () => {
     }, [fetchData])
 
     return <PageWrapper>
-        <RootWrapper mobildReverse threshold={780}>
+        <RootWrapper mobileReverse threshold={780}>
             <Col width={7}>
                 <CardGroupHeader
                     subButton={{

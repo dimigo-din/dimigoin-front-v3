@@ -26,7 +26,7 @@ interface NoticeListItemProps extends Notice {
 
 const NoticeListItem: React.FC<NoticeListItemProps> = ({
   content, title, editable, removeAction, editAction
-}) => <NoticeListItemWrapper threshold={720}>
+}) => <NoticeListItemWrapper>
   <NoticeTitle>{title}</NoticeTitle>
   <NoticeContent>{content}</NoticeContent>
   {editable && <>
@@ -163,20 +163,18 @@ const NoticeContent = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
   flex: 1;
-  @media screen and (max-width: 720px) {
+
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 14px;
+    line-height: 18px;
     margin-left: 0px;
   
     /* styled for multiline ellipsis */
     white-space: inherit;
     display:-webkit-box; 
     word-wrap:break-word; 
-    -webkit-line-clamp:2;
+    -webkit-line-clamp:3;
     -webkit-box-orient:vertical;
-  }
-
-  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
-    font-size: 14px;
-    line-height: 18px;
   }
 `
 
@@ -208,9 +206,13 @@ const HeaderWrapper = styled(Horizontal)`
 `
 
 const NoticeListItemWrapper = styled(ResponsiveWrapper)`
-  /* align-items: center; */
+  align-items: center;
   &:hover svg {
     fill: var(--main-theme-accent);
+  }
+  
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    align-items: flex-start;
   }
 `
 

@@ -98,6 +98,7 @@ const Main: React.FC = () => {
                             />
                         ) : notice === undefined ? (
                             <TextCardGroup
+                                spaceBetweenCards
                                 content={[{
                                     text: <Skeleton count={3} />,
                                     key: "LOADER3"
