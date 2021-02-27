@@ -9,6 +9,7 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 import { UnstyledLink } from "../../basic/Atomics";
 import { useMyData } from "../../../hooks/api/useMyData";
 import { SMALL_SCREEN_THRESHOLD } from "../../../constants";
+import css from "@emotion/css";
 
 const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
   const scrollerRef = useRef<HTMLDivElement>(null)
@@ -28,7 +29,11 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
     <Wrapper>
       <Container>
         <UnstyledLink to="/">
-          <Logo height={37} width={32} />
+          <Logo
+            height={37}
+            width={32}
+            selected={history.location.pathname === '/'}
+          />
         </UnstyledLink>
         <Scroller ref={scrollerRef}>
           {navigations.map(({ title, image, route }) =>
@@ -56,7 +61,11 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
 export const NavigationBar = withRouter(TopNavbar);
 export default NavigationBar
 
-const Logo = styled(IconLogo)`
+const Logo = styled(IconLogo)<{ selected?: boolean }>`
+  fill: #d1d1d1;
+  ${({ selected }) => selected && css`
+    fill: var(--main-theme-accent);
+  `}
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     width: 24px;
   }
