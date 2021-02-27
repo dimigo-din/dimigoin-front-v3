@@ -91,6 +91,7 @@ const SubButton = styled.p<{ noAction?: boolean }>`
 
   ${({ noAction }) => noAction && css`
     color: #9A9A9A;
+    font-weight: 400;
   `}
 `;
 
