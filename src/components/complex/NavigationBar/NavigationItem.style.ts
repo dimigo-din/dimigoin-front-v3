@@ -23,6 +23,7 @@ export const NavigationTitle = styled.span<{ selected?: boolean }>`
     `}
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     font-size: 15px;
+    --bottom-margin: -21px;
   }
 `;
 
@@ -32,12 +33,15 @@ export const NavigationImage = styled.img`
   object-fit: contain;
 `;
 
-export const BottomBar = styled.div<{ selected?: boolean }>`
+export const BottomBar = styled.div<{ selected?: boolean; bottom?: number; }>`
   position: absolute;
-  bottom: -34px;
+  bottom: var(--bottom-margin, ${({ bottom }) => bottom}px);
   left: 0;
   right: 0;
   background-color: #E83C77;
   height: 5px;
   border-radius: 10px;
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    height: 3px;
+  }
 `;
