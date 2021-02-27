@@ -109,6 +109,7 @@ const ProfileImage = styled.img`
   border-radius: 50%;
   border: solid 2px var(--main-theme-accent);
   margin-right: 38.2px;
+    object-fit: cover;
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     width: 28px;
     height: 28px;
