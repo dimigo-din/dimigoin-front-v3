@@ -18,7 +18,7 @@ import { getWholeClassAttendanceLog, registerOtherStudentMovingHistory } from ".
 import { useMyData } from "../../hooks/api/useMyData";
 import Skeleton from "react-loading-skeleton";
 import { getSelfStudyPeriod } from "../../utils";
-import { isStudent } from "../../utils/isStudent";
+import { isStudent, isTeacher } from "../../utils/isStudent";
 import { getTargetPlaceByLabelAndStudent } from "./getTargetPlaceByLabelAndStudent";
 import { LabelCard } from "./LabelCard";
 import { TopBar } from "./TopBar";
@@ -202,7 +202,7 @@ const SelfStudyDisplay: React.FC = () => {
   const moveStudentPlaceTo = useCallback(async (student: Student, place: DisplayPlace) => {
     if (!myData?.permissions.includes(Permission.attendance)) return
 
-    const parsedPlace = await getTargetPlaceByLabelAndStudent(student, place)
+    const parsedPlace = await getTargetPlaceByLabelAndStudent(student, place, isTeacher(myData))
     await registerOtherStudentMovingHistory(student._id, {
       place: parsedPlace.placeId,
       remark: parsedPlace.reason

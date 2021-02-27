@@ -4,13 +4,14 @@ import { ReactComponent as IconLogo } from '../../../assets/brand.svg'
 import { ReactComponent as LogoutLogo } from '../../../assets/icons/logout.svg'
 
 import NavigationItem from "./NavigationItem";
-import navigations from "./navigations";
+import { studentNavigations, teacherNavigations } from "./navigations";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { UnstyledLink } from "../../basic/Atomics";
 import { useMyData } from "../../../hooks/api/useMyData";
 import { SMALL_SCREEN_THRESHOLD } from "../../../constants";
 import css from "@emotion/css";
 import { BottomBar } from "./NavigationItem.style";
+import { isStudent } from "../../../utils/isStudent";
 
 const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
   const scrollerRef = useRef<HTMLDivElement>(null)
@@ -26,6 +27,7 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
   )
   const myLocalData = useMyData()
   const profileImageURI = myLocalData ? myLocalData.photos.slice(-1)[0] : undefined
+
   return (
     <Wrapper>
       <Container>
@@ -40,7 +42,7 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
           </LogoWrapper>
         </UnstyledLink>
         <Scroller ref={scrollerRef}>
-          {navigations.map(({ title, image, route }) =>
+          {(myLocalData && isStudent(myLocalData) ? studentNavigations : teacherNavigations).map(({ title, image, route }) =>
             <NavigationItem
               key={`${route}${title}`}
               title={title}
