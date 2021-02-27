@@ -4,16 +4,19 @@ import { getMentoringList } from "../../api/mentoring"
 import {
     Card,
     CardGroupHeader, CardGroupHeaderButton, CardGroupHeaderWrapper,
-    Col, Data, Divider, HeadData, HeaderWrapper, HeadRow, NoData, PageWrapper,
+    Col, Data, Divider, HeadData, HeadRow, NoData, PageWrapper,
     ResponsiveWrapper, Row, showModal, Table
 } from "../../components"
+import { ReactComponent as _DownloadIcon } from '../../assets/icons/download.svg'
 import { Doc, Mentoring } from "../../constants/types"
 import { ReactComponent as _NewIcon } from '../../assets/icons/edit.svg'
 import styled from "@emotion/styled"
-import { AfterschoolEditor } from "../Afterschool/AfterschoolEditor"
 import { MentoringEditor } from "./MentoringEditor"
 import { dayEngKorMapper } from "../../constants"
 import Skeleton from "react-loading-skeleton"
+import { toast } from "react-toastify"
+import { requestMentoringApplyInfoSheet } from "../../api"
+import { downloadFileFromDownloadble } from "../../functions/downloadById"
 
 const Teacher: React.FC = () => {
     const [mentoringList, setMentoringList] = useState<Doc<Mentoring>[] | null>()
@@ -50,6 +53,16 @@ const Teacher: React.FC = () => {
         }
     }, [fetchData])
 
+    const downloadSheet = useCallback(() => {
+        requestMentoringApplyInfoSheet()
+            .then(downloadable => {
+                downloadFileFromDownloadble(downloadable)
+                toast.success("멘토링 신청 내역 시트를 다운로드했어요")
+            }).catch(() => {
+                toast.error("파일을 다운로드하지 못했어요")
+            })
+    }, [])
+
     useEffect(() => {
         fetchData()
     }, [fetchData])
@@ -62,6 +75,10 @@ const Teacher: React.FC = () => {
                     <CardGroupHeader css={css`flex: 1;`}>
                         멘토링 관리
                     </CardGroupHeader>
+                    <CardGroupHeaderButton onClick={() => downloadSheet()}>
+                        <DownloadIcon />
+                        엑셀 다운로드
+                    </CardGroupHeaderButton>
                     <CardGroupHeaderButton onClick={() => openEdit()}>
                         <NewIcon />
                         새 멘토링
@@ -139,5 +156,10 @@ export default Teacher
 
 const NewIcon = styled(_NewIcon)`
     fill: white;
+    margin-right: 12px;
+`
+
+const DownloadIcon = styled(_DownloadIcon)`
+    stroke: white;
     margin-right: 12px;
 `

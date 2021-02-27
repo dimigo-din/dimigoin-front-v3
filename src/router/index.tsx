@@ -36,9 +36,14 @@ const needAuthAndBranch = <TeacherProps, StudentProps>({
 }): React.FC<StudentProps & TeacherProps> => {
   return function C(props) {
     const [myData, setMyData] = React.useState<User | null>();
+    
     React.useEffect(() => {
-      getMyData().then(setMyData).catch(() => setMyData(null))
+      getMyData()
+        .then(setMyData)
+        .catch(() => setMyData(null))
     }, [])
+
+    console.log(myData)
 
     if (myData === null) return <Redirect to="/auth/login" />
     if (myData?.userType === UserType.S) return <Student {...props} />

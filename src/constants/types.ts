@@ -231,5 +231,5 @@ export interface MentoringSchedule extends Mentoring {
 export interface MentoringApplication {
     date: string;
     applier: Student;
-    mentoring: Mentoring;
+    mentoring: Doc<Mentoring>;
 }

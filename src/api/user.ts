@@ -11,17 +11,19 @@ export const saveMyData = async (myData: User) => {
 export const getMyLocalData = () => cookieJar.get(COOKIE_JAR_KEY.MY_INFO) as User | undefined
 
 export const fetchMyData = async () => {
-    if(!getAccessToken()) return null
+    if(!getAccessToken()) {
+        throw new Error("No Auth Data")
+    }
     const myData = await api<"getMyInfo">("GET", "/user/me")
     saveMyData(myData.identity)
     return myData.identity
 }
 
-export const getMyData = () => new Promise<User>((success) => {
+export const getMyData = () => {
     const cached = getMyLocalData()
-    if(cached) return success(cached)
+    if(cached) return Promise.resolve(cached)
     else return fetchMyData()
-})
+}
 
 export const fetchAllStudents = () => api<"getAllStudents">("GET", "/user/student").then(d => d.students)
 export const getAllTeachers = () => api<"getAllTeachers">("GET", "/user/teacher").then(d => d.teachers)

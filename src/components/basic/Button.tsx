@@ -11,6 +11,7 @@ export interface ButtonProps {
   large?: boolean;
   text?: boolean;
   disabled?: boolean;
+  cancel?: boolean;
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   children: React.ReactNode;
 }
@@ -37,7 +38,7 @@ const style = {
   `,
   gray: css`
     background-color: #f3f3f3;
-    box-shadow: 0 10px 24px 0 rgba(50, 50, 50, 0.11);
+    /* box-shadow: 0 10px 24px 0 rgba(50, 50, 50, 0.11); */
     color: #595858;
   `,
   text: css`
@@ -49,6 +50,10 @@ const style = {
   `,
   disable: css`
     background-color: #8a8a8a;
+  `,
+  cancel: css`
+    background-color: #9A9A9A;
+    color: white;
   `,
   large: css`
     font-size: 24px;
@@ -67,6 +72,7 @@ export const Button: React.FC<ButtonProps> = ({
   large = false,
   text = false,
   disabled = false,
+  cancel = false,
   onClick,
   children,
   ...props
@@ -79,6 +85,7 @@ export const Button: React.FC<ButtonProps> = ({
     (!active || disabled) && style.disable,
     large && style.large,
     small && style.small,
+    cancel && style.cancel,
   ].filter(Boolean);
   return (
     <div

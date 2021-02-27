@@ -26,3 +26,6 @@ export const getWeeklyMeals = async (date: Date): Promise<DailyMeal[]> => {
 export const getDailyMeal = (date: Date = new Date()) => {
   return api<"dailyMeal">('GET', `/meal/date/${formatRequestableDate(date)}`).then(e => e.meal)
 }
+
+export const requestMentoringApplyInfoSheet = () =>
+  api<"requestMentoringApplyInfoSheet">("POST", "/mentoring-application/export").then(e => e.exportedFile)

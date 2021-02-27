@@ -1,4 +1,4 @@
-import { Doc, EngDay, Mentoring, MentoringApplication, MentoringSchedule, Merge } from "../../constants/types";
+import { Doc, DownloadbleFile, EngDay, Mentoring, MentoringApplication, MentoringSchedule, Merge } from "../../constants/types";
 
 export interface MentoringList {
     endpoint: '/mentoring';
@@ -6,6 +6,15 @@ export interface MentoringList {
     req: {};
     res: {
         mentorings: Doc<Mentoring>[];
+    }
+}
+
+export interface AppliedMentoring {
+    endpoint: '/mentoring-application';
+    method: 'GET';
+    req: {};
+    res: {
+        applications: Doc<MentoringApplication>[]
     }
 }
 
@@ -21,6 +30,17 @@ export interface RequestableMentoringList {
 export interface ApplyMentoring {
     endpoint: '/mentoring-application/:mentoringId';
     method: 'POST';
+    req: {
+        date: string;
+    }
+    res: {
+        mentoringApplication: MentoringApplication
+    }
+}
+
+export interface UnapplyMentoring {
+    endpoint: '/mentoring-application/:mentoringId';
+    method: 'DELETE';
     req: {
         date: string;
     }
@@ -57,5 +77,14 @@ export interface DeleteMentoringProgram {
     req: {};
     res: {
         mentoring: Doc<Mentoring>
+    }
+}
+
+export interface RequestMentoringApplyInfoSheet {
+    endpoint: '/mentoring-application/export';
+    method: 'POST';
+    req: {};
+    res: {
+        exportedFile: DownloadbleFile
     }
 }
