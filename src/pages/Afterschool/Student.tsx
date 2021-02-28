@@ -4,10 +4,11 @@ import React, { useCallback, useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import { applyAfterschoolClass, getAfterschoolClassList, getAppliedClasses, unapplyAfterschoolClass } from "../../api"
 import { Card, CardGroupHeader, Col, Divider, NoData, PageWrapper, ResponsiveWrapper } from "../../components"
-import { CardHeader, CardDetail, CardContent } from "../../components/basic/CardComponent"
+import { CardHeader, CardDetail, CardContent, CardFooterDetail } from "../../components/basic/CardComponent"
 import { dayEngKorMapper, engDays, SMALL_SCREEN_THRESHOLD } from "../../constants"
 import { Doc, AfterschoolClass, AfterschoolClassApplication, EngDay } from "../../constants/types"
 import useInput from "../../hooks/useInput"
+import { ReactComponent as AppliedStamp } from "../../assets/stamp/applied.svg"
 import { selfStudyTimesToString } from "../../utils"
 import { WeekDaySelector } from "./WeekDaySelector"
 
@@ -17,15 +18,15 @@ const AfterschoolApply: React.FC = () => {
     const weekDaySelectorInput = useInput<number | null>(null)
     // const weekDaySelectorValue = weekDaySelectorInput.value
 
-    const [ filteredClasses, setFilteredClasses ] = useState<Doc<AfterschoolClass>[] | null>()
+    const [filteredClasses, setFilteredClasses] = useState<Doc<AfterschoolClass>[] | null>()
 
     useEffect(() => {
         // console.log()
-        if(weekDaySelectorInput.value === null) setFilteredClasses(() => afterschoolClassList)
+        if (weekDaySelectorInput.value === null) setFilteredClasses(() => afterschoolClassList)
         else setFilteredClasses(() => afterschoolClassList?.filter(afterschoolClass =>
             afterschoolClass.days.includes(engDays[weekDaySelectorInput.value!!] as EngDay
-        )))
-    }, [ weekDaySelectorInput.value, afterschoolClassList ])
+            )))
+    }, [weekDaySelectorInput.value, afterschoolClassList])
 
     const fetchClassListData = useCallback(() => {
         getAfterschoolClassList()
@@ -85,21 +86,19 @@ const AfterschoolApply: React.FC = () => {
                                     key={afterschoolClass._id}
                                     onClick={() => (applied ? unapplyClass : applyClass)(afterschoolClass._id, afterschoolClass.name)}
                                     disableSpace
-                                    leftBorder={applied}
+                                    leftBorder
+                                    borderColor={applied ? "var(--main-theme-accent)" : "#EEEEEE"}
                                 >
-                                    <CardHeaderWrapper>
+                                    <div>
                                         <CardHeader>{afterschoolClass.name}</CardHeader>
-                                        <CountDisplay>{afterschoolClass.applierCount}/{afterschoolClass.capacity}명</CountDisplay>
-                                    </CardHeaderWrapper>
-                                    <CardDetailWrapper>
-                                        <CardDetail>{afterschoolClass.teacher.name} 선생님,</CardDetail>
-                                        <CardDetail>{afterschoolClass.days?.map(day => dayEngKorMapper[day]).join(' ')}요일,</CardDetail>
-                                        <CardDetail>{selfStudyTimesToString(afterschoolClass.times)}타임</CardDetail>
-                                    </CardDetailWrapper>
-                                    <CardContent>
-                                        {afterschoolClass.description}
-                                    </CardContent>
-                                    <ContentPopup>{afterschoolClass.description}</ContentPopup>
+                                        <CardDetailWrapper>
+                                            <CardDetail>{selfStudyTimesToString(afterschoolClass.times)}타임</CardDetail>
+                                        </CardDetailWrapper>
+                                        <CardFooterDetail>
+                                            남은 인원 : {afterschoolClass.capacity - afterschoolClass.applierCount}
+                                        </CardFooterDetail>
+                                    </div>
+                                    {applied && <AppliedStamp />}
                                 </ClassCard>)
                         }
                         )}
@@ -111,27 +110,21 @@ const AfterschoolApply: React.FC = () => {
                 <CardGroupHeader>
                     신청목록
                 </CardGroupHeader>
-                {appliedClasses?.length
-                    ? appliedClasses?.map(({ afterschool: appliedClass }) =>
-                        <Card onClick={() => unapplyClass(appliedClass._id, appliedClass.name)}>
-                            <CardHeader>{appliedClass.name}</CardHeader>
-                            <CardDetailWrapper>
-                                <CardDetail>{appliedClass.teacher.name} 선생님,</CardDetail>
-                                <CardDetail>{appliedClass.days?.map(day => dayEngKorMapper[day]).join(' ')}요일,</CardDetail>
-                                <CardDetail>{selfStudyTimesToString(appliedClass.times)}타임</CardDetail>
-                            </CardDetailWrapper>
-                        </Card>)
-                    : <Card><NoData>신청한 강좌가 없습니다</NoData></Card>}                {appliedClasses?.length
+                {
+                    appliedClasses?.length
                         ? appliedClasses?.map(({ afterschool: appliedClass }) =>
                             <Card onClick={() => unapplyClass(appliedClass._id, appliedClass.name)}>
-                                <CardHeader>{appliedClass.name}</CardHeader>
+                                <CardHeader>
+                                    {appliedClass.name}
+                                </CardHeader>
                                 <CardDetailWrapper>
                                     <CardDetail>{appliedClass.teacher.name} 선생님,</CardDetail>
                                     <CardDetail>{appliedClass.days?.map(day => dayEngKorMapper[day]).join(' ')}요일,</CardDetail>
                                     <CardDetail>{selfStudyTimesToString(appliedClass.times)}타임</CardDetail>
                                 </CardDetailWrapper>
                             </Card>)
-                        : <Card><NoData>신청한 강좌가 없습니다</NoData></Card>}
+                        : <Card><NoData>신청한 강좌가 없습니다</NoData></Card>
+                }
             </Appliments>
         </RootWrapper>
     </PageWrapper>
@@ -152,8 +145,12 @@ const sticky = css`
 const ClassCard = styled(Card)`
     margin: 12px;
     width: 270px;
-    height: 210px;
+    border-radius: 0px 5px 5px 0px;
     box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 `
 
 const RootWrapper = styled(ResponsiveWrapper)`
@@ -183,39 +180,6 @@ const CardGridWrapper = styled(ResponsiveWrapper)`
 const CardDetailWrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
-    margin-top: 6px;
-`
-
-const CardHeaderWrapper = styled.div`
-    display: flex;
-`
-
-const CountDisplay = styled(CardHeader)`
-    color: var(--main-theme-accent);
-    flex-shrink: 0;
-    flex-grow: 0;
-    white-space: nowrap;
-`
-
-const ContentPopup = styled.p`
-    transition: 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
-    opacity: 0;
-    position: absolute;
-    width: 215px;
-    font-size: 17px;
-    background-color: #fff;
-    line-height: 24px;
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.03);
-    padding: 12px;
-    box-sizing: border-box;
-    @media screen and (min-width: ${SMALL_SCREEN_THRESHOLD}px) {
-        &:hover {
-            opacity: 1;
-        }
-    }
-    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
-        font-size: 14px;
-    }
 `
 
 const ResponsiveWeekDaySelector = styled(WeekDaySelector)`  
