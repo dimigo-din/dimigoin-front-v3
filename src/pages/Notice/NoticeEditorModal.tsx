@@ -64,7 +64,7 @@ export const NoticeEditingModal: React.FC<{ closeModal(): void; } & Partial<Doc<
 
     return <NoticeModalWrapper>
         <HeaderWrapper>
-            <TitleInput placeholder="이곳을 눌러 제목을 입력하세요" {...titleInput} />
+            <TitleInput placeholder="ㅁㄴㅇㄹ을 눌러 제목을 입력하세요" {...titleInput} />
             {/* <NoticeTypeRadioSelector items={[{
                 name: "글까지",
                 key: "ARTICLE_ONLY"

@@ -114,6 +114,7 @@ export interface Notice {
     content: string;
     startDate: Date;
     endDate: Date;
+    author?: User;
 }
 
 export interface DailyMeal {
@@ -231,5 +232,5 @@ export interface MentoringSchedule extends Mentoring {
 export interface MentoringApplication {
     date: string;
     applier: Student;
-    mentoring: Mentoring;
+    mentoring: Doc<Mentoring>;
 }

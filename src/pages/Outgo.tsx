@@ -58,7 +58,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({ onChange }) => {
     <>
       <Checkbox
         text="당일외출이 아님"
-        css={css`margin-bottom: 12px;`}
+        css={css`margin-bottom: 25px;`}
         {...isNotDailyCheckbox}
       />
       <WeekCalendar {...dayInput} rangeSelect={isNotDailyCheckbox.checked} />
@@ -167,14 +167,13 @@ const Outgo: React.FC = () => {
                 padding: 17px 24px;
                 margin-top: 0px;
               `}>
-              <p>현재 외출 유형이 개인 외출로 지정되어있습니다.</p>
-              <p>신청자를 추가하려면 유형을 단체 외출로 변경해주세요.</p>
+              <p>현재 외출 유형이 개인 외출로 지정되어있습니다. 신청자를 추가하려면 유형을 단체 외출로 변경해주세요.</p>
             </TextCard>}
             <Divider data-divider small horizontal />
             <ResponsiveWrapper threshold={1400}>
               <Col width={6}>
                 <CardGroupHeader>외출시간</CardGroupHeader>
-                <Card leftBorder>
+                <Card leftBorder css={css`flex: 1;`}>
                   <DateSelector {...dateSelectorInput} />
                 </Card>
               </Col>

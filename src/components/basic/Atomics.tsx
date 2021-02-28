@@ -41,8 +41,9 @@ export const noBreak = css`
 `
 export const CardExplainContent = styled.div`
   color: #8a8a8a;
-  font-size: 18px;
-  line-height: 30px;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     font-size: 14px;
     line-height: 24px;
@@ -52,11 +53,8 @@ export const CardExplainContent = styled.div`
   }
   & h2 {
     font-weight: 900;
-    font-size: 20px;
+    font-size: 16px;
     color: black;
-    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
-      font-size: 16px;
-    }
   }
   & *+h2 {
     margin-top: 12px;

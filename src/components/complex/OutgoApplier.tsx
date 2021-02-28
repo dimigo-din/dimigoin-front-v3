@@ -121,7 +121,7 @@ export const OutgoApplier: React.FC<OutgoApplierProps> = ({ onChange, value }) =
       // 2차원배열을 1차원으로 펼쳐서 학생리스트로 지정합니다
       setStudentsList(() => sortedByGrade.flat())
     })()
-  }, [])
+  }, [ myData ])
   useEffect(() => {
     if (onChange && appliers) onChange({ target: { value: appliers } })
   }, [appliers, onChange])
@@ -142,7 +142,7 @@ const Wrapper = styled(Card)`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding: -6px;
+  padding: 9px !important;
 `
 
 const FixedHeightContainer = styled.div`

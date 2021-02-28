@@ -1,8 +1,9 @@
-import { Doc, Merge, Notice } from "../../constants/types";
+import { Doc, Merge, Notice, User } from "../../constants/types";
 
 export type APIDocNotice = Merge<Notice, {
   startDate: string;
   endDate: string;
+  author?: User;
 }>
 
 export interface AllNotices {

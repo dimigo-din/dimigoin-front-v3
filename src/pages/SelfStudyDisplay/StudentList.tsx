@@ -67,7 +67,7 @@ export const StudentList: React.FC<{
                             additionalInfo={`${student.student.name} : ${student.log?.place.name || "장소를 등록하지 않았습니다"}${student.log?.remark ? `(${student.log?.remark})` : ''}`}
                             hasLogged={!!student.log}
                         >
-                            {student.student.number} {student.student.name}
+                            {student.student.number.toString().padStart(2, '0')} {student.student.name}
                             {
                                 ((content: string) => content && <EtcInfo>{content}</EtcInfo>)([
                                     student.log?.place && ['CIRCLE', 'ETC', 'MOVING_CLASS'].includes(rowType) && student.log.place.name,
@@ -86,4 +86,5 @@ export const StudentList: React.FC<{
 const EtcInfo = styled.span`
       font-size: 18px;
       font-weight: 700;
-    `
+      margin-left: 6px;
+`

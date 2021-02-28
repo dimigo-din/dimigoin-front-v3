@@ -12,25 +12,30 @@ let localCached: {
 }
 
 export const getPrimaryPlaceList = async () => {
-    if(localCached[CacheKeys.PRIMARY_PLACE] !== null) return localCached[CacheKeys.PRIMARY_PLACE]!!
+    if (localCached[CacheKeys.PRIMARY_PLACE] !== null) return localCached[CacheKeys.PRIMARY_PLACE]!!
 
     const storageCached = getCachedItem<Doc<Place>[]>(CacheKeys.PRIMARY_PLACE)
-    if(storageCached) {
+    if (storageCached) {
         localCached[CacheKeys.PRIMARY_PLACE] = storageCached
         return storageCached
     }
-    const fetched = (await api<"primaryPlaceList">("GET", "/place/primary")).places
-    localCached[CacheKeys.PRIMARY_PLACE] = fetched
-    // 5일간 캐시
-    cacheItem(CacheKeys.PRIMARY_PLACE, fetched, +new Date() + 1000 * 60 * 60 * 24 * 5)
-    return fetched
+    try {
+
+        const fetched = (await api<"primaryPlaceList">("GET", "/place/primary")).places
+        localCached[CacheKeys.PRIMARY_PLACE] = fetched
+        // 5일간 캐시
+        cacheItem(CacheKeys.PRIMARY_PLACE, fetched, +new Date() + 1000 * 60 * 60 * 24 * 5)
+        return fetched
+    } catch(e) {
+        throw e
+    }
 }
 
 export const getPlaceList = async (): Promise<Doc<Place>[]> => {
-    if(localCached[CacheKeys.PLACES] !== null) return localCached[CacheKeys.PLACES]!!
+    if (localCached[CacheKeys.PLACES] !== null) return localCached[CacheKeys.PLACES]!!
 
     const storageCached = getCachedItem<Doc<Place>[]>(CacheKeys.PLACES)
-    if(storageCached) {
+    if (storageCached) {
         localCached[CacheKeys.PLACES] = storageCached
         return storageCached
     }

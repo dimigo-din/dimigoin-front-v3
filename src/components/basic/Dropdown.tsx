@@ -25,7 +25,17 @@ export const Dropdown = ({
   const [selectedIndex, setSelectedIndex] = useState<number>();
   const [opened, setOpened] = useState(false);
 
-  useEffect(() => setSelectedIndex(() => (typeof initIndex === 'number') ? initIndex : -1), [ initIndex ])
+  useEffect(() => setSelectedIndex(() => (typeof initIndex === 'number') ? initIndex : -1), [initIndex])
+
+  useEffect(() => {
+    const outClickEvent = () => {
+      opened && setOpened(() => false)
+    }
+    window.addEventListener('click', outClickEvent)
+    return () => {
+      window.removeEventListener('click', outClickEvent)
+    }
+  }, [opened])
 
   const clickHandler = ({
     key,
@@ -43,29 +53,29 @@ export const Dropdown = ({
         onClick={() => items && setOpened((b) => !b)}
         disabled={!!items}
       >
-        {items ? 
-        [
-          {
-            name: placeholder,
-            key: "SELECTONE",
-          },
-          ...items,
-        ].map(({ key, name }, index) => (
+        {items ?
+          [
+            {
+              name: placeholder,
+              key: "SELECTONE",
+            },
+            ...items,
+          ].map(({ key, name }, index) => (
+            <Item
+              key={key}
+              onClick={() => clickHandler({ key, name, index })}
+              highlighted={selectedIndex !== -1 && selectedIndex === index - 1}
+              visible={selectedIndex === index - 1 || opened}
+            >
+              {name}
+            </Item>
+          )) :
           <Item
-            key={key}
-            onClick={() => clickHandler({ key, name, index })}
-            highlighted={selectedIndex !== -1 && selectedIndex === index - 1}
-            visible={selectedIndex === index - 1 || opened}
+            highlighted={false}
+            visible
           >
-            {name}
-          </Item>
-        )) :
-        <Item
-        highlighted={false}
-        visible
-      >
-        {placeholder}
-      </Item>}
+            {placeholder}
+          </Item>}
       </Wrapper>
     </FixedHeightWrapper>
   );
@@ -93,7 +103,7 @@ const Wrapper = styled.div<{ highlighted?: boolean; opened?: boolean; disabled?:
   background-color: white;
   max-height: 400px;
 
-  ${({disabled}) => disabled && css`
+  ${({ disabled }) => disabled && css`
     &:hover {
       ${highlightedBorder}
     }

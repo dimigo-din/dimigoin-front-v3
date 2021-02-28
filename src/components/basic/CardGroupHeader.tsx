@@ -87,10 +87,12 @@ const SubButton = styled.p<{ noAction?: boolean }>`
 
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     font-size: 12px;
+    margin-top: 10px;
   }
 
   ${({ noAction }) => noAction && css`
     color: #9A9A9A;
+    font-weight: 400;
   `}
 `;
 

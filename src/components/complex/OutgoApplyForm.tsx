@@ -62,7 +62,7 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }
   ]);
   return (
     <>
-      <Card leftBorder>
+      <Card leftBorder {...props}>
         <FormHeader>외출 유형</FormHeader>
         <RadioButtonGroup
           {...outgoType}
@@ -113,12 +113,12 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }
           placeholder="선택 또는 직접 입력"
         />
         <FormHeader>상세 사유</FormHeader>
-        <Textarea {...detailReason} placeholder="이 곳을 눌러 입력하세요" />
+        <Textarea {...detailReason} placeholder="이곳을 눌러 입력하세요" />
         <FormHeader>승인 교사</FormHeader>
         <Dropdown
           {...approver}
           items={approversList}
-          placeholder="이 곳을 눌러 선택하세요"
+          placeholder="이곳을 눌러 선택하세요"
         />
       </Card>
     </>

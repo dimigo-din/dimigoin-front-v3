@@ -98,6 +98,7 @@ const Main: React.FC = () => {
                             />
                         ) : notice === undefined ? (
                             <TextCardGroup
+                                spaceBetweenCards
                                 content={[{
                                     text: <Skeleton count={3} />,
                                     key: "LOADER3"
@@ -113,7 +114,7 @@ const Main: React.FC = () => {
                         isStudent ?
                             <Col width={5}>
                                 <CardGroupHeader subButton={{
-                                    text: "우리반 현황 보기",
+                                    text: "우리반 현황",
                                     route: "/selfstudydisplay"
                                 }}>자습 현황</CardGroupHeader>
                                 <SelfStudyStatus />

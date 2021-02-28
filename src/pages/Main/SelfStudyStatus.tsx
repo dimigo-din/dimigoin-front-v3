@@ -82,6 +82,9 @@ export const SelfStudyStatus: React.FC = () => {
     <Card
       css={css`
         padding: 0px;
+        display: flex;
+        align-items: center;
+        flex: 1;
       `}
     >
       <ButtonsWrapper>

@@ -1,0 +1,8 @@
+<svg id="레이어_2" data-name="레이어 2" xmlns="http://www.w3.org/2000/svg" width="165.76" height="156.76" viewBox="0 0 165.76 156.76">
+  <g id="레이어_1" data-name="레이어 1">
+    <rect id="사각형_1517" data-name="사각형 1517" width="31.535" height="74.831" rx="13.45" transform="translate(11.38 40.643)" fill="#e83c77"/>
+    <path id="패스_2701" data-name="패스 2701" d="M155.906,61.513v41.228a13.135,13.135,0,0,1-13.115,13.115H137.5a13.09,13.09,0,0,1-13.106-13.115V61.513h0a15.768,15.768,0,1,0-31.526,0v41.228a13.114,13.114,0,0,1-13.115,13.115H74.435A13.135,13.135,0,0,1,61.31,102.741V61.513a47.3,47.3,0,1,1,94.6,0Z" transform="translate(-1.525 -0.354)" fill="#e83c77"/>
+    <rect id="사각형_1518" data-name="사각형 1518" width="31.535" height="31.535" rx="13.45" transform="translate(11.38)" fill="#e83c77"/>
+    <rect id="사각형_1519" data-name="사각형 1519" width="31.535" height="165.76" rx="13.45" transform="translate(165.76 125.225) rotate(90)" fill="#e83c77"/>
+  </g>
+</svg>

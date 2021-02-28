@@ -65,12 +65,10 @@ export const ResponsiveScreenWrapper = styled.div`
   }
 `;
 
-export const MOBILD_DEFAULT_THRESHOLD = 720
-
-export const ResponsiveWrapper = styled.div<{ threshold?: number; mobildReverse?: boolean; }>`
+export const ResponsiveWrapper = styled.div<{ threshold?: number; mobileReverse?: boolean; }>`
   display: flex;
-  @media screen and (max-width: ${({ threshold }) => threshold || MOBILD_DEFAULT_THRESHOLD}px) {
-    flex-direction: column${({ mobildReverse }) => mobildReverse && '-reverse'};
+  @media screen and (max-width: ${({ threshold }) => threshold || SMALL_SCREEN_THRESHOLD}px) {
+    flex-direction: column${({ mobileReverse: mobildReverse }) => mobildReverse && '-reverse'};
     & > [data-divider] {
       margin: var(--divider-width, 15px) 0px;
     }

@@ -4,11 +4,14 @@ import { ReactComponent as IconLogo } from '../../../assets/brand.svg'
 import { ReactComponent as LogoutLogo } from '../../../assets/icons/logout.svg'
 
 import NavigationItem from "./NavigationItem";
-import navigations from "./navigations";
+import { studentNavigations, teacherNavigations } from "./navigations";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { UnstyledLink } from "../../basic/Atomics";
 import { useMyData } from "../../../hooks/api/useMyData";
 import { SMALL_SCREEN_THRESHOLD } from "../../../constants";
+import css from "@emotion/css";
+import { BottomBar } from "./NavigationItem.style";
+import { isStudent } from "../../../utils/isStudent";
 
 const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
   const scrollerRef = useRef<HTMLDivElement>(null)
@@ -24,14 +27,22 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
   )
   const myLocalData = useMyData()
   const profileImageURI = myLocalData ? myLocalData.photos.slice(-1)[0] : undefined
+
   return (
     <Wrapper>
       <Container>
         <UnstyledLink to="/">
-          <Logo height={37} width={32} />
+          <LogoWrapper>
+            <Logo
+              height={37}
+              width={32}
+              selected={history.location.pathname === '/'}
+            />
+            {history.location.pathname === '/' && <BottomBar bottom={-24} />}
+          </LogoWrapper>
         </UnstyledLink>
         <Scroller ref={scrollerRef}>
-          {navigations.map(({ title, image, route }) =>
+          {(myLocalData && isStudent(myLocalData) ? studentNavigations : teacherNavigations).map(({ title, image, route }) =>
             <NavigationItem
               key={`${route}${title}`}
               title={title}
@@ -56,7 +67,19 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
 export const NavigationBar = withRouter(TopNavbar);
 export default NavigationBar
 
-const Logo = styled(IconLogo)`
+const LogoWrapper = styled.span`
+  position: relative;
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    --bottom-margin: -9px;
+  }
+`
+
+const Logo = styled(IconLogo) <{ selected?: boolean }>`
+  fill: #d1d1d1;
+  
+  ${({ selected }) => selected && css`
+    fill: var(--main-theme-accent);
+  `}
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     width: 24px;
   }
@@ -100,6 +123,7 @@ const ProfileImage = styled.img`
   border-radius: 50%;
   border: solid 2px var(--main-theme-accent);
   margin-right: 38.2px;
+    object-fit: cover;
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     width: 28px;
     height: 28px;

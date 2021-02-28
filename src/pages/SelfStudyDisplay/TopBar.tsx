@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Horizontal, UnstyledLink } from "../../components";
-import { ReactComponent as IconLogo } from "../../assets/brand.svg";
+import { ReactComponent as IconLogo } from "../../assets/brand-with-bottom-border.svg";
 import { ReactComponent as _ArrowDown } from "../../assets/icons/arrow-down.svg";
 import { EventFunction } from "../../hooks/useInput";
 
@@ -36,22 +36,28 @@ export const TopBar: React.FC<TopBarProps> = ({
 
     return (
         <Horizontal
-            css={css`
-                align-items: center;
-            `}
-            onClick={() => canSelectOtherClass  && setIsOpened(() => true)}
+            onClick={() => canSelectOtherClass && setIsOpened(() => true)}
         >
             <UnstyledLink to="/">
                 <IconLogo height={48} width={32} />
             </UnstyledLink>
-            {canSelectOtherClass === true && <ArrowWrapper isDownArrow={isOpened}>
-                <Arrow />
-            </ArrowWrapper>}
-            <ClassName>{hasClassInfo === true ? clasName || <Skeleton width={300} /> : "학급을 선택해주세요"}</ClassName>
-            <SelfStudyName>{selfStudyName}</SelfStudyName>
+            <LabelWrapper>
+                {canSelectOtherClass === true && <ArrowWrapper isDownArrow={isOpened}>
+                    <Arrow />
+                </ArrowWrapper>}
+                <ClassName>{hasClassInfo === true ? clasName || <Skeleton width={300} /> : "학급을 선택해주세요"}</ClassName>
+                <SelfStudyName>{selfStudyName}</SelfStudyName>
+            </LabelWrapper>
         </Horizontal>
     )
 };
+
+const LabelWrapper = styled.div`
+    display: flex;
+    margin-left: 32px;
+    align-items: center;
+`
+
 const ClassName = styled.h1`
   font-size: 34px;
   font-family: "NanumSquare";
@@ -65,7 +71,6 @@ const SelfStudyName = styled.h2`
 `;
 
 const ArrowWrapper = styled.div<{ isDownArrow?: boolean }>`
-    margin-left: 20px;
     ${({ isDownArrow: isOpened }) => isOpened && css`
     & svg {
         transform: rotate(180deg);

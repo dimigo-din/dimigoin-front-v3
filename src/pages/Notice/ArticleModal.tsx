@@ -6,6 +6,7 @@ import { Card, Title, Divider, Horizontal, CompactButton, cardModalTopBorder } f
 import { SMALL_SCREEN_THRESHOLD } from "../../constants"
 import { Doc, Notice } from "../../constants/types"
 import { formatReadibleDate } from "../../utils"
+import { isStudent, isTeacher } from "../../utils/isStudent"
 
 export const ArticleModal: React.FC<{ articleId: string, goBack(): void, article?: Notice }> = ({ articleId, goBack, article }) => {
   const [articleData, setArticleData] = useState<Doc<Notice>>()
@@ -30,9 +31,9 @@ export const ArticleModal: React.FC<{ articleId: string, goBack(): void, article
             {formatReadibleDate(new Date(articleData.createdAt))}
           </Info>
         </Horizontal>
-        {/* <Horizontal css={css`flex-wrap: wrap;`}>
-            <Info>{articleData.author}</Info>
-          </Horizontal> */}
+        {articleData.author && <Horizontal css={css`flex-wrap: wrap;`}>
+            <Info>{articleData.author.name} {isTeacher(articleData.author) && articleData.author.role}</Info>
+          </Horizontal>}
       </Horizontal>}
       <Divider visible horizontal size={7} small />
     </div>

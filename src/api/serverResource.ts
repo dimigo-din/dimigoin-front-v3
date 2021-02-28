@@ -11,7 +11,7 @@ import {
     RegisterOtherStudentMovingHistory, WeeklyMeals, AllCircle, AppliedCircle,
     ApplyCircle, ApplyQuestion, CircleApplications, FinalSelect, SetApplicationStatus,
     ApplyMentoring, DeleteMentoringProgram, EditMentoringInfo, MentoringList,
-    NewMentoringProgram, RequestableMentoringList
+    NewMentoringProgram, RequestableMentoringList, RequestMentoringApplyInfoSheet, AppliedMentoring, UnapplyMentoring
 } from "./interfaces";
 import { Config } from "./interfaces/config";
 
@@ -66,4 +66,7 @@ export interface APIResource {
     newMentoringProgram: NewMentoringProgram;
     editMentoringInfo: EditMentoringInfo;
     deleteMentoringProgram: DeleteMentoringProgram;
+    requestMentoringApplyInfoSheet: RequestMentoringApplyInfoSheet;
+    appliedMentoring: AppliedMentoring;
+    unapplyMentoring: UnapplyMentoring;
 }

@@ -1,4 +1,4 @@
-import { Student, Teacher } from "../../constants/types"
+import { Student, Teacher, User } from "../../constants/types"
 
 export interface GetMyInfo {
     method: 'GET';
@@ -6,7 +6,7 @@ export interface GetMyInfo {
     needAuth: true;
     req: {};
     res: {
-        identity: Student
+        identity: User
     };
 }
 
