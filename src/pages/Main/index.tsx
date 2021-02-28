@@ -140,7 +140,7 @@ const Main: React.FC = () => {
                                 ))
                             ) : ( */}
                                     {/* <TextCardGroup content={[{ text:  }]} /> */}
-                                    <TextCard css={css`flex: 1;display: flex;`}>
+                                    <TextCard css={css`flex: 1;display: flex;margin-top: 0px;`}>
                                         <NoData>신청 현황이 없습니다</NoData>
                                     </TextCard>
                                     {/* )} */}
