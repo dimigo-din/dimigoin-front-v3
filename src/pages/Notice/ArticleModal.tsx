@@ -10,7 +10,6 @@ import { isTeacher } from "../../utils/isStudent"
 
 export const ArticleModal: React.FC<{ articleId: string, goBack(): void, article?: Notice }> = ({ articleId, goBack, article }) => {
   const [articleData, setArticleData] = useState<Doc<Notice>>()
-  console.log(article)
   useEffect(() => {
     if (!article)
       getNoticeById(articleId).then(e => setArticleData(() => e)).catch(() => {

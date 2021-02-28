@@ -81,7 +81,7 @@ export const IngangsilManager: React.FC = () => {
                     [NightSelfStudyTimeKey.NSS2]: [],
                 }
             })
-            console.log(groupedTicket)
+            
             setTicketsByGrade(() => groupedTicket)
         })()
     }, [])

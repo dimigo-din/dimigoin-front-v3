@@ -21,7 +21,6 @@ const AfterschoolApply: React.FC = () => {
     const [filteredClasses, setFilteredClasses] = useState<Doc<AfterschoolClass>[] | null>()
 
     useEffect(() => {
-        // console.log()
         if (weekDaySelectorInput.value === null) setFilteredClasses(() => afterschoolClassList)
         else setFilteredClasses(() => afterschoolClassList?.filter(afterschoolClass =>
             afterschoolClass.days.includes(engDays[weekDaySelectorInput.value!!] as EngDay

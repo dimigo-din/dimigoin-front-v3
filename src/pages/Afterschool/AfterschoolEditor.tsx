@@ -102,7 +102,6 @@ export const AfterschoolEditor: React.FC<{
             times.length === 0 && "시간"
         ].filter(Boolean)
         if (validations.length) {
-            console.log(placeDropdown.value)
             toast.error(validations.join(', ').을를 + " 다시 확인해주세요")
             return
         }

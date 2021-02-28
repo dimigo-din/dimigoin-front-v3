@@ -18,7 +18,6 @@ export const InputFormModal: React.FC<{
     }, [values, onSubmit])
 
     const updateField = useCallback((index, e) => {
-        console.log(e.target)
         const updatedValues = [
             ...values.slice(0, index),
             e.target.value,

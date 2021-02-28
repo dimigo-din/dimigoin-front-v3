@@ -39,7 +39,6 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }
 
 
   useEffect(() => {
-    console.log('네?')
     onChange &&
       onChange({
         target: {

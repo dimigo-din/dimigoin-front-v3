@@ -157,7 +157,6 @@ const SelfStudyDisplay: React.FC<RouteComponentProps> = ({ history }) => {
   useConsole('SDFFDS', hasUserClassInfo)
 
   useEffect(() => {
-    console.log('네??', topbarOpenStatus.value)
     if (topbarOpenStatus.value) setClassInfo(() => null)
   }, [topbarOpenStatus.value])
 
@@ -170,7 +169,6 @@ const SelfStudyDisplay: React.FC<RouteComponentProps> = ({ history }) => {
   useEffect(() => {
     if (!myData) return
     if (isStudent(myData)) {
-      console.log(myData)
       setClassInfo(() => [myData.grade, myData.class])
     }
     else setClassInfo(() => null)

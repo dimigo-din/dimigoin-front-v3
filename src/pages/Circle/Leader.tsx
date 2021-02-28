@@ -194,7 +194,6 @@ export const Leader: React.FC = () => {
     }, [config, fetchData])
 
     const openDetail = useCallback((index: number) => {
-        console.log(index, applications)
         if (!applications) return
         if (window.innerWidth < 1100) {
             showModal(close =>

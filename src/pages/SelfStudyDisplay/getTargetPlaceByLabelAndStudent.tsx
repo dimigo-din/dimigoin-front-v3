@@ -27,9 +27,8 @@ export const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeN
     new Promise<{
         placeId: string;
         reason?: string;
-    }>((success, fail) => {
+    }>((success) => {
         if (placeName === '교실') getHomeroom(...(isTeacher ? [student.grade, student.class] : [])).then(e => {
-            console.log(e)
             if (e)
                 success({
                     placeId: e._id

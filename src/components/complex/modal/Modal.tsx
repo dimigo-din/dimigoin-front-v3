@@ -42,7 +42,6 @@ export const ModalContainer = () => {
       setVisivility(true);
       setDisappearingAnimation(false);
       if (props) setProps(props);
-      console.log(props);
     };
   }, [disappear]);
   return visible && ModalElement ? (

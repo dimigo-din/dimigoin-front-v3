@@ -33,7 +33,6 @@ export const Timeline: React.FC<{ student: Student; close(): void }> = ({ studen
                 const thisPlace = await getPlaceById(row.place)
                 const parsedTime = new Date(row.createdAt)
                 const formattedTime = `${parsedTime.getHours().toString().padStart(2, '0')}:${parsedTime.getMinutes().toString().padStart(2, '0')}`
-                console.log(parsedTime)
                 return ({
                     subject: row.updatedBy?.name,
                     to: thisPlace?.name || "알수없는장소",

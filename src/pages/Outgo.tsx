@@ -117,8 +117,6 @@ const Outgo: React.FC = () => {
       (!agreementCheckbox.checked && "주의사항")
     ].filter<string>((e): e is string => !!e)
 
-    console.log(isTimeSelected, +(dateSelectorValue?.[0] || 0), +(dateSelectorValue?.[1] || 0))
-
     if (alerts.length) {
       makeAlert.error(alerts.join(', ').을를 + " 다시 확인해주세요")
       return

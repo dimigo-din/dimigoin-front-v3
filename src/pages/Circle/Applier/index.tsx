@@ -95,7 +95,6 @@ export const Applier: React.FC = () => {
     }, [config])
 
     const openDetail = useCallback((index: number, type: SIDE_DETAIL_TYPE = circles?.[index].applied ? "VIEW_APPLICATION" : "DETAIL") => {
-        console.log(circles, index)
         if (!circles) return
         if (window.innerWidth < 1100) {
             showModal(close =>

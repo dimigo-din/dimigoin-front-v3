@@ -46,8 +46,6 @@ const needAuthAndBranch = <TeacherProps, StudentProps>({
         .catch(() => setMyData(null))
     }, [])
 
-    console.log(myData)
-
     if (myData === null) return <Redirect to="/auth/login" />
     if (myData?.userType === UserType.S) return <Student {...props} />
     if (myData?.userType === UserType.T) return <Teacher {...props} />
