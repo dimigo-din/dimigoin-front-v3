@@ -9,10 +9,25 @@ const GlobalStyle = createGlobalStyle`
     --main-theme-accent-rgb: 232, 60, 119;
     --main-theme-accent-background: #FFFBFC;
   }
+  
   * {
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
     font-family: 'NanumSquare', -apple-system, BlinkMacSystemFont,
       'Segoe UI', Helvetica, Arial, sans-serif;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #EEEEEE; 
+    border-radius: 5px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #9A9A9A;
+    border-radius: 5px;
   }
 
   html {

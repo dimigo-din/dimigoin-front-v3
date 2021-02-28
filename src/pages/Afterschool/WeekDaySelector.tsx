@@ -4,10 +4,6 @@ import React from 'react'
 import { days, SMALL_SCREEN_THRESHOLD } from '../../constants'
 import { EventFunction } from '../../hooks/useInput'
 
-// export const MultipleWeekdaySelector: React.FC = () => {
-
-// }
-
 export const WeekDaySelector: React.FC<{
     onChange: EventFunction<number | null>;
     value?: number | null;
@@ -33,27 +29,36 @@ export const WeekDaySelector: React.FC<{
 }
 
 const Wrapper = styled.div`
-    background-color: #fff;
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
 `
 
 const Segment = styled.div<{ selected: boolean }>`
     width: 60px;
-    height: 60px;
+    box-sizing: border-box;
+    flex: 1;
+    min-height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 17px;
     color: #8B8B8B;
-    font-weight: 900;
+    font-weight: 700;
     transition: 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
+    background-color: #fff;
+    box-shadow: outset 0 0 20px 0 rgba(0, 0, 0, 0.03);
+    border-radius: 5px;
+    div+& {
+        margin-top: 15px;
+    }
     ${({ selected }) => selected && css`
-        background-color: #FFECF1;
-        color: #4E4E4E;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.03),
+                    inset 0px 0px 0px 2px var(--main-theme-accent);
+        color: var(--main-theme-accent);
+        font-weight: 800;
     `}
     @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
         font-size: 14px;
-        height: 50px;
     }
 `
 

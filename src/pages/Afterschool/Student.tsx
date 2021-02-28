@@ -72,7 +72,10 @@ const AfterschoolApply: React.FC = () => {
                     방과후
                 </CardGroupHeader>
                 <RegisterColumnWrapper>
-                    <ResponsiveWeekDaySelector {...weekDaySelectorInput} />
+                    <ResponsiveWeekDaySelector
+                        {...weekDaySelectorInput}
+                        css={sticky}
+                    />
                     <Divider small data-divider />
                     <CardGridWrapper>
                         {filteredClasses?.map(afterschoolClass => {
@@ -104,7 +107,7 @@ const AfterschoolApply: React.FC = () => {
                 </RegisterColumnWrapper>
             </Col>
             <Divider small data-divider />
-            <Col width={3}>
+            <Appliments width={3} css={sticky}>
                 <CardGroupHeader>
                     신청목록
                 </CardGroupHeader>
@@ -118,13 +121,33 @@ const AfterschoolApply: React.FC = () => {
                                 <CardDetail>{selfStudyTimesToString(appliedClass.times)}타임</CardDetail>
                             </CardDetailWrapper>
                         </Card>)
-                    : <Card><NoData>신청한 강좌가 없습니다</NoData></Card>}
-            </Col>
+                    : <Card><NoData>신청한 강좌가 없습니다</NoData></Card>}                {appliedClasses?.length
+                        ? appliedClasses?.map(({ afterschool: appliedClass }) =>
+                            <Card onClick={() => unapplyClass(appliedClass._id, appliedClass.name)}>
+                                <CardHeader>{appliedClass.name}</CardHeader>
+                                <CardDetailWrapper>
+                                    <CardDetail>{appliedClass.teacher.name} 선생님,</CardDetail>
+                                    <CardDetail>{appliedClass.days?.map(day => dayEngKorMapper[day]).join(' ')}요일,</CardDetail>
+                                    <CardDetail>{selfStudyTimesToString(appliedClass.times)}타임</CardDetail>
+                                </CardDetailWrapper>
+                            </Card>)
+                        : <Card><NoData>신청한 강좌가 없습니다</NoData></Card>}
+            </Appliments>
         </RootWrapper>
     </PageWrapper>
 }
 
 export default AfterschoolApply
+
+const Appliments = styled(Col)`
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+`
+
+const sticky = css`
+    position: sticky;
+    top: 40px;
+`
 
 const ClassCard = styled(Card)`
     margin: 12px;
@@ -134,10 +157,11 @@ const ClassCard = styled(Card)`
 `
 
 const RootWrapper = styled(ResponsiveWrapper)`
-    /* flex-direction */
+    flex: 1;
 `
 
 const RegisterColumnWrapper = styled(ResponsiveWrapper)`
+    flex: 1;
     align-items: flex-start;
     @media screen and (max-width: 720px) {
         align-items: stretch;
@@ -149,7 +173,6 @@ const CardGridWrapper = styled(ResponsiveWrapper)`
     margin: -12px;
     @media screen and (max-width: 1100px) {
         flex: 1;
-        flex-direction: column;
         &>* {
             width: unset !important;
             flex: 1;
@@ -196,6 +219,8 @@ const ContentPopup = styled.p`
 `
 
 const ResponsiveWeekDaySelector = styled(WeekDaySelector)`  
+    align-self: stretch;
+    max-height: min(685px, 100vh - 248px);
     @media screen and (max-width: 720px) {
         display: flex;
         flex: 1;
