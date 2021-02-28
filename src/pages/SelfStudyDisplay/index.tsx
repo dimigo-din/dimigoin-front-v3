@@ -8,6 +8,7 @@ import { ReactComponent as OtherIcon } from "../../assets/icons/other.svg";
 import { ReactComponent as InsangsilIcon } from "../../assets/icons/ingangsil.svg";
 import { ReactComponent as CircleIcon } from "../../assets/icons/circle.svg";
 import { ReactComponent as AbsentIcon } from "../../assets/icons/close.svg";
+import dimigoBackgroundImage from "../../assets/dimigo-background.svg";
 import {
   Horizontal, noBreak, PageWrapper, ResponsiveWrapper, Divider, Card, Button, ButtonProps, showModal
 } from "../../components";
@@ -31,6 +32,7 @@ import { useConfig } from "../../hooks/api";
 import { LocalstorageKeys } from "../../constants/localstorageKeys";
 import { RouteComponentProps } from "react-router-dom";
 import { OtherPlaceModal } from "../Main/OtherPlaceModal";
+import { BottomImage } from "../../router";
 
 const ROW_COLOR = {
   AVAILABLE: "var(--main-theme-accent)",
@@ -411,6 +413,7 @@ const SelfStudyDisplay: React.FC<RouteComponentProps> = ({ history }) => {
 
         </ResponsiveWrapper>
       </PageWrapper>
+      <BottomImage src={dimigoBackgroundImage} />
     </DndProvider>
   );
 };

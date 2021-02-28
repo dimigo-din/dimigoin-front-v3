@@ -10,6 +10,7 @@ import styled from "@emotion/styled"
 import { toast } from "react-toastify"
 import { swal } from "../../../functions/swal"
 import { Title } from "./MyApplication"
+import css from "@emotion/css"
 
 const Content: React.FC<Doc<Circle> & { close(): void }> = ({ _id, name, close }) => {
     const [questions, setQuestions] = useState<Doc<CircleApplyQuestionItem>[] | null>()
@@ -65,7 +66,7 @@ const Content: React.FC<Doc<Circle> & { close(): void }> = ({ _id, name, close }
                 <React.Fragment
                     key={_id}
                 >
-                    <FormHeader>
+                    <FormHeader css={css`font-weight: 400;`}>
                         {`${question} (최대 ${maxLength}자)`
                             || <Skeleton width={100} />}
                     </FormHeader>

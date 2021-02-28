@@ -3,7 +3,7 @@ import { SMALL_SCREEN_THRESHOLD } from "../../constants";
 
 export const FormHeader = styled.h2`
   font-size: 20px;
-  /* font-weight: 900; */
+  font-weight: 900;
   margin-bottom: 20px;
   &:not(:first-of-type) {
     margin-top: 40px;

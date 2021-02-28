@@ -11,6 +11,7 @@ import Login from "../pages/Login";
 import { Permission, User, UserType } from "../constants/types";
 import { getMyData } from "../api/user";
 import { NavigationBar } from "../components";
+import dimigoBackgroundImage from "../assets/dimigo-background.svg";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 
@@ -95,6 +96,7 @@ const Router: React.FC = () => (
         <Route path="/circle" component={needAuthAndBranch(Circle)} />
         <Route path="/dets" component={needAuth(Dets)} />
         <Route path="/" exact component={needAuth(Main)} />
+        <BottomImage src={dimigoBackgroundImage} />
       </Container>
     </Switch>
   </HashRouter>
@@ -112,6 +114,15 @@ export const TopLine = styled.div`
   width: 100%;
   height: 12px;
   background-color: var(--main-theme-accent);
+`;
+
+export const BottomImage = styled.img`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  width: 100vw;
 `;
 
 export default Router;
