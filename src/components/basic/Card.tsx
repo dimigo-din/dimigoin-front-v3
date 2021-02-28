@@ -84,6 +84,8 @@ const Container = styled.div<CardContainerProps>`
   border-radius: 5px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.03);
   transition: box-shadow 1s cubic-bezier(0, 0.46, 0.12, 0.98),
+              opacity 1s cubic-bezier(0, 0.46, 0.12, 0.98),
+              transform 1s cubic-bezier(0, 0.46, 0.12, 0.98),
               border-color 300ms cubic-bezier(0, 0.46, 0.12, 0.98);
   /* transition: border-left none; */
 

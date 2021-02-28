@@ -15,6 +15,9 @@ export const studentNavigations: NavigationItem[] = [{
 }, {
   title: "동아리",
   route: "/circle"
+}, {
+  title: "DETS",
+  route: "/dets"
 }];
 
 export const teacherNavigations: NavigationItem[] = [{
