@@ -15,6 +15,7 @@ import { ReactComponent as DeskSvg } from "../../assets/icons/desk.svg";
 import { showModal } from "../../components/complex/modal";
 import { OtherPlaceModal } from "./OtherPlaceModal";
 import { SMALL_SCREEN_THRESHOLD } from "../../constants";
+import Skeleton from "react-loading-skeleton";
 
 const IconPlaceMap = [{
   label: "교실",
@@ -102,7 +103,7 @@ export const SelfStudyStatus: React.FC = () => {
         </>}
       </ButtonsWrapper>
       <CurrentPlace>
-        나의 현재 위치는 <CurrentPlaceName>{placeName}</CurrentPlaceName>입니다
+        {placeName ? <>나의 현재 위치는 <CurrentPlaceName>{placeName}</CurrentPlaceName>입니다</> : <Skeleton width={300} />}
       </CurrentPlace>
     </Wrapper>
   );
@@ -119,6 +120,9 @@ const CurrentPlace = styled.p`
   text-align: center;
   border-top: 1px solid #D1D1D1;
   padding: 20px 0px;
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 16px;
+  }
 `
 
 const Wrapper = styled(Card)`
