@@ -31,6 +31,9 @@ export const WeekDaySelector: React.FC<{
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+        flex-direction: row;
+    }
 `
 
 const Segment = styled.div<{ selected: boolean }>`
@@ -59,6 +62,10 @@ const Segment = styled.div<{ selected: boolean }>`
     `}
     @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
         font-size: 14px;
+        div+& {
+            margin-top: 0px;
+            margin-left: 15px;
+        }
     }
 `
 

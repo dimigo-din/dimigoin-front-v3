@@ -64,7 +64,7 @@ const AfterschoolApply: React.FC = () => {
     }, [fetchData])
 
     return <PageWrapper>
-        <RootWrapper mobileReverse threshold={780}>
+        <RootWrapper mobileReverse threshold={840}>
             <Col width={7}>
                 <CardGroupHeader
                     subButton={{
@@ -138,8 +138,10 @@ const Appliments = styled(Col)`
 `
 
 const sticky = css`
+    @media screen and (min-width: ${SMALL_SCREEN_THRESHOLD}px) {
     position: sticky;
     top: 40px;
+    }
 `
 
 const ClassCard = styled(Card)`
@@ -151,6 +153,11 @@ const ClassCard = styled(Card)`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+        align-self: stretch;
+        width: unset;
+    }
 `
 
 const RootWrapper = styled(ResponsiveWrapper)`
@@ -168,11 +175,11 @@ const RegisterColumnWrapper = styled(ResponsiveWrapper)`
 const CardGridWrapper = styled(ResponsiveWrapper)`
     flex-wrap: wrap;
     margin: -12px;
-    @media screen and (max-width: 1100px) {
+    @media screen and (max-width: 1080px) {
         flex: 1;
         &>* {
-            width: unset !important;
-            flex: 1;
+            /* width: unset !important;
+            flex: 1; */
         }
     }
 `
@@ -185,7 +192,7 @@ const CardDetailWrapper = styled.div`
 const ResponsiveWeekDaySelector = styled(WeekDaySelector)`  
     align-self: stretch;
     max-height: min(685px, 100vh - 248px);
-    @media screen and (max-width: 720px) {
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
         display: flex;
         flex: 1;
         &>div {
