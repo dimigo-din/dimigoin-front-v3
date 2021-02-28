@@ -23,6 +23,7 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   onMouseOut?: MouseEventHandler;
   onBlur?: FocusEventHandler;
   leftBorder?: boolean;
+  borderColor?: string;
   disableSpace?: boolean;
 }
 
@@ -39,6 +40,7 @@ export const Card: React.FC<CardProps> = ({
   onMouseOut,
   onBlur,
   leftBorder,
+  borderColor,
   ...props
 }) => (
     <Container
@@ -53,6 +55,7 @@ export const Card: React.FC<CardProps> = ({
       onMouseOut={onMouseOut}
       onBlur={onBlur}
       leftBorder={leftBorder}
+      borderColor={borderColor}
       {...props}
     >
       {button ? <Content>{children}</Content> : children}
@@ -72,6 +75,7 @@ interface CardContainerProps {
   clickable?: boolean;
   leftBorder?: boolean;
   disableSpace?: boolean;
+  borderColor?: string;
 }
 
 const Container = styled.div<CardContainerProps>`
@@ -79,7 +83,8 @@ const Container = styled.div<CardContainerProps>`
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.03);
-  transition: box-shadow 1s cubic-bezier(0, 0.46, 0.12, 0.98);
+  transition: box-shadow 1s cubic-bezier(0, 0.46, 0.12, 0.98),
+              border-color 300ms cubic-bezier(0, 0.46, 0.12, 0.98);
   /* transition: border-left none; */
 
   /* @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
@@ -124,6 +129,10 @@ const Container = styled.div<CardContainerProps>`
         transform: scale(0.99);
       }
     `};
+
+    ${({ borderColor }) => borderColor && css`
+      border-color: ${borderColor}
+    `}
 `;
 
 const Content = styled.div`
