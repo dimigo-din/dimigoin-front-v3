@@ -15,6 +15,7 @@ import { ReactComponent as DeskSvg } from "../../assets/icons/desk.svg";
 import { showModal } from "../../components/complex/modal";
 import { OtherPlaceModal } from "./OtherPlaceModal";
 import { SMALL_SCREEN_THRESHOLD } from "../../constants";
+import Skeleton from "react-loading-skeleton";
 
 const IconPlaceMap = [{
   label: "교실",
@@ -44,8 +45,8 @@ export const SelfStudyStatus: React.FC = () => {
   const isOther = places && currentPlaceLog && (!places.some(e => e._id === currentPlaceLog.place) || !!currentPlaceLog.remark)
 
   const refetchCurrentPlaceId = useCallback(async () => {
-    const [ log ] = await getMyAttendanceLog()
-    if(!log) return
+    const [log] = await getMyAttendanceLog()
+    if (!log) return
     setCurrentPlaceLog(() => ({
       ...log,
       place: log.place._id
@@ -76,41 +77,61 @@ export const SelfStudyStatus: React.FC = () => {
         css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
       }
     })
-  }, [ submitNewLocation ])
+  }, [submitNewLocation])
 
   return (
-    <Card
-      css={css`
-        padding: 0px;
-        display: flex;
-        align-items: center;
-        flex: 1;
-      `}
-    >
+    <Wrapper>
       <ButtonsWrapper>
         {places && <>
           {places.map(place => (
             <Button
               selected={!isOther && place._id === currentPlaceLog?.place}
-              onClick={() => submitNewLocation(place.label, place._id)}
+              onClick={() => submitNewLocation(place.name, place._id)}
               key={place._id}
             >
               <PlaceIcon placeLabel={place.label} />
               <ButtonText>{place.label}</ButtonText>
             </Button>
           ))}
-        <Button
-          selected={isOther}
-          onClick={submitOtherPlace}
-        >
-          <OtherSvg css={iconStyle} />
-          <ButtonText>기타 {isOther && placeName && `(${placeName})`}</ButtonText>
-        </Button>
+          <Button
+            selected={isOther}
+            onClick={submitOtherPlace}
+          >
+            <OtherSvg css={iconStyle} />
+            <ButtonText>기타</ButtonText>
+          </Button>
         </>}
       </ButtonsWrapper>
-    </Card>
+      <CurrentPlace>
+        {placeName ? <>나의 현재 위치는 <CurrentPlaceName>{placeName}</CurrentPlaceName>입니다</> : <Skeleton width={300} />}
+      </CurrentPlace>
+    </Wrapper>
   );
 };
+
+const CurrentPlaceName = styled.span`
+color: var(--main-theme-accent);
+`
+
+const CurrentPlace = styled.p`
+  color: #D1D1D1;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  border-top: 1px solid #D1D1D1;
+  padding: 20px 0px;
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 16px;
+  }
+`
+
+const Wrapper = styled(Card)`
+  padding: 0px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  flex: 1;
+`
 
 const ButtonsWrapper = styled.div`
   display: flex;
@@ -119,6 +140,8 @@ const ButtonsWrapper = styled.div`
   margin: 0px auto;
   flex-wrap: wrap;
   padding: 12px;
+  align-items: center;
+  flex: 1;
 `;
 
 const iconStyle = css`
