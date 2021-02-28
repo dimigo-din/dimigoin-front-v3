@@ -369,9 +369,9 @@ const SelfStudyDisplay: React.FC<RouteComponentProps> = ({ history }) => {
           <ResponsiveWrapper css={css`
           align-items: flex-start;
           margin-top: 20px;
-        `}>{classInfo &&
-              <Horizontal
-                css={css`
+        `}>
+            <Horizontal
+              css={css`
               align-items: stretch;
               --row-color: ${ROW_COLOR.AVAILABLE};
               flex: 1;
@@ -382,17 +382,17 @@ const SelfStudyDisplay: React.FC<RouteComponentProps> = ({ history }) => {
                 margin-top: 0px;
               }
             `}
-              >
-                <LabelCard title="총원" hasLabel width={70}>
-                  {studentQuantity ? (studentQuantity.available + studentQuantity.notAvailable) : <Skeleton width={30} />}
-                </LabelCard>
-                <LabelCard title="현원" hasLabel width={70}>
-                  {studentQuantity ? studentQuantity.available : <Skeleton width={30} />}
-                </LabelCard>
-                <LabelCard title="결원" hasLabel width={70} css={css`--row-color: ${ROW_COLOR.NOTAVAILABLE};`}>
-                  {studentQuantity ? studentQuantity.notAvailable : <Skeleton width={30} />}
-                </LabelCard>
-              </Horizontal>}
+            >{classInfo && <>
+              <LabelCard title="총원" hasLabel width={70}>
+                {studentQuantity ? (studentQuantity.available + studentQuantity.notAvailable) : <Skeleton width={30} />}
+              </LabelCard>
+              <LabelCard title="현원" hasLabel width={70}>
+                {studentQuantity ? studentQuantity.available : <Skeleton width={30} />}
+              </LabelCard>
+              <LabelCard title="결원" hasLabel width={70} css={css`--row-color: ${ROW_COLOR.NOTAVAILABLE};`}>
+                {studentQuantity ? studentQuantity.notAvailable : <Skeleton width={30} />}
+              </LabelCard></>}
+            </Horizontal>
             <ResponsiveWrapper css={css`
               /* flex-direction: column; */
                 &>*+* {
