@@ -1,11 +1,14 @@
 import * as React from "react";
 import { Switch, Route, Redirect, HashRouter, RouteComponentProps } from "react-router-dom";
-import { Main, Notices, Ingangsil, Mentoring, Outgo, SelfStudyDisplay, IngangsilManager, Afterschool, Circle } from "../pages";
+import {
+  Main, Notices, Ingangsil, Mentoring, Outgo, SelfStudyDisplay,
+  IngangsilManager, Afterschool, Circle, Dets
+} from "../pages";
 import { LoadableComponent } from "@loadable/component";
 import { getAccessToken, getRefreshToken, loginWithRefreshToken } from "../api";
 import styled from "@emotion/styled";
 import Login from "../pages/Login";
-import { Permission, Student, User, UserType } from "../constants/types";
+import { Permission, User, UserType } from "../constants/types";
 import { getMyData } from "../api/user";
 import { NavigationBar } from "../components";
 import { toast } from "react-toastify";
@@ -36,7 +39,7 @@ const needAuthAndBranch = <TeacherProps, StudentProps>({
 }): React.FC<StudentProps & TeacherProps> => {
   return function C(props) {
     const [myData, setMyData] = React.useState<User | null>();
-    
+
     React.useEffect(() => {
       getMyData()
         .then(setMyData)
@@ -59,7 +62,7 @@ const needPermission = <Props extends {}>(permission: Permission, Page: React.FC
     getMyData()
       .then(d => {
         const _hasPermission = d.permissions.includes(permission)
-        if(!_hasPermission)
+        if (!_hasPermission)
           toast.info("권한이 없습니다")
         setHasPermission(() => _hasPermission)
       })
@@ -92,6 +95,7 @@ const Router: React.FC = () => (
         <Route path="/mentoring" component={needAuthAndBranch(Mentoring)} />
         <Route path="/afterschool" component={needAuthAndBranch(Afterschool)} />
         <Route path="/circle" component={needAuthAndBranch(Circle)} />
+        <Route path="/dets" component={needAuth(Dets)} />
         <Route path="/" exact component={needAuth(Main)} />
       </Container>
     </Switch>
