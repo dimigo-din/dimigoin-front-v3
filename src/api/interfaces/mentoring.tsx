@@ -28,22 +28,18 @@ export interface RequestableMentoringList {
 }
 
 export interface ApplyMentoring {
-    endpoint: '/mentoring-application/:mentoringId';
+    endpoint: '/mentoring-application/:mentoringId/date/:YYYY-MM-DD';
     method: 'POST';
-    req: {
-        date: string;
-    }
+    req: {};
     res: {
         mentoringApplication: MentoringApplication
     }
 }
 
 export interface UnapplyMentoring {
-    endpoint: '/mentoring-application/:mentoringId';
+    endpoint: '/mentoring-application/:mentoringId/date/:YYYY-MM-DD';
     method: 'DELETE';
-    req: {
-        date: string;
-    }
+    req: {};
     res: {
         mentoringApplication: MentoringApplication
     }

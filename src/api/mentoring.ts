@@ -8,14 +8,10 @@ export const getRequestableMentoringList = () =>
     api<"requestableMentoringList">("GET", "/mentoring/requestable").then(e => e.mentorings)
 
 export const applyMentoring = (scheduleId: string, date: string) => 
-    api<"applyMentoring">("POST", `/mentoring-application/${scheduleId}`, {
-        date
-    })
+    api<"applyMentoring">("POST", `/mentoring-application/${scheduleId}/date/${date}`)
 
 export const unApplyMentoring = (scheduleId: string, date: string) => 
-    api<"unapplyMentoring">("DELETE", `/mentoring-application/${scheduleId}`, {
-        date
-    })
+    api<"unapplyMentoring">("DELETE", `/mentoring-application/${scheduleId}/date/${date}`)
 
 export const createMentoringProgram = (data: RequestableMentoring) => 
     api<"newMentoringProgram">("POST", '/mentoring', data).then(e => e.mentoring)
