@@ -38,19 +38,17 @@ const PlaceIcon: React.FC<{ placeLabel: string }> = ({ placeLabel }) => {
 }
 
 export const SelfStudyStatus: React.FC = () => {
-  const [currentPlaceLog, setCurrentPlaceLog] = useState<Doc<Merge<AttendanceLog, { place: string }>>>();
+  const [currentPlaceLog, setCurrentPlaceLog] = useState<Doc<AttendanceLog>>();
   const [placeName, setPlaceName] = useState<string>()
   const [places, setPlaces] = useState<Doc<Place>[]>();
 
-  const isOther = places && currentPlaceLog && (!places.some(e => e._id === currentPlaceLog.place) || !!currentPlaceLog.remark)
+  const isOther = places && currentPlaceLog && !places.some(e => e._id === currentPlaceLog.place._id)
 
   const refetchCurrentPlaceId = useCallback(async () => {
     const [log] = await getMyAttendanceLog()
     if (!log) return
-    setCurrentPlaceLog(() => ({
-      ...log,
-      place: log.place._id
-    }))
+    console.log(log.place._id)
+    setCurrentPlaceLog(() => log)
     setPlaceName(() => log.place.name)
   }, [setCurrentPlaceLog])
 
@@ -85,7 +83,7 @@ export const SelfStudyStatus: React.FC = () => {
         {places && <>
           {places.map(place => (
             <Button
-              selected={!isOther && place._id === currentPlaceLog?.place}
+              selected={!isOther && place._id === currentPlaceLog?.place._id}
               onClick={() => submitNewLocation(place.name, place._id)}
               key={place._id}
             >
