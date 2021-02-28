@@ -202,7 +202,7 @@ export const Leader: React.FC = () => {
                 <MyApplication
                     isModal
                     form={applications[index].form}
-                    name={`${applications[index].applier.serial} ${applications[index].applier.name} 지원서류`}
+                    name={`${applications[index].applier.serial} ${applications[index].applier.name}`}
                     close={() =>
                         close()
                     }
@@ -234,7 +234,7 @@ export const Leader: React.FC = () => {
                     <Divider data-divider /><Col width={5}>
                     <MyApplication
                         close={() => setSideDetail(() => null)}
-                        name={`${applications[sideDetail].applier.serial} ${applications[sideDetail].applier.name} 지원서류`}
+                        name={`${applications[sideDetail].applier.serial} ${applications[sideDetail].applier.name}`}
                         form={applications[sideDetail].form}
                         isModal={false}
                     />

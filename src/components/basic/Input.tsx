@@ -67,7 +67,7 @@ const LogicalInput = styled.input<LogicalInputProps>`
   }
 
   &::placeholder {
-    color: #EEEEEE;
+    color: #D1D1D1;
   }
 
   ${({ error = false }) => error

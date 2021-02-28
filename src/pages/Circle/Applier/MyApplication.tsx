@@ -47,32 +47,25 @@ export const MyApplication: React.FC<{
         return <></>
     }
 
-    if (isModal)
-        return <Card css={wrapperStyle}>
-            <HeaderWrapper>
-                <CardGroupHeader css={css`flex: 1; margin: 0px;`}>
-                    {name}
-                </CardGroupHeader>
-                <CloseIcon onClick={close} />
-            </HeaderWrapper>
-            <Content
-                form={form}
-                questions={questions}
-            />
-        </Card>
-    else return (
-        <div css={wrapperStyle}>
-            <HeaderWrapper css={css`margin-top: 0px; margin-bottom: 14px;`}>
-                <CardGroupHeader css={css`flex: 1; margin-bottom: 0px;`}>
-                    {name}
-                </CardGroupHeader>
-                <CloseIcon onClick={close} />
-            </HeaderWrapper>
-            <Card>
-                <Content
-                    form={form}
-                    questions={questions}
-                />
-            </Card>
-        </div>)
+    return <Card css={wrapperStyle}>
+        <HeaderWrapper>
+            <Title>
+                <b>{name}</b> 지원서류
+            </Title>
+            <CloseIcon onClick={close} />
+        </HeaderWrapper>
+        <Content
+            form={form}
+            questions={questions}
+        />
+    </Card>
 }
+
+export const Title = styled.h2`
+    flex: 1;
+    font-size: 27px;
+    font-weight: 400;
+    & b {
+        font-weight: 900;
+    }
+`

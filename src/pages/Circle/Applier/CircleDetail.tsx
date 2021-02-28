@@ -3,14 +3,13 @@ import React from "react"
 import ReactMarkdown from 'react-markdown'
 import styled from "@emotion/styled"
 
-import { Button, Card, CardGroupHeader, HeaderWrapper } from "../../../components"
+import { Card } from "../../../components"
 import { Circle } from "../../../constants/types"
-import { ReactComponent as CloseIcon } from '../../../assets/icons/close.svg'
 import remarkGfm from "remark-gfm"
-import { ContentWrapper, TextButton, wrapperStyle } from "./atomics"
+import { ContentWrapper, TextButton as SubmitButton, wrapperStyle } from "./atomics"
 
 const MDRenderer: React.FC = ({ children }) =>
-    <div css={css`line-height: 24px; flex: 1;`}>{children}</div>
+    <div css={css`line-height: 24px; flex: 1; margin-top: 30px;`}>{children}</div>
 
 const CodeRenderer: React.FC<{ value: string }> = ({ value }) =>
     <div css={css`
@@ -60,7 +59,7 @@ const Content: React.FC<Circle & {
             }}>
             {description}
         </Markdown>
-        <TextButton text onClick={onGoApply}>지원서류 작성하기</TextButton>
+        <SubmitButton onClick={onGoApply}>지원하기</SubmitButton>
     </ContentWrapper>
 }
 
@@ -72,25 +71,32 @@ export const CircleDetail: React.FC<Circle & {
     goApply(): void;
     isModal?: boolean;
 }> = ({ close, isModal, goApply, ...circle }) => {
-    if (isModal)
-        return <Card css={wrapperStyle}>
-            <HeaderWrapper>
-                <CardGroupHeader css={css`flex: 1; margin: 0px;`}>
-                    {circle.name}
-                </CardGroupHeader>
-                <CloseIcon onClick={close} />
-            </HeaderWrapper>
-            <Content onGoApply={goApply} {...circle} />
-        </Card>
-    else return (
-        <div css={wrapperStyle}>
-            <HeaderWrapper css={css`margin-top: 0px;`}>
-                <CardGroupHeader css={css`flex: 1;`}>{circle.name}</CardGroupHeader>
-                <CloseIcon onClick={close} />
-            </HeaderWrapper>
-            <Card>
-                <Content onGoApply={goApply} {...circle} />
-            </Card>
-        </div>
-    )
+    return <Card css={wrapperStyle}>
+        <CircleLogo src={circle.imageUrl} />
+        <Category>{circle.category}</Category>
+        <Title>{circle.name}</Title>
+        <Content onGoApply={goApply} {...circle} />
+    </Card>
 }
+
+const Category = styled.h2`
+    font-size: 16px;
+    color: #707070;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 20px;
+`
+
+const Title = styled.h2`
+    font-size: 27px;
+    font-weight: 900;
+    text-align: center;
+    margin-top: 10px;
+`
+
+const CircleLogo = styled.img`
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    align-self: center;
+`

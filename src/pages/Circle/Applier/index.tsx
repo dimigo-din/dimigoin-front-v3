@@ -47,7 +47,7 @@ const CircleDetailBrancher: React.FC<{
             {...circle}
         />,
         VIEW_APPLICATION: <MyApplication
-            name={`${circle.name} 지원서류`}
+            name={circle.name}
             form={circle.form ? circle.form : undefined}
             close={close}
             isModal={isModal}
@@ -209,7 +209,7 @@ export const Applier: React.FC = () => {
 }
 
 const GridWrapper = styled.div`
-    margin: -40px;
+    margin: -15px;
     /* padding-top: 14px; */
     display: flex;
     flex-wrap: wrap;

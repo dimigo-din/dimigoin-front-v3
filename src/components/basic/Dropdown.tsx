@@ -122,7 +122,7 @@ const Wrapper = styled.div<{ highlighted?: boolean; opened?: boolean; disabled?:
 `;
 
 const Item = styled.div<{ highlighted?: boolean; visible?: boolean }>`
-  color: #8A8A8A;
+  color: #D1D1D1;
   padding: 18px 16px;
   font-size: 18px;
   text-overflow: ellipsis;
