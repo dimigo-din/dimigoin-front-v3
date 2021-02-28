@@ -46,29 +46,23 @@ export const CircleCard: React.FC<CircleWithApplication & {
     ...props
 }) => {
         return <Wrapper {...props} onClick={status ? undefined : openSideDetail} disableSpace>
-            <PaddingWrapper>
+            {/* <PaddingWrapper> */}
                 <Logo src={imageUrl} />
                 <ContentWrapper>
                     <Category>{category}</Category>
                     <Name>{name}</Name>
-                    <Content>
-                        {status ? <Status status={status}>
-                            {circleApplicationStatusKorMapper[status]}
-                        </Status> :
-                            <Description>
-                                {description.slice(0, 36)}
-                            </Description>}
-                    </Content>
                 </ContentWrapper>
-            </PaddingWrapper>
-            <ApplyButton status={status} onClick={status ? {
-                applied: openSideDetail,
-                "document-fail": undefined,
-                "document-pass": undefined,
-                "interview-fail": undefined,
-                "interview-pass": finalSelect,
-                final: undefined,
-            }[status] : openSideDetail}>
+            {/* </PaddingWrapper> */}
+            <ApplyButton
+                status={status}
+                onClick={status ? {
+                    applied: openSideDetail,
+                    "document-fail": undefined,
+                    "document-pass": undefined,
+                    "interview-fail": undefined,
+                    "interview-pass": finalSelect,
+                    final: undefined,
+                }[status] : openSideDetail}>
                 {status ? statusLabelMap[status] : "자세히보기"}
             </ApplyButton>
         </Wrapper>
@@ -90,12 +84,21 @@ const statusColorMap = {
     "final": "#E83C77"
 }
 const ApplyButton = styled.div<{ status?: typeof CircleApplicationStatusValues[number] | null }>`
-    background-color: ${({ status }) => status ? (statusColorMap)[status] : "#E83C77"};
-    padding: 16px 0px;
+    border-width: 1px;
+    border-style: solid;
+    padding: 10px;
     text-align: center;
-    color: white;
     font-size: 17px;
     font-weight: 700;
+    align-self: stretch;
+    border-radius: 5px;
+    ${({ status }) => {
+        const color = status ? (statusColorMap)[status] : "#E83C77"
+        return css`
+            color: ${color};
+            border-color: ${color};
+        `
+    }};
 `
 
 const Content = styled.div`
@@ -110,7 +113,6 @@ const Content = styled.div`
 `
 
 const PaddingWrapper = styled.div`
-  padding: 25px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -126,9 +128,10 @@ const Wrapper = styled(Card)`
     display: inline-flex;
     flex-direction: column;
     box-sizing: border-box;
-    width: 210px;
-    height: 320px;
-    padding: 0px;
+    width: 150px;
+    height: 250px;
+    align-items: center;
+    padding: 36px 10px 10px 10px;
     border-radius: 5px;
     overflow: hidden;
     margin: 40px;
@@ -142,8 +145,8 @@ const Wrapper = styled(Card)`
 `
 
 const Logo = styled.img`
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
     object-fit: cover;
 `
 
@@ -161,7 +164,7 @@ const ContentWrapper = styled.div`
 
 const Category = styled.p`
     font-weight: 800;
-    font-size: 11px;
+    font-size: 14px;
     color: #8A8A8A;
     margin-top: 20px;
     @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
@@ -170,9 +173,9 @@ const Category = styled.p`
 `
 
 const Name = styled.p`
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 800;
-    margin-top: 12px;
+    margin-top: 6px;
 
     @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
         font-size: 16px;
