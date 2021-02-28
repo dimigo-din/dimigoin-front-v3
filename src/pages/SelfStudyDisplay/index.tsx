@@ -17,6 +17,7 @@ import {
 import { getWholeClassAttendanceLog, registerOtherStudentMovingHistory } from "../../api";
 import { useMyData } from "../../hooks/api/useMyData";
 import Skeleton from "react-loading-skeleton";
+import { ReactComponent as CloseIcon } from '../../assets/icons/close.svg'
 import { getSelfStudyPeriod } from "../../utils";
 import { isStudent, isTeacher } from "../../utils/isStudent";
 import { getTargetPlaceByLabelAndStudent } from "./getTargetPlaceByLabelAndStudent";
@@ -297,7 +298,12 @@ const SelfStudyDisplay: React.FC = () => {
                             key={place.name}
                           >
                             <ResponsiveWrapper css={css`min-height: 67px;`} threshold={0}>
-                              <LabelCard title="위치" hasLabel={hasLabel} css={[noBreak, responsiveLabelCardWidth(160)]} contentCss={locationLabelStyle}>
+                              <LabelCard
+                                title="위치"
+                                hasLabel={hasLabel}
+                                css={[noBreak, responsiveLabelCardWidth(160)]}
+                                contentCss={locationLabelStyle}
+                              >
                                 {place.icon}
                                 <LocationLabelText>
                                   {isRealData(place) ? place.name : <Skeleton width={50} />}
@@ -345,9 +351,9 @@ const SelfStudyDisplay: React.FC = () => {
         <ResponsiveWrapper css={css`
           flex-direction: column;
         `}>
-          <Divider data-divider smaller horizontal />
           <ResponsiveWrapper css={css`
           align-items: flex-start;
+          margin-top: 20px;
         `}>{classInfo &&
               <Horizontal
                 css={css`
@@ -373,7 +379,7 @@ const SelfStudyDisplay: React.FC = () => {
                 </LabelCard>
               </Horizontal>}
             <ResponsiveWrapper css={css`
-              flex-direction: column;
+              /* flex-direction: column; */
                 &>*+* {
                   margin-left: 12px;
                 }
@@ -381,6 +387,11 @@ const SelfStudyDisplay: React.FC = () => {
               <ButtonWithIcon
                 icon={DeskIcon}
                 label="이동반 위치 초기화"
+                onClick={() => clearMovingClass()}
+              />
+              <ButtonWithIcon
+                icon={CloseIcon}
+                label="닫기"
                 onClick={() => clearMovingClass()}
               />
             </ResponsiveWrapper>
@@ -393,7 +404,7 @@ const SelfStudyDisplay: React.FC = () => {
 };
 
 const TableWrapper = styled.div`
-  margin-top: 45px;
+  margin-top: 12px;
 `;
 
 const RowLable = styled.div`
@@ -409,6 +420,7 @@ const RowLable = styled.div`
 
 const locationLabelStyle = css`
   flex-direction: row;
+  padding-right: 0px;
 `
 
 const responsiveLabelCardWidth = (width: number) => css`
@@ -422,7 +434,7 @@ const responsiveLabelCardWidth = (width: number) => css`
 
 const LocationLabelText = styled.p`
   flex: 1;
-  text-align: right; 
+  text-align: center; 
   @media screen and (max-width: 800px) {
     flex: unset;
     margin-left: 6px;
