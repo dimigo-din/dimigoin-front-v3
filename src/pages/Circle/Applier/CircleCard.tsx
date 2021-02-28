@@ -1,25 +1,24 @@
 import css from "@emotion/css"
 import styled from "@emotion/styled"
 import React from "react"
-import { Card } from "../../../components"
-import { circleApplicationStatusKorMapper, CircleApplicationStatusValues, SMALL_SCREEN_THRESHOLD } from "../../../constants"
-import { Circle, CirclePeriod } from "../../../constants/types"
+import { Card, Horizontal } from "../../../components"
+import { CircleApplicationStatusValues, SMALL_SCREEN_THRESHOLD } from "../../../constants"
 import { CircleWithApplication } from "."
 import Skeleton from "react-loading-skeleton"
 
 const statusLabelMap = {
     applied: "결과 대기중",
-    "document-fail": "수고하셨습니다",
-    "document-pass": "자세히 보기",
-    "interview-fail": "수고하셨습니다",
-    "interview-pass": "최종 선택",
-    "final": "수고하셨습니다"
+    "document-fail": "서류 불합격",
+    "document-pass": "서류 합격",
+    "interview-fail": "면접 불합격",
+    "interview-pass": "면접 합격",
+    "final": "최종 선택"
 }
 
 export const DummyCircleCard: React.FC = (props) => <Wrapper {...props} disableSpace>
-    <PaddingWrapper>
+    <CardContentWrapper>
         <Skeleton width={70} height={70} />
-        <ContentWrapper>
+        <DetailWrapper>
             <Category><Skeleton width={100} /></Category>
             <Name><Skeleton width={50} /></Name>
             <Content>
@@ -27,8 +26,8 @@ export const DummyCircleCard: React.FC = (props) => <Wrapper {...props} disableS
                     <Skeleton width={100} />
                 </Status>
             </Content>
-        </ContentWrapper>
-    </PaddingWrapper>
+        </DetailWrapper>
+    </CardContentWrapper>
 
 </Wrapper>
 
@@ -46,13 +45,13 @@ export const CircleCard: React.FC<CircleWithApplication & {
     ...props
 }) => {
         return <Wrapper {...props} onClick={status ? undefined : openSideDetail} disableSpace>
-            {/* <PaddingWrapper> */}
+            <CardContentWrapper>
                 <Logo src={imageUrl} />
-                <ContentWrapper>
+                <DetailWrapper>
                     <Category>{category}</Category>
                     <Name>{name}</Name>
-                </ContentWrapper>
-            {/* </PaddingWrapper> */}
+                </DetailWrapper>
+            </CardContentWrapper>
             <ApplyButton
                 status={status}
                 onClick={status ? {
@@ -67,6 +66,18 @@ export const CircleCard: React.FC<CircleWithApplication & {
             </ApplyButton>
         </Wrapper>
     }
+
+const CardContentWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 16px;
+    @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+        padding: 0px;
+        flex-direction: row;
+        /* margin-bottom: 16px; */
+    }
+`
 
 const Description = styled.p`
     font-size: 15px;
@@ -112,29 +123,17 @@ const Content = styled.div`
     }
 `
 
-const PaddingWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
-    padding: 0px;
-    flex-direction: row;
-    margin-bottom: 16px;
-}
-`
-
 const Wrapper = styled(Card)`
     display: inline-flex;
     flex-direction: column;
     box-sizing: border-box;
     width: 150px;
     height: 250px;
-    align-items: center;
+    /* align-items: center; */
     padding: 36px 10px 10px 10px;
     border-radius: 5px;
     overflow: hidden;
-    margin: 40px;
+    margin: 15px;
     @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
         flex: 1;
         width: inherit;
@@ -150,7 +149,7 @@ const Logo = styled.img`
     object-fit: cover;
 `
 
-const ContentWrapper = styled.div`
+const DetailWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -4,12 +4,13 @@ import { Card, CardGroupHeader, FormHeader, HeaderWrapper, Textarea } from "../.
 import { Circle, CircleApplyQuestionItem, Doc } from "../../../constants/types"
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close.svg'
 import DangerIcon from "../../../assets/icons/danger.svg"
-import { ContentWrapper, TextButton, wrapperStyle } from "./atomics"
+import { ContentWrapper, TextButton as SubmitButton, wrapperStyle } from "./atomics"
 import { applyCircle, getApplyQuestion } from "../../../api/circle"
 import Skeleton from "react-loading-skeleton"
 import styled from "@emotion/styled"
 import { toast } from "react-toastify"
 import { swal } from "../../../functions/swal"
+import { Title } from "./MyApplication"
 
 const Content: React.FC<Doc<Circle> & { close(): void }> = ({ _id, name, close }) => {
     const [questions, setQuestions] = useState<Doc<CircleApplyQuestionItem>[] | null>()
@@ -82,7 +83,7 @@ const Content: React.FC<Doc<Circle> & { close(): void }> = ({ _id, name, close }
                     </LengthCounter>
                 </React.Fragment>)}
         </FormWrapper>
-        <TextButton text onClick={submit}>제출</TextButton>
+        <SubmitButton onClick={submit}>지원하기</SubmitButton>
     </ContentWrapper>
 }
 
@@ -98,25 +99,13 @@ export const NewApply: React.FC<Doc<Circle> & {
     close(): void;
     isModal?: boolean;
 }> = ({ close, isModal, ...circle }) => {
-    if (isModal)
-        return <Card css={wrapperStyle}>
-            <HeaderWrapper>
-                <CardGroupHeader css={css`flex: 1; margin: 0px;`}>
-                    {circle.name}
-                </CardGroupHeader>
-                <CloseIcon onClick={close} />
-            </HeaderWrapper>
-            <Content close={close} {...circle} />
-        </Card>
-    else return (
-        <div css={wrapperStyle}>
-            <HeaderWrapper css={css`margin-top: 0px;`}>
-                <CardGroupHeader css={css`flex: 1;`}>{circle.name}</CardGroupHeader>
-                <CloseIcon onClick={close} />
-            </HeaderWrapper>
-            <Card>
-                <Content close={close} {...circle} />
-            </Card>
-        </div>
-    )
+    return <Card css={wrapperStyle}>
+        <HeaderWrapper>
+            <Title>
+                <b>{circle.name}</b> 지원서류
+            </Title>
+            <CloseIcon onClick={close} />
+        </HeaderWrapper>
+        <Content close={close} {...circle} />
+    </Card>
 }
