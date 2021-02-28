@@ -6,7 +6,7 @@ import { Card, Title, Divider, Horizontal, CompactButton, cardModalTopBorder } f
 import { SMALL_SCREEN_THRESHOLD } from "../../constants"
 import { Doc, Notice } from "../../constants/types"
 import { formatReadibleDate } from "../../utils"
-import { isStudent, isTeacher } from "../../utils/isStudent"
+import { isTeacher } from "../../utils/isStudent"
 
 export const ArticleModal: React.FC<{ articleId: string, goBack(): void, article?: Notice }> = ({ articleId, goBack, article }) => {
   const [articleData, setArticleData] = useState<Doc<Notice>>()

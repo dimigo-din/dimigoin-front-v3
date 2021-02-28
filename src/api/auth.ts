@@ -4,7 +4,7 @@ import { AuthTokens } from '../constants/types';
 import { cookieJar } from '../storage';
 import { api } from './api';
 import { APIResource } from './serverResource';
-import { fetchMyData, saveMyData } from './user';
+import { fetchMyData } from './user';
 
 export const getAccessToken = (): string | undefined => {
     return cookieJar.get(COOKIE_JAR_KEY.ACCESS_TOKEN)

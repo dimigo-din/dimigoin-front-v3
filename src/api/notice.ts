@@ -1,5 +1,5 @@
 import { APIDocNotice } from "."
-import { Doc, Merge, Notice, User } from "../constants/types"
+import { Doc, Notice } from "../constants/types"
 import { api } from "./api"
 
 const convertToDatedNotice = (notice: Doc<APIDocNotice>): Doc<Notice> => ({

@@ -1,9 +1,8 @@
-import css from "@emotion/css"
 import styled from "@emotion/styled"
 import React, { useEffect, useState } from "react"
 import Skeleton from "react-loading-skeleton"
 import { getApplyQuestion } from "../../../api/circle"
-import { Card, CardGroupHeader, FormHeader, FormHeader as _FormHeader, HeaderWrapper, Textarea } from "../../../components"
+import { Card, FormHeader, HeaderWrapper, Textarea } from "../../../components"
 import { CircleApplyQuestionItem, Doc } from "../../../constants/types"
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close.svg'
 import { ContentWrapper, wrapperStyle } from "./atomics"
@@ -26,7 +25,7 @@ export const MyApplication: React.FC<{
     name: string;
     close(): void;
     isModal?: boolean;
-}> = ({ form, name, close, isModal }) => {
+}> = ({ form, name, close }) => {
     const [questions, setQuestions] = useState<{
         [key: string]: Doc<CircleApplyQuestionItem>
     }>()

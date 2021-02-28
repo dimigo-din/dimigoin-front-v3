@@ -2,7 +2,6 @@ import React from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
 import { ReactComponent as CheckIcon } from '../../assets/icons/check.svg'
-import { Horizontal } from ".";
 import { SMALL_SCREEN_THRESHOLD } from "../../constants";
 
 interface CheckboxProps {

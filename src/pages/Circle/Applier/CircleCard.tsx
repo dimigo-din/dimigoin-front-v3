@@ -1,7 +1,7 @@
 import css from "@emotion/css"
 import styled from "@emotion/styled"
 import React from "react"
-import { Card, Horizontal } from "../../../components"
+import { Card } from "../../../components"
 import { CircleApplicationStatusValues, SMALL_SCREEN_THRESHOLD } from "../../../constants"
 import { CircleWithApplication } from "."
 import Skeleton from "react-loading-skeleton"
@@ -77,13 +77,6 @@ const CardContentWrapper = styled.div`
         flex-direction: row;
         /* margin-bottom: 16px; */
     }
-`
-
-const Description = styled.p`
-    font-size: 15px;
-    font-weight: 700;
-    color: #9A9A9A;
-    line-height: 18px;
 `
 
 const statusColorMap = {

@@ -1,7 +1,6 @@
 import styled from "@emotion/styled"
 import React from "react"
 import { Card, CardProps } from "../../components"
-import { SMALL_SCREEN_THRESHOLD } from "../../constants"
 
 export const DetsCard: React.FC<CardProps & { applied?: boolean }> =
     ({ applied = false, ...props }) => {

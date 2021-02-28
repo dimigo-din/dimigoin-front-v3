@@ -1,4 +1,3 @@
-import { AfterschoolClass, Merge } from "../constants/types";
 import { api } from "./api";
 import { ReqAfterschoolClass } from "./interfaces/afterschool";
 

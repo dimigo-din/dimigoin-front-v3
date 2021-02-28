@@ -2,14 +2,13 @@ import { useEffect, useState } from "react"
 import { getDailyMeal } from "../../api"
 import { DailyMeal } from "../../constants/types"
 
-export const useMeal = (date?: Date) => {
+export const useMeal = (dateStamp?: number) => {
     const [meal, setMeal] = useState<DailyMeal | undefined | null>(undefined)
-    const dateKey = +(date||0)
 
     useEffect(() => {
-        getDailyMeal(date)
+        getDailyMeal(dateStamp ? new Date(dateStamp) : new Date())
             .then(setMeal)
             .catch(() => setMeal(() => null))
-    }, [dateKey])
+    }, [dateStamp])
     return meal
 }

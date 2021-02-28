@@ -2,7 +2,6 @@ import css from '@emotion/css'
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { ReactComponent as CloseSvg } from '../../assets/icons/close.svg'
-import useConsole from '../../hooks/useConsole'
 import { HeaderIconWrapper, Horizontal, NoData } from '../basic/Atomics'
 import { Title as CardTitle } from '../basic/CardGroupHeader'
 import Card from '../basic/Card'
@@ -129,7 +128,6 @@ export const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
       }))))
       .catch(goBack)
   }, [goBack])
-  useConsole('meals', meals)
   if (!meals) return <></>
   return <Card css={css`
     border-top: 5px solid var(--main-theme-accent);
@@ -143,7 +141,6 @@ export const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
       {goBack && <HeaderIconWrapper><CloseSvg onClick={goBack} /></HeaderIconWrapper>}
     </HeaderWrapper>
     {meals?.map(meal => <DailyMeal {...meal} />)}
-
   </Card>
 }
 

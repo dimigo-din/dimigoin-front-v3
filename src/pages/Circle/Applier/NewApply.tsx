@@ -1,6 +1,5 @@
-import css from "@emotion/css"
 import React, { useCallback, useEffect, useState } from "react"
-import { Card, CardGroupHeader, FormHeader, HeaderWrapper, Textarea } from "../../../components"
+import { Card, FormHeader, HeaderWrapper, Textarea } from "../../../components"
 import { Circle, CircleApplyQuestionItem, Doc } from "../../../constants/types"
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close.svg'
 import DangerIcon from "../../../assets/icons/danger.svg"

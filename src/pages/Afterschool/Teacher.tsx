@@ -8,8 +8,8 @@ import { ReactComponent as _DownloadIcon } from '../../assets/icons/download.svg
 import { ReactComponent as _NewIcon } from '../../assets/icons/edit.svg'
 import {
     CardGroupHeader, Col, Data, HeadData, HeadRow, Horizontal,
-    Row, MoreCompactButton, NoData, PageWrapper, ResponsiveWrapper,
-    Table, Card, Divider, showModal, CardGroupHeaderButton, CardGroupHeaderWrapper
+    Row, NoData, PageWrapper, ResponsiveWrapper, Table, Card,
+    Divider, showModal, CardGroupHeaderButton, CardGroupHeaderWrapper
 } from "../../components"
 import { dayEngKorMapper } from "../../constants"
 import { AfterschoolClass, Doc } from "../../constants/types"

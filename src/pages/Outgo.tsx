@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import {
   CardExplainContent, OutgoApplyInput, WeekCalendar, LargeTimeSelector,
   SelectingTime, PageWrapper, ResponsiveWrapper, Col, CardGroupHeader,
-  OutgoApplyForm, Divider, OutgoApplier, Card, Checkbox, Button, TextCardGroup, TextCard
+  OutgoApplyForm, Divider, OutgoApplier, Card, Checkbox, Button, TextCard
 } from "../components";
 import useInput, { EventFunction, useCheckbox } from "../hooks/useInput";
 import { BriefStudent, Doc } from "../constants/types";

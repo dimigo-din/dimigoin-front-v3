@@ -190,26 +190,3 @@ const Day = styled.div<{ selected: boolean; rangeBetweed: boolean; }>`
       font-size: 16px;
     }
 `;
-
-const DayWrapper = styled.div<{isStart?: boolean; isEnd?: boolean; isBetween: boolean}>`
-  transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  ${({isBetween, isStart, isEnd}) => (isBetween || isStart || isEnd) && css`
-      background-color: var(--main-theme-accent);
-  `}
-  /* ${({ isBetween }) => isBetween && css`
-    flex: 1;
-  `} */
-  ${({isStart}) => isStart && css`
-    border-top-left-radius: 24px;
-    border-bottom-left-radius: 24px;
-    padding-left: 
-  `}
-  ${({isEnd}) => isEnd && css`
-    border-top-right-radius: 24px;
-    border-bottom-right-radius: 24px;
-  `}
-`

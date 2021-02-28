@@ -1,6 +1,6 @@
 import styled from "@emotion/styled"
 import React from "react"
-import { Card, CardGroupHeaderWrapper } from "../../components"
+import { Card } from "../../components"
 import { ReactComponent as ClassIcon } from "../../assets/icons/presentation.svg"
 import { ReactComponent as _CircleIcon } from "../../assets/icons/circle.svg"
 import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg"

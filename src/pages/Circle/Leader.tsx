@@ -1,6 +1,5 @@
 import css from "@emotion/css"
 import styled from "@emotion/styled"
-import { type } from "os"
 import React, { useCallback, useEffect, useState } from "react"
 import Skeleton from "react-loading-skeleton"
 import { toast } from "react-toastify"

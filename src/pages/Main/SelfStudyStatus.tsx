@@ -6,7 +6,7 @@ import { getAdverbalSuffix1 } from "josa-complete";
 import Card from "../../components/basic/Card";
 import { getMyAttendanceLog, registerMovingHistory } from "../../api/attendance";
 import { getPrimaryPlaceList } from "../../api/place";
-import { AttendanceLog, Doc, Merge, Place } from "../../constants/types";
+import { AttendanceLog, Doc, Place } from "../../constants/types";
 import { ReactComponent as IngangsilSvg } from "../../assets/icons/ingangsil.svg";
 import { ReactComponent as HealingsilSvg } from "../../assets/icons/healingsil.svg";
 import { ReactComponent as OtherSvg } from "../../assets/icons/other.svg";

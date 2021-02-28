@@ -1,4 +1,4 @@
-import { Doc, DownloadbleFile, EngDay, Mentoring, MentoringApplication, MentoringSchedule, Merge } from "../../constants/types";
+import { Doc, DownloadbleFile, Mentoring, MentoringApplication, MentoringSchedule, Merge } from "../../constants/types";
 
 export interface MentoringList {
     endpoint: '/mentoring';

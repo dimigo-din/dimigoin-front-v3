@@ -49,7 +49,7 @@ export const TextCard = styled(Card)`
   line-height: 32px;
   margin-top: 10px;
 
-  &:first-child {
+  &:first-of-type {
     margin-top: 0px;
   }
 

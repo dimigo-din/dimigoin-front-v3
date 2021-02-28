@@ -2,13 +2,13 @@ import css from "@emotion/css"
 import styled from "@emotion/styled"
 import React, { useCallback, useState } from "react"
 import { toast } from "react-toastify"
-import { Card, CardGroupHeader, Col, NoData, PageWrapper, ResponsiveWrapper, showModal, TextCard } from "../../components"
+import { CardGroupHeader, Col, NoData, PageWrapper, ResponsiveWrapper, showModal, TextCard } from "../../components"
 import { SMALL_SCREEN_THRESHOLD } from "../../constants"
 import { DetsCard } from "./DetsCard"
 import { DetsDetail } from "./DetsDetail"
 const Applier: React.FC = () => {
     const [sideDetail, setSideDetail] = useState<{} | null>(null)
-    const [detsList, setDetsList] = useState<unknown[]>([]);
+    const [detsList, /* setDetsList */] = useState<unknown[]>([]);
 
     const apply = useCallback(() => {
         toast.error("신청 가능한 상태가 아닙니다")
@@ -51,13 +51,7 @@ const Applier: React.FC = () => {
                 }}>
                     DETS
                 </CardGroupHeader>
-                <DetsGrid>
-                    {[...Array(7)].map((_, index) => <DetsCard
-                        key={`MOCKDETS${index}`}
-                        onClick={() => openDetsDetail(index)}
-                    />)}
-                </DetsGrid>
-                {/* {detsList.length ?
+                {detsList.length ?
                     <DetsGrid>
                         {[...Array(7)].map((_, index) => <DetsCard
                             key={`MOCKDETS${index}`}
@@ -68,7 +62,7 @@ const Applier: React.FC = () => {
                         <NoData>
                             현재 신청 가능한 DETS가 없습니다
                         </NoData>
-                    </TextCard>} */}
+                    </TextCard>}
 
             </Col>
             {

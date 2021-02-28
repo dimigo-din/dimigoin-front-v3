@@ -6,7 +6,7 @@ import Card from "../basic/Card";
 import { BriefStudent, Doc } from "../../constants/types";
 import useInput, { EventFunction } from "../../hooks/useInput";
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
-import { fetchAllStudents, getMyData } from "../../api/user";
+import { fetchAllStudents } from "../../api/user";
 import useConsole from "../../hooks/useConsole";
 import { toast } from "react-toastify";
 import { useMyData } from "../../hooks/api";

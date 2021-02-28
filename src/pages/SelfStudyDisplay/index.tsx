@@ -30,7 +30,6 @@ import useConsole from "../../hooks/useConsole";
 import { useConfig } from "../../hooks/api";
 import { LocalstorageKeys } from "../../constants/localstorageKeys";
 import { RouteComponentProps } from "react-router-dom";
-import { toast } from "react-toastify";
 import { OtherPlaceModal } from "../Main/OtherPlaceModal";
 
 const ROW_COLOR = {

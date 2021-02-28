@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import css from "@emotion/css";
 import Skeleton from "react-loading-skeleton";
 
@@ -17,30 +17,33 @@ import { SMALL_SCREEN_THRESHOLD } from "../../constants";
 
 const TodayMealCard: React.FC = () => {
     const meals = useMeal()
+    const openWeekly = useCallback(() => {
+        showModal((close) => <MealList goBack={close} />, {
+            wrapperProps: {
+                css: css`
+                max-width: 1600px;
+                width: 100%;
+                padding: 60px 20px 20px;
+                @media screen and (max-width: 960px) {
+                    padding-top: 40px;
+                }
+                @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+                    padding: 0px;
+                }
+            `
+            }
+        })
+    }, [])
     return (
         <Col width={4} css={fullHeight}>
             <CardGroupHeader
                 subButton={{
                     text: "더보기",
-                    action: () => showModal((close) => <MealList goBack={close} />, {
-                        wrapperProps: {
-                            css: css`
-                            max-width: 1600px;
-                            width: 100%;
-                            padding: 60px 20px 20px;
-                            @media screen and (max-width: 960px) {
-                                padding-top: 40px;
-                            }
-                            @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
-                                padding: 0px;
-                            }
-                        `
-                        }
-                    })
+                    action: () => openWeekly()
                 }}
             >
-                오늘의 급식
-        </CardGroupHeader>
+                    오늘의 급식
+            </CardGroupHeader>
             <TodayMeal css={css`flex: 1;`} meals={meals} />
         </Col>
     )
@@ -51,7 +54,6 @@ const Main: React.FC = () => {
     const [timetableData, setTimeTableData] = useState<string[][] | null>();
 
     const myData = useMyData()
-
 
     const [isStudent, setIsStudent] = useState<boolean>(myData?.userType === UserType.S)
 
