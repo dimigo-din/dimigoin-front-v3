@@ -19,6 +19,7 @@ export const WeekDaySelector: React.FC<{
         >전체</Segment>
         {days.slice(0, -1).map((e, i) =>
             <Segment
+                key={e}
                 selected={i === value}
                 onClick={() => onChange({
                     target: {

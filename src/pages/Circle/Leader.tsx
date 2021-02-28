@@ -71,7 +71,8 @@ const ApplicationList: React.FC<{
                 {
                     applications
                         ? applications.length ?
-                            applications.map((application, index) => <Row
+                            applications.map((application, index) =>
+                            <Row
                                 key={application._id}
                                 onClick={() => openDetail(index)}
                             >
@@ -186,10 +187,6 @@ export const Leader: React.FC = () => {
             toast.success(`${fulfilled.map(e => e.value.applier.name).join(', ')} 지원자의 상태를 ${circleApplicationStatusKorMapper[changeTo].으로} 변경했어요`)
         if (rejected.length)
             toast.info(`${rejected.map(e => selectedApplications[e.index].applier.name).join(', ')} 지원자의 상태를 변경하지 못했어요`)
-        // selectedApplications.map(application => ({
-        //     ...application,
-        //     changeTo: config.CIRCLE_PERIOD
-        // }))
         fetchData()
     }, [config, fetchData])
 

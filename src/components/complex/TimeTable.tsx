@@ -15,8 +15,10 @@ export const TimeTable: React.FC<TimeTableProps> = ({ timetable, ...props }) => 
   return (
     <WrapperCard {...props}>
       <table
-        css={[css`width: 100%;`
-          , timetable?.length && css`height: 100%;`]}
+        css={[
+          css`width: 100%;`,
+          timetable?.length && css`height: 100%;`
+        ]}
       >
         <DaysHeader>
           <tr>
@@ -35,16 +37,19 @@ export const TimeTable: React.FC<TimeTableProps> = ({ timetable, ...props }) => 
           {timetable ?
             timetable.length ? Array(7).fill([...Array(5)])
               .map((times, timeIndex) =>
-                <Row>
+                <Row key={`timeindex${timeIndex}`}>
                   {(times as undefined[]).map((_, dayIndex) => {
                     const subject = timetable[dayIndex]?.[timeIndex]
-                    return <Item key={`${timeIndex}${dayIndex}`} colored={today === dayIndex}>
+                    return <Item
+                      key={`${timeIndex}${dayIndex}`}
+                      colored={today === dayIndex}
+                    >
                       {subject && subject.length > 3 ? subject.slice(0, 2) + '...' : subject}
                     </Item>
                   })}
                 </Row>
               ) : undefined
-            : Array(7).fill(Array(5)).map(day => <Row>{day.fill((() => <Item><Skeleton /></Item>)())}</Row>)}
+            : Array(7).fill(Array(5)).map((day, index) => <Row key={`skeleton${index}`}>{day.fill((() => <Item><Skeleton /></Item>)())}</Row>)}
         </ContentWrapper>
       </table>
       {timetable?.length === 0 &&

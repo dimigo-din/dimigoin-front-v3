@@ -29,7 +29,8 @@ const DailyMeal: React.FC<DailyMealProps> = ({
   >
     <DailyMealHeader>{header}요일</DailyMealHeader>
     {meals ? meals.map((meal, index) =>
-      <>
+      <React.Fragment
+        key={meal}>
         <Label>{PERIOD_LABEL[index]}</Label>
         <DailyMealItem>
           {meal || <NoMealData>정보가 없습니다</NoMealData>}
@@ -40,7 +41,7 @@ const DailyMeal: React.FC<DailyMealProps> = ({
         margin: 6px 0px;
       }
       `} />
-      </>
+      </React.Fragment>
     ) : <NoMealData>정보가 없습니다</NoMealData>}
   </DailyMealWrapper>
 
@@ -140,7 +141,11 @@ export const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
       <ThisWeek>{date.getMonth() + 1}월 {getThisWeek(date)}째 주</ThisWeek>
       {goBack && <HeaderIconWrapper><CloseSvg onClick={goBack} /></HeaderIconWrapper>}
     </HeaderWrapper>
-    {meals?.map(meal => <DailyMeal {...meal} />)}
+    {meals?.map(meal =>
+      <DailyMeal
+        key={meal.header}
+        {...meal}
+      />)}
   </Card>
 }
 

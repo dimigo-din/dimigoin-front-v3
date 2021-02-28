@@ -47,7 +47,9 @@ const InputChip: React.FC<{
         }} />
         {
           queriedStudents ? queriedStudents
-            .map((student, index) => <SearchListItem
+            .map((student, index) =>
+            <SearchListItem
+              key={student.studentId}
               focus={index === focusedIndex}
               onMouseEnter={() => setFocusIndex(() => index)}
               onClick={() => onSubmit(student)}
@@ -129,11 +131,18 @@ export const OutgoApplier: React.FC<OutgoApplierProps> = ({ onChange, value }) =
     <Wrapper leftBorder>
       {appliers &&
         appliers.map((applier, index) => (
-          <Chip css={css`margin: 6px;`} key={applier.studentId} onClick={() => removeApplier(index)}>
+          <Chip
+            css={css`margin: 6px;`}
+            key={applier.studentId}
+            onClick={() => removeApplier(index)}
+          >
             {applier.studentId} {applier.name}
           </Chip>
         ))}
-      <InputChip studentsList={studentsList} onSubmit={addApplier} />
+      <InputChip
+        studentsList={studentsList}
+        onSubmit={addApplier}
+      />
     </Wrapper>
   );
 };

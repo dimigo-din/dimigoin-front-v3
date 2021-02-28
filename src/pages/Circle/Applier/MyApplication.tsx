@@ -1,5 +1,5 @@
 import styled from "@emotion/styled"
-import React, { useEffect, useState } from "react"
+import React, { Fragment, useEffect, useState } from "react"
 import Skeleton from "react-loading-skeleton"
 import { getApplyQuestion } from "../../../api/circle"
 import { Card, FormHeader, HeaderWrapper, Textarea } from "../../../components"
@@ -11,13 +11,13 @@ const Content: React.FC<{
     form: Record<string, string>;
     questions?: Record<string, Doc<CircleApplyQuestionItem>>
 }> = ({ form, questions }) => <ContentWrapper>
-    {Object.entries(form).map(([question, answer]) => <>
+    {Object.entries(form).map(([question, answer]) => <Fragment key={question}>
         <FormHeader>
             {`${questions?.[question].question} (최대 ${questions?.[question].maxLength}자)`
                 || <Skeleton width={100} />}
         </FormHeader>
         <Textarea disabled value={answer} />
-    </>)}
+    </Fragment>)}
 </ContentWrapper>
 
 export const MyApplication: React.FC<{

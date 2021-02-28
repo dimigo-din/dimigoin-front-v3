@@ -23,12 +23,15 @@ export const TextCardGroup: React.FC<TextCardGroupProps> = ({
     <div css={spaceBetweenCards || shadow} {...props}>
       {content.map((i) => (
         i.to ?
-          <UnstyledLink to={i.to} css={spaceBetweenCards && spaceBetweenLinksStyle}>
+          <UnstyledLink
+            to={i.to}
+            css={spaceBetweenCards && spaceBetweenLinksStyle}
+            key={i.key || i.text?.toString()}
+          >
             <TextCard
               children={i?.text}
               css={spaceBetweenCards || cancelHover}
               {...i}
-              key={i.key || i.text?.toString()}
             />
           </UnstyledLink>
           : <TextCard

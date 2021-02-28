@@ -31,7 +31,7 @@ export const InputFormModal: React.FC<{
             <CardGroupHeader>정보 입력</CardGroupHeader>
             {
                 form.map((label, index) =>
-                    <FormRow>
+                    <FormRow key={label.label}>
                         <Label>{label.label}</Label>
                         <Input
                             onChange={(event) => updateField(index, event)}

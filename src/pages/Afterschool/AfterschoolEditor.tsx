@@ -196,7 +196,11 @@ export const AfterschoolEditor: React.FC<{
         />
         <FormHeader>요일</FormHeader>
         <Horizontal>
-            {days.slice(0, -1).map((day, i) => <Checkbox text={day} {...weekdayCheckboxes[i]} />)}
+            {days.slice(0, -1).map((day, i) => <Checkbox
+                key={day}
+                text={day}
+                {...weekdayCheckboxes[i]}
+            />)}
         </Horizontal>
         <FormHeader>시간</FormHeader>
         <Horizontal>
@@ -211,7 +215,12 @@ export const AfterschoolEditor: React.FC<{
         </Horizontal>
         <FormHeader>대상 반</FormHeader>
         <Horizontal>
-            {targetClassCheckboxes.map((checkbox, index) => <Checkbox text={`${index + 1}반`} {...checkbox} />)}
+            {targetClassCheckboxes.map((checkbox, index) =>
+                <Checkbox
+                    key={`index${index}`}
+                    text={`${index + 1}반`}
+                    {...checkbox}
+            />)}
         </Horizontal>
         <FormHeader>강의실</FormHeader>
         <Dropdown

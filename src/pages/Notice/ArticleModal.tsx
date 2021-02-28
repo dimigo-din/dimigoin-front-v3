@@ -3,6 +3,7 @@ import styled from "@emotion/styled"
 import React, { useState, useEffect } from "react"
 import { getNoticeById } from "../../api/notice"
 import { Card, Title, Divider, Horizontal, CompactButton, cardModalTopBorder } from "../../components"
+import { Markdown } from "../../components/basic/Markdown"
 import { SMALL_SCREEN_THRESHOLD } from "../../constants"
 import { Doc, Notice } from "../../constants/types"
 import { formatReadibleDate } from "../../utils"
@@ -36,14 +37,18 @@ export const ArticleModal: React.FC<{ articleId: string, goBack(): void, article
       </Horizontal>}
       <Divider visible horizontal size={7} small />
     </div>
-    {articleData.content.split('\n').map(e => <Content>{e}</Content>)}
+    <Markdown renderer={{
+      text: Content
+    }}>
+    {articleData.content}
+    </Markdown>
     <div css={css`margin-top: 12px; text-align: right;`}>
       <CompactButton onClick={goBack}>닫기</CompactButton>
     </div>
   </Card>)
 }
 
-const Content = styled.p`
+const Content = styled.span`
   font-size: 22px;
   color: #8A8A8A;
   line-height: 35px;

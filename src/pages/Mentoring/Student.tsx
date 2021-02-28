@@ -68,7 +68,9 @@ const Student: React.FC = () => {
                             && application.date === mentoringSchedule.date
                         ) : undefined
                     }))
-                        .map((mentoringSchedule: Doc<MentoringSchedule> & { application?: Doc<MentoringApplication> }) => <Row
+                        .map((mentoringSchedule: Doc<MentoringSchedule> & { application?: Doc<MentoringApplication> }) =>
+                        <Row
+                            key={mentoringSchedule._id}
                         >
                             <Data>{mentoringSchedule.teacher.name}</Data>
                             <Data>{mentoringSchedule.subject}</Data>

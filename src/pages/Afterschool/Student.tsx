@@ -112,7 +112,10 @@ const AfterschoolApply: React.FC = () => {
                 {
                     appliedClasses?.length
                         ? appliedClasses?.map(({ afterschool: appliedClass }) =>
-                            <Card onClick={() => unapplyClass(appliedClass._id, appliedClass.name)}>
+                            <Card
+                                key={appliedClass._id}
+                                onClick={() => unapplyClass(appliedClass._id, appliedClass.name)}
+                            >
                                 <CardHeader>
                                     {appliedClass.name}
                                 </CardHeader>

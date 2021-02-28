@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import css from "@emotion/css";
 import Skeleton from "react-loading-skeleton";
@@ -170,7 +170,11 @@ const Ingangsil: React.FC = () => {
             } : undefined}>우리반 신청자</CardGroupHeader>
             {[...Array(2)].map((_, index) => {
               const currentTimeAppliers = groupedByTime?.[NightSelfStudyTimeKey[index === 0 ? "NSS1" : "NSS2"]]
-              return (<IngangsilApplierWrapper leftBorder>
+              return (
+              <IngangsilApplierWrapper
+                key={`cardindex${index}`}
+                leftBorder
+              >
                 <ResponsiveWrapper>
                   <IngangTime>{index + 1}타임</IngangTime>
                   <Divider small data-divider />
@@ -196,10 +200,10 @@ const Ingangsil: React.FC = () => {
               const selfStudyId = NightSelfStudyTimeKey[index === 0 ? "NSS1" : "NSS2"]
               const currentTimeAppliers = groupedByTime?.[selfStudyId]
               const applied = myData && currentTimeAppliers?.map(e => e.applier._id).includes(myData?._id)
-              return (<>
+              return (
+              <Fragment key={`ingangsil${index}`}>
                 {index !== 0 && <Divider horizontal small data-divider />}
                 <IngansilStatus
-                  key={`ingangsil${index}`}
                   onSubmit={async () => {
                     if (applied) await unapplyIngangsil(selfStudyId)
                     else await applyIngangsil(selfStudyId)
@@ -210,7 +214,7 @@ const Ingangsil: React.FC = () => {
                   max={myStatus?.ingangMaxApplier}
                   isApplied={applied}
                   time={myStatus?.selfStudyTimes[selfStudyId]}
-                /></>
+                /></Fragment>
               )
             })}
           </Col>

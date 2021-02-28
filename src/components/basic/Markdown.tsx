@@ -1,5 +1,5 @@
 import css from "@emotion/css"
-import React from "react"
+import React, { ElementType } from "react"
 import remarkGfm from "remark-gfm"
 import ReactMarkdown from 'react-markdown'
 
@@ -37,7 +37,10 @@ padding: revert;
 padding: revert;
 `}>{children}</ul>
 
-export const Markdown: React.FC<{ children: string }> = ({ children }) => {
+export const Markdown: React.FC<{
+    children: string;
+    renderer?: {[nodeType: string]: ElementType};
+}> = ({ children, renderer }) => {
     return <ReactMarkdown
         plugins={[remarkGfm]}
         renderers={{
@@ -47,7 +50,8 @@ export const Markdown: React.FC<{ children: string }> = ({ children }) => {
             code: CodeRenderer,
             root: MDRenderer,
             listItem: ListItemRenderer,
-            list: ListRenderer
+            list: ListRenderer,
+            ...renderer
         }}>
         {children}
     </ReactMarkdown>

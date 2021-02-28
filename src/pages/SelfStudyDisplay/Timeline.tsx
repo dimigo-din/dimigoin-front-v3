@@ -4,7 +4,6 @@ import { getAdverbalSuffix1 } from 'josa-complete';
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import { getTimelineByStudent } from '../../api';
-import { getPlaceById } from '../../api/place';
 import { Card, CardGroupHeader } from '../../components';
 import { Student } from '../../constants/types';
 
@@ -30,12 +29,12 @@ export const Timeline: React.FC<{ student: Student; close(): void }> = ({ studen
                 return
             }
             const parsedTimeline = await Promise.all(fetchedTimelineData.map(async row => {
-                const thisPlace = await getPlaceById(row.place)
                 const parsedTime = new Date(row.createdAt)
+
                 const formattedTime = `${parsedTime.getHours().toString().padStart(2, '0')}:${parsedTime.getMinutes().toString().padStart(2, '0')}`
                 return ({
                     subject: row.updatedBy?.name,
-                    to: thisPlace?.name || "알수없는장소",
+                    to: row.place.name,
                     time: formattedTime,
                     id: row._id,
                     remark: row.remark,

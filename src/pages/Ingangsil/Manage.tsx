@@ -1,6 +1,6 @@
 import css from '@emotion/css'
 import styled from '@emotion/styled'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { Fragment, useCallback, useEffect, useState } from 'react'
 import { Card, PageWrapper, CardGroupHeader, ResponsiveWrapper, Divider, NoData } from '../../components'
 import { ReactComponent as _DownloadIcon } from '../../assets/icons/download.svg'
 import { getEntireTicket, requestExcelFile } from '../../api/ingangsil'
@@ -32,7 +32,7 @@ const ApplierListCard: React.FC<{
             {(students?.NSS1.length === 0) && (students.NSS2.length === 0) ? <NoApplier>신청 인원이 없습니다</NoApplier> : (<>
                 <Section>
                     {students ?
-                        students.NSS1.map(student => <Name>{student.serial} {student.name}</Name>)
+                        students.NSS1.map(student => <Name key={student._id}>{student.serial} {student.name}</Name>)
                         : <Skeleton width={148} />}
                 </Section>
                 <Section>
@@ -89,14 +89,14 @@ export const IngangsilManager: React.FC = () => {
         <CardGroupHeader>인강실 신청자</CardGroupHeader>
         <ResponsiveWrapper threshold={1200}>
             {
-                [...Array(3)].map((_, index) => <>
+                [...Array(3)].map((_, index) => <Fragment key={`grade${index}`}>
                         {(index !== 0) && <Divider data-divider small />}
                         <ApplierListCard
                             onClickDownload={() => downloadExcel(index + 1)}
                             students={ticketsByGrade?.[index + 1]}
                             grade={index + 1}  
                         />
-                    </>
+                    </Fragment>
                 )
             }
         </ResponsiveWrapper>

@@ -102,7 +102,7 @@ const Council: React.FC = () => {
                 {councilSchedules?.map(councilSchedule => {
                     const buttonName = councilSchedule.date[0].getDate().toString()
                     return (
-                        <Row>
+                        <Row key={councilSchedule.detail}>
                             <Data>
                                 <RadioButton id={buttonName} name="councilradio" />
                             </Data>

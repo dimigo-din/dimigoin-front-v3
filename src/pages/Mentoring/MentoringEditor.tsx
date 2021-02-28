@@ -166,6 +166,7 @@ export const MentoringEditor: React.FC<{
         <FormHeader>요일</FormHeader>
         <Horizontal>
             {[...Array(5)].map((_, index) => <Checkbox
+                key={`day${index}`}
                 defaultChecked={data?.days.includes(Object.keys(EngDay)[index] as EngDay)}
                 checked={dayChecks[index]}
                 onChange={({ target: { checked } }) => setDayChecks(beforeState => [

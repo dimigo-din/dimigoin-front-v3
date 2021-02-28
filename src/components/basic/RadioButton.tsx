@@ -46,10 +46,10 @@ export const RadioButtonGroup: React.FC<RadioButtonsGroupProps> = ({
     <RadioButtonGroupWrapper
     >
       {items.map((item) => (
-        <RadioButtonGroupItemWrapper>
+        <RadioButtonGroupItemWrapper
+          key={item.key}>
           <RadioButton
             name={name}
-            key={item.key}
             disabled={item.disabled}
             checked={item.key === value?.key}
             onClick={() =>
