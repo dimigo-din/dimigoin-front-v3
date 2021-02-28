@@ -6,13 +6,14 @@ import { Card, FormHeader, HeaderWrapper, Textarea } from "../../../components"
 import { CircleApplyQuestionItem, Doc } from "../../../constants/types"
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close.svg'
 import { ContentWrapper, wrapperStyle } from "./atomics"
+import css from "@emotion/css"
 
 const Content: React.FC<{
     form: Record<string, string>;
     questions?: Record<string, Doc<CircleApplyQuestionItem>>
 }> = ({ form, questions }) => <ContentWrapper>
     {Object.entries(form).map(([question, answer]) => <Fragment key={question}>
-        <FormHeader>
+        <FormHeader css={css`font-weight: 400;`}>
             {`${questions?.[question].question} (최대 ${questions?.[question].maxLength}자)`
                 || <Skeleton width={100} />}
         </FormHeader>
