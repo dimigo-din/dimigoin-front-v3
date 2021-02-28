@@ -86,4 +86,5 @@ export const StudentList: React.FC<{
 const EtcInfo = styled.span`
       font-size: 18px;
       font-weight: 700;
-    `
+      margin-left: 6px;
+`

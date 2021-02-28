@@ -88,11 +88,14 @@ export const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeN
             }
         })
         if (placeName === '이동반') {
-            const rawStored = localStorage.getItem(LocalstorageKeys.MOVINGCLASS)
+            const rawStored = getStoredMovingClass()
             if (!rawStored) {
                 toast.info('이동반 정보를 찾을 수 없어요. 이동반 위치를 지정해주세요.')
                 showModal((close) => <OtherPlaceModal presetReason="이동반" onSubmit={(name, placeId, reason) => {
-                    localStorage.setItem(LocalstorageKeys.MOVINGCLASS, placeId)
+                    localStorage.setItem(LocalstorageKeys.MOVINGCLASS, JSON.stringify({
+                        id: placeId,
+                        name
+                    }))
                     success({
                         placeId,
                         reason
@@ -106,8 +109,14 @@ export const getTargetPlaceByLabelAndStudent = (student: Student, { name: placeN
                 return
             }
             return success({
-                placeId: rawStored,
+                placeId: rawStored.id,
                 reason: "이동반"
             })
         }
     })
+
+export const getStoredMovingClass = (): { name: string; id: string } | null => {
+    const stored = localStorage.getItem(LocalstorageKeys.MOVINGCLASS)
+    if(stored) return JSON.parse(stored)
+    else return null
+}

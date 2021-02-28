@@ -9,7 +9,7 @@ import { ReactComponent as InsangsilIcon } from "../../assets/icons/ingangsil.sv
 import { ReactComponent as CircleIcon } from "../../assets/icons/circle.svg";
 import { ReactComponent as AbsentIcon } from "../../assets/icons/close.svg";
 import {
-  Horizontal, noBreak, PageWrapper, ResponsiveWrapper, Divider, Card, Button, ButtonProps
+  Horizontal, noBreak, PageWrapper, ResponsiveWrapper, Divider, Card, Button, ButtonProps, showModal
 } from "../../components";
 import {
   AttendanceLogWithStudent, Permission, SelfStudyTime, Student
@@ -20,7 +20,7 @@ import Skeleton from "react-loading-skeleton";
 import { ReactComponent as CloseIcon } from '../../assets/icons/close.svg'
 import { getSelfStudyPeriod } from "../../utils";
 import { isStudent, isTeacher } from "../../utils/isStudent";
-import { getTargetPlaceByLabelAndStudent } from "./getTargetPlaceByLabelAndStudent";
+import { getStoredMovingClass, getTargetPlaceByLabelAndStudent } from "./getTargetPlaceByLabelAndStudent";
 import { LabelCard } from "./LabelCard";
 import { TopBar } from "./TopBar";
 import { StudentList } from "./StudentList";
@@ -29,6 +29,9 @@ import useInput from "../../hooks/useInput";
 import useConsole from "../../hooks/useConsole";
 import { useConfig } from "../../hooks/api";
 import { LocalstorageKeys } from "../../constants/localstorageKeys";
+import { RouteComponentProps } from "react-router-dom";
+import { toast } from "react-toastify";
+import { OtherPlaceModal } from "../Main/OtherPlaceModal";
 
 const ROW_COLOR = {
   AVAILABLE: "var(--main-theme-accent)",
@@ -48,7 +51,20 @@ const ButtonWithIcon: React.FC<Partial<ButtonProps> & {
   </ButtonWithIconWrapper>)
 }
 
-const clearMovingClass = () => localStorage.removeItem(LocalstorageKeys.MOVINGCLASS)
+const setMovingClassInfo = () => new Promise<void>(success => {
+  showModal((close) => <OtherPlaceModal presetReason="이동반" onSubmit={(name, placeId, reason) => {
+    localStorage.setItem(LocalstorageKeys.MOVINGCLASS, JSON.stringify({
+      id: placeId,
+      name
+    }))
+    close()
+    success()
+  }} />, {
+    wrapperProps: {
+      css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px;`
+    }
+  })
+})
 
 export interface DisplayPlace {
   name: string;
@@ -112,7 +128,7 @@ const OTHER_INDEX = groupedPlaces.findIndex(p => p.fallback)
 const MOVING_CLASS_INDEX = groupedPlaces.length
 const INITIAL_INDEX = groupedPlaces.findIndex(p => p.initial)
 
-const SelfStudyDisplay: React.FC = () => {
+const SelfStudyDisplay: React.FC<RouteComponentProps> = ({ history }) => {
   const [selfStudyStatus, setSelfStudyStatus] = useState<{
     available: DisplayPlaceWithStudents[];
     notAvailable: DisplayPlaceWithStudents[]
@@ -179,7 +195,6 @@ const SelfStudyDisplay: React.FC = () => {
         const placeGroupIndex = current.log?.place.type !== undefined ? grouped.findIndex(p => p.type === current.log?.place.type) : INITIAL_INDEX
         const isMovingClass = current.log?.remark === '이동반'
         const matchedIndex = isMovingClass ? (IS_MOVING_CLASS_SYSTEM ? MOVING_CLASS_INDEX : OTHER_INDEX) : ((placeGroupIndex !== -1) ? placeGroupIndex : OTHER_INDEX)
-        console.log(IS_MOVING_CLASS_SYSTEM, matchedIndex, groupedPlaces, groupedPlaces[matchedIndex])
         return [
           ...grouped.slice(0, matchedIndex),
           {
@@ -386,13 +401,13 @@ const SelfStudyDisplay: React.FC = () => {
             `}>
               <ButtonWithIcon
                 icon={DeskIcon}
-                label="이동반 위치 초기화"
-                onClick={() => clearMovingClass()}
+                label={`이동반 위치 지정 ${((placeName) => placeName ? `(${placeName})` : '')(getStoredMovingClass()?.name)}`}
+                onClick={() => setMovingClassInfo().then(e => fetchData())}
               />
               <ButtonWithIcon
                 icon={CloseIcon}
                 label="닫기"
-                onClick={() => clearMovingClass()}
+                onClick={() => history.goBack()}
               />
             </ResponsiveWrapper>
           </ResponsiveWrapper>
