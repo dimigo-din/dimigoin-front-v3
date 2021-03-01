@@ -1,0 +1,38 @@
+name: React Deployment
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Check out the repo
+        uses: actions/checkout@v2
+      -
+        name: Cache node-modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+      -
+        name: Install packages
+        run: yarn install
+      -
+        name: Build project
+        env:
+          GENERATE_SOURCEMAP: false
+        run: yarn build
+      - name: Deploy to Edison
+        uses: appleboy/scp-action@master
+        with:
+          host: edison.dimigo.hs.kr
+          username: ${{ secrets.EDISON_USERNAME }}
+          password: ${{ secrets.EDISON_PASSWORD }}
+          port: 22
+          source: "./build/"
+          target: "/srv/dimigoin-front-v3/"
