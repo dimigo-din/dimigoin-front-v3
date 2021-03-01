@@ -1,6 +1,6 @@
 name: React build
-on: 
-  push:  
+on:
+  push:
     branches:
       - master
 
@@ -8,10 +8,10 @@ jobs:
   build:
     runs-on: ubuntu-18.04
     steps:
-      - name: Checkout source code.   
+      - name: Checkout source code.
         uses: actions/checkout@master
 
-      - name: Cache node modules      
+      - name: Cache node modules
         uses: actions/cache@v1
         with:
           path: node_modules
@@ -20,15 +20,15 @@ jobs:
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
 
-      - name: Install Dependencies   
+      - name: Install Dependencies
         run: yarn
 
-      - name: Build                  
+      - name: Build
         env:
           CI: false
         run: yarn build
 
-      - name: Deploy                 
+      - name: Deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

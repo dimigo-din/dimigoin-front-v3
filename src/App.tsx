@@ -1,13 +1,13 @@
-import React from "react";
-import styled from "@emotion/styled";
+import React from 'react';
+import styled from '@emotion/styled';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import './toastStyle.css'
+import './toastStyle.css';
 
-import Router from "./router";
-import GlobalStyle from "./components/GlobalStyle";
-import { ModalContainer } from "./components";
-import "./webfont";
+import Router from './router';
+import GlobalStyle from './components/GlobalStyle';
+import { ModalContainer } from './components';
+import './webfont';
 
 function App() {
   return (
@@ -15,9 +15,9 @@ function App() {
       <GlobalStyle />
       <ModalContainer />
       <ToastContainer />
-        <RouterWrap>
-          <Router />
-        </RouterWrap>
+      <RouterWrap>
+        <Router />
+      </RouterWrap>
     </>
   );
 }

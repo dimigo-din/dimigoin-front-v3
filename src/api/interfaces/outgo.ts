@@ -6,14 +6,12 @@ export interface OutgoRequestForm {
   duration: {
     start: Date;
     end: Date;
-  }
+  };
 }
 
 export interface RequestOutgo {
-    method: "POST";
-    endpoint: "/outgo-request";
-    req: OutgoRequestForm;
-    res: {
-
-    }
+  method: 'POST';
+  endpoint: '/outgo-request';
+  req: OutgoRequestForm;
+  res: {};
 }

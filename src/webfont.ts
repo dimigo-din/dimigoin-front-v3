@@ -1,1 +1,1 @@
-import "./NanumSquare.css";
+import './NanumSquare.css';

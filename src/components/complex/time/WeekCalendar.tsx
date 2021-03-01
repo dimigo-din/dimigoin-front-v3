@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
-import css from "@emotion/css";
-import styled from "@emotion/styled";
-import { EventFunction } from "../../../hooks/useInput";
-import { getThisWeek } from "../../../utils";
-import { ReactComponent as ArrowLeft } from "../../../assets/icons/arrow-left.svg"  
-import { ReactComponent as ArrowRight } from "../../../assets/icons/arrow-right.svg"
-import useConsole from "../../../hooks/useConsole";
+import React, { useCallback, useEffect, useState } from 'react';
+import css from '@emotion/css';
+import styled from '@emotion/styled';
+import { EventFunction } from '../../../hooks/useInput';
+import { getThisWeek } from '../../../utils';
+import { ReactComponent as ArrowLeft } from '../../../assets/icons/arrow-left.svg';
+import { ReactComponent as ArrowRight } from '../../../assets/icons/arrow-right.svg';
+import useConsole from '../../../hooks/useConsole';
 
 interface WeekCalendarProps {
   date?: [Date, Date];
@@ -13,53 +13,79 @@ interface WeekCalendarProps {
   rangeSelect?: boolean;
 }
 
-export const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange, rangeSelect }) => {
-  const [ pivotDate, setPivotDate ] = useState(date?.[0] || new Date());
-  const [ selectedPosition, setSelectingPosition ] = useState(0);
-  const [ days, setDays ] = useState<number[]>();
+export const WeekCalendar: React.FC<WeekCalendarProps> = ({
+  date,
+  onChange,
+  rangeSelect,
+}) => {
+  const [pivotDate, setPivotDate] = useState(date?.[0] || new Date());
+  const [selectedPosition, setSelectingPosition] = useState(0);
+  const [days, setDays] = useState<number[]>();
 
-  useEffect(() => setDays(new Array(7)
-  .fill(0)
-  .map((e, index) => +pivotDate + 86400000 * (index - pivotDate.getDay()))
-  .map((e) => e - (e % 1000000))), [ pivotDate ])
+  useEffect(
+    () =>
+      setDays(
+        new Array(7)
+          .fill(0)
+          .map(
+            (e, index) => +pivotDate + 86400000 * (index - pivotDate.getDay()),
+          )
+          .map((e) => e - (e % 1000000)),
+      ),
+    [pivotDate],
+  );
 
-  useConsole("PIVOT", days);
-  
-  const [selectedDates, setSelectDates] = useState<[number, number]>((date?.map(e => +e) || Array(2).fill([+pivotDate - (+pivotDate % 1000000)])) as [number, number]);
+  useConsole('PIVOT', days);
+
+  const [selectedDates, setSelectDates] = useState<[number, number]>(
+    (date?.map((e) => +e) ||
+      Array(2).fill([+pivotDate - (+pivotDate % 1000000)])) as [number, number],
+  );
   const selectDate = (timestamp: number) => {
-    if(!rangeSelect) {
-      setSelectDates(() => [timestamp, timestamp])
-      return
+    if (!rangeSelect) {
+      setSelectDates(() => [timestamp, timestamp]);
+      return;
     }
-    if(selectedPosition === 0) setSelectDates(() => [timestamp, timestamp])
-    else setSelectDates(dates => [dates[0], timestamp].sort() as [number, number])
-  
-    setSelectingPosition(position => position === 0 ? 1 : 0)
-  }
+    if (selectedPosition === 0) setSelectDates(() => [timestamp, timestamp]);
+    else
+      setSelectDates(
+        (dates) => [dates[0], timestamp].sort() as [number, number],
+      );
+
+    setSelectingPosition((position) => (position === 0 ? 1 : 0));
+  };
   useEffect(() => {
     if (!onChange) return;
-    const date = selectedDates.map(t => {
-      const date = new Date(t)
+    const date = selectedDates.map((t) => {
+      const date = new Date(t);
       date.setHours(0);
       date.setMinutes(0);
       date.setSeconds(0);
       date.setMilliseconds(0);
-      return date
+      return date;
     }) as [Date, Date];
     onChange({
       target: {
         value: date,
       },
     });
-  }, [ selectedDates, onChange ]);
-  
-  const showPrevWeek = useCallback(() => setPivotDate(date => new Date(+date - 604800000)), [])
-  const showNextWeek = useCallback(() => setPivotDate(date => new Date(+date + 604800000)), [])
+  }, [selectedDates, onChange]);
+
+  const showPrevWeek = useCallback(
+    () => setPivotDate((date) => new Date(+date - 604800000)),
+    [],
+  );
+  const showNextWeek = useCallback(
+    () => setPivotDate((date) => new Date(+date + 604800000)),
+    [],
+  );
   return (
     <Wrapper>
       <HeaderWrapper>
         <ArrowLeft onClick={showPrevWeek} />
-        <Header>{pivotDate.getMonth() + 1}월 {getThisWeek(pivotDate)}주</Header>
+        <Header>
+          {pivotDate.getMonth() + 1}월 {getThisWeek(pivotDate)}주
+        </Header>
         <ArrowRight onClick={showNextWeek} />
       </HeaderWrapper>
       <BorderWrapper>
@@ -88,21 +114,22 @@ export const WeekCalendar: React.FC<WeekCalendarProps> = ({ date, onChange, rang
       <WeekWrapper>
         {days?.map((timestamp) => {
           const date = new Date(timestamp);
-          const isBetween = selectedDates[0] < timestamp && timestamp < selectedDates[1]
+          const isBetween =
+            selectedDates[0] < timestamp && timestamp < selectedDates[1];
           return (
             // <DayWrapper
             //   isEnd={Boolean(selectedDates[0] && (selectedDates[1] === timestamp))}
             //   isStart={Boolean(selectedDates[1] && (selectedDates[0] === timestamp))}
             //   isBetween={isBetween}
             // >
-              <Day
-                key={timestamp}
-                selected={selectedDates.includes(timestamp)}
-                rangeBetweed={isBetween}
-                onClick={() => selectDate(timestamp)}
-              >
-                {date.getDate()}
-              </Day>
+            <Day
+              key={timestamp}
+              selected={selectedDates.includes(timestamp)}
+              rangeBetweed={isBetween}
+              onClick={() => selectDate(timestamp)}
+            >
+              {date.getDate()}
+            </Day>
             // </DayWrapper>
           );
         })}
@@ -157,7 +184,7 @@ const WeekWrapper = styled(DayHeaderWrapper)`
   margin: 0px auto;
 `;
 
-const Day = styled.div<{ selected: boolean; rangeBetweed: boolean; }>`
+const Day = styled.div<{ selected: boolean; rangeBetweed: boolean }>`
   font-size: 20px;
   font-weight: 700;
   color: #8a8a8a;
@@ -170,7 +197,7 @@ const Day = styled.div<{ selected: boolean; rangeBetweed: boolean; }>`
   transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
   border-radius: 15px;
   /* flex: 1; */
-  
+
   ${({ selected }) =>
     selected &&
     css`
@@ -179,14 +206,16 @@ const Day = styled.div<{ selected: boolean; rangeBetweed: boolean; }>`
       border-radius: 24px;
     `}
 
-    ${({ rangeBetweed }) => rangeBetweed && css`
+  ${({ rangeBetweed }) =>
+    rangeBetweed &&
+    css`
       background-color: rgba(var(--main-theme-accent-rgb), 0.1);
       /* color: white; */
       border-radius: 24px;
     `}
 
     @media screen and (max-width: 500px) {
-      padding: 3px;
-      font-size: 16px;
-    }
+    padding: 3px;
+    font-size: 16px;
+  }
 `;

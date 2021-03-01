@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "@emotion/styled";
-import css from "@emotion/css";
-import { Horizontal, UnstyledLink } from "./Atomics";
-import { Divider } from "../layout/Cols";
-import Skeleton from "react-loading-skeleton";
-import { SMALL_SCREEN_THRESHOLD } from "../../constants";
+import React from 'react';
+import styled from '@emotion/styled';
+import css from '@emotion/css';
+import { Horizontal, UnstyledLink } from './Atomics';
+import { Divider } from '../layout/Cols';
+import Skeleton from 'react-loading-skeleton';
+import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 
 interface CardGroupheaderProps {
   withBubble?: boolean;
@@ -24,26 +24,30 @@ export const CardGroupHeader: React.FC<CardGroupheaderProps> = ({
 }) => {
   return (
     <Wrapper {...props}>
-      <Horizontal css={css`
-        flex-wrap: wrap;
-      `}>
+      <Horizontal
+        css={css`
+          flex-wrap: wrap;
+        `}
+      >
         <Title withBubble={withBubble}>{children}</Title>
         <Divider smaller />
-        {subButton && (subButton.component || (
-          subButton.route ? (
-            <SubButton>
-              <UnstyledLink to={subButton.route}>
+        {subButton &&
+          (subButton.component ||
+            (subButton.route ? (
+              <SubButton>
+                <UnstyledLink to={subButton.route}>
+                  {subButton.text || <Skeleton width={120} />}
+                </UnstyledLink>
+              </SubButton>
+            ) : subButton.action ? (
+              <SubButton onClick={subButton.action}>
                 {subButton.text || <Skeleton width={120} />}
-              </UnstyledLink>
-            </SubButton>
-          ) : subButton.action ? (
-            <SubButton onClick={subButton.action}>
-              {subButton.text || <Skeleton width={120} />}
-            </SubButton>
-          ) : (
-                <SubButton noAction>{subButton.text || <Skeleton width={120} />}</SubButton>
-              )
-        ))}
+              </SubButton>
+            ) : (
+              <SubButton noAction>
+                {subButton.text || <Skeleton width={120} />}
+              </SubButton>
+            )))}
       </Horizontal>
     </Wrapper>
   );
@@ -52,7 +56,7 @@ export const CardGroupHeader: React.FC<CardGroupheaderProps> = ({
 export const Title = styled.h1<{ withBubble?: boolean }>`
   font-size: 27px;
   font-weight: 900;
-  font-family: "NanumSquare", sans-serif;
+  font-family: 'NanumSquare', sans-serif;
   color: #333333;
   flex-basis: 1;
   flex-shrink: 0;
@@ -68,8 +72,8 @@ export const Title = styled.h1<{ withBubble?: boolean }>`
         width: 8px;
         height: 8px;
         border-radius: 4px;
-        background-color: #E83C77;
-        content: " ";
+        background-color: #e83c77;
+        content: ' ';
         margin-left: 4px;
         margin-top: -3px;
       }
@@ -79,7 +83,7 @@ export const Title = styled.h1<{ withBubble?: boolean }>`
 const SubButton = styled.p<{ noAction?: boolean }>`
   align-self: flex-end;
   font-weight: 800;
-  color: #E83C77;
+  color: #e83c77;
   margin-top: 12px;
   flex-basis: 1;
   flex-shrink: 0;
@@ -90,10 +94,12 @@ const SubButton = styled.p<{ noAction?: boolean }>`
     margin-top: 10px;
   }
 
-  ${({ noAction }) => noAction && css`
-    color: #9A9A9A;
-    font-weight: 400;
-  `}
+  ${({ noAction }) =>
+    noAction &&
+    css`
+      color: #9a9a9a;
+      font-weight: 400;
+    `}
 `;
 
 const Wrapper = styled.section`

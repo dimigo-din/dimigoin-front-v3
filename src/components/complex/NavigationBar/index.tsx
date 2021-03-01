@@ -1,32 +1,34 @@
-import React, { useRef, useCallback } from "react";
-import styled from "@emotion/styled";
-import { ReactComponent as IconLogo } from '../../../assets/brand.svg'
-import { ReactComponent as LogoutLogo } from '../../../assets/icons/logout.svg'
+import React, { useRef, useCallback } from 'react';
+import styled from '@emotion/styled';
+import { ReactComponent as IconLogo } from '../../../assets/brand.svg';
+import { ReactComponent as LogoutLogo } from '../../../assets/icons/logout.svg';
 
-import NavigationItem from "./NavigationItem";
-import { studentNavigations, teacherNavigations } from "./navigations";
-import { withRouter, RouteComponentProps } from "react-router-dom";
-import { UnstyledLink } from "../../basic/Atomics";
-import { useMyData } from "../../../hooks/api/useMyData";
-import { SMALL_SCREEN_THRESHOLD } from "../../../constants";
-import css from "@emotion/css";
-import { BottomBar } from "./NavigationItem.style";
-import { isStudent } from "../../../utils/isStudent";
+import NavigationItem from './NavigationItem';
+import { studentNavigations, teacherNavigations } from './navigations';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { UnstyledLink } from '../../basic/Atomics';
+import { useMyData } from '../../../hooks/api/useMyData';
+import { SMALL_SCREEN_THRESHOLD } from '../../../constants';
+import css from '@emotion/css';
+import { BottomBar } from './NavigationItem.style';
+import { isStudent } from '../../../utils/isStudent';
 
 const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
-  const scrollerRef = useRef<HTMLDivElement>(null)
+  const scrollerRef = useRef<HTMLDivElement>(null);
   const scrollToClicked = useCallback(
     (offset: number) => {
       if (scrollerRef.current)
         scrollerRef.current.scrollTo({
           left: offset,
-          behavior: 'smooth'
-        })
+          behavior: 'smooth',
+        });
     },
     [scrollerRef],
-  )
-  const myLocalData = useMyData()
-  const profileImageURI = myLocalData ? myLocalData.photos.slice(-1)[0] : undefined
+  );
+  const myLocalData = useMyData();
+  const profileImageURI = myLocalData
+    ? myLocalData.photos.slice(-1)[0]
+    : undefined;
 
   return (
     <Wrapper>
@@ -42,7 +44,10 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
           </LogoWrapper>
         </UnstyledLink>
         <Scroller ref={scrollerRef}>
-          {(myLocalData && isStudent(myLocalData) ? studentNavigations : teacherNavigations).map(({ title, image, route }) =>
+          {(myLocalData && isStudent(myLocalData)
+            ? studentNavigations
+            : teacherNavigations
+          ).map(({ title, image, route }) => (
             <NavigationItem
               key={`${route}${title}`}
               title={title}
@@ -51,7 +56,7 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
               route={route}
               onLinkClicked={scrollToClicked}
             />
-          )}
+          ))}
         </Scroller>
         <ProfileContainer>
           <ProfileImage src={profileImageURI} />
@@ -65,34 +70,36 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
 };
 
 export const NavigationBar = withRouter(TopNavbar);
-export default NavigationBar
+export default NavigationBar;
 
 const LogoWrapper = styled.span`
   position: relative;
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     --bottom-margin: -9px;
   }
-`
+`;
 
-const Logo = styled(IconLogo) <{ selected?: boolean }>`
+const Logo = styled(IconLogo)<{ selected?: boolean }>`
   fill: #d1d1d1;
-  
-  ${({ selected }) => selected && css`
-    fill: var(--main-theme-accent);
-  `}
+
+  ${({ selected }) =>
+    selected &&
+    css`
+      fill: var(--main-theme-accent);
+    `}
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     width: 24px;
   }
-`
+`;
 
 const Logout = styled(LogoutLogo)`
   height: 26px;
   width: 26px;
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
-      width: 18px;
-      height: 18px;
+    width: 18px;
+    height: 18px;
   }
-`
+`;
 
 const Wrapper = styled.div`
   width: 100%;
@@ -123,7 +130,7 @@ const ProfileImage = styled.img`
   border-radius: 50%;
   border: solid 2px var(--main-theme-accent);
   margin-right: 38.2px;
-    object-fit: cover;
+  object-fit: cover;
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     width: 28px;
     height: 28px;
@@ -135,4 +142,4 @@ const Scroller = styled.div`
   display: flex;
   align-items: center;
   overflow-x: auto;
-`
+`;

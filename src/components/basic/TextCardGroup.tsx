@@ -1,9 +1,9 @@
-import React, { ReactNode } from "react";
-import styled from "@emotion/styled";
-import css from "@emotion/css";
-import Card, { CardProps } from "./Card";
-import { UnstyledLink } from "./Atomics";
-import { SMALL_SCREEN_THRESHOLD } from "../../constants";
+import React, { ReactNode } from 'react';
+import styled from '@emotion/styled';
+import css from '@emotion/css';
+import Card, { CardProps } from './Card';
+import { UnstyledLink } from './Atomics';
+import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 
 interface TextCardGroupProps {
   content: (CardProps & {
@@ -21,8 +21,8 @@ export const TextCardGroup: React.FC<TextCardGroupProps> = ({
 }) => {
   return (
     <div css={spaceBetweenCards || shadow} {...props}>
-      {content.map((i) => (
-        i.to ?
+      {content.map((i) =>
+        i.to ? (
           <UnstyledLink
             to={i.to}
             css={spaceBetweenCards && spaceBetweenLinksStyle}
@@ -34,13 +34,15 @@ export const TextCardGroup: React.FC<TextCardGroupProps> = ({
               {...i}
             />
           </UnstyledLink>
-          : <TextCard
+        ) : (
+          <TextCard
             children={i?.text}
             css={spaceBetweenCards || cancelHover}
             {...i}
             key={i.key || i.text?.toString()}
           />
-      ))}
+        ),
+      )}
     </div>
   );
 };
@@ -48,7 +50,7 @@ export const TextCardGroup: React.FC<TextCardGroupProps> = ({
 export const TextCard = styled(Card)`
   font-weight: 400;
   font-size: 18px;
-  font-family: "NanumSquare" !important;
+  font-family: 'NanumSquare' !important;
   line-height: 32px;
   margin-top: 10px;
 
@@ -77,6 +79,6 @@ const spaceBetweenLinksStyle = css`
   &:first-of-type {
     margin-top: 0px;
   }
-`
+`;
 
 export default TextCardGroup;

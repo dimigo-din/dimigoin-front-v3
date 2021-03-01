@@ -1,8 +1,15 @@
-import React, { useEffect, useState } from "react";
-import useInput, { EventFunction } from "../../hooks/useInput";
-import { getAllTeachers } from "../../api/user";
-import {  Card, FormHeader, RadioButtonGroup, Textarea, Dropdown,
-          RadioButtonItem, DropdownItem } from "../basic";
+import React, { useEffect, useState } from 'react';
+import useInput, { EventFunction } from '../../hooks/useInput';
+import { getAllTeachers } from '../../api/user';
+import {
+  Card,
+  FormHeader,
+  RadioButtonGroup,
+  Textarea,
+  Dropdown,
+  RadioButtonItem,
+  DropdownItem,
+} from '../basic';
 
 export interface OutgoApplyInput {
   outgoType?: string;
@@ -16,27 +23,33 @@ interface OutgoApplyProps {
   onChange?: EventFunction<OutgoApplyInput>;
 }
 
-export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }) => {
+export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({
+  onChange,
+  ...props
+}) => {
   const outgoType = useInput<RadioButtonItem>();
   const applyType = useInput<RadioButtonItem>();
   const outgoReason = useInput<DropdownItem>();
   const detailReason = useInput();
   const approver = useInput<DropdownItem>();
-  const [ approversList, setApproversList ] = useState<DropdownItem[]>();
+  const [approversList, setApproversList] = useState<DropdownItem[]>();
 
   useEffect(() => {
-    getAllTeachers().then(teacherList => setApproversList(() => teacherList.map(teacher => ({
-      name: [teacher.role, teacher.name, '선생님'].join(' '),
-      key: teacher._id
-    }))))
-  }, [ setApproversList ]);
+    getAllTeachers().then((teacherList) =>
+      setApproversList(() =>
+        teacherList.map((teacher) => ({
+          name: [teacher.role, teacher.name, '선생님'].join(' '),
+          key: teacher._id,
+        })),
+      ),
+    );
+  }, [setApproversList]);
 
   const applyTypeValue = applyType.value,
-        detailReasonValue = detailReason.value,
-        approverValue = approver.value,
-        outgoReasonValue= outgoReason.value,
-        outgoTypeValue = outgoType.value
-
+    detailReasonValue = detailReason.value,
+    approverValue = approver.value,
+    outgoReasonValue = outgoReason.value,
+    outgoTypeValue = outgoType.value;
 
   useEffect(() => {
     onChange &&
@@ -57,7 +70,7 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }
     approverValue,
     detailReasonValue,
     outgoReasonValue,
-    outgoTypeValue
+    outgoTypeValue,
   ]);
   return (
     <>
@@ -68,12 +81,12 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }
           name="outgoType"
           items={[
             {
-              name: "개인 외출",
-              key: "alone",
+              name: '개인 외출',
+              key: 'alone',
             },
             {
-              name: "단체 외출",
-              key: "group",
+              name: '단체 외출',
+              key: 'group',
             },
           ]}
         />
@@ -83,12 +96,12 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }
           name="applyType"
           items={[
             {
-              name: "일반 외출",
-              key: "onetime",
+              name: '일반 외출',
+              key: 'onetime',
             },
             {
-              name: "정기 외출",
-              key: "regulary",
+              name: '정기 외출',
+              key: 'regulary',
             },
           ]}
         />
@@ -97,16 +110,16 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({ onChange, ...props }
           {...outgoReason}
           items={[
             {
-              name: "사유1",
-              key: "reason1",
+              name: '사유1',
+              key: 'reason1',
             },
             {
-              name: "사유2",
-              key: "reason2",
+              name: '사유2',
+              key: 'reason2',
             },
             {
-              name: "사유3",
-              key: "reason3",
+              name: '사유3',
+              key: 'reason3',
             },
           ]}
           placeholder="선택 또는 직접 입력"

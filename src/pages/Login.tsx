@@ -1,51 +1,79 @@
-import React, { useCallback, useEffect } from "react";
-import styled from "@emotion/styled";
-import { ReactComponent as _BrandWithText } from "../assets/brand-with-text.svg";
-import { Button, Input, ResponsiveWrapper, TodayMeal } from "../components";
-import css from "@emotion/css";
-import { useMeal } from "../hooks/api";
-import { useTextInput } from "../hooks/useInput";
-import { clearTokens, loginWithInfo } from "../api";
-import { useHistory } from "react-router-dom";
-import { SMALL_SCREEN_THRESHOLD } from "../constants";
+import React, { useCallback, useEffect } from 'react';
+import styled from '@emotion/styled';
+import { ReactComponent as _BrandWithText } from '../assets/brand-with-text.svg';
+import { Button, Input, ResponsiveWrapper, TodayMeal } from '../components';
+import css from '@emotion/css';
+import { useMeal } from '../hooks/api';
+import { useTextInput } from '../hooks/useInput';
+import { clearTokens, loginWithInfo } from '../api';
+import { useHistory } from 'react-router-dom';
+import { SMALL_SCREEN_THRESHOLD } from '../constants';
 
 const Login: React.FC = () => {
-  const todayMeal = useMeal()
-  const [ usernameInput, setUsernameError ] = useTextInput();
-  const [ passwordInput, setPasswordError] = useTextInput()
-  const history = useHistory()
-  useEffect(() => clearTokens(), [])
+  const todayMeal = useMeal();
+  const [usernameInput, setUsernameError] = useTextInput();
+  const [passwordInput, setPasswordError] = useTextInput();
+  const history = useHistory();
+  useEffect(() => clearTokens(), []);
   const login = useCallback(async () => {
-    if(!usernameInput.value) setUsernameError("올바른 사용자 이름을 입력해주세요")
-    if(!passwordInput.value) setPasswordError("올바른 비밀번호를 입력해주세요")
-    if(!usernameInput.value || !passwordInput.value) return
+    if (!usernameInput.value)
+      setUsernameError('올바른 사용자 이름을 입력해주세요');
+    if (!passwordInput.value)
+      setPasswordError('올바른 비밀번호를 입력해주세요');
+    if (!usernameInput.value || !passwordInput.value) return;
 
-    if(await loginWithInfo({
-      username: usernameInput.value,
-      password: passwordInput.value
-    })) {
-      history.push('/')
+    if (
+      await loginWithInfo({
+        username: usernameInput.value,
+        password: passwordInput.value,
+      })
+    ) {
+      history.push('/');
     }
-  }, [usernameInput.value, passwordInput.value, setPasswordError, setUsernameError, history])
-  const enterToSubmit = useCallback((e) => {
-    if(e.key === 'Enter') login()
-  }, [login])
-  return <Wrapper>
-    <SameHeightHorizontal threshold={SMALL_SCREEN_THRESHOLD}>
-      <InputContainer>
-        <BrandWithText />
-        <Input css={ css`margin-top: 36px;` } placeholder="아이디" {...usernameInput} onKeyPress={enterToSubmit} />
-        <Input css={ css`margin-top: 12px;` } type="password" placeholder="비밀번호" {...passwordInput} onKeyPress={enterToSubmit} />
-        <LoginButton onClick={login}>
-          로그인
-        </LoginButton>
-      </InputContainer>
-      <MealDisplay meals={todayMeal} />
-    </SameHeightHorizontal>
-  </Wrapper>
-}
+  }, [
+    usernameInput.value,
+    passwordInput.value,
+    setPasswordError,
+    setUsernameError,
+    history,
+  ]);
+  const enterToSubmit = useCallback(
+    (e) => {
+      if (e.key === 'Enter') login();
+    },
+    [login],
+  );
+  return (
+    <Wrapper>
+      <SameHeightHorizontal threshold={SMALL_SCREEN_THRESHOLD}>
+        <InputContainer>
+          <BrandWithText />
+          <Input
+            css={css`
+              margin-top: 36px;
+            `}
+            placeholder="아이디"
+            {...usernameInput}
+            onKeyPress={enterToSubmit}
+          />
+          <Input
+            css={css`
+              margin-top: 12px;
+            `}
+            type="password"
+            placeholder="비밀번호"
+            {...passwordInput}
+            onKeyPress={enterToSubmit}
+          />
+          <LoginButton onClick={login}>로그인</LoginButton>
+        </InputContainer>
+        <MealDisplay meals={todayMeal} />
+      </SameHeightHorizontal>
+    </Wrapper>
+  );
+};
 
-export default Login
+export default Login;
 
 const BrandWithText = styled(_BrandWithText)`
   width: 216px;
@@ -53,7 +81,7 @@ const BrandWithText = styled(_BrandWithText)`
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     width: 120px;
   }
-`
+`;
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -65,7 +93,7 @@ const Wrapper = styled.div`
   @media screen and (max-height: 720px) {
     align-items: flex-start;
   }
-`
+`;
 
 const SameHeightHorizontal = styled(ResponsiveWrapper)`
   display: flex;
@@ -76,19 +104,19 @@ const SameHeightHorizontal = styled(ResponsiveWrapper)`
     flex: 1;
     padding: 36px 18px;
   }
-`
+`;
 
 const InputContainer = styled.div`
   flex: 0.4;
   @media screen and (max-width: 1280px) {
     flex: 1;
   }
-`
+`;
 
 const LoginButton = styled(Button)`
   display: flex;
   margin-top: 48px;
-`
+`;
 
 const MealDisplay = styled(TodayMeal)`
   flex: 0.5;
@@ -100,4 +128,4 @@ const MealDisplay = styled(TodayMeal)`
     margin-left: 0px;
     margin-top: 24px;
   }
-`
+`;

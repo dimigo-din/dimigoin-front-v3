@@ -11,8 +11,8 @@ export const PageWrapper = styled.div`
   flex: 1;
 
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
-      padding-top: 40px;
+    padding-top: 40px;
   }
 `;
 
-export default PageWrapper
+export default PageWrapper;

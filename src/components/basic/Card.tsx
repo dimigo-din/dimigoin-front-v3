@@ -13,10 +13,10 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   hover?: boolean;
   clickable?: boolean;
   cardRef?:
-  | string
-  | ((instance: HTMLDivElement | null) => void)
-  | React.RefObject<HTMLDivElement>
-  | null;
+    | string
+    | ((instance: HTMLDivElement | null) => void)
+    | React.RefObject<HTMLDivElement>
+    | null;
   onClick?: MouseEventHandler;
   onMouseOver?: MouseEventHandler;
   onFocus?: FocusEventHandler;
@@ -33,7 +33,7 @@ export const Card: React.FC<CardProps> = ({
   hover,
   clickable,
   cardRef,
-  className = "",
+  className = '',
   onClick,
   onMouseOver,
   onFocus,
@@ -43,29 +43,29 @@ export const Card: React.FC<CardProps> = ({
   borderColor,
   ...props
 }) => (
-    <Container
-      className={className}
-      hover={hover}
-      clickable={clickable}
-      button={!!button}
-      ref={cardRef}
-      onClick={onClick}
-      onMouseOver={onMouseOver}
-      onFocus={onFocus}
-      onMouseOut={onMouseOut}
-      onBlur={onBlur}
-      leftBorder={leftBorder}
-      borderColor={borderColor}
-      {...props}
-    >
-      {button ? <Content>{children}</Content> : children}
-      {button && (
-        <>
-          <Button>{button}</Button>
-        </>
-      )}
-    </Container>
-  );
+  <Container
+    className={className}
+    hover={hover}
+    clickable={clickable}
+    button={!!button}
+    ref={cardRef}
+    onClick={onClick}
+    onMouseOver={onMouseOver}
+    onFocus={onFocus}
+    onMouseOut={onMouseOut}
+    onBlur={onBlur}
+    leftBorder={leftBorder}
+    borderColor={borderColor}
+    {...props}
+  >
+    {button ? <Content>{children}</Content> : children}
+    {button && (
+      <>
+        <Button>{button}</Button>
+      </>
+    )}
+  </Container>
+);
 
 export default Card;
 
@@ -84,19 +84,21 @@ const Container = styled.div<CardContainerProps>`
   border-radius: 5px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.03);
   transition: box-shadow 1s cubic-bezier(0, 0.46, 0.12, 0.98),
-              opacity 1s cubic-bezier(0, 0.46, 0.12, 0.98),
-              transform 1s cubic-bezier(0, 0.46, 0.12, 0.98),
-              border-color 300ms cubic-bezier(0, 0.46, 0.12, 0.98);
+    opacity 1s cubic-bezier(0, 0.46, 0.12, 0.98),
+    transform 1s cubic-bezier(0, 0.46, 0.12, 0.98),
+    border-color 300ms cubic-bezier(0, 0.46, 0.12, 0.98);
   /* transition: border-left none; */
 
   /* @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     padding: 24px 18px;
   } */
-  ${({ disableSpace }) => !disableSpace && css`
-    & + & {
-      margin-top: 10px;
-    }
-  `}
+  ${({ disableSpace }) =>
+    !disableSpace &&
+    css`
+      & + & {
+        margin-top: 10px;
+      }
+    `}
 
   ${({ leftBorder }) =>
     leftBorder &&
@@ -132,8 +134,10 @@ const Container = styled.div<CardContainerProps>`
       }
     `};
 
-    ${({ borderColor }) => borderColor && css`
-      border-color: ${borderColor}
+  ${({ borderColor }) =>
+    borderColor &&
+    css`
+      border-color: ${borderColor};
     `}
 `;
 

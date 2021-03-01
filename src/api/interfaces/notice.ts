@@ -1,18 +1,21 @@
-import { Doc, Merge, Notice, User } from "../../constants/types";
+import { Doc, Merge, Notice, User } from '../../constants/types';
 
-export type APIDocNotice = Merge<Notice, {
-  startDate: string;
-  endDate: string;
-  author?: User;
-}>
+export type APIDocNotice = Merge<
+  Notice,
+  {
+    startDate: string;
+    endDate: string;
+    author?: User;
+  }
+>;
 
 export interface AllNotices {
   endpoint: '/notice';
   method: 'GET';
   req: {};
   res: {
-    notices: Doc<APIDocNotice>[]
-  }
+    notices: Doc<APIDocNotice>[];
+  };
 }
 
 export interface GetNoticeById {
@@ -20,8 +23,8 @@ export interface GetNoticeById {
   method: 'GET';
   req: {};
   res: {
-    notice: Doc<APIDocNotice>
-  }
+    notice: Doc<APIDocNotice>;
+  };
 }
 
 export interface RegisterNotice {
@@ -29,8 +32,8 @@ export interface RegisterNotice {
   method: 'POST';
   req: APIDocNotice;
   res: {
-    notice: Doc<APIDocNotice>
-  }
+    notice: Doc<APIDocNotice>;
+  };
 }
 
 export interface EditRegisteredNotice {
@@ -38,8 +41,8 @@ export interface EditRegisteredNotice {
   method: 'PATCH';
   req: APIDocNotice;
   res: {
-    notice: Doc<APIDocNotice>
-  }
+    notice: Doc<APIDocNotice>;
+  };
 }
 
 export interface CurrentNotices {
@@ -47,8 +50,8 @@ export interface CurrentNotices {
   method: 'GET';
   req: {};
   res: {
-    notices: Doc<APIDocNotice>[]
-  }
+    notices: Doc<APIDocNotice>[];
+  };
 }
 
 export interface RemoveNotice {
@@ -56,6 +59,6 @@ export interface RemoveNotice {
   method: 'DELETE';
   req: {};
   res: {
-    notice: Doc<APIDocNotice>
-  }
+    notice: Doc<APIDocNotice>;
+  };
 }

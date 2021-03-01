@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "@emotion/styled";
-import { EventFunction } from "../../hooks/useInput";
-import { SMALL_SCREEN_THRESHOLD } from "../../constants";
+import React from 'react';
+import styled from '@emotion/styled';
+import { EventFunction } from '../../hooks/useInput';
+import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 
 interface RadioButtonProps {
   onChange?: (...p: any[]) => any;
@@ -10,7 +10,11 @@ interface RadioButtonProps {
 }
 
 export const RadioButton: React.FC<
-  React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & RadioButtonProps
+  React.DetailedHTMLProps<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  > &
+    RadioButtonProps
 > = ({ disabled, children, checked, ...props }) => {
   return (
     <Wrapper>
@@ -40,14 +44,15 @@ interface RadioButtonsGroupProps {
 }
 
 export const RadioButtonGroup: React.FC<RadioButtonsGroupProps> = ({
-  items, name, onChange, value
+  items,
+  name,
+  onChange,
+  value,
 }) => {
   return (
-    <RadioButtonGroupWrapper
-    >
+    <RadioButtonGroupWrapper>
       {items.map((item) => (
-        <RadioButtonGroupItemWrapper
-          key={item.key}>
+        <RadioButtonGroupItemWrapper key={item.key}>
           <RadioButton
             name={name}
             disabled={item.disabled}
@@ -69,17 +74,17 @@ const RadioButtonGroupWrapper = styled.div`
   flex-wrap: wrap;
   line-height: 36px;
   margin: -6px;
-`
+`;
 
 const RadioButtonGroupItemWrapper = styled.div`
   flex: 1;
   margin: 6px;
-`
+`;
 
 const Circle = styled.div<{ disabled?: boolean }>`
   width: 26px;
   height: 26px;
-  border: 1px solid #8A8A8A;
+  border: 1px solid #8a8a8a;
   border-radius: 13px;
   box-sizing: border-box;
   transition: 300ms;
@@ -93,11 +98,11 @@ const LogicalButton = styled.input`
   opacity: 0;
   width: 0px;
   cursor: pointer;
-  &:checked+div {
+  &:checked + div {
     border-width: 6px;
     border-color: var(--main-theme-accent);
   }
-  &:not(:checked):focus+div {
+  &:not(:checked):focus + div {
     box-shadow: inset 0px 0px 0px 2px var(--main-theme-accent);
   }
 `;
@@ -106,18 +111,17 @@ const Wrapper = styled.label`
   display: flex;
   align-items: center;
   user-select: none;
-
 `;
 
 const Label = styled.p`
   font-size: 20px;
   margin-left: 15px;
-  color: #8A8A8A;
+  color: #8a8a8a;
   white-space: pre;
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     font-size: 14px;
     margin-left: 6px;
   }
-`
+`;
 
 export default RadioButtonGroup;

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, ReactNode, useCallback } from "react";
-import styled from "@emotion/styled";
-import css from "@emotion/css";
+import React, { useState, useEffect, ReactNode, useCallback } from 'react';
+import styled from '@emotion/styled';
+import css from '@emotion/css';
 
 export interface ModalOption {
   wrapperProps?: React.HTMLAttributes<HTMLDivElement>;
@@ -10,7 +10,7 @@ export interface ModalOption {
 export let showModal: (
   el: (close: () => Promise<void>) => ReactNode,
   props?: ModalOption,
-  onClose?: () => void
+  onClose?: () => void,
 ) => void;
 export const ModalContainer = () => {
   const [ModalElement, setModalElement] = useState<ReactNode>();
@@ -18,27 +18,27 @@ export const ModalContainer = () => {
   const [visible, setVisivility] = useState(false);
   const [onClose, setOnClose] = useState<() => void>();
   const [disappearingAnimation, setDisappearingAnimation] = useState(false);
-  const disappear = useCallback(() => new Promise<void>((suc) => {
-    onClose && onClose();
-    setDisappearingAnimation(true);
-    setTimeout(() => {
-      setVisivility(false)
-      suc()
-    }, 600);
-  }), [onClose]);
+  const disappear = useCallback(
+    () =>
+      new Promise<void>((suc) => {
+        onClose && onClose();
+        setDisappearingAnimation(true);
+        setTimeout(() => {
+          setVisivility(false);
+          suc();
+        }, 600);
+      }),
+    [onClose],
+  );
   useEffect(() => {
     showModal = (
       el: (close: () => Promise<void>) => ReactNode,
       props?: ModalOption,
-      onCloseListener?
+      onCloseListener?,
     ) => {
       if (onCloseListener) setOnClose(() => onCloseListener);
       else setOnClose(undefined);
-      setModalElement(
-        el(() =>
-          disappear()
-        )
-      );
+      setModalElement(el(() => disappear()));
       setVisivility(true);
       setDisappearingAnimation(false);
       if (props) setProps(props);
@@ -50,7 +50,11 @@ export const ModalContainer = () => {
       visible={disappearingAnimation}
       {...props?.backdropProps}
     >
-      <Wrapper onClick={(e) => e.stopPropagation()} {...props?.wrapperProps} disappear={disappearingAnimation}>
+      <Wrapper
+        onClick={(e) => e.stopPropagation()}
+        {...props?.wrapperProps}
+        disappear={disappearingAnimation}
+      >
         {ModalElement}
       </Wrapper>
     </Backdrop>
@@ -101,7 +105,7 @@ export const Backdrop = styled.div<{ visible?: boolean }>`
 const Wrapper = styled.div<{ disappear: boolean }>`
   box-sizing: border-box;
   animation: ContentEnter 300ms cubic-bezier(0, 0.75, 0.21, 1) forwards;
-  
+
   ${({ disappear }) =>
     disappear &&
     css`
@@ -109,25 +113,24 @@ const Wrapper = styled.div<{ disappear: boolean }>`
     `}
 
   @keyframes ContentEnter {
-      from {
-          opacity: 0;
-          transform: scale(0.995);
-      }
-      to {
-          opacity: 1;
-          transform: scale(1);
-      }
+    from {
+      opacity: 0;
+      transform: scale(0.995);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
   @keyframes ContentExit {
-      from {
-          opacity: 1;
-          transform: scale(1);
-      }
-      to {
-          opacity: 0;
-          /* display: none; */
-          transform: scale(0.995);
-      }
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      /* display: none; */
+      transform: scale(0.995);
+    }
   }
-
 `;

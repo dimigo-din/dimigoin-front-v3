@@ -52,7 +52,7 @@ const style = {
     background-color: #8a8a8a;
   `,
   cancel: css`
-    background-color: #9A9A9A;
+    background-color: #9a9a9a;
     color: white;
   `,
   large: css`

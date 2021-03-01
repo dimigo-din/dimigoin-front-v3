@@ -1,23 +1,23 @@
-import React, { useEffect } from "react";
-import css from "@emotion/css";
-import styled from "@emotion/styled";
-import useInput, { EventFunction } from "../../../hooks/useInput";
+import React, { useEffect } from 'react';
+import css from '@emotion/css';
+import styled from '@emotion/styled';
+import useInput, { EventFunction } from '../../../hooks/useInput';
 
 interface TimeSelectorProps {
   defaultHour?: number;
   defaultMinute?: number;
   onChange?: EventFunction<SelectingTime>;
-  rangeTag: |"부터"|"까지";
+  rangeTag: '부터' | '까지';
 }
 
 const TimeSelector: React.FC<TimeSelectorProps> = ({
   defaultHour = 9,
   defaultMinute = 30,
   onChange,
-  rangeTag
+  rangeTag,
 }) => {
-  const hourInput = useInput(defaultHour + "", (value) => +value < 24);
-  const minuteInput = useInput(defaultMinute + "", (value) => +value < 60);
+  const hourInput = useInput(defaultHour + '', (value) => +value < 24);
+  const minuteInput = useInput(defaultMinute + '', (value) => +value < 60);
 
   useEffect(() => {
     onChange &&
@@ -29,7 +29,7 @@ const TimeSelector: React.FC<TimeSelectorProps> = ({
           },
         },
       });
-  }, [ hourInput.value, minuteInput.value, onChange ]);
+  }, [hourInput.value, minuteInput.value, onChange]);
   return (
     <TimeWrapper>
       <HalfDayWrapper>
@@ -45,7 +45,7 @@ const TimeSelector: React.FC<TimeSelectorProps> = ({
       </HalfDayWrapper>
       <IndicatorWrapper>
         <Indicator {...hourInput} />
-        <Divider data-divider >:</Divider>
+        <Divider data-divider>:</Divider>
         <Indicator {...minuteInput} />
       </IndicatorWrapper>
       <FromUntil>{rangeTag}</FromUntil>
@@ -63,21 +63,37 @@ interface LargeTimeSelectorProps {
   onChange?: EventFunction<SelectingTime[]>;
 }
 
-export const LargeTimeSelector: React.FC<LargeTimeSelectorProps> = ({ value, onChange, ...props }) => {
+export const LargeTimeSelector: React.FC<LargeTimeSelectorProps> = ({
+  value,
+  onChange,
+  ...props
+}) => {
   const fromInput = useInput<SelectingTime>();
   const toInput = useInput<SelectingTime>();
   useEffect(() => {
-    onChange && fromInput.value && toInput.value &&
+    onChange &&
+      fromInput.value &&
+      toInput.value &&
       onChange({
         target: {
           value: [fromInput.value, toInput.value],
         },
       });
-  }, [ fromInput.value, toInput.value, onChange ]);
+  }, [fromInput.value, toInput.value, onChange]);
   return (
     <Wrapper {...props}>
-      <TimeSelector defaultHour={value?.[0].hour} defaultMinute={value?.[0].minute} {...fromInput} rangeTag="부터" />
-      <TimeSelector defaultHour={value?.[1].hour} defaultMinute={value?.[1].minute} {...toInput} rangeTag="까지" />
+      <TimeSelector
+        defaultHour={value?.[0].hour}
+        defaultMinute={value?.[0].minute}
+        {...fromInput}
+        rangeTag="부터"
+      />
+      <TimeSelector
+        defaultHour={value?.[1].hour}
+        defaultMinute={value?.[1].minute}
+        {...toInput}
+        rangeTag="까지"
+      />
     </Wrapper>
   );
 };
@@ -101,8 +117,7 @@ const TimeWrapper = styled.div`
 `;
 
 const HalfDayWrapper = styled.div`
-
-@media screen and (max-width: 400px) {
+  @media screen and (max-width: 400px) {
     display: none;
   }
 `;

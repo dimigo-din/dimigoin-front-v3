@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "@emotion/styled";
-import css from "@emotion/css";
-import { ReactComponent as CheckIcon } from '../../assets/icons/check.svg'
-import { SMALL_SCREEN_THRESHOLD } from "../../constants";
+import React from 'react';
+import styled from '@emotion/styled';
+import css from '@emotion/css';
+import { ReactComponent as CheckIcon } from '../../assets/icons/check.svg';
+import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 
 interface CheckboxProps {
   text?: string;
@@ -13,7 +13,12 @@ interface CheckboxProps {
 }
 
 export const Checkbox: React.FC<CheckboxProps> = ({
-  text, onChange, checked, defaultChecked, disabled, ...props
+  text,
+  onChange,
+  checked,
+  defaultChecked,
+  disabled,
+  ...props
 }) => {
   return (
     <Wrapper {...props}>
@@ -23,15 +28,10 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         onChange={onChange}
       />
       <LabelWrapper>
-        <CheckWrapper
-          checked={!!checked}
-          disabled={!!disabled}
-        >
+        <CheckWrapper checked={!!checked} disabled={!!disabled}>
           <Check visible={!!checked} />
         </CheckWrapper>
-        {text && <Label>
-          {text}
-        </Label>}
+        {text && <Label>{text}</Label>}
       </LabelWrapper>
     </Wrapper>
   );
@@ -40,7 +40,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
 const LabelWrapper = styled.div`
   align-items: center;
   display: flex;
-`
+`;
 
 const Wrapper = styled.label`
   font-weight: 700;
@@ -48,7 +48,7 @@ const Wrapper = styled.label`
   display: block;
   color: #8a8a8a;
   flex-shrink: 0;
-  &+& {
+  & + & {
     margin-left: 12px;
   }
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
@@ -63,12 +63,12 @@ const InvisibleCheck = styled.input`
   width: 0px;
   height: 0px;
   margin: 0px;
-  &:focus+div>div {
+  &:focus + div > div {
     box-shadow: inset 0px 0px 0px 1px var(--main-theme-accent);
   }
 `;
 
-const CheckWrapper = styled.div<{ checked: boolean; disabled: boolean; }>`
+const CheckWrapper = styled.div<{ checked: boolean; disabled: boolean }>`
   width: 18px;
   height: 18px;
   display: inline-grid;
@@ -77,7 +77,7 @@ const CheckWrapper = styled.div<{ checked: boolean; disabled: boolean; }>`
   color: var(--main-theme-accent);
   place-items: center;
   transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
-  border-color: #8A8A8A;
+  border-color: #8a8a8a;
   margin-right: 10px;
   vertical-align: middle;
   ${({ checked }) =>
@@ -86,18 +86,20 @@ const CheckWrapper = styled.div<{ checked: boolean; disabled: boolean; }>`
       border-color: var(--main-theme-accent);
     `}
 
-  ${({ disabled }) => disabled && css`
-    border-color: #D1D1D1;
-  `}
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      border-color: #d1d1d1;
+    `}
 
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     width: 12px;
     height: 12px;
   }
 `;
-InvisibleCheck.defaultProps = { type: "checkbox" };
+InvisibleCheck.defaultProps = { type: 'checkbox' };
 
-const Check = styled(CheckIcon) <{ visible: boolean }>`
+const Check = styled(CheckIcon)<{ visible: boolean }>`
   width: 13px;
   transition: 300ms cubic-bezier(0, 0.75, 0.21, 1);
   opacity: 0;
@@ -116,6 +118,6 @@ const Check = styled(CheckIcon) <{ visible: boolean }>`
 const Label = styled.p`
   vertical-align: middle;
   line-height: 22px;
-`
+`;
 
 export default Checkbox;

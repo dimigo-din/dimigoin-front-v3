@@ -1,23 +1,31 @@
-import React, { useMemo } from "react";
-import styled from "@emotion/styled";
-import Card from "../basic/Card";
-import css from "@emotion/css";
-import { days } from "../../constants";
-import Skeleton from "react-loading-skeleton";
-import { NoData } from "..";
+import React, { useMemo } from 'react';
+import styled from '@emotion/styled';
+import Card from '../basic/Card';
+import css from '@emotion/css';
+import { days } from '../../constants';
+import Skeleton from 'react-loading-skeleton';
+import { NoData } from '..';
 
 interface TimeTableProps {
   timetable?: string[][];
 }
 
-export const TimeTable: React.FC<TimeTableProps> = ({ timetable, ...props }) => {
-  const today = useMemo(() => (new Date()).getDay() - 1, [])
+export const TimeTable: React.FC<TimeTableProps> = ({
+  timetable,
+  ...props
+}) => {
+  const today = useMemo(() => new Date().getDay() - 1, []);
   return (
     <WrapperCard {...props}>
       <table
         css={[
-          css`width: 100%;`,
-          timetable?.length && css`height: 100%;`
+          css`
+            width: 100%;
+          `,
+          timetable?.length &&
+            css`
+              height: 100%;
+            `,
         ]}
       >
         <DaysHeader>
@@ -34,26 +42,44 @@ export const TimeTable: React.FC<TimeTableProps> = ({ timetable, ...props }) => 
           </tr>
         </DaysHeader>
         <ContentWrapper>
-          {timetable ?
-            timetable.length ? Array(7).fill([...Array(5)])
-              .map((times, timeIndex) =>
-                <Row key={`timeindex${timeIndex}`}>
-                  {(times as undefined[]).map((_, dayIndex) => {
-                    const subject = timetable[dayIndex]?.[timeIndex]
-                    return <Item
-                      key={`${timeIndex}${dayIndex}`}
-                      colored={today === dayIndex}
-                    >
-                      {subject && subject.length > 3 ? subject.slice(0, 2) + '...' : subject}
-                    </Item>
-                  })}
-                </Row>
-              ) : undefined
-            : Array(7).fill(Array(5)).map((day, index) => <Row key={`skeleton${index}`}>{day.fill((() => <Item><Skeleton /></Item>)())}</Row>)}
+          {timetable
+            ? timetable.length
+              ? Array(7)
+                  .fill([...Array(5)])
+                  .map((times, timeIndex) => (
+                    <Row key={`timeindex${timeIndex}`}>
+                      {(times as undefined[]).map((_, dayIndex) => {
+                        const subject = timetable[dayIndex]?.[timeIndex];
+                        return (
+                          <Item
+                            key={`${timeIndex}${dayIndex}`}
+                            colored={today === dayIndex}
+                          >
+                            {subject && subject.length > 3
+                              ? subject.slice(0, 2) + '...'
+                              : subject}
+                          </Item>
+                        );
+                      })}
+                    </Row>
+                  ))
+              : undefined
+            : Array(7)
+                .fill(Array(5))
+                .map((day, index) => (
+                  <Row key={`skeleton${index}`}>
+                    {day.fill(
+                      (() => (
+                        <Item>
+                          <Skeleton />
+                        </Item>
+                      ))(),
+                    )}
+                  </Row>
+                ))}
         </ContentWrapper>
       </table>
-      {timetable?.length === 0 &&
-        <NoData>시간표 정보가 없습니다</NoData>}
+      {timetable?.length === 0 && <NoData>시간표 정보가 없습니다</NoData>}
     </WrapperCard>
   );
 };
@@ -126,9 +152,9 @@ const Item = styled.td<{ colored?: boolean }>`
       color: black;
     `}
 
-    @media screen and (max-width: 450px) {
-      padding: 10px 6px;
-    }
+  @media screen and (max-width: 450px) {
+    padding: 10px 6px;
+  }
 `;
 
 export default TimeTable;

@@ -1,10 +1,10 @@
-import { ServiceConfig } from "../../constants/types";
+import { ServiceConfig } from '../../constants/types';
 
 export interface Config {
-    method: 'GET';
-    endpoint: '/config';
-    req: {};
-    res: {
-        config: ServiceConfig
-    }
+  method: 'GET';
+  endpoint: '/config';
+  req: {};
+  res: {
+    config: ServiceConfig;
+  };
 }

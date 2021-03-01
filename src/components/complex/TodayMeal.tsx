@@ -1,17 +1,17 @@
-import React from "react";
-import styled from "@emotion/styled";
-import css from "@emotion/css";
-import Card from "../basic/Card";
-import { DAILY_TIME_PERIOD, getTimePeriod } from "../../utils";
-import { NoData } from "../basic";
-import useConsole from "../../hooks/useConsole";
-import Skeleton from "react-loading-skeleton";
-import { DailyMeal } from "../../constants/types";
+import React from 'react';
+import styled from '@emotion/styled';
+import css from '@emotion/css';
+import Card from '../basic/Card';
+import { DAILY_TIME_PERIOD, getTimePeriod } from '../../utils';
+import { NoData } from '../basic';
+import useConsole from '../../hooks/useConsole';
+import Skeleton from 'react-loading-skeleton';
+import { DailyMeal } from '../../constants/types';
 
 const MealItem: React.FC<MealItemSelected> = ({
   highlight: selected = false,
-  name = "",
-  menu = "",
+  name = '',
+  menu = '',
 }) => (
   <MealItemContainer highlight={selected}>
     <MealNameText highlight={selected}>{name}</MealNameText>
@@ -19,38 +19,64 @@ const MealItem: React.FC<MealItemSelected> = ({
   </MealItemContainer>
 );
 
-const Loader = () => <MealItemContainer>
-  <MealMenuText><Skeleton count={2} /></MealMenuText>
-</MealItemContainer>
+const Loader = () => (
+  <MealItemContainer>
+    <MealMenuText>
+      <Skeleton count={2} />
+    </MealMenuText>
+  </MealItemContainer>
+);
 
 interface TodayMealProps {
   meals?: DailyMeal | null;
 }
 
-const NO_MEAL_DATA = "급식 정보가 없습니다"
+const NO_MEAL_DATA = '급식 정보가 없습니다';
 
 export const TodayMeal: React.FC<TodayMealProps> = ({ meals, ...props }) => {
-  const period = getTimePeriod()
-  useConsole('MEALMEAL', meals)
+  const period = getTimePeriod();
+  useConsole('MEALMEAL', meals);
   return (
-    <MealCard {...props} css={meals === null && css`padding: 25px;`}>
-      {
-        (meals?.breakfast.length || meals?.dinner.length || meals?.lunch.length) ? (
-          <>
-            <MealItem highlight={period === DAILY_TIME_PERIOD.MORNING} name="아침" menu={meals?.breakfast.join(', ') || NO_MEAL_DATA} />
-            <MealItem highlight={period === DAILY_TIME_PERIOD.BEFORE_NOON} name="점심" menu={meals?.lunch.join(', ') || NO_MEAL_DATA} />
-            <MealItem highlight={period === DAILY_TIME_PERIOD.EVENING} name="저녁" menu={meals?.dinner.join(', ') || NO_MEAL_DATA} />
-          </>
-        ) : meals === null ? <NoData>
-          {NO_MEAL_DATA}
-        </NoData> : <>
-        <Loader />
-        <Loader />
-        <Loader />
-        </>
+    <MealCard
+      {...props}
+      css={
+        meals === null &&
+        css`
+          padding: 25px;
+        `
       }
+    >
+      {meals?.breakfast.length ||
+      meals?.dinner.length ||
+      meals?.lunch.length ? (
+        <>
+          <MealItem
+            highlight={period === DAILY_TIME_PERIOD.MORNING}
+            name="아침"
+            menu={meals?.breakfast.join(', ') || NO_MEAL_DATA}
+          />
+          <MealItem
+            highlight={period === DAILY_TIME_PERIOD.BEFORE_NOON}
+            name="점심"
+            menu={meals?.lunch.join(', ') || NO_MEAL_DATA}
+          />
+          <MealItem
+            highlight={period === DAILY_TIME_PERIOD.EVENING}
+            name="저녁"
+            menu={meals?.dinner.join(', ') || NO_MEAL_DATA}
+          />
+        </>
+      ) : meals === null ? (
+        <NoData>{NO_MEAL_DATA}</NoData>
+      ) : (
+        <>
+          <Loader />
+          <Loader />
+          <Loader />
+        </>
+      )}
     </MealCard>
-  )
+  );
 };
 
 interface MealItemSelected {
@@ -63,7 +89,7 @@ const MealCard = styled(Card)`
   padding: 0;
   display: flex;
   flex-direction: column;
-  &>*{
+  & > * {
     flex: 1;
   }
 `;

@@ -1,9 +1,9 @@
-import { toast } from "react-toastify"
+import { toast } from 'react-toastify';
 
 export default {
   error(message: string) {
     toast(message, {
-      type: 'error'
-    })
-  }
-}
+      type: 'error',
+    });
+  },
+};

@@ -9,15 +9,28 @@ const Card = styled(_Card)`
   border-top: 5px solid var(--main-theme-accent);
 `;
 
-export const showCardModal = (el: (close: () => void) => JSX.Element, onClose?: () => void, props?: ModalOption & {
-  cardProps?: CardProps & {
-    css?: SerializedStyles;
-  }
-}) => {
-  showModal((close) => <Card css={css`
-    width: 720px;
-    ${props?.cardProps?.css}
-  `} {...props?.cardProps}>
-    {el(close)}
-  </Card>, props, onClose)
-}
+export const showCardModal = (
+  el: (close: () => void) => JSX.Element,
+  onClose?: () => void,
+  props?: ModalOption & {
+    cardProps?: CardProps & {
+      css?: SerializedStyles;
+    };
+  },
+) => {
+  showModal(
+    (close) => (
+      <Card
+        css={css`
+          width: 720px;
+          ${props?.cardProps?.css}
+        `}
+        {...props?.cardProps}
+      >
+        {el(close)}
+      </Card>
+    ),
+    props,
+    onClose,
+  );
+};

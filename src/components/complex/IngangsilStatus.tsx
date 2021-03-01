@@ -1,12 +1,12 @@
-import React from "react";
-import css from "@emotion/css";
-import styled from '@emotion/styled'
-import CardGroupHeader from "../basic/CardGroupHeader";
-import Card from "../basic/Card";
-import Button from "../basic/Button";
-import Skeleton from "react-loading-skeleton";
-import { IngangApplyPeriod } from "../../constants/types";
-import { SMALL_SCREEN_THRESHOLD } from "../../constants";
+import React from 'react';
+import css from '@emotion/css';
+import styled from '@emotion/styled';
+import CardGroupHeader from '../basic/CardGroupHeader';
+import Card from '../basic/Card';
+import Button from '../basic/Button';
+import Skeleton from 'react-loading-skeleton';
+import { IngangApplyPeriod } from '../../constants/types';
+import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 
 interface IngangsilStatusProps {
   currentApplied?: number;
@@ -19,7 +19,7 @@ interface IngangsilStatusProps {
 
 const nullableSkeletonText = (value?: any) => {
   return value === undefined ? <Skeleton /> : value;
-}
+};
 
 export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
   currentApplied,
@@ -27,19 +27,22 @@ export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
   max,
   isApplied,
   name,
-  onSubmit
+  onSubmit,
 }) => {
   const isRequestable =
-    ((max !== undefined) && (currentApplied !== undefined)) ? (//1. 신청 했고, 자리가 없을 때
-      currentApplied < max ||
-      //2. 자리가 남았을때
-      Boolean(isApplied && currentApplied >= max)) : null;
+    max !== undefined && currentApplied !== undefined //1. 신청 했고, 자리가 없을 때
+      ? currentApplied < max ||
+        //2. 자리가 남았을때
+        Boolean(isApplied && currentApplied >= max)
+      : null;
   return (
     <>
       <CardGroupHeader
         subButton={{
-          text: time && `${time.start.hour}:${time.start.minute} ~ ${time.end.hour}:${time.start.minute}`,
-          component: time ? undefined : <Skeleton width={70} />
+          text:
+            time &&
+            `${time.start.hour}:${time.start.minute} ~ ${time.end.hour}:${time.start.minute}`,
+          component: time ? undefined : <Skeleton width={70} />,
         }}
       >
         {name}
@@ -48,7 +51,9 @@ export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
         <NumberWrapper>
           <div css={isRequestable ? active : disabled}>
             <NumberName>현원</NumberName>
-            <NumberDisplay>{nullableSkeletonText(currentApplied)}</NumberDisplay>
+            <NumberDisplay>
+              {nullableSkeletonText(currentApplied)}
+            </NumberDisplay>
           </div>
           <div>
             <NumberName>총원</NumberName>
@@ -59,10 +64,15 @@ export const IngansilStatus: React.FC<IngangsilStatusProps> = ({
       <ApplyButton
         disabled={!isRequestable}
         onClick={() => onSubmit()}
-        css={max === undefined && css`color: transparent;`}
+        css={
+          max === undefined &&
+          css`
+            color: transparent;
+          `
+        }
       >
         {/* 신청했는지 판별하는 변수를 넣어주세요  */}
-        {isApplied ? "취소하기" : "신청하기"}
+        {isApplied ? '취소하기' : '신청하기'}
       </ApplyButton>
     </>
   );
@@ -106,11 +116,11 @@ const ApplyButton = styled(Button)`
   display: block;
   text-align: center;
   margin-top: 10px;
-`
+`;
 
 const NumberWrapper = styled.div`
   display: flex;
   justify-content: space-around;
   flex-shrink: 3;
   padding: 3vw 0px 2vw;
-`
+`;

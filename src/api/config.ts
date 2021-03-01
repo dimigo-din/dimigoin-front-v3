@@ -1,4 +1,4 @@
-import { api } from "./api";
+import { api } from './api';
 
 export const getAllConfigs = () =>
-    api<"config">("GET", "/config").then(e => e.config)
+  api<'config'>('GET', '/config').then((e) => e.config);

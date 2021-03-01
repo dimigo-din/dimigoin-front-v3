@@ -1,60 +1,87 @@
-import React, { Fragment, useCallback, useEffect, useState } from "react";
-import styled from "@emotion/styled";
-import css from "@emotion/css";
-import Skeleton from "react-loading-skeleton";
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import styled from '@emotion/styled';
+import css from '@emotion/css';
+import Skeleton from 'react-loading-skeleton';
 import {
-  PageWrapper, ResponsiveWrapper, Col, CardGroupHeader, Card,
-  CardTitle, Divider, IngansilStatus, TextCardGroup
-} from "../../components";
-import { ReactComponent as CircleSvg } from "../../assets/icons/circle.svg";
-import { APIResource } from "../../api";
+  PageWrapper,
+  ResponsiveWrapper,
+  Col,
+  CardGroupHeader,
+  Card,
+  CardTitle,
+  Divider,
+  IngansilStatus,
+  TextCardGroup,
+} from '../../components';
+import { ReactComponent as CircleSvg } from '../../assets/icons/circle.svg';
+import { APIResource } from '../../api';
 import {
-  IngangApplyPeriod, IngangsilTicket,
-  NightSelfStudyTimeKey, Permission, Student
-} from "../../constants/types";
-import { useMyData } from "../../hooks/api/useMyData";
-import { applyIngangsil, getMyIngangsilStatus, unapplyIngangsil } from "../../api/ingangsil";
-import { SMALL_SCREEN_THRESHOLD } from "../../constants";
+  IngangApplyPeriod,
+  IngangsilTicket,
+  NightSelfStudyTimeKey,
+  Permission,
+  Student,
+} from '../../constants/types';
+import { useMyData } from '../../hooks/api/useMyData';
+import {
+  applyIngangsil,
+  getMyIngangsilStatus,
+  unapplyIngangsil,
+} from '../../api/ingangsil';
+import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 
-const timeRangeToString = ({ start, end }: IngangApplyPeriod) => (
-  `${start.hour.toString().padStart(2, '0')}:${start.minute.toString().padStart(2, '0')} ~ ` +
-  `${end.hour.toString().padStart(2, '0')}:${end.minute.toString().padStart(2, '0')}`
-);
+const timeRangeToString = ({ start, end }: IngangApplyPeriod) =>
+  `${start.hour.toString().padStart(2, '0')}:${start.minute
+    .toString()
+    .padStart(2, '0')} ~ ` +
+  `${end.hour.toString().padStart(2, '0')}:${end.minute
+    .toString()
+    .padStart(2, '0')}`;
 
 const Ingangsil: React.FC = () => {
-  const [myStatus, setFetchedMyStatus] = useState<APIResource["myIngangsilApplyStatus"]["res"]>()
-  const [groupedByTime, setGroupedByTime] = useState<Record<NightSelfStudyTimeKey, IngangsilTicket[]>>()
-  const myData = useMyData() as Student
+  const [myStatus, setFetchedMyStatus] = useState<
+    APIResource['myIngangsilApplyStatus']['res']
+  >();
+  const [groupedByTime, setGroupedByTime] = useState<
+    Record<NightSelfStudyTimeKey, IngangsilTicket[]>
+  >();
+  const myData = useMyData() as Student;
 
   useEffect(() => {
-    const _groupedByTime = myStatus?.applicationsInClass.reduce((acc, current) => {
-      acc[current.time] = [...(acc[current.time] || []), current]
-      return acc
-    }, {
-      [NightSelfStudyTimeKey.NSS1]: [],
-      [NightSelfStudyTimeKey.NSS2]: []
-    } as Record<NightSelfStudyTimeKey, IngangsilTicket[]>)
-    setGroupedByTime(() => _groupedByTime)
-  }, [ myStatus ])
+    const _groupedByTime = myStatus?.applicationsInClass.reduce(
+      (acc, current) => {
+        acc[current.time] = [...(acc[current.time] || []), current];
+        return acc;
+      },
+      {
+        [NightSelfStudyTimeKey.NSS1]: [],
+        [NightSelfStudyTimeKey.NSS2]: [],
+      } as Record<NightSelfStudyTimeKey, IngangsilTicket[]>,
+    );
+    setGroupedByTime(() => _groupedByTime);
+  }, [myStatus]);
 
   const loadStatus = useCallback(() => {
-    return getMyIngangsilStatus().then(setFetchedMyStatus)
-  }, [setFetchedMyStatus])
+    return getMyIngangsilStatus().then(setFetchedMyStatus);
+  }, [setFetchedMyStatus]);
   useEffect(() => {
-    const timer = setInterval(() => loadStatus(), 1000)
+    const timer = setInterval(() => loadStatus(), 1000);
     return () => {
-      clearInterval(timer)
-    }
+      clearInterval(timer);
+    };
   }, [loadStatus]);
 
   return (
     <>
       <PageWrapper>
-        <ResponsiveWrapper threshold={1100} css={css`
-          @media screen and (max-width: 1100px) {
-            flex-direction: column-reverse;
-          }
-        `}>
+        <ResponsiveWrapper
+          threshold={1100}
+          css={css`
+            @media screen and (max-width: 1100px) {
+              flex-direction: column-reverse;
+            }
+          `}
+        >
           <Col width={4.5}>
             <CardGroupHeader>신청안내</CardGroupHeader>
             <Card
@@ -78,19 +105,35 @@ const Ingangsil: React.FC = () => {
                   <Row>
                     <Time />
                     <Desc>
-                      {myStatus ? timeRangeToString(myStatus.ingangApplyPeriod) : <Skeleton width={120} />}
+                      {myStatus ? (
+                        timeRangeToString(myStatus.ingangApplyPeriod)
+                      ) : (
+                        <Skeleton width={120} />
+                      )}
                     </Desc>
                   </Row>
                   <Row>
                     <People />
                     <Desc>
-                      {myStatus ? <>한 학급당 최대 <b>{myStatus.ingangMaxApplier}명</b></> : <Skeleton width={120} />}
+                      {myStatus ? (
+                        <>
+                          한 학급당 최대 <b>{myStatus.ingangMaxApplier}명</b>
+                        </>
+                      ) : (
+                        <Skeleton width={120} />
+                      )}
                     </Desc>
                   </Row>
                   <Row>
                     <DateIcon />
                     <Desc>
-                      {myStatus ? <>일주일 최대 <b>{myStatus.weeklyTicketCount}회</b></> : <Skeleton width={120} />}
+                      {myStatus ? (
+                        <>
+                          일주일 최대 <b>{myStatus.weeklyTicketCount}회</b>
+                        </>
+                      ) : (
+                        <Skeleton width={120} />
+                      )}
                     </Desc>
                   </Row>
                 </Col>
@@ -108,19 +151,27 @@ const Ingangsil: React.FC = () => {
                       color: var(--main-theme-accent);
                     `}
                   >
-                    {myStatus ? (<>
-                      <Ticket />
-                      <Desc>
-                        남은 티켓 <b>{myStatus?.weeklyRemainTicket}/{myStatus?.weeklyTicketCount}</b>
-                      </Desc>
-                    </>) : <Skeleton width={100} />}
+                    {myStatus ? (
+                      <>
+                        <Ticket />
+                        <Desc>
+                          남은 티켓{' '}
+                          <b>
+                            {myStatus?.weeklyRemainTicket}/
+                            {myStatus?.weeklyTicketCount}
+                          </b>
+                        </Desc>
+                      </>
+                    ) : (
+                      <Skeleton width={100} />
+                    )}
                   </Row>
                   <Row>
                     <Info>
                       <p>
                         티켓을 모두 소진하면 신청할 수 없습니다. <br></br>
                         인강실 사용이 꼭 <b>필요할 때만 신청</b>하시기 바랍니다.
-                        </p>
+                      </p>
                     </Info>
                   </Row>
                 </Col>
@@ -133,11 +184,11 @@ const Ingangsil: React.FC = () => {
               spaceBetweenCards
               content={[
                 {
-                  key: "notice1",
+                  key: 'notice1',
                   children: (
                     <Info>
                       <p>
-                        인강실에서는 인터넷 강의, 교과 과제, 프로그래밍 등{" "}
+                        인강실에서는 인터넷 강의, 교과 과제, 프로그래밍 등{' '}
                         <b>학습 관련 활동</b> 만 가능합니다.
                       </p>
                       <p>
@@ -149,11 +200,11 @@ const Ingangsil: React.FC = () => {
                   leftBorder: true,
                 },
                 {
-                  key: "notice2",
+                  key: 'notice2',
                   children: (
                     <Info>
                       <p>
-                        쾌적한 인터넷 환경을 위해 과제와 관련 없는{" "}
+                        쾌적한 인터넷 환경을 위해 과제와 관련 없는{' '}
                         <b>기타 활동은 금지</b> 됩니다.
                       </p>
                       <p>와이파이는 모두가 공유하는 공공재입니다.</p>
@@ -164,58 +215,89 @@ const Ingangsil: React.FC = () => {
               ]}
             />
             <Divider horizontal small data-divider />
-            <CardGroupHeader subButton={myData?.permissions.includes(Permission["ingang-application"]) ? {
-              text: "인원관리",
-              route: '/ingangsil/manager'
-            } : undefined}>우리반 신청자</CardGroupHeader>
+            <CardGroupHeader
+              subButton={
+                myData?.permissions.includes(Permission['ingang-application'])
+                  ? {
+                      text: '인원관리',
+                      route: '/ingangsil/manager',
+                    }
+                  : undefined
+              }
+            >
+              우리반 신청자
+            </CardGroupHeader>
             {[...Array(2)].map((_, index) => {
-              const currentTimeAppliers = groupedByTime?.[NightSelfStudyTimeKey[index === 0 ? "NSS1" : "NSS2"]]
+              const currentTimeAppliers =
+                groupedByTime?.[
+                  NightSelfStudyTimeKey[index === 0 ? 'NSS1' : 'NSS2']
+                ];
               return (
-              <IngangsilApplierWrapper
-                key={`cardindex${index}`}
-                leftBorder
-              >
-                <ResponsiveWrapper>
-                  <IngangTime>{index + 1}타임</IngangTime>
-                  <Divider small data-divider />
-                  <IngangerWrapper>
-                    {currentTimeAppliers ? // 로드가 됐으면
-                      currentTimeAppliers.length === 0 ? // 신청자가 없으면
-                        <Inganger>신청자가 없습니다</Inganger> :
-                        currentTimeAppliers.map(({ applier: { name, number } }) => ( // 신청자가 있으면
-                          <Inganger key={number}>{number} {name}</Inganger>
-                        )) : <>
-                        <Inganger><Skeleton width={60} /></Inganger> {/* 로드가 안됐으면 */}
-                        <Inganger><Skeleton width={60} /></Inganger>
-                        <Inganger><Skeleton width={60} /></Inganger>
-                      </>}
-                  </IngangerWrapper>
-                </ResponsiveWrapper>
-              </IngangsilApplierWrapper>)
+                <IngangsilApplierWrapper key={`cardindex${index}`} leftBorder>
+                  <ResponsiveWrapper>
+                    <IngangTime>{index + 1}타임</IngangTime>
+                    <Divider small data-divider />
+                    <IngangerWrapper>
+                      {currentTimeAppliers ? ( // 로드가 됐으면
+                        currentTimeAppliers.length === 0 ? ( // 신청자가 없으면
+                          <Inganger>신청자가 없습니다</Inganger>
+                        ) : (
+                          currentTimeAppliers.map((
+                            { applier: { name, number } }, // 신청자가 있으면
+                          ) => (
+                            <Inganger key={number}>
+                              {number} {name}
+                            </Inganger>
+                          ))
+                        )
+                      ) : (
+                        <>
+                          <Inganger>
+                            <Skeleton width={60} />
+                          </Inganger>{' '}
+                          {/* 로드가 안됐으면 */}
+                          <Inganger>
+                            <Skeleton width={60} />
+                          </Inganger>
+                          <Inganger>
+                            <Skeleton width={60} />
+                          </Inganger>
+                        </>
+                      )}
+                    </IngangerWrapper>
+                  </ResponsiveWrapper>
+                </IngangsilApplierWrapper>
+              );
             })}
           </Col>
           <Divider data-divider />
           <Col width={5.5}>
             {[...Array(2)].map((_, index) => {
-              const selfStudyId = NightSelfStudyTimeKey[index === 0 ? "NSS1" : "NSS2"]
-              const currentTimeAppliers = groupedByTime?.[selfStudyId]
-              const applied = myData && currentTimeAppliers?.map(e => e.applier._id).includes(myData?._id)
+              const selfStudyId =
+                NightSelfStudyTimeKey[index === 0 ? 'NSS1' : 'NSS2'];
+              const currentTimeAppliers = groupedByTime?.[selfStudyId];
+              const applied =
+                myData &&
+                currentTimeAppliers
+                  ?.map((e) => e.applier._id)
+                  .includes(myData?._id);
               return (
-              <Fragment key={`ingangsil${index}`}>
-                {index !== 0 && <Divider horizontal small data-divider />}
-                <IngansilStatus
-                  onSubmit={async () => {
-                    if (applied) await unapplyIngangsil(selfStudyId)
-                    else await applyIngangsil(selfStudyId)
-                    await loadStatus()
-                  }}
-                  name={`야간 자율학습 ${index + 1}타임`}
-                  currentApplied={currentTimeAppliers?.length}
-                  max={myStatus?.ingangMaxApplier}
-                  isApplied={applied}
-                  time={myStatus?.selfStudyTimes[selfStudyId]}
-                /></Fragment>
-              )
+                <Fragment key={`ingangsil${index}`}>
+                  {index !== 0 && <Divider horizontal small data-divider />}
+                  <IngansilStatus
+                    onSubmit={async () => {
+                      if (applied) await unapplyIngangsil(selfStudyId);
+                      else await applyIngangsil(selfStudyId);
+                      await loadStatus();
+                    }}
+                    name={`야간 자율학습 ${index + 1}타임`}
+                    currentApplied={currentTimeAppliers?.length}
+                    max={myStatus?.ingangMaxApplier}
+                    isApplied={applied}
+                    time={myStatus?.selfStudyTimes[selfStudyId]}
+                  />
+                </Fragment>
+              );
             })}
           </Col>
         </ResponsiveWrapper>
@@ -264,7 +346,7 @@ const Time = styled.i`
   }
 
   &::after {
-    content: "";
+    content: '';
     display: block;
     box-sizing: border-box;
     position: absolute;
@@ -298,7 +380,7 @@ const DateIcon = styled.i`
 
   &::after,
   &::before {
-    content: "";
+    content: '';
     display: block;
     box-sizing: border-box;
     position: absolute;
@@ -336,7 +418,7 @@ const Ticket = styled.i`
 
   &::after,
   &::before {
-    content: "";
+    content: '';
     display: block;
     box-sizing: border-box;
     position: absolute;
@@ -387,12 +469,12 @@ const IngangerWrapper = styled.div`
   margin: -8px;
   display: flex;
   flex-wrap: wrap;
-`
+`;
 
 const IngangsilApplierWrapper = styled(Card)`
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     padding: 24px 18px;
   }
-`
+`;
 
-export default Ingangsil
+export default Ingangsil;

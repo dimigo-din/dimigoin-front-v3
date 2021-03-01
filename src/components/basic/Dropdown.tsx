@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import styled from "@emotion/styled";
-import css from "@emotion/css";
-import { EventFunction } from "../../hooks/useInput";
-import { SMALL_SCREEN_THRESHOLD } from "../../constants";
+import React, { useEffect, useState } from 'react';
+import styled from '@emotion/styled';
+import css from '@emotion/css';
+import { EventFunction } from '../../hooks/useInput';
+import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 
 export interface DropdownItem {
   name: string;
@@ -18,24 +18,31 @@ interface DropdownProps {
 }
 
 export const Dropdown = ({
-  items, placeholder,
-  onChange, requireMessage,
-  initIndex, ...props
+  items,
+  placeholder,
+  onChange,
+  requireMessage,
+  initIndex,
+  ...props
 }: DropdownProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number>();
   const [opened, setOpened] = useState(false);
 
-  useEffect(() => setSelectedIndex(() => (typeof initIndex === 'number') ? initIndex : -1), [initIndex])
+  useEffect(
+    () =>
+      setSelectedIndex(() => (typeof initIndex === 'number' ? initIndex : -1)),
+    [initIndex],
+  );
 
   useEffect(() => {
     const outClickEvent = () => {
-      opened && setOpened(() => false)
-    }
-    window.addEventListener('click', outClickEvent)
+      opened && setOpened(() => false);
+    };
+    window.addEventListener('click', outClickEvent);
     return () => {
-      window.removeEventListener('click', outClickEvent)
-    }
-  }, [opened])
+      window.removeEventListener('click', outClickEvent);
+    };
+  }, [opened]);
 
   const clickHandler = ({
     key,
@@ -53,11 +60,11 @@ export const Dropdown = ({
         onClick={() => items && setOpened((b) => !b)}
         disabled={!!items}
       >
-        {items ?
+        {items ? (
           [
             {
               name: placeholder,
-              key: "SELECTONE",
+              key: 'SELECTONE',
             },
             ...items,
           ].map(({ key, name }, index) => (
@@ -69,13 +76,12 @@ export const Dropdown = ({
             >
               {name}
             </Item>
-          )) :
-          <Item
-            highlighted={false}
-            visible
-          >
+          ))
+        ) : (
+          <Item highlighted={false} visible>
             {placeholder}
-          </Item>}
+          </Item>
+        )}
       </Wrapper>
     </FixedHeightWrapper>
   );
@@ -92,37 +98,43 @@ const FixedHeightWrapper = styled.div<{ opened?: boolean }>`
 `;
 
 const highlightedBorder = css`
-  box-shadow: 0 0 6px 0 #F8C5D7;
+  box-shadow: 0 0 6px 0 #f8c5d7;
   border-color: var(--main-theme-accent);
 `;
 
-const Wrapper = styled.div<{ highlighted?: boolean; opened?: boolean; disabled?: boolean }>`
+const Wrapper = styled.div<{
+  highlighted?: boolean;
+  opened?: boolean;
+  disabled?: boolean;
+}>`
   border-radius: 6px;
-  border: solid 1px #D1D1D1;
+  border: solid 1px #d1d1d1;
   transition: 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
   background-color: white;
   max-height: 400px;
 
-  ${({ disabled }) => disabled && css`
-    &:hover {
-      ${highlightedBorder}
-    }
-  `}
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      &:hover {
+        ${highlightedBorder}
+      }
+    `}
   ${({ highlighted }) =>
     highlighted &&
     css`
-      box-shadow: 0 0 6px 0 #F8C5D7;
+      box-shadow: 0 0 6px 0 #f8c5d7;
     `}
   ${({ opened }) =>
     opened &&
     css`
       border-color: var(--main-theme-accent);
-  overflow-y: auto;
+      overflow-y: auto;
     `}
 `;
 
 const Item = styled.div<{ highlighted?: boolean; visible?: boolean }>`
-  color: #D1D1D1;
+  color: #d1d1d1;
   padding: 18px 16px;
   font-size: 18px;
   text-overflow: ellipsis;
@@ -139,7 +151,7 @@ const Item = styled.div<{ highlighted?: boolean; visible?: boolean }>`
   height: unset;
   visibility: visible;
   transition: padding 300ms cubic-bezier(0, 0.76, 0.12, 0.98),
-              height 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
+    height 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
   ${({ visible }) =>
     visible ||
     css`

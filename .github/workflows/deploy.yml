@@ -7,11 +7,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Check out the repo
+      - name: Check out the repo
         uses: actions/checkout@v2
-      -
-        name: Cache node-modules
+      - name: Cache node-modules
         uses: actions/cache@v1
         with:
           path: node_modules
@@ -19,11 +17,9 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
-      -
-        name: Install packages
+      - name: Install packages
         run: yarn install
-      -
-        name: Build project
+      - name: Build project
         env:
           GENERATE_SOURCEMAP: false
         run: yarn build
@@ -34,5 +30,5 @@ jobs:
           username: ${{ secrets.EDISON_USERNAME }}
           password: ${{ secrets.EDISON_PASSWORD }}
           port: 22
-          source: "./build/"
-          target: "/srv/dimigoin-front-v3/"
+          source: './build/'
+          target: '/srv/dimigoin-front-v3/'

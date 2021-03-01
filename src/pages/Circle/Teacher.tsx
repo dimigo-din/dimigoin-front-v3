@@ -1,7 +1,7 @@
-import React from "react"
+import React from 'react';
 
 export const Teacher: React.FC = () => {
-    return <></>
-}
+  return <></>;
+};
 
-export default Teacher
+export default Teacher;

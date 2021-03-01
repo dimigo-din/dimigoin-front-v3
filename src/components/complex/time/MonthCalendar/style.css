@@ -73,10 +73,10 @@
   border-radius: 6px;
 }
 
-.react-calendar__tile--range:not(.react-calendar__tile--rangeStart,.react-calendar__tile--rangeEnd) {
+.react-calendar__tile--range:not(.react-calendar__tile--rangeStart, .react-calendar__tile--rangeEnd) {
   border-radius: 0px;
   color: black;
-  background-color: rgba(var(--main-theme-accent-rgb),0.1);
+  background-color: rgba(var(--main-theme-accent-rgb), 0.1);
 }
 
 .react-calendar__tile--rangeStart {

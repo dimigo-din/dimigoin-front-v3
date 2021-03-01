@@ -1,11 +1,11 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Switch,
   Route,
   Redirect,
   RouteComponentProps,
   BrowserRouter,
-} from "react-router-dom";
+} from 'react-router-dom';
 import {
   Main,
   Notices,
@@ -17,29 +17,29 @@ import {
   Afterschool,
   Circle,
   Dets,
-} from "../pages";
-import { LoadableComponent } from "@loadable/component";
-import { getAccessToken, getRefreshToken, loginWithRefreshToken } from "../api";
-import styled from "@emotion/styled";
-import Login from "../pages/Login";
-import { Permission, User, UserType } from "../constants/types";
-import { getMyData } from "../api/user";
-import { NavigationBar } from "../components";
-import dimigoBackgroundImage from "../assets/dimigo-background.svg";
-import { toast } from "react-toastify";
-import { useEffect } from "react";
+} from '../pages';
+import { LoadableComponent } from '@loadable/component';
+import { getAccessToken, getRefreshToken, loginWithRefreshToken } from '../api';
+import styled from '@emotion/styled';
+import Login from '../pages/Login';
+import { Permission, User, UserType } from '../constants/types';
+import { getMyData } from '../api/user';
+import { NavigationBar } from '../components';
+import dimigoBackgroundImage from '../assets/dimigo-background.svg';
+import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 
 const needAuth = <PageProps extends {}>(
-  Component: LoadableComponent<PageProps>
+  Component: LoadableComponent<PageProps>,
 ) => {
   return (params: PageProps) => {
     try {
       const accessToken = getAccessToken();
-      if (!accessToken) throw new Error("Cannot find access token");
+      if (!accessToken) throw new Error('Cannot find access token');
 
       const refreshToken = getRefreshToken();
       if (!refreshToken || !loginWithRefreshToken(refreshToken))
-        throw new Error("Cannot login with refresh token");
+        throw new Error('Cannot login with refresh token');
 
       return <Component {...params} />;
     } catch {
@@ -73,7 +73,7 @@ const needAuthAndBranch = <TeacherProps, StudentProps>({
 
 const needPermission = <Props extends {}>(
   permission: Permission,
-  Page: React.FC<RouteComponentProps<Props>>
+  Page: React.FC<RouteComponentProps<Props>>,
 ) => (props: RouteComponentProps<Props>) => {
   const [hasPermission, setHasPermission] = React.useState<boolean>();
 
@@ -81,11 +81,11 @@ const needPermission = <Props extends {}>(
     getMyData()
       .then((d) => {
         const _hasPermission = d.permissions.includes(permission);
-        if (!_hasPermission) toast.info("권한이 없습니다");
+        if (!_hasPermission) toast.info('권한이 없습니다');
         setHasPermission(() => _hasPermission);
       })
       .catch(() => {
-        toast.info("로그인이 필요합니다");
+        toast.info('로그인이 필요합니다');
         setHasPermission(() => false);
       });
   }, []);
@@ -106,8 +106,8 @@ const Router: React.FC = () => (
         <Route
           path="/ingangsil/manager"
           component={needPermission(
-            Permission["ingang-application"],
-            needAuth(IngangsilManager)
+            Permission['ingang-application'],
+            needAuth(IngangsilManager),
           )}
         />
         <Route

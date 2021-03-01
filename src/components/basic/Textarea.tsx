@@ -1,10 +1,10 @@
-import css from "@emotion/css";
-import styled from "@emotion/styled";
-import { SMALL_SCREEN_THRESHOLD } from "../../constants";
+import css from '@emotion/css';
+import styled from '@emotion/styled';
+import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 
 export const Textarea = styled.textarea`
   border-radius: 6px;
-  border: solid 1px #D1D1D1;
+  border: solid 1px #d1d1d1;
   width: 100%;
   resize: none;
   box-sizing: border-box;
@@ -14,13 +14,15 @@ export const Textarea = styled.textarea`
   transition: 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
   &::placeholder {
-    color: #D1D1D1;
+    color: #d1d1d1;
   }
-  ${({ disabled }) => !disabled && css`
-    &:hover {
-      box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.14);
-    }
-  `}
+  ${({ disabled }) =>
+    !disabled &&
+    css`
+      &:hover {
+        box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.14);
+      }
+    `}
   &:focus {
     border-color: var(--main-theme-accent);
     box-shadow: 0px 0px 6px rgba(var(--main-theme-accent-rgb), 0.3);

@@ -14,12 +14,7 @@ export const Input: React.FC<
       React.InputHTMLAttributes<HTMLInputElement>,
       HTMLInputElement
     >
-> = ({
-  errorMessage = '',
-  error,
-  defaultValue,
-  ...props
-}) => (
+> = ({ errorMessage = '', error, defaultValue, ...props }) => (
   <Wrapper>
     <LogicalInput
       error={error}
@@ -52,14 +47,14 @@ const LogicalInput = styled.input<LogicalInputProps>`
     Animating Frame 이슈때문에 border가 아니라
     box-shadow로 테두리 색을 처리했습니다.
   */
-  box-shadow: inset 0px 0px 0px 1px #EEEEEE;
+  box-shadow: inset 0px 0px 0px 1px #eeeeee;
   background-color: #ffffff;
   font-family: 'NanumSquare', sans-serif;
   font-size: 17px;
   transition: 300ms;
 
   &:hover {
-    box-shadow: inset 0px 0px 0px 2px #D1D1D1;
+    box-shadow: inset 0px 0px 0px 2px #d1d1d1;
   }
 
   &:focus {
@@ -67,16 +62,19 @@ const LogicalInput = styled.input<LogicalInputProps>`
   }
 
   &::placeholder {
-    color: #D1D1D1;
+    color: #d1d1d1;
   }
 
-  ${({ error = false }) => error
-    && css`
+  ${({ error = false }) =>
+    error &&
+    css`
       background-color: lighten(#e83c3d, 35%);
     `};
-  ${({ isSecret }) => isSecret && css`
-    font-family: pass;
-  `}
+  ${({ isSecret }) =>
+    isSecret &&
+    css`
+      font-family: pass;
+    `}
   outline: 0;
 
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {

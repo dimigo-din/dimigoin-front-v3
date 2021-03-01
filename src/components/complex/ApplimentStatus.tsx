@@ -1,7 +1,7 @@
-import React from "react";
-import Card, { CardTitle } from "../basic/Card";
-import styled from "@emotion/styled";
-import { MyTodayDetail as Detail } from "../basic/Atomics";
+import React from 'react';
+import Card, { CardTitle } from '../basic/Card';
+import styled from '@emotion/styled';
+import { MyTodayDetail as Detail } from '../basic/Atomics';
 
 export interface ApplimentStatus {
   name: string;
@@ -12,7 +12,12 @@ interface ApplimentStatusProps extends ApplimentStatus {
   className?: string;
 }
 
-export const ApplimentStatus: React.FC<ApplimentStatusProps> = ({ name, location, time, className }) => {
+export const ApplimentStatus: React.FC<ApplimentStatusProps> = ({
+  name,
+  location,
+  time,
+  className,
+}) => {
   return (
     <Card leftBorder className={className}>
       <CardTitle>오늘의 {name}</CardTitle>
@@ -47,7 +52,7 @@ const Time = styled.i`
   }
 
   &::after {
-    content: "";
+    content: '';
     display: block;
     box-sizing: border-box;
     position: absolute;
@@ -74,7 +79,7 @@ const Pin = styled.i`
   }
 
   &::before {
-    content: "";
+    content: '';
     display: block;
     box-sizing: border-box;
     position: absolute;

@@ -1,2 +1,2 @@
-export * from './Cols'
-export * from './PageWrapper'
+export * from './Cols';
+export * from './PageWrapper';

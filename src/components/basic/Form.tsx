@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import { SMALL_SCREEN_THRESHOLD } from "../../constants";
+import styled from '@emotion/styled';
+import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 
 export const FormHeader = styled.h2`
   font-size: 20px;
@@ -14,9 +14,8 @@ export const FormHeader = styled.h2`
 `;
 
 export const HeaderWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    margin-top: 12px;
-    margin-bottom: 24px;
-`
-
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+  margin-bottom: 24px;
+`;
