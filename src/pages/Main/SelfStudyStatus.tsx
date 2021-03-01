@@ -57,7 +57,7 @@ export const SelfStudyStatus: React.FC = () => {
 
   const refetchCurrentPlaceId = useCallback(async () => {
     const [log] = await getMyAttendanceLog();
-    if (!log.place) {
+    if (!log?.place) {
       setPlaceName(() => null);
       return;
     }
