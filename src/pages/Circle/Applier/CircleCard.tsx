@@ -145,7 +145,7 @@ const Wrapper = styled(Card)`
   box-sizing: border-box;
   width: 150px;
   height: 250px;
-  /* align-items: center; */
+  justify-content: space-between;
   padding: 36px 10px 10px 10px;
   border-radius: 5px;
   overflow: hidden;

@@ -53,17 +53,18 @@ const Content: React.FC<Doc<Circle> & { close(): void }> = ({
       focusCancel: true,
     })
       .then((questionResult) => {
-        if (!questionResult.isConfirmed) return;
+        if (!questionResult.isConfirmed) return null;
         return applyCircle(_id, answers as Record<string, string>);
       })
       .then((apply) => {
+        if (apply === null) return;
         if (apply?.circle !== _id) throw new Error('');
         toast.success(`${name} 동아리에 지원했어요`);
+        close();
       })
       .catch(() => {
         toast.error(`${name} 동아리에 지원하지 못했어요. 다시 시도해주세요.`);
-      })
-      .finally(() => close());
+      });
   }, [answers, name, _id, close]);
 
   useEffect(() => {
