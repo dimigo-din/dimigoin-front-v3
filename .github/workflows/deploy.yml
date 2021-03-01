@@ -25,12 +25,11 @@ jobs:
           GENERATE_SOURCEMAP: false
         run: yarn build
       - name: Deploy to Edison
-        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        uses: appleboy/scp-action@master
         with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: sftp
+          host: edison.dimigo.hs.kr
+          username: ${{ secrets.EDISON_USERNAME }}
+          password: ${{ secrets.EDISON_PASSWORD }}
           port: 22
-          local-dir: ./build/
-          server-dir: /srv/dimigoin-front-v3/
+          source: "./build/"
+          target: "/srv/dimigoin-front-v3/"
