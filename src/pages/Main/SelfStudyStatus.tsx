@@ -47,7 +47,7 @@ const PlaceIcon: React.FC<{ placeLabel: string }> = ({ placeLabel }) => {
 
 export const SelfStudyStatus: React.FC = () => {
   const [currentPlaceLog, setCurrentPlaceLog] = useState<Doc<AttendanceLog>>();
-  const [placeName, setPlaceName] = useState<string>();
+  const [placeName, setPlaceName] = useState<string | null>();
   const [places, setPlaces] = useState<Doc<Place>[]>();
 
   const isOther =
@@ -57,7 +57,10 @@ export const SelfStudyStatus: React.FC = () => {
 
   const refetchCurrentPlaceId = useCallback(async () => {
     const [log] = await getMyAttendanceLog();
-    if (!log) return;
+    if (!log) {
+      setPlaceName(() => null);
+      return;
+    }
     setCurrentPlaceLog(() => log);
     setPlaceName(() => log.place.name);
   }, [setCurrentPlaceLog]);
@@ -81,7 +84,7 @@ export const SelfStudyStatus: React.FC = () => {
         );
       });
     },
-    [],
+    [refetchCurrentPlaceId],
   );
 
   const submitOtherPlace = useCallback(() => {
@@ -128,10 +131,16 @@ export const SelfStudyStatus: React.FC = () => {
         )}
       </ButtonsWrapper>
       <CurrentPlace>
-        {placeName ? (
+        {placeName !== undefined ? (
           <>
-            나의 현재 위치는 <CurrentPlaceName>{placeName}</CurrentPlaceName>
-            입니다
+            {placeName ? (
+              <>
+                나의 현재 위치는{' '}
+                <CurrentPlaceName>{placeName}</CurrentPlaceName> 입니다
+              </>
+            ) : (
+              <>아직 현재 위치를 등록하지 않았습니다</>
+            )}
           </>
         ) : (
           <Skeleton width={300} />
