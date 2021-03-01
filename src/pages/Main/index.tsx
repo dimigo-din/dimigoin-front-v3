@@ -87,7 +87,7 @@ const Main: React.FC = () => {
                         {notice && notice.length !== 0 ? (
                             <TextCardGroup
                                 content={[...notice.slice(0, 2).map((e) => ({
-                                    text: e.content,
+                                    text: e.title,
                                     leftBorder: true,
                                     clickable: true,
                                     to: `/notices/${e._id}`
