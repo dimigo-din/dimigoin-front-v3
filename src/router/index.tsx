@@ -1,8 +1,22 @@
 import * as React from "react";
-import { Switch, Route, Redirect, HashRouter, RouteComponentProps } from "react-router-dom";
 import {
-  Main, Notices, Ingangsil, Mentoring, Outgo, SelfStudyDisplay,
-  IngangsilManager, Afterschool, Circle, Dets
+  Switch,
+  Route,
+  Redirect,
+  RouteComponentProps,
+  BrowserRouter,
+} from "react-router-dom";
+import {
+  Main,
+  Notices,
+  Ingangsil,
+  Mentoring,
+  Outgo,
+  SelfStudyDisplay,
+  IngangsilManager,
+  Afterschool,
+  Circle,
+  Dets,
 } from "../pages";
 import { LoadableComponent } from "@loadable/component";
 import { getAccessToken, getRefreshToken, loginWithRefreshToken } from "../api";
@@ -15,25 +29,28 @@ import dimigoBackgroundImage from "../assets/dimigo-background.svg";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 
-const needAuth = <PageProps extends {}>(Component: LoadableComponent<PageProps>) => {
+const needAuth = <PageProps extends {}>(
+  Component: LoadableComponent<PageProps>
+) => {
   return (params: PageProps) => {
     try {
-      const accessToken = getAccessToken()
-      if (!accessToken) throw new Error("Cannot find access token")
+      const accessToken = getAccessToken();
+      if (!accessToken) throw new Error("Cannot find access token");
 
-      const refreshToken = getRefreshToken()
-      if (!refreshToken || !loginWithRefreshToken(refreshToken)) throw new Error("Cannot login with refresh token")
+      const refreshToken = getRefreshToken();
+      if (!refreshToken || !loginWithRefreshToken(refreshToken))
+        throw new Error("Cannot login with refresh token");
 
-      return <Component {...params} />
+      return <Component {...params} />;
     } catch {
-      return <Redirect to="/auth/login" />
+      return <Redirect to="/auth/login" />;
     }
-  }
-}
+  };
+};
 
 const needAuthAndBranch = <TeacherProps, StudentProps>({
   Teacher,
-  Student
+  Student,
 }: {
   Teacher: LoadableComponent<TeacherProps>;
   Student: LoadableComponent<StudentProps>;
@@ -44,50 +61,60 @@ const needAuthAndBranch = <TeacherProps, StudentProps>({
     React.useEffect(() => {
       getMyData()
         .then(setMyData)
-        .catch(() => setMyData(null))
-    }, [])
+        .catch(() => setMyData(null));
+    }, []);
 
-    if (myData === null) return <Redirect to="/auth/login" />
-    if (myData?.userType === UserType.S) return <Student {...props} />
-    if (myData?.userType === UserType.T) return <Teacher {...props} />
-    return <></>
-  }
-}
+    if (myData === null) return <Redirect to="/auth/login" />;
+    if (myData?.userType === UserType.S) return <Student {...props} />;
+    if (myData?.userType === UserType.T) return <Teacher {...props} />;
+    return <></>;
+  };
+};
 
-const needPermission = <Props extends {}>(permission: Permission, Page: React.FC<RouteComponentProps<Props>>) => (props: RouteComponentProps<Props>) => {
+const needPermission = <Props extends {}>(
+  permission: Permission,
+  Page: React.FC<RouteComponentProps<Props>>
+) => (props: RouteComponentProps<Props>) => {
   const [hasPermission, setHasPermission] = React.useState<boolean>();
 
   useEffect(() => {
     getMyData()
-      .then(d => {
-        const _hasPermission = d.permissions.includes(permission)
-        if (!_hasPermission)
-          toast.info("권한이 없습니다")
-        setHasPermission(() => _hasPermission)
+      .then((d) => {
+        const _hasPermission = d.permissions.includes(permission);
+        if (!_hasPermission) toast.info("권한이 없습니다");
+        setHasPermission(() => _hasPermission);
       })
       .catch(() => {
-        toast.info("로그인이 필요합니다")
-        setHasPermission(() => false)
-      })
-  }, [])
+        toast.info("로그인이 필요합니다");
+        setHasPermission(() => false);
+      });
+  }, []);
 
-  if (hasPermission === undefined) return <></>
-  if (hasPermission)
-    return <Page {...props} />
-  return <Redirect to="/" />
-}
-
+  if (hasPermission === undefined) return <></>;
+  if (hasPermission) return <Page {...props} />;
+  return <Redirect to="/" />;
+};
 
 const Router: React.FC = () => (
-  <HashRouter>
+  <BrowserRouter>
     <Switch>
       <Route path="/auth/login" component={Login} />
       <Route path="/selfstudydisplay" component={needAuth(SelfStudyDisplay)} />
       <Container>
         <TopLine />
         <NavigationBar />
-        <Route path="/ingangsil/manager" component={needPermission(Permission["ingang-application"], needAuth(IngangsilManager))} />
-        <Route path="/ingangsil" exact component={needAuthAndBranch(Ingangsil)} />
+        <Route
+          path="/ingangsil/manager"
+          component={needPermission(
+            Permission["ingang-application"],
+            needAuth(IngangsilManager)
+          )}
+        />
+        <Route
+          path="/ingangsil"
+          exact
+          component={needAuthAndBranch(Ingangsil)}
+        />
         <Route path="/outgo" component={needAuth(Outgo)} />
         <Route path="/notices/:articleId" component={needAuth(Notices)} />
         <Route path="/notices" exact component={needAuth(Notices)} />
@@ -99,7 +126,7 @@ const Router: React.FC = () => (
         <BottomImage src={dimigoBackgroundImage} />
       </Container>
     </Switch>
-  </HashRouter>
+  </BrowserRouter>
 );
 
 const Container = styled.div`
