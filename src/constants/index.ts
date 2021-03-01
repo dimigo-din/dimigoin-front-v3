@@ -51,3 +51,5 @@ export const SCHOOL_API_SERVER =
   (() => {
     throw new Error('Cannot find School API Server URI (Student Database)');
   })();
+
+export const SLACK_API_ENDPOINT = process.env.REACT_APP_SLACK_API_ENDPOINT

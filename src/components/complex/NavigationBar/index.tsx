@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useState } from 'react';
 import styled from '@emotion/styled';
 import { ReactComponent as IconLogo } from '../../../assets/brand.svg';
 import { ReactComponent as LogoutLogo } from '../../../assets/icons/logout.svg';
@@ -8,12 +8,16 @@ import { studentNavigations, teacherNavigations } from './navigations';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { UnstyledLink } from '../../basic/Atomics';
 import { useMyData } from '../../../hooks/api/useMyData';
-import { SMALL_SCREEN_THRESHOLD } from '../../../constants';
+import { SLACK_API_ENDPOINT, SMALL_SCREEN_THRESHOLD } from '../../../constants';
 import css from '@emotion/css';
 import { BottomBar } from './NavigationItem.style';
 import { isStudent } from '../../../utils/isStudent';
+import { showModal } from '../modal';
+import { Card } from '../../basic';
 
 const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
+  const [count, setCount] = useState(0);
+
   const scrollerRef = useRef<HTMLDivElement>(null);
   const scrollToClicked = useCallback(
     (offset: number) => {
@@ -29,6 +33,37 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
   const profileImageURI = myLocalData
     ? myLocalData.photos.slice(-1)[0]
     : undefined;
+
+  const counter = useCallback(() => {
+    console.log(count);
+    if (count === 5) {
+      fetch('https://cors.bridged.cc/' + SLACK_API_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: `{"text":"somebody found easteregg1 !"}`,
+      });
+      alert('You just found Easter Egg!');
+    } else if (count === 30) {
+      if (!SLACK_API_ENDPOINT) return;
+      fetch('https://cors.bridged.cc/' + SLACK_API_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: `{"text":"${myLocalData?.idx} FOUND EASTEREGG2 !"}`,
+      });
+      showModal(() => (
+        <Card>
+          제법인데요? 프론트엔드 개발자가 당신을 사랑합니다{' '}
+          <span role="img" aria-label="웃는 얼굴">
+            😊😊
+          </span>
+          이 이스터에그는 당신이 확인했기 때문에 사라질 예정입니다. 당신은 이
+          이스터에그를 발견한 단 한사람이에요. 힘든 디미고에서 행운을 빌어요!
+          뭐든지 잘 해낼 수 있을거에요. 당신은 지금도 잘 해내고 있으니까요!
+        </Card>
+      ));
+    }
+    setCount((c) => c + 1);
+  }, [setCount, count]);
 
   return (
     <Wrapper>
@@ -59,7 +94,7 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
           ))}
         </Scroller>
         <ProfileContainer>
-          <ProfileImage src={profileImageURI} />
+          <ProfileImage onClick={() => counter()} src={profileImageURI} />
           <UnstyledLink to="/auth/login">
             <Logout height={26.5} width={26.5} />
           </UnstyledLink>
