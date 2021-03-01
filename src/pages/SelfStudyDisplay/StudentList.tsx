@@ -66,7 +66,7 @@ export const StudentList: React.FC<{
                 key={student.student._id}
                 student={student.student}
                 additionalInfo={`${student.student.name} : ${
-                  student.log?.place.name || '장소를 등록하지 않았습니다'
+                  student.log?.place?.name || '장소를 등록하지 않았습니다'
                 }${student.log?.remark ? `(${student.log?.remark})` : ''}`}
                 hasLogged={!!student.log}
               >

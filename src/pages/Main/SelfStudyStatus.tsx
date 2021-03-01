@@ -53,16 +53,16 @@ export const SelfStudyStatus: React.FC = () => {
   const isOther =
     places &&
     currentPlaceLog &&
-    !places.some((e) => e._id === currentPlaceLog.place._id);
+    !places.some((e) => e._id === currentPlaceLog.place?._id);
 
   const refetchCurrentPlaceId = useCallback(async () => {
     const [log] = await getMyAttendanceLog();
-    if (!log) {
+    if (!log.place) {
       setPlaceName(() => null);
       return;
     }
     setCurrentPlaceLog(() => log);
-    setPlaceName(() => log.place.name);
+    setPlaceName(() => log.place?.name);
   }, [setCurrentPlaceLog]);
 
   useEffect(() => {
@@ -115,7 +115,7 @@ export const SelfStudyStatus: React.FC = () => {
           <>
             {places.map((place) => (
               <Button
-                selected={!isOther && place._id === currentPlaceLog?.place._id}
+                selected={!isOther && place._id === currentPlaceLog?.place?._id}
                 onClick={() => submitNewLocation(place.name, place._id)}
                 key={place._id}
               >
