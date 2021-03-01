@@ -20,3 +20,5 @@
   - EmotionJS : 전반적인 스타일링
   - react-dnd : Drag & Drag 구현(자습현황)
   - Loadable
+
+Made with ❤, from DIMIGOin Developers
