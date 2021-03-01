@@ -1,0 +1,36 @@
+name: React Deployment
+on: push
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Check out the repo
+        uses: actions/checkout@v2
+      -
+        name: Cache node-modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+      -
+        name: Install packages
+        run: yarn install
+      -
+        name: Build project
+        env:
+          GENERATE_SOURCEMAP: false
+        run: yarn build
+      - name: Deploy to Edison
+        uses: SamKirkland/FTP-Deploy-Action@3.1.1
+        with:
+          ftp-server: ${{ secrets.FTP_HOST }}
+          ftp-username: ${{ secrets.FTP_USERNAME }}
+          ftp-password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./build
+          server-dir: /srv/dimigoin-front-v3
+          git-ftp-args: --insecure
+      
