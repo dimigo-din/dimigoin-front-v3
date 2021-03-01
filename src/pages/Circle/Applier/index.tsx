@@ -251,7 +251,7 @@ export const Applier: React.FC = () => {
                   {config?.CIRCLE_PERIOD === CirclePeriod.application
                     ? '신청'
                     : '상태 변경'}{' '}
-                  가능한 동아리가 없어요 {circles.length}
+                  가능한 동아리가 없어요
                 </NoData>
               </TextCard>
             )
