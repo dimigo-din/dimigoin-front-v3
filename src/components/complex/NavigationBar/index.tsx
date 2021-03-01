@@ -63,7 +63,7 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
       ));
     }
     setCount((c) => c + 1);
-  }, [setCount, count]);
+  }, [setCount, count, myLocalData]);
 
   return (
     <Wrapper>
