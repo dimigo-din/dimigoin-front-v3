@@ -70,9 +70,7 @@ export const SelfStudyStatus: React.FC = () => {
   const submitNewLocation = useCallback(
     async (requestedPlaceName: string, placeId: string, reason?: string) => {
       return registerMovingHistory(placeId, reason).then((successRes) => {
-        console.log(successRes);
-        setCurrentPlaceLog(() => successRes);
-        setPlaceName(() => requestedPlaceName);
+        refetchCurrentPlaceId();
         toast.success(
           `장소를 ${requestedPlaceName}${
             (successRes.place.name &&
@@ -195,14 +193,23 @@ const Button = styled.div<{ selected?: boolean }>`
   margin: 12px;
   user-select: none;
   transition: 1s cubic-bezier(0, 0.46, 0.12, 0.98);
+  cursor: pointer;
 
   & svg path {
+    transition: 1s cubic-bezier(0, 0.46, 0.12, 0.98);
     fill: #d1d1d1;
   }
 
   &:active {
     opacity: 0.7;
     transform: scale(0.98);
+  }
+
+  &:hover {
+    color: var(--main-theme-accent);
+    & svg path {
+      fill: var(--main-theme-accent);
+    }
   }
 
   ${({ selected }) =>
