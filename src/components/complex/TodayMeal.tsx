@@ -7,6 +7,7 @@ import { NoData } from '../basic';
 import useConsole from '../../hooks/useConsole';
 import Skeleton from 'react-loading-skeleton';
 import { DailyMeal } from '../../constants/types';
+import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 
 const MealItem: React.FC<MealItemSelected> = ({
   highlight: selected = false,
@@ -122,6 +123,10 @@ const MealNameText = styled.span<MealItemSelected>`
     css`
       color: var(--main-theme-accent);
     `}
+
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 16px;
+  }
 `;
 
 export const MealMenuText = styled.p<MealItemSelected>`
@@ -137,6 +142,10 @@ export const MealMenuText = styled.p<MealItemSelected>`
     css`
       color: #111111;
     `}
+
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 14px;
+  }
 `;
 
 export default TodayMeal;
