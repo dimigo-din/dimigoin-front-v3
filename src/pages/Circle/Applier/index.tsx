@@ -58,7 +58,7 @@ const CircleDetailBrancher: React.FC<{
   close(): void;
   isModal: boolean;
   goApply(): void;
-}> = ({ circle, type, close, isModal, goApply }) => {
+}> = ({ circle, type, close, isModal, goApply, ...props }) => {
   return {
     DETAIL: (
       <CircleDetail
@@ -66,15 +66,19 @@ const CircleDetailBrancher: React.FC<{
         isModal={isModal}
         goApply={goApply}
         {...circle}
+        {...props}
       />
     ),
-    NEW_APPLY: <NewApply close={close} isModal={isModal} {...circle} />,
+    NEW_APPLY: (
+      <NewApply close={close} isModal={isModal} {...circle} {...props} />
+    ),
     VIEW_APPLICATION: (
       <MyApplication
         name={circle.name}
         form={circle.form ? circle.form : undefined}
         close={close}
         isModal={isModal}
+        {...props}
       />
     ),
   }[type];
@@ -214,25 +218,24 @@ export const Applier: React.FC = () => {
 
   return (
     <PageWrapper>
+      <CardGroupHeader
+        subButton={
+          config
+            ? {
+                text: getSubheaderText(
+                  config.CIRCLE_PERIOD,
+                  config.CIRCLE_MAX_APPLY,
+                ),
+              }
+            : {
+                component: <Skeleton />,
+              }
+        }
+      >
+        동아리 지원
+      </CardGroupHeader>
       <ResponsiveWrapper>
         <Col width={sideDetail ? 5 : 10}>
-          <CardGroupHeader
-            subButton={
-              config
-                ? {
-                    text: getSubheaderText(
-                      config.CIRCLE_PERIOD,
-                      config.CIRCLE_MAX_APPLY,
-                    ),
-                  }
-                : {
-                    component: <Skeleton />,
-                  }
-            }
-          >
-            동아리 지원
-          </CardGroupHeader>
-
           {circles ? (
             circles.length ? (
               <GridWrapper>
@@ -269,7 +272,6 @@ export const Applier: React.FC = () => {
           <>
             <Divider data-divider />
             <Col width={5}>
-              {/* <Card> */}
               <CircleDetailBrancher
                 isModal={false}
                 goApply={() => {
@@ -283,7 +285,6 @@ export const Applier: React.FC = () => {
                   setSideDetail(() => null);
                 }}
               />
-              {/* </Card> */}
             </Col>
           </>
         )}

@@ -101,24 +101,24 @@ const Teacher: React.FC = () => {
 
   return (
     <PageWrapper>
+      <CardGroupHeaderWrapper>
+        <CardGroupHeader
+          css={css`
+            flex: 1;
+          `}
+        >
+          멘토링 관리
+        </CardGroupHeader>
+        <CardGroupHeaderButton onClick={() => downloadSheet()}>
+          <DownloadIcon />
+          엑셀 다운로드
+        </CardGroupHeaderButton>
+        <CardGroupHeaderButton onClick={() => openEdit()}>
+          <NewIcon />새 멘토링
+        </CardGroupHeaderButton>
+      </CardGroupHeaderWrapper>
       <ResponsiveWrapper>
         <Col width={sideDetail ? 5 : 10}>
-          <CardGroupHeaderWrapper>
-            <CardGroupHeader
-              css={css`
-                flex: 1;
-              `}
-            >
-              멘토링 관리
-            </CardGroupHeader>
-            <CardGroupHeaderButton onClick={() => downloadSheet()}>
-              <DownloadIcon />
-              엑셀 다운로드
-            </CardGroupHeaderButton>
-            <CardGroupHeaderButton onClick={() => openEdit()}>
-              <NewIcon />새 멘토링
-            </CardGroupHeaderButton>
-          </CardGroupHeaderWrapper>
           <Table>
             <HeadRow>
               <tr>

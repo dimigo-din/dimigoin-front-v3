@@ -111,6 +111,13 @@ const AfterschoolMangement: React.FC = () => {
 
   return (
     <PageWrapper>
+      <CardGroupHeader
+        css={css`
+          flex: 1;
+        `}
+      >
+        방과후 관리
+      </CardGroupHeader>
       <ResponsiveWrapper>
         <Col width={sideDetail ? 5 : 10}>
           <CardGroupHeaderWrapper
@@ -118,13 +125,6 @@ const AfterschoolMangement: React.FC = () => {
               flex-grow: 0;
             `}
           >
-            <CardGroupHeader
-              css={css`
-                flex: 1;
-              `}
-            >
-              방과후 관리
-            </CardGroupHeader>
             <Horizontal>
               <CardGroupHeaderButton
                 onClick={() =>

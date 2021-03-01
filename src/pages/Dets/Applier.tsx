@@ -54,15 +54,15 @@ const Applier: React.FC = () => {
 
   return (
     <PageWrapper>
+      <CardGroupHeader
+        subButton={{
+          text: '학생 주도로 이루어지는 방과후 활동입니다.',
+        }}
+      >
+        DETS
+      </CardGroupHeader>
       <ResponsiveWrapper>
         <Col width={sideDetail ? 5 : 10}>
-          <CardGroupHeader
-            subButton={{
-              text: '학생 주도로 이루어지는 방과후 활동입니다.',
-            }}
-          >
-            DETS
-          </CardGroupHeader>
           {detsList.length ? (
             <DetsGrid>
               {[...Array(7)].map((_, index) => (
@@ -82,7 +82,6 @@ const Applier: React.FC = () => {
           <Col width={5}>
             <DetsDetail
               css={css`
-                margin-top: 39px;
                 flex: 1;
               `}
               apply={() => apply()}
