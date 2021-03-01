@@ -241,8 +241,8 @@ const SelfStudyDisplay: React.FC<RouteComponentProps> = ({ history }) => {
     )
       .reduce((grouped, current) => {
         const placeGroupIndex =
-          current.log?.place.type !== undefined
-            ? grouped.findIndex((p) => p.type === current.log?.place.type)
+          current.log?.place?.type !== undefined
+            ? grouped.findIndex((p) => p.type === current.log?.place?.type)
             : INITIAL_INDEX;
         const isMovingClass = current.log?.remark === '이동반';
         const matchedIndex = isMovingClass

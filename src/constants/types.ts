@@ -134,7 +134,7 @@ export interface Place {
 export interface AttendanceLog {
   student: Doc<Student>;
   date: string;
-  place: Doc<Place>;
+  place?: Doc<Place>;
   remark: string;
   updatedBy: User | null;
 }
