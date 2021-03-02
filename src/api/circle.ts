@@ -35,8 +35,10 @@ export const applyCircle = async (
     form: form,
   }).then((e) => e.circleApplication);
 
-export const getApplications = () =>
-  api<'circleApplications'>('GET', '/circle-applier-selection').then(
+export const getApplications = (isChecking?: boolean) =>
+  api<'circleApplications'>('GET', '/circle-applier-selection', {
+    hasAlert: isChecking
+  }).then(
     (e) => e.applications,
   );
 
@@ -52,3 +54,13 @@ export const finalSelect = (circleId: string) =>
   api<'finalSelect'>('PATCH', `/circle-application/${circleId}/final`).then(
     (e) => e.application,
   );
+
+export const hasRegisteredCircle = async () => {
+  try {
+    console.log('가져와요')
+    await getApplications(false)
+    return true
+  } catch (e) {
+    return false
+  }
+}

@@ -17,6 +17,9 @@ export const Circle = {
   Student: loadable(() => import('./Circle/Student')),
   Teacher: loadable(() => import('./Circle/Teacher')),
 };
+
+export const NewCircle = loadable(() => import('./Circle/NewCircle'));
+
 export const Outgo = loadable(() => import('./Outgo'));
 export const SelfStudyDisplay = loadable(() => import('./SelfStudyDisplay'));
 export const Mentoring = {

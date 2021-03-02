@@ -15,7 +15,8 @@ export const apiWithoutAuth = axios.create({
 });
 
 request.interceptors.response.use(undefined, (error) => {
-  if (error?.config?.url.startsWith('/meal/date/'))
+  console.dir(error)
+  if (error?.config?.url.startsWith('/meal/date/') || (error?.config?.url === '/circle-applier-selection' && error?.response?.status === 403))
     return Promise.reject(error);
   const errorMessage =
     error.response?.data?.message ||
@@ -38,6 +39,7 @@ export const api = async <T extends keyof APIResource>(
   endpoint: APIResource[T]['endpoint'] | string,
   param?: APIResource[T]['req'] & {
     withoutAuth?: boolean;
+    hasAlert?: boolean;
   },
   headers?: any,
 ) => {

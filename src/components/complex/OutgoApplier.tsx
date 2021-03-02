@@ -17,7 +17,7 @@ interface OutgoApplierProps {
   value?: Doc<BriefStudent>[];
 }
 
-const InputChip: React.FC<{
+export const InputChip: React.FC<{
   onSubmit(student: BriefStudent): any;
   studentsList?: BriefStudent[];
 }> = ({ studentsList, onSubmit }) => {
@@ -81,7 +81,7 @@ const InputChip: React.FC<{
   );
 };
 
-interface OutgoProcessingUser extends Doc<BriefStudent> {
+export interface OutgoProcessingUser extends Doc<BriefStudent> {
   grade: number;
 }
 

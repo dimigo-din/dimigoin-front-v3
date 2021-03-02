@@ -187,6 +187,7 @@ export interface ServiceConfig {
   CIRCLE_PERIOD: CirclePeriod;
   CIRCLE_MAX_APPLY: number;
   IS_MOVING_CLASS_SYSTEM: boolean;
+  CIRCLE_CATEGORY: string[];
 }
 
 export interface Circle {

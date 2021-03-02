@@ -17,6 +17,7 @@ import {
   Afterschool,
   Circle,
   Dets,
+  NewCircle,
 } from '../pages';
 import { LoadableComponent } from '@loadable/component';
 import { getAccessToken, getRefreshToken, loginWithRefreshToken } from '../api';
@@ -120,7 +121,15 @@ const Router: React.FC = () => (
         <Route path="/notices" exact component={needAuth(Notices)} />
         <Route path="/mentoring" component={needAuthAndBranch(Mentoring)} />
         <Route path="/afterschool" component={needAuthAndBranch(Afterschool)} />
-        <Route path="/circle" component={needAuthAndBranch(Circle)} />
+        <Route path="/circle" exact component={needAuthAndBranch(Circle)} />
+        <Route
+          path="/circle/new"
+          exact
+          component={needPermission(
+            Permission['circle-applier-selection'],
+            needAuth(NewCircle),
+          )}
+        />
         <Route path="/dets" component={needAuth(Dets)} />
         <Route path="/" exact component={needAuth(Main)} />
         <BottomImage src={dimigoBackgroundImage} />
