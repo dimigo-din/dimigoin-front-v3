@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { COOKIE_JAR_KEY } from '../constants/cookieJarKeys';
 import { AuthTokens } from '../constants/types';
 import { cookieJar } from '../storage';
@@ -58,3 +59,17 @@ export const loginWithRefreshToken = async (refreshToken: string) => {
     return false;
   }
 };
+
+export const refetchToken = async () => {
+  const refreshToken = getRefreshToken()
+  if (!refreshToken) {
+    toast.error("계정 상태가 올바르지 않아요")
+    return
+  }
+  const tokens = await loginWithRefreshToken(refreshToken)
+  if (!tokens) {
+    toast.error("계정 정보를 불러올 수 없어요")
+    return;
+  }
+  setTokens(tokens)
+}

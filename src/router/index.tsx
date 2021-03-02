@@ -125,10 +125,7 @@ const Router: React.FC = () => (
         <Route
           path="/circle/new"
           exact
-          component={needPermission(
-            Permission['circle-applier-selection'],
-            needAuth(NewCircle),
-          )}
+          component={needPermission(Permission['circle'], needAuth(NewCircle))}
         />
         <Route path="/dets" component={needAuth(Dets)} />
         <Route path="/" exact component={needAuth(Main)} />

@@ -89,6 +89,7 @@ export enum Permission {
   'ingang-application' = 'ingang-application',
   attendance = 'attendance',
   'circle-applier-selection' = 'circle-applier-selection',
+  circle = 'circle'
 }
 
 export interface User {

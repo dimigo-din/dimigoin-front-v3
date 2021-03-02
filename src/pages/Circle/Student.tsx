@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { Permission } from '../../constants/types';
 import { useMyData } from '../../hooks/api/useMyData';
 import Applier from './Applier';
@@ -9,6 +10,8 @@ export const Student: React.FC = (props) => {
   if (!myData) return <></>;
   if (myData.permissions.includes(Permission['circle-applier-selection']))
     return <Leader {...props} />;
+  if (myData.permissions.includes(Permission['circle']))
+    return <Redirect to="/circle/new" />;
   else return <Applier {...props} />;
 };
 

@@ -2,9 +2,9 @@ import css from '@emotion/css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { APIRequestCircle } from '../../api';
+import { APIRequestCircle, refetchToken } from '../../api';
 import { createCircle } from '../../api/circle';
-import { fetchAllStudents } from '../../api/user';
+import { fetchAllStudents, fetchMyData } from '../../api/user';
 import DangerIcon from '../../assets/icons/danger.svg';
 import {
   Card,
@@ -60,6 +60,7 @@ export const NewCircle: React.FC = () => {
       !descriptionInput.value && '설명',
       !leader?._id && '동아리장',
       !subleader?._id && '부동아리장',
+      !categoryInput.value?.name && '부동아리장',
     ].filter((e): e is string => !!e);
 
     if (checks.length) {
@@ -68,7 +69,7 @@ export const NewCircle: React.FC = () => {
     }
 
     const { isConfirmed } = await swal({
-      title: '동아리를 등록하시겠어요??',
+      title: '동아리를 등록하시겠어요?',
       html: (
         <>
           <p>"{nameInput.value}" 동아리를 등록해요</p>
@@ -92,6 +93,9 @@ export const NewCircle: React.FC = () => {
     };
 
     createCircle(data)
+      .then(() => {
+        return refetchToken();
+      })
       .then(() => {
         history.push('/circle');
         toast.success('동아리를 등록했어요');
