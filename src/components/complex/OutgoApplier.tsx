@@ -18,12 +18,13 @@ interface OutgoApplierProps {
 }
 
 export const InputChip: React.FC<{
-  onSubmit(student: BriefStudent): any;
-  studentsList?: BriefStudent[];
+  onSubmit(student: Doc<BriefStudent>): any;
+  studentsList?: Doc<BriefStudent>[];
+  closeWithSubmit?: boolean;
 }> = ({ studentsList, onSubmit }) => {
   const [typing, setTypingState] = useState(false);
   const [focusedIndex, setFocusIndex] = useState(-1);
-  const [queriedStudents, setQueriedStudents] = useState<BriefStudent[]>();
+  const [queriedStudents, setQueriedStudents] = useState<Doc<BriefStudent>[]>();
   const userInput = useInput();
   useEffect(() => {
     setQueriedStudents(() =>

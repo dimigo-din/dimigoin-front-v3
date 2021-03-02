@@ -62,10 +62,10 @@ const CircleDetailBrancher: React.FC<{
   return {
     DETAIL: (
       <CircleDetail
-        close={close}
         isModal={isModal}
         goApply={goApply}
         {...circle}
+        chair={circle.chair.name}
       />
     ),
     NEW_APPLY: <NewApply close={close} isModal={isModal} {...circle} />,

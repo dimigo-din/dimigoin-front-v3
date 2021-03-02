@@ -2,7 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 
 import { Card } from '../../../components';
-import { Circle } from '../../../constants/types';
+import { Circle, Doc, Merge, Student } from '../../../constants/types';
 import {
   ContentWrapper,
   TextButton as SubmitButton,
@@ -10,32 +10,42 @@ import {
 } from './atomics';
 import { Markdown } from '../../../components/basic/Markdown';
 
-const Content: React.FC<
-  Circle & {
-    onGoApply(): void;
-  }
-> = ({ description, onGoApply }) => {
-  return (
-    <ContentWrapper>
-      <Markdown>{description}</Markdown>
-      <SubmitButton onClick={onGoApply}>지원하기</SubmitButton>
-    </ContentWrapper>
-  );
-};
+// const Content: React.FC<
+//   Merge<
+//     Circle,
+//     {
+//       onGoApply(): void;
+//       chair: string;
+//       viceChair?: Doc<Student>;
+//     }
+//   >
+// > = ({ description, onGoApply }) => {
+//   return (
+//   );
+// };
 
 export const CircleDetail: React.FC<
-  Circle & {
-    close(): void;
-    goApply(): void;
-    isModal?: boolean;
-  }
-> = ({ close, isModal, goApply, ...circle }) => {
+  Merge<
+    Circle,
+    {
+      chair: string;
+      goApply?(): void;
+      isModal?: boolean;
+      viceChair?: Doc<Student>;
+      preview?: boolean;
+    }
+  >
+> = ({ goApply, description, imageUrl, category, name, preview }) => {
   return (
     <Card css={wrapperStyle}>
-      <CircleLogo src={circle.imageUrl} />
-      <Category>{circle.category}</Category>
-      <Title>{circle.name}</Title>
-      <Content onGoApply={goApply} {...circle} />
+      <CircleLogo src={imageUrl || 'https://via.placeholder.com/120'} />
+      <Category>{category || '카테고리'}</Category>
+      <Title>{name || '이름'}</Title>
+
+      <ContentWrapper>
+        <Markdown>{description || '이곳에는 설명이 들어갑니다'}</Markdown>
+        {!preview && <SubmitButton onClick={goApply}>지원하기</SubmitButton>}
+      </ContentWrapper>
     </Card>
   );
 };
