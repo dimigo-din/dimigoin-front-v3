@@ -88,3 +88,17 @@ export interface FinalSelect {
     application: Doc<CircleApplication>;
   };
 }
+
+export type APIRequestCircle = Merge<Circle, {
+  chair: string;
+  viceChair: string;
+}>
+
+export interface CreateCircle {
+  endpoint: '/circle';
+  method: 'POST';
+  req: APIRequestCircle;
+  res: {
+    circle: Doc<Circle>;
+  }
+}

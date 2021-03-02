@@ -3,6 +3,7 @@ import { cacheItem, getCachedItem } from '../functions/localCache';
 import { CacheKeys } from '../constants/cacheKey';
 import { Doc, CircleApplyQuestionItem } from '../constants/types';
 import { CircleApplicationStatusValues } from '../constants';
+import { APIRequestCircle } from './interfaces';
 
 export const getAllCircles = () =>
   api<'allCircle'>('GET', '/circle').then((e) => e.circles);
@@ -57,10 +58,13 @@ export const finalSelect = (circleId: string) =>
 
 export const hasRegisteredCircle = async () => {
   try {
-    console.log('가져와요')
     await getApplications(false)
     return true
   } catch (e) {
     return false
   }
 }
+
+export const createCircle = (data: APIRequestCircle) =>
+  api<'createCircle'>("POST", "/circle", data)
+
