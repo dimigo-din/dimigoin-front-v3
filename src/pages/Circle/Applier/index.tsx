@@ -41,8 +41,9 @@ const getSubheaderText = (
   maxApplyAmount: number,
 ) =>
   ({
-    [CirclePeriod.application]: `동아리 지원은 3월 10일 ~ 3월 20일까지, 최대 ${maxApplyAmount}개까지 가능합니다.`,
-    [CirclePeriod.interview]: '면접은 3월 25일부터 4월 7일까지 진행됩니다.',
+    [CirclePeriod.registering]: '3월 4일까지는 동아리 등록기간입니다.',
+    [CirclePeriod.application]: `동아리 지원은 최대 ${maxApplyAmount}개까지 가능합니다.`,
+    [CirclePeriod.interview]: '면접은 동아리 개별적으로 진행됩니다.',
     [CirclePeriod.final]: '최종 선택은 되돌릴 수 없으니 신중하게 생각해주세요.',
   }[currentPeriod]);
 
@@ -99,6 +100,8 @@ export const Applier: React.FC = () => {
       await getAppliedCircles()
     ).applications.reduce(
       (matched, current) => {
+        console.log(current);
+        if (!current.circle) return matched;
         return {
           ...matched,
           [current.circle._id]: current,
@@ -248,10 +251,11 @@ export const Applier: React.FC = () => {
             ) : (
               <TextCard>
                 <NoData>
-                  {config?.CIRCLE_PERIOD === CirclePeriod.application
-                    ? '신청'
-                    : '상태 변경'}{' '}
-                  가능한 동아리가 없어요
+                  {config?.CIRCLE_PERIOD === CirclePeriod.registering
+                    ? '동아리 지원 기간이 아니에요. 목요일 방과후시간 이후로 지원할 수 있어요.'
+                    : config?.CIRCLE_PERIOD === CirclePeriod.application
+                    ? '신청 가능한 동아리가 없어요'
+                    : '상태 변경 가능한 동아리가 없어요'}
                 </NoData>
               </TextCard>
             )

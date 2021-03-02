@@ -178,6 +178,7 @@ export interface AfterschoolClassApplication {
 }
 
 export enum CirclePeriod {
+  registering = 'REGISTERING',
   application = 'APPLICATION',
   interview = 'INTERVIEW',
   final = 'FINAL',
