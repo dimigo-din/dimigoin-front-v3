@@ -49,8 +49,8 @@ export const api = async <T extends keyof APIResource>(
       headers: {
         ...(!param?.withoutAuth &&
           token && {
-            Authorization: `Bearer ${token}`,
-          }),
+          Authorization: `Bearer ${token}`,
+        }),
         ...headers,
       },
     })

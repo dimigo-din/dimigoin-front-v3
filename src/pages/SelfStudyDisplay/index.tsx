@@ -50,6 +50,7 @@ import { LocalstorageKeys } from '../../constants/localstorageKeys';
 import { RouteComponentProps } from 'react-router-dom';
 import { OtherPlaceModal } from '../Main/OtherPlaceModal';
 import { BottomImage } from '../../router';
+import { toast } from 'react-toastify';
 
 const ROW_COLOR = {
   AVAILABLE: 'var(--main-theme-accent)',
@@ -236,50 +237,57 @@ const SelfStudyDisplay: React.FC<RouteComponentProps> = ({ history }) => {
 
   const fetchData = useCallback(async () => {
     if (!myData || !classInfo) return;
-    const [available, notAvailable] = (
-      await getWholeClassAttendanceLog(classInfo[0], classInfo[1])
-    )
-      .reduce((grouped, current) => {
-        const placeGroupIndex =
-          current.log?.place?.type !== undefined
-            ? grouped.findIndex((p) => p.type === current.log?.place?.type)
-            : INITIAL_INDEX;
-        const isMovingClass = current.log?.remark === '이동반';
-        const matchedIndex = isMovingClass
-          ? IS_MOVING_CLASS_SYSTEM
-            ? MOVING_CLASS_INDEX
-            : OTHER_INDEX
-          : placeGroupIndex !== -1
-          ? placeGroupIndex
-          : OTHER_INDEX;
-        return [
-          ...grouped.slice(0, matchedIndex),
-          {
-            ...grouped[matchedIndex],
-            students: [...(grouped[matchedIndex].students || []), current],
+    try {
+      const [available, notAvailable] = (
+        await getWholeClassAttendanceLog(classInfo[0], classInfo[1])
+      )
+        .reduce((grouped, current) => {
+          const placeGroupIndex =
+            current.log?.place?.type !== undefined
+              ? grouped.findIndex((p) => p.type === current.log?.place?.type)
+              : INITIAL_INDEX;
+          const isMovingClass = current.log?.remark === '이동반';
+          const matchedIndex = isMovingClass
+            ? IS_MOVING_CLASS_SYSTEM
+              ? MOVING_CLASS_INDEX
+              : OTHER_INDEX
+            : placeGroupIndex !== -1
+            ? placeGroupIndex
+            : OTHER_INDEX;
+          return [
+            ...grouped.slice(0, matchedIndex),
+            {
+              ...grouped[matchedIndex],
+              students: [...(grouped[matchedIndex].students || []), current],
+            },
+            ...grouped.slice(matchedIndex + 1),
+          ];
+        }, (IS_MOVING_CLASS_SYSTEM ? groupedPlacesIncludingMovingClass : groupedPlaces).map((g) => ({ ...g, students: [] })) as DisplayPlaceWithStudents[])
+        .reduce(
+          (grouped, current) => {
+            if (current.isAvailable)
+              return [[...grouped[0], current], grouped[1]];
+            return [grouped[0], [...grouped[1], current]];
           },
-          ...grouped.slice(matchedIndex + 1),
-        ];
-      }, (IS_MOVING_CLASS_SYSTEM ? groupedPlacesIncludingMovingClass : groupedPlaces).map((g) => ({ ...g, students: [] })) as DisplayPlaceWithStudents[])
-      .reduce(
-        (grouped, current) => {
-          if (current.isAvailable)
-            return [[...grouped[0], current], grouped[1]];
-          return [grouped[0], [...grouped[1], current]];
-        },
-        [[], []] as DisplayPlaceWithStudents[][],
+          [[], []] as DisplayPlaceWithStudents[][],
+        );
+      setSelfStudyStatus(() => ({ available, notAvailable }));
+      setStudentQuantity(() => ({
+        available: available.reduce(
+          (acc, current) => acc + current.students.length,
+          0,
+        ),
+        notAvailable: notAvailable.reduce(
+          (acc, current) => acc + current.students.length,
+          0,
+        ),
+      }));
+    } catch (e) {
+      toast.error(
+        '서버와 연결이 끊어졌어요. 다시 시도하려면 페이지를 새로고침해주세요.',
       );
-    setSelfStudyStatus(() => ({ available, notAvailable }));
-    setStudentQuantity(() => ({
-      available: available.reduce(
-        (acc, current) => acc + current.students.length,
-        0,
-      ),
-      notAvailable: notAvailable.reduce(
-        (acc, current) => acc + current.students.length,
-        0,
-      ),
-    }));
+      throw e;
+    }
   }, [setSelfStudyStatus, myData, classInfo, IS_MOVING_CLASS_SYSTEM]);
 
   const moveStudentPlaceTo = useCallback(
@@ -317,8 +325,16 @@ const SelfStudyDisplay: React.FC<RouteComponentProps> = ({ history }) => {
   // }, [])
 
   useEffect(() => {
-    fetchData();
-    const timer = setInterval(() => fetchData(), 5000);
+    const timer = setInterval(
+      () =>
+        fetchData().catch(() => {
+          clearTimeout(timer);
+        }),
+      5000,
+    );
+    fetchData().catch(() => {
+      clearTimeout(timer);
+    });
     const timeNameTimer = setInterval(
       () => updateSelfStudyTimeLabel(),
       1000 * 60 * 5,
