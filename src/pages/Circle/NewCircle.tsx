@@ -171,7 +171,7 @@ export const NewCircle: React.FC = () => {
             </TextButton>
           </Card>
         </Col>
-        <Divider />
+        <Divider data-divider />
         <Col width={5}>
           <CardGroupHeader>미리보기</CardGroupHeader>
           <CircleDetail
