@@ -136,7 +136,16 @@ export const NewCircle: React.FC = () => {
               `}
             >
               {leader?.studentId} {leader?.name}
-              <InputChip studentsList={students} onSubmit={setLeader} />
+              <InputChip
+                studentsList={students}
+                onSubmit={setLeader}
+                css={
+                  leader &&
+                  css`
+                    margin-left: 12px;
+                  `
+                }
+              />
             </Horizontal>
             <FormHeader>부동아리장</FormHeader>
             <Horizontal
@@ -148,7 +157,12 @@ export const NewCircle: React.FC = () => {
               <InputChip
                 studentsList={students}
                 onSubmit={setSubleader}
-                closeWithSubmit
+                css={
+                  subleader &&
+                  css`
+                    margin-left: 12px;
+                  `
+                }
               />
             </Horizontal>
             <FormHeader>분류</FormHeader>
