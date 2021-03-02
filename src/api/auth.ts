@@ -72,4 +72,5 @@ export const refetchToken = async () => {
     return;
   }
   setTokens(tokens)
+  return tokens
 }

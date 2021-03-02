@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { APIRequestCircle, refetchToken } from '../../api';
 import { createCircle } from '../../api/circle';
-import { fetchAllStudents, fetchMyData } from '../../api/user';
+import { fetchAllStudents } from '../../api/user';
 import DangerIcon from '../../assets/icons/danger.svg';
 import {
   Card,
