@@ -12,7 +12,7 @@ export const getWeeklyMeals = async (date: Date): Promise<DailyMeal[]> => {
   const raw = (await api<'weeklyMeals'>('GET', '/meal/weekly')).meals;
   return raw.reduce<DailyMeal[]>(
     (matched, current) => {
-      const index = new Date(current.date).getDay();
+      const index = new Date(current.date).getDay() - 1;
       return [...matched.slice(0, index), current, ...matched.slice(index + 1)];
     },
     [...Array(7)],
