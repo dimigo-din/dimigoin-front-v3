@@ -94,6 +94,7 @@ export const NewCircle: React.FC = () => {
     createCircle(data)
       .then(() => {
         history.push('/circle');
+        toast.success('동아리를 등록했어요');
       })
       .catch(() => {
         toast.error('동아리 등록에 실패했어요. 다시 시도해주세요.');

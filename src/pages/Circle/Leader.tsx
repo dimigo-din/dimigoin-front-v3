@@ -214,8 +214,6 @@ export const Leader: React.FC = () => {
       submitType: SubmitType,
       selectedApplications: Doc<ApplicationForSubmiter>[],
     ) => {
-      // CircleApplicationStatusValues
-
       if (!config) {
         toast.error('현재 선발 단계를 불러올 수 없어요. 다시 시도해주세요');
         return;
