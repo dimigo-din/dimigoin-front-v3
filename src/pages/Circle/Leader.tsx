@@ -2,8 +2,13 @@ import css from '@emotion/css';
 import styled from '@emotion/styled';
 import React, { useCallback, useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
+import { Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getApplications, setApplicationStatus } from '../../api/circle';
+import {
+  getApplications,
+  hasRegisteredCircle,
+  setApplicationStatus,
+} from '../../api/circle';
 import { ApplicationForSubmiter } from '../../api/interfaces/circle';
 import DangerIcon from '../../assets/icons/danger.svg';
 import {
@@ -47,7 +52,7 @@ const isChangable = (
   applicationStatus: typeof CircleApplicationStatusValues[number],
 ) => {
   return (
-    { application: 1, interview: 3, final: 0 }[currentPeriod] >
+    { application: 1, interview: 3, final: 0, registering: 0 }[currentPeriod] >
     CircleApplicationStatusValues.indexOf(applicationStatus)
   );
 };
@@ -185,6 +190,7 @@ export const Leader: React.FC = () => {
   const config = useConfig();
 
   const [sideDetail, setSideDetail] = useState<number | null>(null);
+  const [hasRegistered, setHasRegistered] = useState<boolean>();
 
   const fetchData = useCallback(
     () =>
@@ -195,7 +201,12 @@ export const Leader: React.FC = () => {
   );
 
   useEffect(() => {
-    fetchData();
+    hasRegisteredCircle().then((_hasRegistered) => {
+      setHasRegistered(_hasRegistered);
+      if (_hasRegistered === true) {
+        fetchData();
+      }
+    });
   }, [fetchData]);
 
   const changeState = useCallback(
@@ -203,8 +214,6 @@ export const Leader: React.FC = () => {
       submitType: SubmitType,
       selectedApplications: Doc<ApplicationForSubmiter>[],
     ) => {
-      // CircleApplicationStatusValues
-
       if (!config) {
         toast.error('현재 선발 단계를 불러올 수 없어요. 다시 시도해주세요');
         return;
@@ -328,6 +337,8 @@ export const Leader: React.FC = () => {
     },
     [applications],
   );
+
+  if (hasRegistered === false) return <Redirect to="/circle/new" />;
 
   return (
     <PageWrapper>

@@ -17,9 +17,10 @@ import {
   Afterschool,
   Circle,
   Dets,
+  NewCircle,
 } from '../pages';
 import { LoadableComponent } from '@loadable/component';
-import { getAccessToken, getRefreshToken, loginWithRefreshToken } from '../api';
+import { getAccessToken, refetchToken } from '../api';
 import styled from '@emotion/styled';
 import Login from '../pages/Login';
 import { Permission, User, UserType } from '../constants/types';
@@ -37,9 +38,7 @@ const needAuth = <PageProps extends {}>(
       const accessToken = getAccessToken();
       if (!accessToken) throw new Error('Cannot find access token');
 
-      const refreshToken = getRefreshToken();
-      if (!refreshToken || !loginWithRefreshToken(refreshToken))
-        throw new Error('Cannot login with refresh token');
+      if (!refetchToken()) throw new Error('Cannot login with refresh token');
 
       return <Component {...params} />;
     } catch {
@@ -120,7 +119,12 @@ const Router: React.FC = () => (
         <Route path="/notices" exact component={needAuth(Notices)} />
         <Route path="/mentoring" component={needAuthAndBranch(Mentoring)} />
         <Route path="/afterschool" component={needAuthAndBranch(Afterschool)} />
-        <Route path="/circle" component={needAuthAndBranch(Circle)} />
+        <Route path="/circle" exact component={needAuthAndBranch(Circle)} />
+        <Route
+          path="/circle/new"
+          exact
+          component={needPermission(Permission['circle'], needAuth(NewCircle))}
+        />
         <Route path="/dets" component={needAuth(Dets)} />
         <Route path="/" exact component={needAuth(Main)} />
         <BottomImage src={dimigoBackgroundImage} />

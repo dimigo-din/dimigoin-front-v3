@@ -21,6 +21,7 @@ export const CircleApplicationStatusLevelTree = {
     CircleApplicationStatusValues[4],
   ],
   [CirclePeriod.final]: null,
+  [CirclePeriod.registering]: null,
 };
 
 export const dayEngKorMapper = {

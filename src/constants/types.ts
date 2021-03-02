@@ -89,6 +89,7 @@ export enum Permission {
   'ingang-application' = 'ingang-application',
   attendance = 'attendance',
   'circle-applier-selection' = 'circle-applier-selection',
+  circle = 'circle'
 }
 
 export interface User {
@@ -178,6 +179,7 @@ export interface AfterschoolClassApplication {
 }
 
 export enum CirclePeriod {
+  registering = 'REGISTERING',
   application = 'APPLICATION',
   interview = 'INTERVIEW',
   final = 'FINAL',
@@ -187,6 +189,7 @@ export interface ServiceConfig {
   CIRCLE_PERIOD: CirclePeriod;
   CIRCLE_MAX_APPLY: number;
   IS_MOVING_CLASS_SYSTEM: boolean;
+  CIRCLE_CATEGORY: string[];
 }
 
 export interface Circle {

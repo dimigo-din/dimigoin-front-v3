@@ -17,13 +17,14 @@ interface OutgoApplierProps {
   value?: Doc<BriefStudent>[];
 }
 
-const InputChip: React.FC<{
-  onSubmit(student: BriefStudent): any;
-  studentsList?: BriefStudent[];
+export const InputChip: React.FC<{
+  onSubmit(student: Doc<BriefStudent>): any;
+  studentsList?: Doc<BriefStudent>[];
+  closeWithSubmit?: boolean;
 }> = ({ studentsList, onSubmit }) => {
   const [typing, setTypingState] = useState(false);
   const [focusedIndex, setFocusIndex] = useState(-1);
-  const [queriedStudents, setQueriedStudents] = useState<BriefStudent[]>();
+  const [queriedStudents, setQueriedStudents] = useState<Doc<BriefStudent>[]>();
   const userInput = useInput();
   useEffect(() => {
     setQueriedStudents(() =>
@@ -81,7 +82,7 @@ const InputChip: React.FC<{
   );
 };
 
-interface OutgoProcessingUser extends Doc<BriefStudent> {
+export interface OutgoProcessingUser extends Doc<BriefStudent> {
   grade: number;
 }
 

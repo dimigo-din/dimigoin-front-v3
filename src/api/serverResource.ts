@@ -51,6 +51,7 @@ import {
   RequestMentoringApplyInfoSheet,
   AppliedMentoring,
   UnapplyMentoring,
+  CreateCircle,
 } from './interfaces';
 import { Config } from './interfaces/config';
 
@@ -108,4 +109,5 @@ export interface APIResource {
   requestMentoringApplyInfoSheet: RequestMentoringApplyInfoSheet;
   appliedMentoring: AppliedMentoring;
   unapplyMentoring: UnapplyMentoring;
+  createCircle: CreateCircle;
 }
