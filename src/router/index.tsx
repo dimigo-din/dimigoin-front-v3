@@ -20,12 +20,7 @@ import {
   NewCircle,
 } from '../pages';
 import { LoadableComponent } from '@loadable/component';
-import {
-  getAccessToken,
-  getRefreshToken,
-  loginWithRefreshToken,
-  refetchToken,
-} from '../api';
+import { getAccessToken, refetchToken } from '../api';
 import styled from '@emotion/styled';
 import Login from '../pages/Login';
 import { Permission, User, UserType } from '../constants/types';
@@ -43,9 +38,7 @@ const needAuth = <PageProps extends {}>(
       const accessToken = getAccessToken();
       if (!accessToken) throw new Error('Cannot find access token');
 
-      const refreshToken = getRefreshToken();
-      if (!refreshToken || !refetchToken(refreshToken))
-        throw new Error('Cannot login with refresh token');
+      if (!refetchToken()) throw new Error('Cannot login with refresh token');
 
       return <Component {...params} />;
     } catch {
