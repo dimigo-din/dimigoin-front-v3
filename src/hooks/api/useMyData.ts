@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { clearUserInfo, refetchToken as refetchUserData } from '../../api';
+import { refetchToken as refetchUserData } from '../../api';
 import { getMyData } from '../../api/user';
 import { User } from '../../constants/types';
 
