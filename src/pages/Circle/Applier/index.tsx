@@ -218,7 +218,7 @@ export const Applier: React.FC = () => {
   return (
     <PageWrapper>
       <ResponsiveWrapper>
-        <Col width={sideDetail ? 5 : 10}>
+        <Col width={sideDetail ? 4 : 10}>
           <CardGroupHeader
             subButton={
               config
@@ -272,7 +272,7 @@ export const Applier: React.FC = () => {
         {sideDetail && circles && (
           <>
             <Divider data-divider />
-            <Col width={5}>
+            <Col width={6}>
               {/* <Card> */}
               <CircleDetailBrancher
                 isModal={false}
