@@ -70,6 +70,7 @@ const ApplicationList: React.FC<{
     Array(applications?.length).fill(false),
   );
   const [buttonVisible, setButtonVisible] = useState(false);
+  const config = useConfig();
 
   useEffect(() => {
     setButtonVisible(() => checks.some((c) => c));
@@ -147,7 +148,12 @@ const ApplicationList: React.FC<{
               ))
             ) : (
               <Data colSpan={7}>
-                <NoData> 지원자가 없습니다 </NoData>
+                <NoData>
+                  {' '}
+                  지원자가 없습니다.{' '}
+                  {config?.CIRCLE_PERIOD === CirclePeriod.registering &&
+                    '현재 동아리 등록기간입니다.'}{' '}
+                </NoData>
               </Data>
             )
           ) : applications === null ? (

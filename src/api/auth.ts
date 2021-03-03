@@ -25,6 +25,10 @@ export const clearTokens = () => {
   cookieJar.remove(COOKIE_JAR_KEY.MY_INFO);
 };
 
+export const clearUserInfo = () => {
+  cookieJar.remove(COOKIE_JAR_KEY.MY_INFO);
+}
+
 export const loginWithInfo = async ({
   username,
   password,
@@ -72,5 +76,7 @@ export const refetchToken = async () => {
     return;
   }
   setTokens(tokens)
-  return tokens
+  // clearUserInfo()
+
+  return await fetchMyData(tokens.accessToken)
 }

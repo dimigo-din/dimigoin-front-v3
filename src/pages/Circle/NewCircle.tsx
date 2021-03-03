@@ -116,7 +116,7 @@ export const NewCircle: React.FC = () => {
   return (
     <PageWrapper>
       <ResponsiveWrapper>
-        <Col width={5}>
+        <Col width={4}>
           <CardGroupHeader>동아리 등록</CardGroupHeader>
           <Card
             css={css`
@@ -130,6 +130,7 @@ export const NewCircle: React.FC = () => {
             <Input {...imageUrlInput} />
             <FormHeader>설명</FormHeader>
             <Textarea
+              rows={8}
               placeholder="마크다운을 지원합니다"
               {...descriptionInput}
             />
@@ -190,7 +191,7 @@ export const NewCircle: React.FC = () => {
           </Card>
         </Col>
         <Divider data-divider />
-        <Col width={5}>
+        <Col width={6}>
           <CardGroupHeader>미리보기</CardGroupHeader>
           <CircleDetail
             category={categoryInput.value?.name || ''}
