@@ -1,5 +1,5 @@
 import { COOKIE_JAR_KEY } from '../constants/cookieJarKeys';
-import { User } from '../constants/types';
+import { AuthTokens, User } from '../constants/types';
 import { cookieJar } from '../storage';
 import { api } from './api';
 import { getAccessToken } from './auth';
@@ -11,12 +11,14 @@ export const saveMyData = async (myData: User) => {
 export const getMyLocalData = () =>
   cookieJar.get(COOKIE_JAR_KEY.MY_INFO) as User | undefined;
 
-export const fetchMyData = async () => {
-  if (!getAccessToken()) {
+export const fetchMyData = async (token?: string) => {
+  if (!token && !getAccessToken()) {
     throw new Error('No Auth Data');
   }
-  const myData = await api<'getMyInfo'>('GET', '/user/me');
-  saveMyData(myData.identity);
+  const myData = await (token ? api<'getMyInfo'>('GET', '/user/me', { withoutAuth: true }, {
+    Authorization: `Bearer ${token}`,
+  }) : api<'getMyInfo'>('GET', '/user/me'));
+  await saveMyData(myData.identity);
   return myData.identity;
 };
 

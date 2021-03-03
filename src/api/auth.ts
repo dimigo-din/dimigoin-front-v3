@@ -4,7 +4,7 @@ import { AuthTokens } from '../constants/types';
 import { cookieJar } from '../storage';
 import { api } from './api';
 import { APIResource } from './serverResource';
-import { fetchMyData } from './user';
+import { fetchMyData, getMyData } from './user';
 
 export const getAccessToken = (): string | undefined => {
   return cookieJar.get(COOKIE_JAR_KEY.ACCESS_TOKEN);
@@ -24,6 +24,10 @@ export const clearTokens = () => {
   cookieJar.remove(COOKIE_JAR_KEY.REFRESH_TOKEN);
   cookieJar.remove(COOKIE_JAR_KEY.MY_INFO);
 };
+
+export const clearUserInfo = () => {
+  cookieJar.remove(COOKIE_JAR_KEY.MY_INFO);
+}
 
 export const loginWithInfo = async ({
   username,
@@ -72,5 +76,7 @@ export const refetchToken = async () => {
     return;
   }
   setTokens(tokens)
-  return tokens
+  // clearUserInfo()
+
+  return await fetchMyData(tokens.accessToken)
 }

@@ -6,8 +6,9 @@ import Applier from './Applier';
 import Leader from './Leader';
 
 export const Student: React.FC = (props) => {
-  const myData = useMyData();
+  const myData = useMyData({ noLocalData: true });
   if (!myData) return <></>;
+  console.log(myData.permissions);
   if (myData.permissions.includes(Permission['circle-applier-selection']))
     return <Leader {...props} />;
   if (myData.permissions.includes(Permission['circle']))
