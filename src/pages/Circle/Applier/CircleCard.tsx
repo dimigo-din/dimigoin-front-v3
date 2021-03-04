@@ -105,7 +105,7 @@ const CardContentWrapper = styled.div`
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     padding: 0px;
     flex-direction: row;
-    /* margin-bottom: 16px; */
+    margin-bottom: 16px;
   }
 `;
 
@@ -171,6 +171,7 @@ const Wrapper = styled(Card)`
     height: inherit;
     margin: 0px;
     margin-top: 12px;
+    padding: 36px 16px 16px 16px;
   }
 `;
 
