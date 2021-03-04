@@ -52,6 +52,9 @@ import {
   AppliedMentoring,
   UnapplyMentoring,
   CreateCircle,
+  GetCircleById,
+  GetMyCircle,
+  EditCircle,
 } from './interfaces';
 import { Config } from './interfaces/config';
 
@@ -110,4 +113,7 @@ export interface APIResource {
   appliedMentoring: AppliedMentoring;
   unapplyMentoring: UnapplyMentoring;
   createCircle: CreateCircle;
+  getCircleById: GetCircleById;
+  getMyCircle: GetMyCircle;
+  editCircle: EditCircle;
 }

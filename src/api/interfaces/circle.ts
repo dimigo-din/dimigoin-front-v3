@@ -17,6 +17,24 @@ export interface AllCircle {
   };
 }
 
+export interface GetCircleById {
+  endpoint: '/circle/:id';
+  method: 'GET';
+  req: {};
+  res: {
+    circle: Doc<Circle>
+  }
+}
+
+export interface GetMyCircle {
+  endpoint: '/circle/my-circle';
+  method: 'GET';
+  req: {};
+  res: {
+    circle: Doc<Circle>
+  }
+}
+
 export interface AppliedCircle {
   endpoint: '/circle-application';
   method: 'GET';
@@ -97,6 +115,15 @@ export type APIRequestCircle = Merge<Circle, {
 export interface CreateCircle {
   endpoint: '/circle';
   method: 'POST';
+  req: APIRequestCircle;
+  res: {
+    circle: Doc<Circle>;
+  }
+}
+
+export interface EditCircle {
+  endpoint: '/circle/:circleId';
+  method: 'PATCH';
   req: APIRequestCircle;
   res: {
     circle: Doc<Circle>;

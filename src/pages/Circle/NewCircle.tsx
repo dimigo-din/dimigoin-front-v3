@@ -3,16 +3,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { APIRequestCircle, refetchToken } from '../../api';
-import { createCircle } from '../../api/circle';
+import { saveCircleInfo, getMyCircle, createCircle } from '../../api/circle';
 import { fetchAllStudents } from '../../api/user';
-import DangerIcon from '../../assets/icons/danger.svg';
 import {
   Card,
   CardGroupHeader,
   Col,
   Divider,
-  Dropdown,
-  DropdownItem,
   FormHeader,
   Horizontal,
   Input,
@@ -21,10 +18,9 @@ import {
   ResponsiveWrapper,
   Textarea,
 } from '../../components';
-import { BriefStudent, Doc } from '../../constants/types';
-import { swal } from '../../functions/swal';
+import { BriefStudent, Circle, Doc } from '../../constants/types';
 import { useConfig } from '../../hooks/api';
-import useInput, { useTextInput } from '../../hooks/useInput';
+import { useTextInput } from '../../hooks/useInput';
 import { TextButton } from './Applier/atomics';
 import { CircleDetail } from './Applier/CircleDetail';
 
@@ -32,14 +28,18 @@ export const NewCircle: React.FC = () => {
   const [nameInput] = useTextInput();
   const [imageUrlInput] = useTextInput();
   const [descriptionInput] = useTextInput();
+  const [categoryInput] = useTextInput();
+
+  const setName = nameInput.setValue;
+  const setImageUrl = imageUrlInput.setValue;
+  const setDescription = descriptionInput.setValue;
+  const setCategory = categoryInput.setValue;
 
   const [students, setStudents] = useState<Doc<BriefStudent>[]>();
   const [leader, setLeader] = useState<Doc<BriefStudent>>();
   const [subleader, setSubleader] = useState<Doc<BriefStudent>>();
-  const categoryInput = useInput<DropdownItem>();
+  const [prevCircleInfo, setPrevCircleInfo] = useState<Doc<Circle>>();
   const config = useConfig();
-
-  const history = useHistory();
 
   useEffect(() => {
     (async () => {
@@ -50,8 +50,35 @@ export const NewCircle: React.FC = () => {
         userId: e.idx + '',
       }));
       setStudents(() => mapped);
+
+      const fetchedMyCircleInfo = await getMyCircle();
+      setPrevCircleInfo(() => fetchedMyCircleInfo);
     })();
   }, []);
+
+  useEffect(() => {
+    if (!prevCircleInfo) return;
+    setLeader(() => ({
+      _id: prevCircleInfo.chair._id,
+      createdAt: prevCircleInfo.chair.createdAt,
+      name: prevCircleInfo.chair.name,
+      studentId: prevCircleInfo.chair.serial + '',
+      updatedAt: prevCircleInfo.chair.updatedAt,
+      userId: prevCircleInfo.chair.idx + '',
+    }));
+    setSubleader(() => ({
+      _id: prevCircleInfo.viceChair._id,
+      createdAt: prevCircleInfo.viceChair.createdAt,
+      name: prevCircleInfo.viceChair.name,
+      studentId: prevCircleInfo.viceChair.serial + '',
+      updatedAt: prevCircleInfo.viceChair.updatedAt,
+      userId: prevCircleInfo.viceChair.idx + '',
+    }));
+    setName(prevCircleInfo.name);
+    setImageUrl(prevCircleInfo.imageUrl);
+    setDescription(prevCircleInfo.description);
+    setCategory(prevCircleInfo.category);
+  }, [prevCircleInfo, setName, setImageUrl, setDescription, setCategory]);
 
   const register = useCallback(async () => {
     const checks = [
@@ -60,7 +87,7 @@ export const NewCircle: React.FC = () => {
       !descriptionInput.value && '설명',
       !leader?._id && '동아리장',
       !subleader?._id && '부동아리장',
-      !categoryInput.value?.name && '부동아리장',
+      !categoryInput.value && '부동아리장',
     ].filter((e): e is string => !!e);
 
     if (checks.length) {
@@ -68,40 +95,30 @@ export const NewCircle: React.FC = () => {
       return;
     }
 
-    const { isConfirmed } = await swal({
-      title: '동아리를 등록하시겠어요?',
-      html: (
-        <>
-          <p>"{nameInput.value}" 동아리를 등록해요</p>
-          <p>동아리 등록 이후에는 정보를 변경하거나. 삭제할 수 없어요.</p>
-        </>
-      ),
-      imageUrl: DangerIcon,
-      showCancelButton: true,
-      focusCancel: true,
-    });
-
-    if (!isConfirmed) return;
-
     const data: APIRequestCircle = {
       name: nameInput.value!!,
       imageUrl: imageUrlInput.value!!,
       description: descriptionInput.value!!,
       chair: leader!._id!!,
       viceChair: subleader!._id!!,
-      category: categoryInput.value!.name!!,
+      category: categoryInput.value!!,
     };
 
-    createCircle(data)
+    console.log(prevCircleInfo?._id, data);
+
+    (prevCircleInfo
+      ? saveCircleInfo(prevCircleInfo._id, data)
+      : createCircle(data)
+    )
       .then(() => {
         return refetchToken();
       })
       .then(() => {
-        history.push('/circle');
-        toast.success('동아리를 등록했어요');
+        // history.push('/circle');
+        toast.success('동아리 정보를 저장했어요');
       })
       .catch(() => {
-        toast.error('동아리 등록에 실패했어요. 다시 시도해주세요.');
+        toast.error('동아리 정보를 저장하지 못했어요. 다시 시도해주세요.');
       });
   }, [
     nameInput.value,
@@ -110,14 +127,14 @@ export const NewCircle: React.FC = () => {
     subleader,
     descriptionInput.value,
     categoryInput.value,
-    history,
+    prevCircleInfo,
   ]);
 
   return (
     <PageWrapper>
       <ResponsiveWrapper>
         <Col width={4}>
-          <CardGroupHeader>동아리 등록</CardGroupHeader>
+          <CardGroupHeader>동아리 정보 편집</CardGroupHeader>
           <Card
             css={css`
               display: flex;
@@ -172,13 +189,7 @@ export const NewCircle: React.FC = () => {
             </Horizontal>
             <FormHeader>분류</FormHeader>
             {config && (
-              <Dropdown
-                {...categoryInput}
-                items={config.CIRCLE_CATEGORY.map((e) => ({
-                  name: e,
-                }))}
-                placeholder="분류를 선택해주세요"
-              />
+              <Input {...categoryInput} placeholder="분류를 선택해주세요" />
             )}
             <TextButton
               onClick={() => register()}
@@ -194,7 +205,7 @@ export const NewCircle: React.FC = () => {
         <Col width={6}>
           <CardGroupHeader>미리보기</CardGroupHeader>
           <CircleDetail
-            category={categoryInput.value?.name || ''}
+            category={categoryInput.value || ''}
             name={nameInput.value || ''}
             chair={leader?.name || ''}
             imageUrl={imageUrlInput.value || ''}
