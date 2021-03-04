@@ -177,7 +177,7 @@ const Wrapper = styled(Card)`
 const Logo = styled.img`
   width: 80px;
   height: 80px;
-  object-fit: cover;
+  object-fit: contain;
 `;
 
 const DetailWrapper = styled.div`

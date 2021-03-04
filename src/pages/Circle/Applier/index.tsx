@@ -243,20 +243,22 @@ export const Applier: React.FC = () => {
           {circles ? (
             circles.length ? (
               <GridWrapper>
-                {circles.map((circle, index) => (
-                  <CircleCard
-                    isPreview={
-                      config?.CIRCLE_PERIOD === CirclePeriod.submitting
-                    }
-                    key={circle._id}
-                    {...circle}
-                    finalSelect={() => finalSelect(index)}
-                    openSideDetail={() =>
-                      !(config?.CIRCLE_PERIOD === CirclePeriod.submitting) &&
-                      openDetail(index)
-                    }
-                  />
-                ))}
+                {circles
+                  .sort(() => Math.random() - 0.5)
+                  .map((circle, index) => (
+                    <CircleCard
+                      isPreview={
+                        config?.CIRCLE_PERIOD === CirclePeriod.submitting
+                      }
+                      key={circle._id}
+                      {...circle}
+                      finalSelect={() => finalSelect(index)}
+                      openSideDetail={() =>
+                        !(config?.CIRCLE_PERIOD === CirclePeriod.submitting) &&
+                        openDetail(index)
+                      }
+                    />
+                  ))}
               </GridWrapper>
             ) : (
               <TextCard>
