@@ -43,6 +43,7 @@ export const CircleCard: React.FC<
   CircleWithApplication & {
     openSideDetail(): void;
     finalSelect(): void;
+    isPreview?: boolean;
   }
 > = ({
   imageUrl,
@@ -52,12 +53,13 @@ export const CircleCard: React.FC<
   openSideDetail,
   finalSelect,
   description,
+  isPreview,
   ...props
 }) => {
   return (
     <Wrapper
       {...props}
-      onClick={status ? undefined : openSideDetail}
+      onClick={status && isPreview ? undefined : openSideDetail}
       disableSpace
     >
       <CardContentWrapper>
@@ -67,23 +69,25 @@ export const CircleCard: React.FC<
           <Name>{name}</Name>
         </DetailWrapper>
       </CardContentWrapper>
-      <ApplyButton
-        status={status}
-        onClick={
-          status
-            ? {
-                applied: openSideDetail,
-                'document-fail': undefined,
-                'document-pass': undefined,
-                'interview-fail': undefined,
-                'interview-pass': finalSelect,
-                final: undefined,
-              }[status]
-            : openSideDetail
-        }
-      >
-        {status ? statusLabelMap[status] : '자세히보기'}
-      </ApplyButton>
+      {!isPreview && (
+        <ApplyButton
+          status={status}
+          onClick={
+            status
+              ? {
+                  applied: openSideDetail,
+                  'document-fail': undefined,
+                  'document-pass': undefined,
+                  'interview-fail': undefined,
+                  'interview-pass': finalSelect,
+                  final: undefined,
+                }[status]
+              : openSideDetail
+          }
+        >
+          {status ? statusLabelMap[status] : '자세히보기'}
+        </ApplyButton>
+      )}
     </Wrapper>
   );
 };

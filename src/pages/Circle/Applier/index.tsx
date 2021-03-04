@@ -97,11 +97,14 @@ export const Applier: React.FC = () => {
   const fetchData = useCallback(async () => {
     if (!config) return;
     const fetchedCircles = await getAllCircles();
+    if (config.CIRCLE_PERIOD === CirclePeriod.submitting) {
+      setCircles(() => fetchedCircles);
+      return;
+    }
     const fetchedAppliedCircles = (
       await getAppliedCircles()
     ).applications.reduce(
       (matched, current) => {
-        console.log(current);
         if (!current.circle) return matched;
         return {
           ...matched,
@@ -242,10 +245,16 @@ export const Applier: React.FC = () => {
               <GridWrapper>
                 {circles.map((circle, index) => (
                   <CircleCard
+                    isPreview={
+                      config?.CIRCLE_PERIOD === CirclePeriod.submitting
+                    }
                     key={circle._id}
                     {...circle}
                     finalSelect={() => finalSelect(index)}
-                    openSideDetail={() => openDetail(index)}
+                    openSideDetail={() =>
+                      !(config?.CIRCLE_PERIOD === CirclePeriod.submitting) &&
+                      openDetail(index)
+                    }
                   />
                 ))}
               </GridWrapper>
@@ -256,6 +265,8 @@ export const Applier: React.FC = () => {
                     ? '동아리 지원 기간이 아니에요. 목요일 방과후시간 이후로 지원할 수 있어요.'
                     : config?.CIRCLE_PERIOD === CirclePeriod.application
                     ? '신청 가능한 동아리가 없어요'
+                    : config?.CIRCLE_PERIOD === CirclePeriod.submitting
+                    ? '동아리 등록기간이에요. 동아리 목록은 3월 4일 방과후 시간 이후에 공개돼요.'
                     : '상태 변경 가능한 동아리가 없어요'}
                 </NoData>
               </TextCard>
@@ -274,7 +285,6 @@ export const Applier: React.FC = () => {
           <>
             <Divider data-divider />
             <Col width={6}>
-              {/* <Card> */}
               <CircleDetailBrancher
                 isModal={false}
                 goApply={() => {
@@ -288,7 +298,6 @@ export const Applier: React.FC = () => {
                   setSideDetail(() => null);
                 }}
               />
-              {/* </Card> */}
             </Col>
           </>
         )}
