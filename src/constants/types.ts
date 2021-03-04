@@ -179,7 +179,8 @@ export interface AfterschoolClassApplication {
 }
 
 export enum CirclePeriod {
-  registering = 'REGISTERING',
+  submitting = 'SUBMITTING',    // 기초정보 등록기간
+  registering = 'REGISTERING',  // 상세정보 입력기간
   application = 'APPLICATION',
   interview = 'INTERVIEW',
   final = 'FINAL',
