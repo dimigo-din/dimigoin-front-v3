@@ -69,25 +69,30 @@ export const CircleCard: React.FC<
           <Name>{name}</Name>
         </DetailWrapper>
       </CardContentWrapper>
-      {!isPreview && (
-        <ApplyButton
-          status={status}
-          onClick={
-            status
-              ? {
-                  applied: openSideDetail,
-                  'document-fail': undefined,
-                  'document-pass': undefined,
-                  'interview-fail': undefined,
-                  'interview-pass': finalSelect,
-                  final: undefined,
-                }[status]
-              : openSideDetail
-          }
-        >
-          {status ? statusLabelMap[status] : '자세히보기'}
-        </ApplyButton>
-      )}
+      {/* {!isPreview && ( */}
+      <ApplyButton
+        status={status}
+        isPreview={isPreview}
+        onClick={
+          status
+            ? {
+                applied: openSideDetail,
+                'document-fail': undefined,
+                'document-pass': undefined,
+                'interview-fail': undefined,
+                'interview-pass': finalSelect,
+                final: undefined,
+              }[status]
+            : openSideDetail
+        }
+      >
+        {isPreview
+          ? '8일 공개'
+          : status
+          ? statusLabelMap[status]
+          : '자세히보기'}
+      </ApplyButton>
+      {/* )} */}
     </Wrapper>
   );
 };
@@ -96,7 +101,7 @@ const CardContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 16px;
+  /* margin-bottom: 16px; */
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     padding: 0px;
     flex-direction: row;
@@ -114,6 +119,7 @@ const statusColorMap = {
 };
 const ApplyButton = styled.div<{
   status?: typeof CircleApplicationStatusValues[number] | null;
+  isPreview?: boolean;
 }>`
   border-width: 1px;
   border-style: solid;
@@ -123,8 +129,12 @@ const ApplyButton = styled.div<{
   font-weight: 700;
   align-self: stretch;
   border-radius: 5px;
-  ${({ status }) => {
-    const color = status ? statusColorMap[status] : '#E83C77';
+  ${({ status, isPreview }) => {
+    const color = isPreview
+      ? '#B8B8B8'
+      : status
+      ? statusColorMap[status]
+      : '#E83C77';
     return css`
       color: ${color};
       border-color: ${color};
@@ -154,6 +164,7 @@ const Wrapper = styled(Card)`
   border-radius: 5px;
   overflow: hidden;
   margin: 15px;
+  justify-content: space-between;
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     flex: 1;
     width: inherit;
@@ -195,6 +206,7 @@ const Name = styled.p`
   font-size: 18px;
   font-weight: 800;
   margin-top: 6px;
+  text-align: center;
 
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     font-size: 16px;

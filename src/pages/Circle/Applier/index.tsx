@@ -263,7 +263,7 @@ export const Applier: React.FC = () => {
                 <NoData>
                   {config?.CIRCLE_PERIOD === CirclePeriod.application
                     ? '신청 가능한 동아리가 없어요'
-                    : config?.CIRCLE_PERIOD === CirclePeriod.submitting
+                    : config?.CIRCLE_PERIOD === CirclePeriod.registering
                     ? '동아리 등록기간이에요. 동아리 목록은 3월 4일 방과후 시간 이후에 공개돼요.'
                     : '상태 변경 가능한 동아리가 없어요'}
                 </NoData>
