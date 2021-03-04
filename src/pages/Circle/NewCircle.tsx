@@ -1,6 +1,5 @@
 import css from '@emotion/css';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { APIRequestCircle, refetchToken } from '../../api';
 import { saveCircleInfo, getMyCircle, createCircle } from '../../api/circle';
