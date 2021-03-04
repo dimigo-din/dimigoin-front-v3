@@ -1,5 +1,6 @@
 import css from '@emotion/css';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { APIRequestCircle, refetchToken } from '../../api';
 import { saveCircleInfo, getMyCircle, createCircle } from '../../api/circle';
@@ -17,7 +18,7 @@ import {
   ResponsiveWrapper,
   Textarea,
 } from '../../components';
-import { BriefStudent, Circle, Doc } from '../../constants/types';
+import { BriefStudent, Circle, CirclePeriod, Doc } from '../../constants/types';
 import { useConfig } from '../../hooks/api';
 import { useTextInput } from '../../hooks/useInput';
 import { TextButton } from './Applier/atomics';
@@ -40,8 +41,18 @@ export const NewCircle: React.FC = () => {
   const [prevCircleInfo, setPrevCircleInfo] = useState<Doc<Circle>>();
   const config = useConfig();
 
+  const history = useHistory();
+
   useEffect(() => {
     (async () => {
+      if (!config) return;
+      if (
+        ![CirclePeriod.registering, CirclePeriod.submitting].includes(
+          config?.CIRCLE_PERIOD,
+        )
+      ) {
+        history.push('/circle');
+      }
       const fetchedStudents = await fetchAllStudents();
       const mapped = fetchedStudents.map<Doc<BriefStudent>>((e) => ({
         ...e,
@@ -53,7 +64,7 @@ export const NewCircle: React.FC = () => {
       const fetchedMyCircleInfo = await getMyCircle();
       setPrevCircleInfo(() => fetchedMyCircleInfo);
     })();
-  }, []);
+  }, [config, history]);
 
   useEffect(() => {
     if (!prevCircleInfo) return;
@@ -196,7 +207,7 @@ export const NewCircle: React.FC = () => {
                 align-self: stretch;
               `}
             >
-              등록
+              저장
             </TextButton>
           </Card>
         </Col>

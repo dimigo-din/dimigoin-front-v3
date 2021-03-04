@@ -116,7 +116,9 @@ export const Applier: React.FC = () => {
 
   const fetchData = useCallback(async () => {
     if (!config) return;
-    const fetchedCircles = await getAllCircles();
+    const fetchedCircles = (await getAllCircles()).sort(
+      () => Math.random() - 0.5,
+    );
     if (config.CIRCLE_PERIOD === CirclePeriod.submitting) {
       setCircles(() => fetchedCircles);
       return;
@@ -263,22 +265,20 @@ export const Applier: React.FC = () => {
           {circles ? (
             circles.length ? (
               <GridWrapper>
-                {circles
-                  .sort(() => Math.random() - 0.5)
-                  .map((circle, index) => (
-                    <CircleCard
-                      isPreview={
-                        config?.CIRCLE_PERIOD === CirclePeriod.submitting
-                      }
-                      key={circle._id}
-                      {...circle}
-                      finalSelect={() => finalSelect(index)}
-                      openSideDetail={() =>
-                        !(config?.CIRCLE_PERIOD === CirclePeriod.submitting) &&
-                        openDetail(index)
-                      }
-                    />
-                  ))}
+                {circles.map((circle, index) => (
+                  <CircleCard
+                    isPreview={
+                      config?.CIRCLE_PERIOD === CirclePeriod.submitting
+                    }
+                    key={circle._id}
+                    {...circle}
+                    finalSelect={() => finalSelect(index)}
+                    openSideDetail={() =>
+                      !(config?.CIRCLE_PERIOD === CirclePeriod.submitting) &&
+                      openDetail(index)
+                    }
+                  />
+                ))}
               </GridWrapper>
             ) : (
               <TextCard>

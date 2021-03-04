@@ -4,6 +4,10 @@ import { Button } from '../../../components';
 
 export const wrapperStyle = css`
   flex: 1;
+  position: sticky;
+  top: 30px;
+  max-height: min(720px, 100vh - 60px);
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
