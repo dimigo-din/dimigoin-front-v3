@@ -35,6 +35,7 @@ import { CircleDetail } from './CircleDetail';
 import { MyApplication } from './MyApplication';
 import { NewApply } from './NewApply';
 import { toast } from 'react-toastify';
+import { LocalstorageKeys } from '../../../constants/localstorageKeys';
 
 const getSubheaderText = (
   currentPeriod: CirclePeriod,
@@ -93,6 +94,25 @@ export const Applier: React.FC = () => {
     selectedIndex: number;
     title?: string;
   } | null>(null);
+
+  useEffect(() => {
+    console.log(
+      localStorage.getItem(LocalstorageKeys.CIRCLE_INFO1_ALERT_CLOSED),
+    );
+    if (!localStorage.getItem(LocalstorageKeys.CIRCLE_INFO1_ALERT_CLOSED))
+      swal({
+        html: (
+          <>
+            <p>
+              3월 4일 6시 35분부터 3월 8일 13시까지는 동아리 미리보기
+              기간입니다.
+            </p>
+            <p>동아리 신청은 8일 13시 이후로 가능합니다.</p>
+          </>
+        ),
+      });
+    localStorage.setItem(LocalstorageKeys.CIRCLE_INFO1_ALERT_CLOSED, 'closed');
+  }, []);
 
   const fetchData = useCallback(async () => {
     if (!config) return;
