@@ -261,9 +261,7 @@ export const Applier: React.FC = () => {
             ) : (
               <TextCard>
                 <NoData>
-                  {config?.CIRCLE_PERIOD === CirclePeriod.registering
-                    ? '동아리 지원 기간이 아니에요. 월요일 1시 이후로 지원할 수 있어요.'
-                    : config?.CIRCLE_PERIOD === CirclePeriod.application
+                  {config?.CIRCLE_PERIOD === CirclePeriod.application
                     ? '신청 가능한 동아리가 없어요'
                     : config?.CIRCLE_PERIOD === CirclePeriod.submitting
                     ? '동아리 등록기간이에요. 동아리 목록은 3월 4일 방과후 시간 이후에 공개돼요.'
