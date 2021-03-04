@@ -70,4 +70,5 @@ const CircleLogo = styled.img`
   height: 120px;
   object-fit: cover;
   align-self: center;
+  margin-top: 24px;
 `;
