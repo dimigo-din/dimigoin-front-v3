@@ -52,8 +52,9 @@ const isChangable = (
   applicationStatus: typeof CircleApplicationStatusValues[number],
 ) => {
   return (
-    { application: 1, interview: 3, final: 0, registering: 0 }[currentPeriod] >
-    CircleApplicationStatusValues.indexOf(applicationStatus)
+    { application: 1, interview: 3, final: 0, registering: 0, submitting: 0 }[
+      currentPeriod
+    ] > CircleApplicationStatusValues.indexOf(applicationStatus)
   );
 };
 
@@ -343,6 +344,9 @@ export const Leader: React.FC = () => {
     },
     [applications],
   );
+
+  if (config?.CIRCLE_PERIOD === CirclePeriod.registering)
+    return <Redirect to="/circle" />;
 
   if (hasRegistered === false) return <Redirect to="/circle/new" />;
 

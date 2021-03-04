@@ -41,7 +41,8 @@ const getSubheaderText = (
   maxApplyAmount: number,
 ) =>
   ({
-    [CirclePeriod.registering]: '3월 4일까지는 동아리 등록기간입니다.',
+    [CirclePeriod.registering]: '동아리 등록기간입니다.',
+    [CirclePeriod.submitting]: '현재 동아리 미리보기 기간입니다',
     [CirclePeriod.application]: `동아리 지원은 최대 ${maxApplyAmount}개까지 가능합니다.`,
     [CirclePeriod.interview]: '면접은 동아리 개별적으로 진행됩니다.',
     [CirclePeriod.final]: '최종 선택은 되돌릴 수 없으니 신중하게 생각해주세요.',
