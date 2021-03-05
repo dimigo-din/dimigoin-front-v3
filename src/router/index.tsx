@@ -82,7 +82,7 @@ const needPermission = <Props extends {}>(
         return getMyData();
       })
       .then((d) => {
-        console.log(d.permissions)
+        console.log(d.permissions);
         const _hasPermission = d.permissions.includes(permission);
         if (!_hasPermission) toast.info('권한이 없습니다');
         setHasPermission(() => _hasPermission);
@@ -124,11 +124,7 @@ const Router: React.FC = () => (
         <Route path="/mentoring" component={needAuthAndBranch(Mentoring)} />
         <Route path="/afterschool" component={needAuthAndBranch(Afterschool)} />
         <Route path="/circle" exact component={needAuthAndBranch(Circle)} />
-        <Route
-          path="/circle/new"
-          exact
-          component={needPermission(Permission['circle'], needAuth(NewCircle))}
-        />
+        <Route path="/circle/new" exact component={needAuth(NewCircle)} />
         <Route path="/dets" component={needAuth(Dets)} />
         <Route path="/" exact component={needAuth(Main)} />
         <BottomImage src={dimigoBackgroundImage} />
