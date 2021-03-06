@@ -8,6 +8,7 @@ import {
   TextButton as SubmitButton,
   wrapperStyle,
 } from './atomics';
+import { ReactComponent as _CloseIcon } from '../../../assets/icons/close.svg';
 import { Markdown } from '../../../components/basic/Markdown';
 
 // const Content: React.FC<
@@ -33,11 +34,13 @@ export const CircleDetail: React.FC<
       isModal?: boolean;
       viceChair?: Doc<Student>;
       preview?: boolean;
+      close?(): void;
     }
   >
-> = ({ goApply, description, imageUrl, category, name, preview }) => {
+> = ({ goApply, description, imageUrl, category, name, preview, close }) => {
   return (
     <Card css={wrapperStyle}>
+      <CloseIcon onClick={close} />
       <CircleLogo src={imageUrl || 'https://via.placeholder.com/120'} />
       <Category>{category || '카테고리'}</Category>
       <Title>{name || '이름'}</Title>
@@ -71,4 +74,10 @@ const CircleLogo = styled.img`
   object-fit: cover;
   align-self: center;
   margin-top: 24px;
+`;
+
+const CloseIcon = styled(_CloseIcon)`
+  position: absolute;
+  top: 24px;
+  right: 24px;
 `;

@@ -61,17 +61,28 @@ const CircleDetailBrancher: React.FC<{
   close(): void;
   isModal: boolean;
   goApply(): void;
-}> = ({ circle, type, close, isModal, goApply }) => {
+  refetch(): void;
+}> = ({ circle, type, close, isModal, goApply, refetch }) => {
   return {
     DETAIL: (
       <CircleDetail
+        close={() => close()}
         isModal={isModal}
         goApply={goApply}
         {...circle}
         chair={circle.chair.name}
       />
     ),
-    NEW_APPLY: <NewApply close={close} isModal={isModal} {...circle} />,
+    NEW_APPLY: (
+      <NewApply
+        close={() => {
+          close();
+          refetch();
+        }}
+        isModal={isModal}
+        {...circle}
+      />
+    ),
     VIEW_APPLICATION: (
       <MyApplication
         name={circle.name}
@@ -178,10 +189,8 @@ export const Applier: React.FC = () => {
               goApply={() => {
                 close().then(() => openDetail(index, 'NEW_APPLY'));
               }}
-              close={() => {
-                fetchData();
-                close();
-              }}
+              refetch={() => fetchData()}
+              close={() => close()}
             />
           ),
           {
@@ -192,6 +201,9 @@ export const Applier: React.FC = () => {
                 height: 100vh;
                 display: flex;
                 padding: 60px 20px 20px;
+                @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+                  padding: 0px;
+                }
               `,
             },
             backdropProps: {
@@ -313,10 +325,8 @@ export const Applier: React.FC = () => {
                 }}
                 circle={circles[sideDetail.selectedIndex]}
                 type={sideDetail.type}
-                close={() => {
-                  fetchData();
-                  setSideDetail(() => null);
-                }}
+                refetch={() => fetchData()}
+                close={() => setSideDetail(() => null)}
               />
             </Col>
           </>
