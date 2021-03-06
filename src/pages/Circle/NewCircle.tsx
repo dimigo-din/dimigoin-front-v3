@@ -1,4 +1,5 @@
 import css from '@emotion/css';
+import styled from '@emotion/styled';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -22,15 +23,18 @@ import { BriefStudent, Circle, CirclePeriod, Doc } from '../../constants/types';
 import { useConfig } from '../../hooks/api';
 import { useTextInput } from '../../hooks/useInput';
 import { TextButton } from './Applier/atomics';
+import { CircleCard } from './Applier/CircleCard';
 import { CircleDetail } from './Applier/CircleDetail';
 
 export const NewCircle: React.FC = () => {
   const [nameInput] = useTextInput();
+  const [fullNameInput] = useTextInput();
   const [imageUrlInput] = useTextInput();
   const [descriptionInput] = useTextInput();
   const [categoryInput] = useTextInput();
 
   const setName = nameInput.setValue;
+  const setFullName = fullNameInput.setValue;
   const setImageUrl = imageUrlInput.setValue;
   const setDescription = descriptionInput.setValue;
   const setCategory = categoryInput.setValue;
@@ -85,10 +89,18 @@ export const NewCircle: React.FC = () => {
       userId: prevCircleInfo.viceChair.idx + '',
     }));
     setName(prevCircleInfo.name);
+    setFullName(prevCircleInfo.fullName);
     setImageUrl(prevCircleInfo.imageUrl);
     setDescription(prevCircleInfo.description);
     setCategory(prevCircleInfo.category);
-  }, [prevCircleInfo, setName, setImageUrl, setDescription, setCategory]);
+  }, [
+    prevCircleInfo,
+    setName,
+    setImageUrl,
+    setDescription,
+    setCategory,
+    setFullName,
+  ]);
 
   const register = useCallback(async () => {
     const checks = [
@@ -98,6 +110,7 @@ export const NewCircle: React.FC = () => {
       !leader?._id && '동아리장',
       !subleader?._id && '부동아리장',
       !categoryInput.value && '부동아리장',
+      !fullNameInput.value && '전체 이름',
     ].filter((e): e is string => !!e);
 
     if (checks.length) {
@@ -112,6 +125,7 @@ export const NewCircle: React.FC = () => {
       chair: leader!._id!!,
       viceChair: subleader!._id!!,
       category: categoryInput.value!!,
+      fullName: fullNameInput.value,
     };
 
     console.log(prevCircleInfo?._id, data);
@@ -137,6 +151,7 @@ export const NewCircle: React.FC = () => {
     subleader,
     descriptionInput.value,
     categoryInput.value,
+    fullNameInput.value,
     prevCircleInfo,
   ]);
 
@@ -153,6 +168,11 @@ export const NewCircle: React.FC = () => {
           >
             <FormHeader>이름</FormHeader>
             <Input {...nameInput} />
+            <FormHeader>전체 이름 (선택입력)</FormHeader>
+            <Input {...fullNameInput} />
+            <FieldInfo>
+              이름은 동아리 목록 카드에, 전체 이름은 상세내용 카드에 표시돼요.
+            </FieldInfo>
             <FormHeader>로고 URL</FormHeader>
             <Input {...imageUrlInput} />
             <FormHeader>설명</FormHeader>
@@ -214,9 +234,19 @@ export const NewCircle: React.FC = () => {
         <Divider data-divider />
         <Col width={6}>
           <CardGroupHeader>미리보기</CardGroupHeader>
-          <CircleDetail
+          <CircleCard
             category={categoryInput.value || ''}
             name={nameInput.value || ''}
+            imageUrl={imageUrlInput.value || ''}
+            description={descriptionInput.value || ''}
+            css={css`
+              margin: 0px;
+              margin-bottom: 12px;
+            `}
+          />
+          <CircleDetail
+            category={categoryInput.value || ''}
+            name={fullNameInput.value || nameInput.value || ''}
             chair={leader?.name || ''}
             imageUrl={imageUrlInput.value || ''}
             description={descriptionInput.value || ''}
@@ -228,3 +258,7 @@ export const NewCircle: React.FC = () => {
   );
 };
 export default NewCircle;
+
+const FieldInfo = styled.p`
+  margin-top: 12px;
+`;

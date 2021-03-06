@@ -8,6 +8,7 @@ import {
 } from '../../../constants';
 import { CircleWithApplication } from '.';
 import Skeleton from 'react-loading-skeleton';
+import { Doc, Merge, Student } from '../../../constants/types';
 
 const statusLabelMap = {
   applied: '결과 대기중',
@@ -40,11 +41,16 @@ export const DummyCircleCard: React.FC = (props) => (
 );
 
 export const CircleCard: React.FC<
-  CircleWithApplication & {
-    openSideDetail(): void;
-    finalSelect(): void;
-    isPreview?: boolean;
-  }
+  Merge<
+    CircleWithApplication,
+    {
+      openSideDetail?(): void;
+      finalSelect?(): void;
+      isPreview?: boolean;
+      chair?: Doc<Student>;
+      viceChair?: Doc<Student>;
+    }
+  >
 > = ({
   imageUrl,
   name,

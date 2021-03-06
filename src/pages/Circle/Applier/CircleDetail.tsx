@@ -29,7 +29,7 @@ export const CircleDetail: React.FC<
   Merge<
     Circle,
     {
-      chair: string;
+      chair?: string;
       goApply?(): void;
       isModal?: boolean;
       viceChair?: Doc<Student>;
@@ -40,7 +40,7 @@ export const CircleDetail: React.FC<
 > = ({ goApply, description, imageUrl, category, name, preview, close }) => {
   return (
     <Card css={wrapperStyle}>
-      <CloseIcon onClick={close} />
+      {!preview && <CloseIcon onClick={close} />}
       <CircleLogo src={imageUrl || 'https://via.placeholder.com/120'} />
       <Category>{category || '카테고리'}</Category>
       <Title>{name || '이름'}</Title>

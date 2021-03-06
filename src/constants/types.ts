@@ -201,6 +201,7 @@ export interface Circle {
   viceChair: Doc<Student>;
   category: string;
   applied?: boolean;
+  fullName?: string;
 }
 
 export interface CircleApplication {
