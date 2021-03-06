@@ -110,7 +110,6 @@ export const NewCircle: React.FC = () => {
       !leader?._id && '동아리장',
       !subleader?._id && '부동아리장',
       !categoryInput.value && '부동아리장',
-      !fullNameInput.value && '전체 이름',
     ].filter((e): e is string => !!e);
 
     if (checks.length) {
