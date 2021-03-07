@@ -245,7 +245,8 @@ export const NewCircle: React.FC = () => {
           />
           <CircleDetail
             category={categoryInput.value || ''}
-            name={fullNameInput.value || nameInput.value || ''}
+            name={nameInput.value || ''}
+            fullName={fullNameInput.value || ''}
             chair={leader?.name || ''}
             imageUrl={imageUrlInput.value || ''}
             description={descriptionInput.value || ''}
