@@ -255,25 +255,24 @@ export const Applier: React.FC = () => {
 
   return (
     <PageWrapper>
+      <CardGroupHeader
+        subButton={
+          config
+            ? {
+                text: getSubheaderText(
+                  config.CIRCLE_PERIOD,
+                  config.CIRCLE_MAX_APPLY,
+                ),
+              }
+            : {
+                component: <Skeleton />,
+              }
+        }
+      >
+        동아리 지원
+      </CardGroupHeader>
       <ResponsiveWrapper>
         <Col width={sideDetail ? 4 : 10}>
-          <CardGroupHeader
-            subButton={
-              config
-                ? {
-                    text: getSubheaderText(
-                      config.CIRCLE_PERIOD,
-                      config.CIRCLE_MAX_APPLY,
-                    ),
-                  }
-                : {
-                    component: <Skeleton />,
-                  }
-            }
-          >
-            동아리 지원
-          </CardGroupHeader>
-
           {circles ? (
             circles.length ? (
               <GridWrapper>
