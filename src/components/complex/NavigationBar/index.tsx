@@ -5,7 +5,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import NavigationItem from './NavigationItem';
 import { studentNavigations, teacherNavigations } from './navigations';
-import { UnstyledLink } from '../../basic/Atomics';
+import { MoreCompactButton, UnstyledLink } from '../../basic/Atomics';
 import { useMyData } from '../../../hooks/api/useMyData';
 import { SMALL_SCREEN_THRESHOLD } from '../../../constants';
 import { BottomBar } from './NavigationItem.style';
@@ -13,6 +13,33 @@ import { isStudent } from '../../../utils/isStudent';
 
 import { ReactComponent as IconLogo } from '../../../assets/brand.svg';
 import { ReactComponent as LogoutLogo } from '../../../assets/icons/logout.svg';
+import { showCardModal } from '../modal';
+import { CardGroupHeader } from '../../basic';
+import { toast } from 'react-toastify';
+
+const openConfig = () => {
+  showCardModal(() => (
+    <>
+      <CardGroupHeader>설정</CardGroupHeader>
+      <ConfigGroupHeader>임시파일</ConfigGroupHeader>
+      <MoreCompactButton
+        onClick={() => {
+          localStorage.clear();
+          toast.success('임시 파일을 삭제했어요');
+        }}
+      >
+        임시 파일 삭제
+      </MoreCompactButton>
+    </>
+  ));
+};
+
+const ConfigGroupHeader = styled.p`
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  margin-top: 12px;
+`;
 
 const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -60,7 +87,7 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
           ))}
         </Scroller>
         <ProfileContainer>
-          <ProfileImage src={profileImageURI} />
+          <ProfileImage src={profileImageURI} onClick={openConfig} />
           <UnstyledLink to="/auth/login">
             <Logout height={26.5} width={26.5} />
           </UnstyledLink>
@@ -132,6 +159,7 @@ const ProfileImage = styled.img`
   border: solid 2px var(--main-theme-accent);
   margin-right: 38.2px;
   object-fit: cover;
+  cursor: pointer;
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     width: 28px;
     height: 28px;

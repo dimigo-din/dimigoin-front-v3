@@ -107,9 +107,6 @@ export const Applier: React.FC = () => {
   } | null>(null);
 
   useEffect(() => {
-    console.log(
-      localStorage.getItem(LocalstorageKeys.CIRCLE_INFO1_ALERT_CLOSED),
-    );
     if (!localStorage.getItem(LocalstorageKeys.CIRCLE_INFO1_ALERT_CLOSED))
       swal({
         html: (
@@ -122,7 +119,19 @@ export const Applier: React.FC = () => {
           </>
         ),
       });
+    if (!localStorage.getItem(LocalstorageKeys.CIRCLE_INFO2_ALERT_CLOSED))
+      swal({
+        html: (
+          <>
+            <p>
+              동아리 신청 서류가 정상적으로 뜨지 않으면 프로필사진을 클릭하고
+              임시파일을 제거해주세요
+            </p>
+          </>
+        ),
+      });
     localStorage.setItem(LocalstorageKeys.CIRCLE_INFO1_ALERT_CLOSED, 'closed');
+    localStorage.setItem(LocalstorageKeys.CIRCLE_INFO2_ALERT_CLOSED, 'closed');
   }, []);
 
   const fetchData = useCallback(async () => {

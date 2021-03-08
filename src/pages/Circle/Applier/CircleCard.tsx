@@ -135,6 +135,7 @@ const ApplyButton = styled.div<{
   font-weight: 700;
   align-self: stretch;
   border-radius: 5px;
+  cursor: pointer;
   ${({ status, isPreview }) => {
     const color = isPreview
       ? '#B8B8B8'
@@ -144,6 +145,11 @@ const ApplyButton = styled.div<{
     return css`
       color: ${color};
       border-color: ${color};
+      ${status &&
+      ['applied', 'document-fail', 'interview-fail', 'final'].includes(
+        status,
+      ) &&
+      'cursor: not-allowed;'}
     `;
   }};
 `;
