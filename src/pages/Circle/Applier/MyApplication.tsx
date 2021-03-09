@@ -24,7 +24,7 @@ const Content: React.FC<{
             <Skeleton width={100} />
           )}
         </FormHeader>
-        <Textarea disabled value={answer} />
+        <Textarea rows={5} disabled value={answer} />
       </Fragment>
     ))}
   </ContentWrapper>

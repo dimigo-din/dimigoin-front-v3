@@ -358,7 +358,7 @@ export const Leader: React.FC = () => {
   return (
     <PageWrapper>
       <ResponsiveWrapper>
-        <Col width={sideDetail ? 10 : 5}>
+        <Col width={sideDetail === null ? 10 : 5}>
           <CardGroupHeader>동아리 지원자 관리</CardGroupHeader>
           <ApplicationList
             currentPeriod={config?.CIRCLE_PERIOD.toLowerCase()}

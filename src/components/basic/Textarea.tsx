@@ -13,6 +13,7 @@ export const Textarea = styled.textarea`
   font-size: 18px;
   transition: 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  line-height: 1.6;
   &::placeholder {
     color: #d1d1d1;
   }
