@@ -52,9 +52,14 @@ const isChangable = (
   applicationStatus: typeof CircleApplicationStatusValues[number],
 ) => {
   return (
-    { application: 1, interview: 3, final: 0, registering: 0, submitting: 0 }[
-      currentPeriod
-    ] > CircleApplicationStatusValues.indexOf(applicationStatus)
+    {
+      application: 1,
+      interview: 3,
+      screening: 3,
+      final: 0,
+      registering: 0,
+      submitting: 0,
+    }[currentPeriod] > CircleApplicationStatusValues.indexOf(applicationStatus)
   );
 };
 

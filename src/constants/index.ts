@@ -20,6 +20,10 @@ export const CircleApplicationStatusLevelTree = {
     CircleApplicationStatusValues[3],
     CircleApplicationStatusValues[4],
   ],
+  [CirclePeriod.screening]: [
+    CircleApplicationStatusValues[3],
+    CircleApplicationStatusValues[4],
+  ],
   [CirclePeriod.final]: null,
   [CirclePeriod.registering]: null,
   [CirclePeriod.submitting]: null,

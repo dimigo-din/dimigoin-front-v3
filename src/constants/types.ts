@@ -182,6 +182,7 @@ export enum CirclePeriod {
   submitting = 'SUBMITTING',    // 기초정보 등록기간
   registering = 'REGISTERING',  // 상세정보 입력기간
   application = 'APPLICATION',
+  screening = 'SCREENING', // 서류심사
   interview = 'INTERVIEW',
   final = 'FINAL',
 }
