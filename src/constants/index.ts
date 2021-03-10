@@ -16,11 +16,11 @@ export const CircleApplicationStatusLevelTree = {
     CircleApplicationStatusValues[1],
     CircleApplicationStatusValues[2],
   ],
-  [CirclePeriod.interview]: [
-    CircleApplicationStatusValues[3],
-    CircleApplicationStatusValues[4],
-  ],
   [CirclePeriod.screening]: [
+    CircleApplicationStatusValues[1],
+    CircleApplicationStatusValues[2],
+  ],
+  [CirclePeriod.interview]: [
     CircleApplicationStatusValues[3],
     CircleApplicationStatusValues[4],
   ],
