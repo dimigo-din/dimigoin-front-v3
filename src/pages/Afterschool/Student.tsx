@@ -165,7 +165,7 @@ const AfterschoolApply: React.FC = () => {
         </Col>
         <Divider small data-divider />
         <Appliments width={3} css={sticky}>
-          <CardGroupHeader>신청목록</CardGroupHeader>
+          <CardGroupHeader>신청 목록</CardGroupHeader>
           {appliedClasses?.length ? (
             appliedClasses?.map(({ afterschool: appliedClass }) => (
               <Card

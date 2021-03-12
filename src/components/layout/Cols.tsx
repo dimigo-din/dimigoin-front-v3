@@ -78,8 +78,8 @@ export const ResponsiveWrapper = styled.div<{
   display: flex;
   @media screen and (max-width: ${({ threshold }) =>
       threshold || SMALL_SCREEN_THRESHOLD}px) {
-    flex-direction: column
-      ${({ mobileReverse: mobildReverse }) => mobildReverse && '-reverse'};
+    flex-direction: ${({ mobileReverse: mobildReverse }) =>
+      mobildReverse ? 'column-reverse' : 'column'};
     & > [data-divider] {
       margin: var(--divider-width, 15px) 0px;
     }

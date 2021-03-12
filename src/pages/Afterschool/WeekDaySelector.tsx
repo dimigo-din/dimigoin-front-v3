@@ -65,6 +65,7 @@ const Segment = styled.div<{ selected: boolean }>`
   background-color: #fff;
   box-shadow: outset 0 0 20px 0 rgba(0, 0, 0, 0.03);
   border-radius: 5px;
+  text-align: center;
   div + & {
     margin-top: 15px;
   }
