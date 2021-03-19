@@ -187,7 +187,7 @@ const ResponsiveWeekDaySelector = styled(WeekDaySelector)`
   max-height: min(685px, 100vh - 248px);
   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
     display: flex;
-    flex: 1;
+    /* flex: 1; */
     & > div {
       width: unset;
       flex: 1;
