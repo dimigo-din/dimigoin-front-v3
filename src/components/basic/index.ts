@@ -13,3 +13,4 @@ export * from './RadioButton';
 export * from './Table';
 export * from './Textarea';
 export * from './TextCardGroup';
+export * from './Loader';

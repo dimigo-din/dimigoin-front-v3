@@ -1,13 +1,7 @@
 import css from '@emotion/css';
 import styled from '@emotion/styled';
 import React, { useCallback, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import {
-  applyAfterschoolClass,
-  getAfterschoolClassList,
-  getAppliedClasses,
-  unapplyAfterschoolClass,
-} from '../../api';
+import { getAfterschoolClassList, getAppliedClasses } from '../../api';
 import {
   Card,
   CardGroupHeader,
@@ -17,11 +11,7 @@ import {
   PageWrapper,
   ResponsiveWrapper,
 } from '../../components';
-import {
-  CardHeader,
-  CardDetail,
-  CardFooterDetail,
-} from '../../components/basic/CardComponent';
+import { CardHeader, CardDetail } from '../../components/basic/CardComponent';
 import {
   dayEngKorMapper,
   engDays,
@@ -34,8 +24,8 @@ import {
   EngDay,
 } from '../../constants/types';
 import useInput from '../../hooks/useInput';
-import { ReactComponent as AppliedStamp } from '../../assets/stamp/applied.svg';
 import { selfStudyTimesToString } from '../../utils';
+import { CardDetailWrapper, ClassCard, unapplyClass } from './ClassCard';
 import { WeekDaySelector } from './WeekDaySelector';
 
 const AfterschoolApply: React.FC = () => {
@@ -82,28 +72,6 @@ const AfterschoolApply: React.FC = () => {
     fetchAppliedClassData();
   }, [fetchClassListData, fetchAppliedClassData]);
 
-  const applyClass = useCallback(
-    (classId: string, className: string) => {
-      applyAfterschoolClass(classId)
-        .then(() => toast.success(`"${className}" 강의를 신청했습니다`))
-        .catch(() => toast.info(`"${className}" 강의를 신청하지 못했습니다`))
-        .finally(() => fetchData());
-    },
-    [fetchData],
-  );
-
-  const unapplyClass = useCallback(
-    (classId: string, className: string) => {
-      unapplyAfterschoolClass(classId)
-        .then(() => toast.success(`"${className}" 강의 신청을 취소했습니다`))
-        .catch(() =>
-          toast.info(`"${className}" 강의 신청을 취소하지 못했습니다`),
-        )
-        .finally(() => fetchData());
-    },
-    [fetchData],
-  );
-
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -123,43 +91,19 @@ const AfterschoolApply: React.FC = () => {
             <ResponsiveWeekDaySelector {...weekDaySelectorInput} css={sticky} />
             <Divider small data-divider />
             <CardGridWrapper>
-              {filteredClasses?.map((afterschoolClass) => {
-                const applied = appliedClasses?.some(
-                  ({ afterschool: registeredClass }) =>
-                    registeredClass._id === afterschoolClass._id,
-                );
-                return (
-                  <ClassCard
-                    key={afterschoolClass._id}
-                    onClick={() =>
-                      (applied ? unapplyClass : applyClass)(
-                        afterschoolClass._id,
-                        afterschoolClass.name,
-                      )
-                    }
-                    disableSpace
-                    leftBorder
-                    borderColor={
-                      applied ? 'var(--main-theme-accent)' : '#EEEEEE'
-                    }
-                  >
-                    <div>
-                      <CardHeader>{afterschoolClass.name}</CardHeader>
-                      <CardDetailWrapper>
-                        <CardDetail>
-                          {selfStudyTimesToString(afterschoolClass.times)}타임
-                        </CardDetail>
-                      </CardDetailWrapper>
-                      <CardFooterDetail>
-                        남은 인원 :{' '}
-                        {afterschoolClass.capacity -
-                          afterschoolClass.applierCount}
-                      </CardFooterDetail>
-                    </div>
-                    {applied && <AppliedStamp />}
-                  </ClassCard>
-                );
-              })}
+              {filteredClasses?.map(
+                (afterschoolClass) =>
+                  appliedClasses && (
+                    <ClassCard
+                      afterschoolClass={afterschoolClass}
+                      applied={appliedClasses?.some(
+                        ({ afterschool: registeredClass }) =>
+                          registeredClass._id === afterschoolClass._id,
+                      )}
+                      refetch={fetchData}
+                    />
+                  ),
+              )}
             </CardGridWrapper>
           </RegisterColumnWrapper>
         </Col>
@@ -214,22 +158,6 @@ const sticky = css`
   }
 `;
 
-const ClassCard = styled(Card)`
-  margin: 12px;
-  width: 270px;
-  border-radius: 0px 5px 5px 0px;
-  box-sizing: border-box;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
-    align-self: stretch;
-    width: unset;
-  }
-`;
-
 const RootWrapper = styled(ResponsiveWrapper)`
   flex: 1;
 `;
@@ -252,11 +180,6 @@ const CardGridWrapper = styled(ResponsiveWrapper)`
             flex: 1; */
     }
   }
-`;
-
-const CardDetailWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
 `;
 
 const ResponsiveWeekDaySelector = styled(WeekDaySelector)`

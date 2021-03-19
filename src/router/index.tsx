@@ -154,6 +154,7 @@ export const BottomImage = styled.img`
   right: 0;
   z-index: -1;
   width: 100vw;
+  user-select: none;
 `;
 
 export default Router;
