@@ -73,4 +73,6 @@ export const createCircle = (data: APIRequestCircle) =>
 
 export const getCircleById = (circleId: string) => api<'getCircleById'>("GET", `/circle/${circleId}`).then(e => e.circle)
 
-export const getMyCircle = () => api<'getMyCircle'>("GET", '/circle/my-circle').then(e => e.circle)
+export const getMyCircle = () => api<'getMyCircle'>("GET", '/circle/my-circle', {
+  hasAlert: false
+}).then(e => e.circle)

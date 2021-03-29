@@ -47,6 +47,12 @@ export const NewCircle: React.FC = () => {
 
   const history = useHistory();
 
+  const refetchCircleInfo = useCallback(() => {
+    getMyCircle().then((fetchedMyCircleInfo) =>
+      setPrevCircleInfo(() => fetchedMyCircleInfo),
+    );
+  }, []);
+
   useEffect(() => {
     (async () => {
       if (!config) return;
@@ -64,11 +70,9 @@ export const NewCircle: React.FC = () => {
         userId: e.idx + '',
       }));
       setStudents(() => mapped);
-
-      const fetchedMyCircleInfo = await getMyCircle();
-      setPrevCircleInfo(() => fetchedMyCircleInfo);
+      refetchCircleInfo();
     })();
-  }, [config, history]);
+  }, [config, history, refetchCircleInfo]);
 
   useEffect(() => {
     if (!prevCircleInfo) return;
@@ -139,6 +143,7 @@ export const NewCircle: React.FC = () => {
       .then(() => {
         // history.push('/circle');
         toast.success('동아리 정보를 저장했어요');
+        refetchCircleInfo();
       })
       .catch(() => {
         toast.error('동아리 정보를 저장하지 못했어요. 다시 시도해주세요.');
@@ -152,6 +157,7 @@ export const NewCircle: React.FC = () => {
     categoryInput.value,
     fullNameInput.value,
     prevCircleInfo,
+    refetchCircleInfo,
   ]);
 
   return (
