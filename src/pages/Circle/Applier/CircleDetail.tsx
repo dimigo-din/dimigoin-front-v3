@@ -39,12 +39,13 @@ export const CircleDetail: React.FC<
       <CircleLogo src={imageUrl || 'https://via.placeholder.com/120'} />
       <Category>{category || '카테고리'}</Category>
       <Title>
-        {fullName?.split('\\n').map((e) => (
-          <>
-            <>{e}</>
-            <br />
-          </>
-        )) ||
+        {(fullName?.length &&
+          fullName.split('\\n').map((e) => (
+            <>
+              <>{e}</>
+              <br />
+            </>
+          ))) ||
           name ||
           '이름'}
       </Title>
