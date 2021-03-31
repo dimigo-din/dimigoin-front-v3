@@ -113,7 +113,6 @@ export const IngangsilManager: React.FC = () => {
           },
         },
       );
-      console.log(groupedTicket);
       setTicketsByGrade(() => groupedTicket);
     })();
   }, []);

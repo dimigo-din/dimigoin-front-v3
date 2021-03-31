@@ -25,7 +25,7 @@ export const StudentList: React.FC<{
   log?: AttendanceLogWithStudent[];
   hasLabel: boolean;
   moveStudent(student: Student): void;
-  rowType: string;
+  rowType?: string;
   isDraggable?: boolean;
 }> = ({ log, hasLabel, moveStudent, rowType, isDraggable }) => {
   const [, droppable] = useDrop<
@@ -60,7 +60,7 @@ export const StudentList: React.FC<{
               <DraggableStudent
                 isDraggable={isDraggable}
                 freeWidth={
-                  ['ABSENT', 'ETC', 'CIRCLE'].includes(rowType) ||
+                  (rowType && ['ABSENT', 'ETC', 'CIRCLE'].includes(rowType)) ||
                   !!student.log?.remark
                 }
                 key={student.student._id}
@@ -75,9 +75,11 @@ export const StudentList: React.FC<{
                 {((content: string) => content && <EtcInfo>{content}</EtcInfo>)(
                   [
                     student.log?.place &&
+                      rowType &&
                       ['CIRCLE', 'ETC', 'MOVING_CLASS'].includes(rowType) &&
                       student.log.place.name,
                     student.log?.remark &&
+                      rowType &&
                       ['CIRCLE', 'ETC'].includes(rowType) &&
                       student.log.remark,
                   ]

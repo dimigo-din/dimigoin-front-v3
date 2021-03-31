@@ -33,7 +33,7 @@ const toDropdownList = (items: Doc<Place>[]) =>
   }));
 
 export const OtherPlaceModal: React.FC<{
-  onSubmit(placeId: string, placeName: string, reason: string): void;
+  onSubmit(placeName: string, placeId: string, reason: string): void;
   priority?: string;
   showOnly?: string;
   presetReason?: string;

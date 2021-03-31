@@ -82,7 +82,6 @@ const needPermission = <Props extends {}>(
         return getMyData();
       })
       .then((d) => {
-        console.log(d.permissions);
         const _hasPermission = d.permissions.includes(permission);
         if (!_hasPermission) toast.info('권한이 없습니다');
         setHasPermission(() => _hasPermission);

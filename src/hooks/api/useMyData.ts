@@ -12,7 +12,6 @@ export const useMyData = ({ noLocalData }: { noLocalData?: boolean } = {}) => {
       }
       getMyData()
         .then((d) => {
-          console.log(d)
           setMyData(d)
         })
         .catch(() => setMyData(null));

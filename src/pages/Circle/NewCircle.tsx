@@ -131,8 +131,6 @@ export const NewCircle: React.FC = () => {
       fullName: fullNameInput.value,
     };
 
-    console.log(prevCircleInfo?._id, data);
-
     (prevCircleInfo
       ? saveCircleInfo(prevCircleInfo._id, data)
       : createCircle(data)

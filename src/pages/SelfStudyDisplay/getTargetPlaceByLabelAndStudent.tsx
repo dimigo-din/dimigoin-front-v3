@@ -11,23 +11,34 @@ import { OtherPlaceModal } from '../Main/OtherPlaceModal';
 
 const getHomeroom = async (grade?: number, clas?: number) => {
   try {
-    if (grade) throw new Error('No Grade provided');
+    if (grade) throw new Error('올바르지 않은 접근입니다');
     const primaryPlaces = await getPrimaryPlaceList();
     const homeroom = primaryPlaces.find((place) => place.label === '교실');
     if (homeroom) return homeroom;
+    throw new Error('교실 정보를 찾을 수 없습니다');
   } catch (e) {
-    if (!(grade && clas)) throw new Error('학급 정보를 찾을 수 없습니다');
+    if (!(grade && clas)) throw e;
     const queriedHomeroom = (await getPlaceList()).find(
       (place) => place.name === `${grade}학년 ${clas}반`,
     );
     if (queriedHomeroom) return queriedHomeroom;
-    throw new Error('Cannot find homeroom');
+    throw e;
   }
 };
 
 const queryPlaceByName = async (name: string) => {
   return (await getPlaceList()).find((place) => place.name.includes(name));
 };
+
+export const getIngangsil = (grade: number): Promise<Doc<Place>> =>
+  Promise.all([queryPlaceByName('영어 전용'), queryPlaceByName('비즈쿨')]).then(
+    (ingangsilPlaces) => {
+      if (ingangsilPlaces.some((place) => !place?._id)) {
+        throw new Error('인강실을 찾을 수 없어요');
+      }
+      return (ingangsilPlaces as Doc<Place>[])[grade];
+    },
+  );
 
 export const getTargetPlaceByLabelAndStudent = (
   student: Student,
@@ -48,16 +59,13 @@ export const getTargetPlaceByLabelAndStudent = (
         },
       );
     if (placeName === '인강실') {
-      Promise.all([queryPlaceByName('비즈쿨'), queryPlaceByName('영어')]).then(
-        (ingangsilPlaces) => {
-          if (ingangsilPlaces.some((place) => !place?._id)) {
-            return fail('인강실을 찾을 수 없어요');
-          }
-          return success({
-            placeId: (ingangsilPlaces as Doc<Place>[])[student.grade - 1]._id,
-          });
-        },
-      );
+      getIngangsil(student.grade)
+        .then((ingangsilPlace) =>
+          success({
+            placeId: ingangsilPlace._id,
+          }),
+        )
+        .catch((e) => fail(e));
     }
     // if (placeName === '세탁') {
     //   if (student.gender === Gender.F) {

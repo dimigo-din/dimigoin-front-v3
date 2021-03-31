@@ -10,7 +10,6 @@ export const Student: React.FC = (props) => {
   const myData = useMyData({ noLocalData: true });
   const config = useConfig();
   if (!myData) return <></>;
-  console.log(myData.permissions);
   if (myData.permissions.includes(Permission['circle-applier-selection'])) {
     if (config?.CIRCLE_PERIOD === CirclePeriod.submitting)
       return <Redirect to="/circle/new" />;
