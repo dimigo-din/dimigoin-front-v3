@@ -36,6 +36,7 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close.svg';
 import { getSelfStudyPeriod } from '../../utils';
 import { isStudent, isTeacher } from '../../utils/isStudent';
 import {
+  getIngangsil,
   getStoredMovingClass,
   getTargetPlaceByLabelAndStudent,
 } from './getTargetPlaceByLabelAndStudent';
@@ -111,7 +112,7 @@ const setMovingClassInfo = () =>
 
 export interface DisplayPlace {
   name: string;
-  type: string;
+  type?: string;
   icon: JSX.Element;
   isAvailable: boolean;
   fallback?: boolean;
@@ -137,7 +138,7 @@ const movingClass = {
 const groupedPlaces: DisplayPlace[] = [
   {
     icon: <DeskIcon css={iconStyle} />,
-    type: 'CLASSROOM',
+    // type: 'CLASSROOM',
     name: '교실',
     isAvailable: true,
     initial: true,
@@ -247,13 +248,19 @@ const SelfStudyDisplay: React.FC<RouteComponentProps> = ({ history }) => {
               ? grouped.findIndex((p) => p.type === current.log?.place?.type)
               : INITIAL_INDEX;
           const isMovingClass = current.log?.remark === '이동반';
-          const matchedIndex = isMovingClass
-            ? IS_MOVING_CLASS_SYSTEM
-              ? MOVING_CLASS_INDEX
-              : OTHER_INDEX
-            : placeGroupIndex !== -1
-            ? placeGroupIndex
-            : OTHER_INDEX;
+          const isHomeroom =
+            current.log?.place?.name === `${classInfo[0]}학년 ${classInfo[1]}반`
+              ? INITIAL_INDEX
+              : null;
+          const matchedIndex =
+            isHomeroom ??
+            (isMovingClass
+              ? IS_MOVING_CLASS_SYSTEM
+                ? MOVING_CLASS_INDEX
+                : OTHER_INDEX
+              : placeGroupIndex !== -1
+              ? placeGroupIndex
+              : OTHER_INDEX);
           return [
             ...grouped.slice(0, matchedIndex),
             {
@@ -294,16 +301,20 @@ const SelfStudyDisplay: React.FC<RouteComponentProps> = ({ history }) => {
     async (student: Student, place: DisplayPlace) => {
       if (!myData?.permissions.includes(Permission.attendance)) return;
 
-      const parsedPlace = await getTargetPlaceByLabelAndStudent(
-        student,
-        place,
-        isTeacher(myData),
-      );
-      await registerOtherStudentMovingHistory(student._id, {
-        place: parsedPlace.placeId,
-        remark: parsedPlace.reason,
-      });
-      await fetchData();
+      try {
+        const parsedPlace = await getTargetPlaceByLabelAndStudent(
+          student,
+          place,
+          isTeacher(myData),
+        );
+        await registerOtherStudentMovingHistory(student._id, {
+          place: parsedPlace.placeId,
+          remark: parsedPlace.reason,
+        });
+        await fetchData();
+      } catch (e) {
+        toast.error(e.message);
+      }
     },
     [myData, fetchData],
   );
