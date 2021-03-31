@@ -16,6 +16,14 @@ interface TopBarProps {
   value?: boolean;
 }
 
+const getTimeString = (): string => {
+  const d = new Date();
+  return `${d
+    .getHours()
+    .toString()
+    .padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+};
+
 export const TopBar: React.FC<TopBarProps> = ({
   clasName,
   selfStudyName,
@@ -25,6 +33,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   value,
 }) => {
   const [isOpened, setIsOpened] = useState(value);
+  const [timeString, setTimeString] = useState(getTimeString());
 
   useEffect(() => {
     if (isOpened !== undefined) onChange({ target: { value: isOpened } });
@@ -33,6 +42,14 @@ export const TopBar: React.FC<TopBarProps> = ({
   useEffect(() => {
     setIsOpened(() => value);
   }, [value]);
+
+  useEffect(() => {
+    const timer = setInterval(
+      () => setTimeString(() => getTimeString()),
+      60000,
+    );
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <Horizontal onClick={() => canSelectOtherClass && setIsOpened(() => true)}>
@@ -51,6 +68,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             : '학급을 선택해주세요'}
         </ClassName>
         <SelfStudyName>{selfStudyName}</SelfStudyName>
+        <TimeWrapper>{timeString}</TimeWrapper>
       </LabelWrapper>
     </Horizontal>
   );
@@ -60,6 +78,7 @@ const LabelWrapper = styled.div`
   display: flex;
   margin-left: 32px;
   align-items: center;
+  flex: 1;
 `;
 
 const ClassName = styled.h1`
@@ -72,6 +91,11 @@ const ClassName = styled.h1`
 const SelfStudyName = styled.h2`
   font-size: 26px;
   margin-left: 20px;
+`;
+
+const TimeWrapper = styled(SelfStudyName)`
+  flex: 1;
+  text-align: right;
 `;
 
 const ArrowWrapper = styled.div<{ isDownArrow?: boolean }>`

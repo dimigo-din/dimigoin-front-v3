@@ -54,7 +54,7 @@ import { toast } from 'react-toastify';
 
 const ROW_COLOR = {
   AVAILABLE: 'var(--main-theme-accent)',
-  NOTAVAILABLE: '#B8B8B8',
+  NOTAVAILABLE: '#7c7c7c',
 };
 
 const ButtonWithIcon: React.FC<
