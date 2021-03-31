@@ -36,21 +36,25 @@ export const getPrimaryPlaceList = async () => {
   }
 };
 
+const sortPlaces = <T extends Place>(places: T[]) => places.sort((a, b) =>
+  a.name > b.name ? 1 : -1,
+)
+
 export const getPlaceList = async (): Promise<Doc<Place>[]> => {
   if (localCached[CacheKeys.PLACES] !== null)
-    return localCached[CacheKeys.PLACES]!!;
+    return sortPlaces(localCached[CacheKeys.PLACES]!!);
 
   const storageCached = getCachedItem<Doc<Place>[]>(CacheKeys.PLACES);
   if (storageCached) {
     localCached[CacheKeys.PLACES] = storageCached;
-    return storageCached;
+    return sortPlaces(storageCached);
   }
 
   const fetched = (await api<'placeList'>('GET', '/place')).places;
   localCached[CacheKeys.PLACES] = fetched;
   // 일주일간 캐시
   cacheItem(CacheKeys.PLACES, fetched, +new Date() + 1000 * 60 * 60 * 24 * 5);
-  return fetched;
+  return sortPlaces(fetched);
 };
 
 export const getPlaceById = (placeId: string) =>
