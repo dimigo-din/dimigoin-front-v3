@@ -13,7 +13,6 @@ import { ReactComponent as _DownloadIcon } from '../../assets/icons/download.svg
 import { getEntireTicket, requestExcelFile } from '../../api/ingangsil';
 import { downloadFileFromDownloadble } from '../../functions/downloadById';
 import { NightSelfStudyTimeKey, Student } from '../../constants/types';
-import Skeleton from 'react-loading-skeleton';
 import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 // import { group } from 'console'
 
@@ -29,6 +28,7 @@ const ApplierListCard: React.FC<{
       disableSpace
       css={css`
         padding: 0px;
+        flex: 1;
       `}
     >
       <CardTitle>
@@ -47,26 +47,18 @@ const ApplierListCard: React.FC<{
         ) : (
           <>
             <Section>
-              {students ? (
-                students.NSS1.map((student) => (
-                  <Name key={student._id}>
-                    {student.serial} {student.name}
-                  </Name>
-                ))
-              ) : (
-                <Skeleton width={148} />
-              )}
+              {students?.NSS1.map((student) => (
+                <Name key={student._id}>
+                  {student.serial} {student.name}
+                </Name>
+              ))}
             </Section>
             <Section>
-              {students ? (
-                students.NSS1.map((student) => (
-                  <Name>
-                    {student.serial} {student.name}
-                  </Name>
-                ))
-              ) : (
-                <Skeleton width={148} />
-              )}
+              {students?.NSS2.map((student) => (
+                <Name>
+                  {student.serial} {student.name}
+                </Name>
+              ))}
             </Section>
           </>
         )}
@@ -121,7 +113,7 @@ export const IngangsilManager: React.FC = () => {
           },
         },
       );
-
+      console.log(groupedTicket);
       setTicketsByGrade(() => groupedTicket);
     })();
   }, []);
@@ -208,6 +200,9 @@ const Name = styled.div`
   color: #707070;
   text-align: center;
   white-space: nowrap;
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    font-size: 16px;
+  }
 `;
 
 export const NoApplier = styled(NoData)`

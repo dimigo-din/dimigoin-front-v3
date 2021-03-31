@@ -308,22 +308,6 @@ const SelfStudyDisplay: React.FC<RouteComponentProps> = ({ history }) => {
     [myData, fetchData],
   );
 
-  // const openMoveClassDisplay = useCallback(() => {
-  //   showModal(() => <NamedSection css={css`
-  //     padding: 20px;
-  //   `} sections={[{
-  //       name: "방과후 1실",
-  //       component: <MoveClass />
-  //     }, {
-  //       name: "방과후 2실",
-  //       component: <MoveClass />
-  //     }]} />, {
-  //     wrapperProps: {
-  //       css: css`max-width: min(1080px, 100vw); padding: 60px 20px 20px; width: 100%;`
-  //     }
-  //   })
-  // }, [])
-
   useEffect(() => {
     const timer = setInterval(
       () =>
