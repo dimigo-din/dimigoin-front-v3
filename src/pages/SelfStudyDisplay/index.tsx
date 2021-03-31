@@ -36,7 +36,6 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close.svg';
 import { getSelfStudyPeriod } from '../../utils';
 import { isStudent, isTeacher } from '../../utils/isStudent';
 import {
-  getIngangsil,
   getStoredMovingClass,
   getTargetPlaceByLabelAndStudent,
 } from './getTargetPlaceByLabelAndStudent';
