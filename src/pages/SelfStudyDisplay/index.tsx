@@ -565,8 +565,8 @@ const SelfStudyDisplay: React.FC<RouteComponentProps> = ({ history }) => {
             >
               <ButtonWithIcon
                 icon={DeskIcon}
-                label={`이동반 위치 지정 ${((placeName) =>
-                  placeName ? `(${placeName})` : '')(
+                label={`이동반 위치 ${((placeName) =>
+                  placeName ? `재지정 (${placeName})` : '지정')(
                   getStoredMovingClass()?.name,
                 )}`}
                 onClick={() => setMovingClassInfo().then((e) => fetchData())}
