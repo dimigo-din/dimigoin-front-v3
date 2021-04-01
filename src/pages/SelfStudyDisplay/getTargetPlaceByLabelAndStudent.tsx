@@ -36,7 +36,9 @@ export const getIngangsil = (grade: number): Promise<Doc<Place>> =>
       if (ingangsilPlaces.some((place) => !place?._id)) {
         throw new Error('인강실을 찾을 수 없어요');
       }
-      return (ingangsilPlaces as Doc<Place>[])[grade];
+      const queried = (ingangsilPlaces as Doc<Place>[])[grade - 1];
+      if (!queried) throw new Error('인강실을 찾을 수 없어요');
+      return queried;
     },
   );
 
@@ -60,11 +62,12 @@ export const getTargetPlaceByLabelAndStudent = (
       );
     if (placeName === '인강실') {
       getIngangsil(student.grade)
-        .then((ingangsilPlace) =>
+        .then((ingangsilPlace) => {
+          console.log(ingangsilPlace);
           success({
             placeId: ingangsilPlace._id,
-          }),
-        )
+          });
+        })
         .catch((e) => fail(e));
     }
     // if (placeName === '세탁') {
