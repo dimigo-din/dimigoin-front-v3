@@ -48,6 +48,18 @@ export interface TimelineByStudent {
   };
 }
 
+export interface TimelineByClass {
+  method: 'GET';
+  endpoint: '/attendance/date/:date/grade/:grade/class/:class/timeline';
+  req: {};
+  res: {
+    logs: (Doc<AttendanceLog> & {
+      place: string;
+      student: string;
+    })[]
+  }
+}
+
 export interface RegisterOtherStudentMovingHistory {
   endpoint: '/attendance/student/:studentId';
   method: 'POST';

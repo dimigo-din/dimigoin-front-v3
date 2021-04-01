@@ -33,6 +33,10 @@ export const getTimelineByStudent = (studentId: string) =>
     `/attendance/date/${todayString}/student/${studentId}`,
   ).then((e) => e.logs);
 
+export const getTimelineByClass = (grade: number, clas: number) =>
+  api<'timelineByClass'>('GET', `/attendance/date/${todayString}/grade/${grade}/class/${clas}/timeline`)
+    .then(e => e.logs)
+
 export const registerOtherStudentMovingHistory = (
   studentId: string,
   log: RegisteringAttendanceLog,

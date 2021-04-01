@@ -4,10 +4,10 @@ import React from 'react';
 import { useDrag } from 'react-dnd';
 import { showModal } from '../../components';
 import { Student } from '../../constants/types';
-import { Timeline } from './Timeline';
+import { TimelineByStudent } from './Timeline';
 
 const openTimelineByStudent = (student: Student) => {
-  showModal((close) => <Timeline student={student} close={close} />, {
+  showModal((close) => <TimelineByStudent student={student} close={close} />, {
     wrapperProps: {
       css: css`
         max-width: min(1080px, 100vw);

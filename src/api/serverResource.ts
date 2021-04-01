@@ -55,6 +55,7 @@ import {
   GetCircleById,
   GetMyCircle,
   EditCircle,
+  TimelineByClass,
 } from './interfaces';
 import { Config } from './interfaces/config';
 
@@ -116,4 +117,5 @@ export interface APIResource {
   getCircleById: GetCircleById;
   getMyCircle: GetMyCircle;
   editCircle: EditCircle;
+  timelineByClass: TimelineByClass;
 }

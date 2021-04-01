@@ -8,6 +8,7 @@ import { ReactComponent as OtherIcon } from '../../assets/icons/other.svg';
 import { ReactComponent as InsangsilIcon } from '../../assets/icons/ingangsil.svg';
 import { ReactComponent as CircleIcon } from '../../assets/icons/circle.svg';
 import { ReactComponent as AbsentIcon } from '../../assets/icons/close.svg';
+import { ReactComponent as HistoryIcon } from '../../assets/icons/history.svg';
 import dimigoBackgroundImage from '../../assets/dimigo-background.svg';
 import {
   Horizontal,
@@ -51,6 +52,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { OtherPlaceModal } from '../Main/OtherPlaceModal';
 import { BottomImage } from '../../router';
 import { toast } from 'react-toastify';
+import { TimelineByClass } from './Timeline';
 
 const ROW_COLOR = {
   AVAILABLE: 'var(--main-theme-accent)',
@@ -318,6 +320,31 @@ const SelfStudyDisplay: React.FC<RouteComponentProps> = ({ history }) => {
     [myData, fetchData],
   );
 
+  const openClassTimeline = useCallback(() => {
+    if (!classInfo) {
+      toast.error('학급 정보를 불러오지 못했어요');
+      return;
+    }
+    showModal(
+      (close) => (
+        <TimelineByClass
+          grade={classInfo[0]}
+          clas={classInfo[1]}
+          close={close}
+        />
+      ),
+      {
+        wrapperProps: {
+          css: css`
+            max-width: min(1080px, 100vw);
+            padding: 60px 20px 20px;
+            width: 100%;
+          `,
+        },
+      },
+    );
+  }, [classInfo]);
+
   useEffect(() => {
     const timer = setInterval(
       () =>
@@ -562,6 +589,11 @@ const SelfStudyDisplay: React.FC<RouteComponentProps> = ({ history }) => {
                 }
               `}
             >
+              <ButtonWithIcon
+                icon={HistoryIcon}
+                label="전체 타임라인 보기"
+                onClick={() => openClassTimeline()}
+              />
               <ButtonWithIcon
                 icon={DeskIcon}
                 label={`이동반 위치 ${((placeName) =>
