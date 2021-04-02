@@ -1,13 +1,15 @@
 import React, { useCallback, useEffect } from 'react';
 import styled from '@emotion/styled';
-import { ReactComponent as _BrandWithText } from '../assets/brand-with-text.svg';
-import { Button, Input, ResponsiveWrapper, TodayMeal } from '../components';
 import css from '@emotion/css';
+import { useHistory } from 'react-router-dom';
+import { Cherryblossom } from 'react-cherryblossom';
+
 import { useMeal } from '../hooks/api';
 import { useTextInput } from '../hooks/useInput';
 import { clearTokens, loginWithInfo } from '../api';
-import { useHistory } from 'react-router-dom';
 import { SMALL_SCREEN_THRESHOLD } from '../constants';
+import { ReactComponent as _BrandWithText } from '../assets/brand-with-text.svg';
+import { Button, Input, ResponsiveWrapper, TodayMeal } from '../components';
 
 const Login: React.FC = () => {
   const todayMeal = useMeal();
@@ -45,6 +47,10 @@ const Login: React.FC = () => {
   );
   return (
     <Wrapper>
+      <BlossomContainer>
+        <BlossomBackground amount={100} />
+      </BlossomContainer>
+
       <SameHeightHorizontal threshold={SMALL_SCREEN_THRESHOLD}>
         <InputContainer>
           <BrandWithText />
@@ -129,3 +135,10 @@ const MealDisplay = styled(TodayMeal)`
     margin-top: 24px;
   }
 `;
+
+const BlossomContainer = styled.div`
+  opacity: 0.4;
+  z-index: -10;
+`;
+
+const BlossomBackground = styled(Cherryblossom)``;
