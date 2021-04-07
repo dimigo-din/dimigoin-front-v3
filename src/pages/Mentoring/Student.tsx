@@ -114,7 +114,7 @@ const Student: React.FC = () => {
                       <Data>
                         {mentoringSchedule.duration.start.hour}시{' '}
                         {mentoringSchedule.duration.start.minute}분 ~
-                        {mentoringSchedule.duration.end.minute}시{' '}
+                        {mentoringSchedule.duration.end.hour}시{' '}
                         {mentoringSchedule.duration.end.minute}분
                       </Data>
                       <Data>

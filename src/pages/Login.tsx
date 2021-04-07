@@ -48,7 +48,7 @@ const Login: React.FC = () => {
   return (
     <Wrapper>
       <BlossomContainer>
-        <BlossomBackground amount={100} />
+        <BlossomBackground amount={70} />
       </BlossomContainer>
 
       <SameHeightHorizontal threshold={SMALL_SCREEN_THRESHOLD}>
