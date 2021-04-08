@@ -83,6 +83,7 @@ const Student: React.FC = () => {
             {/* <HeadData>상태</HeadData> */}
             <HeadData>선생님</HeadData>
             <HeadData>과목</HeadData>
+            <HeadData>이름</HeadData>
             <HeadData>날짜</HeadData>
             <HeadData>시간</HeadData>
             {/* <HeadData>장소</HeadData> */}
@@ -110,10 +111,11 @@ const Student: React.FC = () => {
                     <Row key={mentoringSchedule._id}>
                       <Data>{mentoringSchedule.teacher.name}</Data>
                       <Data>{mentoringSchedule.subject}</Data>
+                      <Data>{mentoringSchedule.name}</Data>
                       <Data>{mentoringSchedule.date}</Data>
                       <Data>
                         {mentoringSchedule.duration.start.hour}시{' '}
-                        {mentoringSchedule.duration.start.minute}분 ~
+                        {mentoringSchedule.duration.start.minute}분 ~{' '}
                         {mentoringSchedule.duration.end.hour}시{' '}
                         {mentoringSchedule.duration.end.minute}분
                       </Data>
@@ -158,74 +160,25 @@ const Student: React.FC = () => {
             )
           ) : (
             <>
-              <Row>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-              </Row>
-              <Row>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-              </Row>
-              <Row>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-              </Row>
-              <Row>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-                <Data>
-                  <Skeleton width={30} />
-                </Data>
-              </Row>
+              {Array(6).fill(
+                <Row>
+                  <Data>
+                    <Skeleton width={50} />
+                  </Data>
+                  <Data>
+                    <Skeleton width={30} />
+                  </Data>
+                  <Data>
+                    <Skeleton width={80} />
+                  </Data>
+                  <Data>
+                    <Skeleton width={150} />
+                  </Data>
+                  <Data>
+                    <Skeleton width={180} />
+                  </Data>
+                </Row>,
+              )}
             </>
           )}
         </Table>

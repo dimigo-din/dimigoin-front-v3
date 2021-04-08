@@ -292,7 +292,8 @@ const SelfStudyDisplay: React.FC<RouteComponentProps> = ({ history }) => {
       }));
     } catch (e) {
       toast.error(
-        '서버와 연결이 끊어졌어요. 다시 시도하려면 페이지를 새로고침해주세요.',
+        e.message ||
+          '서버와 연결이 끊어졌어요. 다시 시도하려면 페이지를 새로고침해주세요.',
       );
       throw e;
     }
