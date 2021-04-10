@@ -89,6 +89,7 @@ export const Dropdown = ({
 
 const FixedHeightWrapper = styled.div<{ opened?: boolean }>`
   height: 56px;
+  width: 10px; // 이거 왜되는지 모르겠습니다만 이거 넣으니까 정상적으로 잘 작동됩니다 왜 되는지 알려주세요 후배님
   ${({ opened }) =>
     opened &&
     css`
@@ -108,7 +109,7 @@ const Wrapper = styled.div<{
   disabled?: boolean;
 }>`
   border-radius: 6px;
-  border: solid 1px #d1d1d1;
+  border: solid 1px #eeeeee;
   transition: 300ms cubic-bezier(0, 0.76, 0.12, 0.98);
   background-color: white;
   max-height: 400px;
@@ -135,7 +136,7 @@ const Wrapper = styled.div<{
 
 const Item = styled.div<{ highlighted?: boolean; visible?: boolean }>`
   color: #d1d1d1;
-  padding: 18px 16px;
+  padding: 20px 24px;
   font-size: 18px;
   text-overflow: ellipsis;
   overflow-x: hidden;
@@ -156,7 +157,7 @@ const Item = styled.div<{ highlighted?: boolean; visible?: boolean }>`
     visible ||
     css`
       visibility: hidden;
-      padding: 0px 16px;
+      padding: 0px 24px;
       height: 0px;
     `}
 

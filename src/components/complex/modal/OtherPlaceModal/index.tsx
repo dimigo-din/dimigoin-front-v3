@@ -2,18 +2,19 @@ import css from '@emotion/css';
 import styled from '@emotion/styled';
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { getPlaceList } from '../../api/place';
 import {
+  DropdownItem,
+  CardGroupHeader,
+  Dropdown,
+  Input,
   Button,
   Card,
-  CardGroupHeader,
   cardModalTopBorder,
-  Dropdown,
-  DropdownItem,
-  Input,
-} from '../../components';
-import { Doc, Place } from '../../constants/types';
-import useInput, { useTextInput } from '../../hooks/useInput';
+} from '../../..';
+import { getPlaceList } from '../../../../api/place';
+import { Doc, Place } from '../../../../constants/types';
+import useInput, { useTextInput } from '../../../../hooks/useInput';
+import CategorySelector from './GroupTypeSelector';
 
 const orderTypeFirst = (places: Doc<Place>[], priority: string) =>
   places
@@ -85,6 +86,11 @@ export const OtherPlaceModal: React.FC<{
     <CardWrapper>
       <MarginWrapper>
         <CardGroupHeader>상세 정보 입력</CardGroupHeader>
+        <CategorySelector
+          css={css`
+            margin: 0px -25px;
+          `}
+        />
         <FormRow
           css={css`
             margin-top: 30px;

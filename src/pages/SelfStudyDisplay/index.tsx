@@ -49,7 +49,7 @@ import useConsole from '../../hooks/useConsole';
 import { useConfig } from '../../hooks/api';
 import { LocalstorageKeys } from '../../constants/localstorageKeys';
 import { RouteComponentProps } from 'react-router-dom';
-import { OtherPlaceModal } from '../Main/OtherPlaceModal';
+import { OtherPlaceModal } from '../../components/complex/modal/OtherPlaceModal';
 import { BottomImage } from '../../router';
 import { toast } from 'react-toastify';
 import { TimelineByClass } from './Timeline';

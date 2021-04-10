@@ -92,6 +92,7 @@ const WrapperCard = styled(Card)`
   display: flex;
   flex-direction: column;
   padding: 0px 24px 0px;
+  overflow-x: scroll;
   /* height: 100%; */
   @media screen and (max-width: 450px) {
     padding: 0px 12px 0px;

@@ -16,7 +16,7 @@ import { ReactComponent as OtherSvg } from '../../assets/icons/other.svg';
 import { ReactComponent as LaundrySvg } from '../../assets/icons/laundry.svg';
 import { ReactComponent as DeskSvg } from '../../assets/icons/desk.svg';
 import { showModal } from '../../components/complex/modal';
-import { OtherPlaceModal } from './OtherPlaceModal';
+import { OtherPlaceModal } from '../../components/complex/modal/OtherPlaceModal';
 import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 import Skeleton from 'react-loading-skeleton';
 
@@ -100,7 +100,7 @@ export const SelfStudyStatus: React.FC = () => {
       {
         wrapperProps: {
           css: css`
-            max-width: min(1080px, 100vw);
+            max-width: min(720px, 100vw);
             padding: 60px 20px 20px;
           `,
         },

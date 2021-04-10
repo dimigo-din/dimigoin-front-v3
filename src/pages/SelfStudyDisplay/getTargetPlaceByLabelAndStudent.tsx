@@ -7,7 +7,7 @@ import { showModal } from '../../components';
 import { LocalstorageKeys } from '../../constants/localstorageKeys';
 import { Student, Doc, Place } from '../../constants/types';
 import { InputFormModal } from '../Main/InputFormModal';
-import { OtherPlaceModal } from '../Main/OtherPlaceModal';
+import { OtherPlaceModal } from '../../components/complex/modal/OtherPlaceModal';
 
 const getHomeroom = async (grade?: number, clas?: number) => {
   try {
