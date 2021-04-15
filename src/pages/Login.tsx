@@ -48,7 +48,7 @@ const Login: React.FC = () => {
   return (
     <Wrapper>
       <BlossomContainer>
-        <BlossomBackground amount={70} />
+        <BlossomBackground amount={30} />
       </BlossomContainer>
 
       <SameHeightHorizontal threshold={SMALL_SCREEN_THRESHOLD}>
@@ -97,7 +97,9 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   @media screen and (max-height: 720px) {
-    align-items: flex-start;
+    padding: 40px 0px;
+    /* align-items: flex-start; */
+    flex-wrap: wrap;
   }
 `;
 
@@ -137,7 +139,7 @@ const MealDisplay = styled(TodayMeal)`
 `;
 
 const BlossomContainer = styled.div`
-  opacity: 0.4;
+  opacity: 0.2;
   z-index: -10;
 `;
 
