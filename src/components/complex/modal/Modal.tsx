@@ -1,6 +1,7 @@
 import React, { useState, useEffect, ReactNode, useCallback } from 'react';
-import styled from '@emotion/styled';
+import styled, { Interpolation } from '@emotion/styled';
 import css from '@emotion/css';
+import { SMALL_SCREEN_THRESHOLD } from '../../../constants';
 
 export interface ModalOption {
   wrapperProps?: React.HTMLAttributes<HTMLDivElement>;
@@ -12,6 +13,7 @@ export let showModal: (
   props?: ModalOption,
   onClose?: () => void,
 ) => void;
+
 export const ModalContainer = () => {
   const [ModalElement, setModalElement] = useState<ReactNode>();
   const [props, setProps] = useState<ModalOption>();
@@ -33,7 +35,7 @@ export const ModalContainer = () => {
   useEffect(() => {
     showModal = (
       el: (close: () => Promise<void>) => ReactNode,
-      props?: ModalOption,
+      modalOpenProps?: ModalOption,
       onCloseListener?,
     ) => {
       if (onCloseListener) setOnClose(() => onCloseListener);
@@ -41,7 +43,19 @@ export const ModalContainer = () => {
       setModalElement(el(() => disappear()));
       setVisivility(true);
       setDisappearingAnimation(false);
-      if (props) setProps(props);
+      // const combinedProps: ModalOption = {
+      //   wrapperProps: {
+      //     css: ,
+      //     ...props?.wrapperProps,
+      //   },
+      //   backdropProps: {
+      //     css: css`
+      //       overflow-y: auto;
+      //     `,
+      //     ...props?.backdropProps,
+      //   },
+      // };
+      setProps(modalOpenProps);
     };
   }, [disappear]);
   return visible && ModalElement ? (
@@ -49,6 +63,7 @@ export const ModalContainer = () => {
       onClick={disappear}
       visible={disappearingAnimation}
       {...props?.backdropProps}
+      // css={props?.backdropProps?.css as Interpolation<undefined>}
     >
       <Wrapper
         onClick={(e) => e.stopPropagation()}
@@ -72,7 +87,12 @@ export const Backdrop = styled.div<{ visible?: boolean }>`
   backdrop-filter: blur(2px);
   animation: appear 600ms cubic-bezier(0, 0.75, 0.21, 1) forwards;
   display: grid;
-  place-items: center;
+  place-items: center center;
+
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    padding: 0px;
+    place-items: stretch stretch;
+  }
 
   ${({ visible }) =>
     visible &&

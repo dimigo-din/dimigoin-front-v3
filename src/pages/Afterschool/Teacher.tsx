@@ -50,40 +50,22 @@ const AfterschoolMangement: React.FC = () => {
   const openEdit = useCallback(
     (classData?: Doc<AfterschoolClass>) => {
       if (window.innerWidth < 1300) {
-        showModal(
-          (close) => (
-            <Card
-              css={css`
-                flex: 1;
-                overflow: auto;
-              `}
-            >
-              <AfterschoolEditor
-                close={() => {
-                  fetchData();
-                  close();
-                }}
-                data={classData}
-              />
-            </Card>
-          ),
-          {
-            wrapperProps: {
-              css: css`
-                max-width: min(720px, 100vw);
-                width: 100vw;
-                height: 100vh;
-                display: flex;
-                padding: 60px 20px 20px;
-              `,
-            },
-            backdropProps: {
-              css: css`
-                overflow-y: auto;
-              `,
-            },
-          },
-        );
+        showModal((close) => (
+          <Card
+            css={css`
+              flex: 1;
+              overflow: auto;
+            `}
+          >
+            <AfterschoolEditor
+              close={() => {
+                fetchData();
+                close();
+              }}
+              data={classData}
+            />
+          </Card>
+        ));
       } else {
         setSideDetail(() => ({
           data: classData,

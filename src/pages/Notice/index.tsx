@@ -60,23 +60,6 @@ const NoticeListItem: React.FC<NoticeListItemProps> = ({
   </NoticeListItemWrapper>
 );
 
-const NOTICE_EDITING_MODAL_OPTION = {
-  wrapperProps: {
-    css: css`
-      max-width: min(1080px, 100vw);
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      padding: 60px 20px 20px;
-    `,
-  },
-  backdropProps: {
-    css: css`
-      overflow-y: auto;
-    `,
-  },
-};
-
 const Notices: React.FC<
   RouteComponentProps<{
     articleId: string;
@@ -131,7 +114,7 @@ const Notices: React.FC<
           }}
         />
       ),
-      NOTICE_EDITING_MODAL_OPTION,
+      // NOTICE_EDITING_MODAL_OPTION,
     );
   }, [fetchNotices]);
 
@@ -171,7 +154,7 @@ const Notices: React.FC<
           }}
         />
       ),
-      NOTICE_EDITING_MODAL_OPTION,
+      // NOTICE_EDITING_MODAL_OPTION,
     );
   };
 

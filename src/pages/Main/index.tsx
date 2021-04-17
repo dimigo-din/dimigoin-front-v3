@@ -27,21 +27,7 @@ import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 const TodayMealCard: React.FC = () => {
   const meals = useMeal();
   const openWeekly = useCallback(() => {
-    showModal((close) => <MealList goBack={close} />, {
-      wrapperProps: {
-        css: css`
-          max-width: 1600px;
-          width: 100%;
-          padding: 60px 20px 20px;
-          @media screen and (max-width: 960px) {
-            padding-top: 40px;
-          }
-          @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
-            padding: 0px;
-          }
-        `,
-      },
-    });
+    showModal((close) => <MealList goBack={close} />);
   }, []);
   return (
     <Col width={4} css={fullHeight}>

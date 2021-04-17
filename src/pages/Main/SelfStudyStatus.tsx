@@ -97,14 +97,14 @@ export const SelfStudyStatus: React.FC = () => {
           }}
         />
       ),
-      {
-        wrapperProps: {
-          css: css`
-            max-width: min(1080px, 100vw);
-            padding: 60px 20px 20px;
-          `,
-        },
-      },
+      // {
+      //   wrapperProps: {
+      //     css: css`
+      //       max-width: min(1080px, 100vw);
+      //       padding: 60px 20px 20px;
+      //     `,
+      //   },
+      // },
     );
   }, [submitNewLocation]);
 

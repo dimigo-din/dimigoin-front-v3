@@ -25,28 +25,9 @@ const Applier: React.FC = () => {
   const openDetsDetail = useCallback(
     (index: number) => {
       if (window.innerWidth < 1100) {
-        showModal(
-          (close) => <DetsDetail isModal close={close} apply={() => apply()} />,
-          {
-            wrapperProps: {
-              css: css`
-                max-width: min(720px, 100vw);
-                width: 100vw;
-                height: 100vh;
-                display: flex;
-                padding: 60px 20px 20px;
-                @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
-                  padding: 0px;
-                }
-              `,
-            },
-            backdropProps: {
-              css: css`
-                overflow-y: auto;
-              `,
-            },
-          },
-        );
+        showModal((close) => (
+          <DetsDetail isModal close={close} apply={() => apply()} />
+        ));
       } else setSideDetail(() => ({}));
     },
     [apply],
