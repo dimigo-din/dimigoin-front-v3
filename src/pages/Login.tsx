@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import css from '@emotion/css';
 import { useHistory } from 'react-router-dom';
 import { Cherryblossom } from 'react-cherryblossom';
+import { toast } from 'react-toastify';
 
 import { useMeal } from '../hooks/api';
 import { useTextInput } from '../hooks/useInput';
@@ -23,6 +24,8 @@ const Login: React.FC = () => {
     if (!passwordInput.value)
       setPasswordError('올바른 비밀번호를 입력해주세요');
     if (!usernameInput.value || !passwordInput.value) return;
+    setUsernameError('');
+    setPasswordError('');
 
     if (
       await loginWithInfo({
