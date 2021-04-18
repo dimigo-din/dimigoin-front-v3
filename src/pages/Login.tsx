@@ -31,6 +31,8 @@ const Login: React.FC = () => {
       })
     ) {
       history.push('/');
+    } else {
+      toast.error('사용자 이름 또는 비밀번호를 확인해주세요.');
     }
   }, [
     usernameInput.value,
