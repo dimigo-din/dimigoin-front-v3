@@ -8,25 +8,13 @@ import { api } from './api';
 
 // const today = +new Date()
 
-export const getWeeklyMeals = async (date: Date): Promise<DailyMeal[]> => {
-  const raw = (await api<'weeklyMeals'>('GET', '/meal/weekly')).meals;
-  return raw.reduce<DailyMeal[]>(
-    (matched, current) => {
-      const index = new Date(current.date).getDay() - 1;
-      return [...matched.slice(0, index), current, ...matched.slice(index + 1)];
-    },
-    [...Array(7)],
+export const getWeeklyMeals = async (date: Date): Promise<DailyMeal[]> =>
+  (await api<'weeklyMeals'>('GET', '/meal/weekly')).meals;
+
+export const getDailyMeal = (date: Date = new Date()) =>
+  api<'dailyMeal'>('GET', `/meal/date/${formatRequestableDate(date)}`).then(
+    (e) => e.meal,
   );
-
-  // return []
-};
-
-export const getDailyMeal = (date: Date = new Date()) => {
-  return api<'dailyMeal'>(
-    'GET',
-    `/meal/date/${formatRequestableDate(date)}`,
-  ).then((e) => e.meal);
-};
 
 export const requestMentoringApplyInfoSheet = () =>
   api<'requestMentoringApplyInfoSheet'>(
