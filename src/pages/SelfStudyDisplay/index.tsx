@@ -132,7 +132,7 @@ interface DisplayPlaceWithStudents extends DisplayPlace {
 const movingClass = {
   icon: <DeskIcon css={iconStyle} />,
   type: 'MOVING_CLASS',
-  name: '이동반',
+  name: '아날로그',
   isAvailable: true,
 };
 
