@@ -33,7 +33,8 @@
     "styled-reset": "^4.2.1",
     "sweetalert2": "^10.14.1",
     "sweetalert2-react-content": "^3.2.2",
-    "universal-cookie": "^4.0.4"
+    "universal-cookie": "^4.0.4",
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@emotion/babel-preset-css-prop": "^10.0.27",

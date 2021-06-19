@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Card, CardGroupHeader, PageWrapper } from '../../components';
 import { ReactComponent as UploadFileIcon } from '../../assets/upload-file.svg';
 import { ReactComponent as DocumentIcon } from '../../assets/document.svg';
@@ -6,10 +6,41 @@ import styled from '@emotion/styled';
 import css from '@emotion/css';
 
 const MealRegisterMain = () => {
+  const [isHover, setIsHover] = useState(false);
+  const [file, setFile] = useState<File>();
+
+  const dragHover: React.DragEventHandler<HTMLDivElement> = (e) => {
+    setIsHover(true);
+  };
+  const dragEnd: React.DragEventHandler<HTMLDivElement> = (e) => {
+    setIsHover(false);
+  };
+  const setLoadedFile: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setFile(e?.target?.files?.[0]);
+  };
+
   return (
     <PageWrapper>
       <CardGroupHeader>주간 급식표 관리</CardGroupHeader>
-      <CardWrapper>
+      <CardWrapper
+        isFileHovered={isHover}
+        onDragOver={dragHover}
+        onDragEnter={dragHover}
+        onDragLeave={dragEnd}
+        onDragEnd={dragEnd}
+        onDrop={dragEnd}
+      >
+        <input
+          type="file"
+          onChange={setLoadedFile}
+          css={css`
+            inset: 0px;
+            width: 100%;
+            opacity: 0;
+            position: absolute;
+            display: block;
+          `}
+        />
         <MaxWidthedContent>
           <UploadFileIcon />
           <LoadButton>
@@ -46,12 +77,21 @@ const MaxWidthedContent = styled.div`
   align-items: center;
 `;
 
-const CardWrapper = styled(Card)`
+const CardWrapper = styled(Card)<{ isFileHovered?: boolean }>`
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
+  transition: 0.3s;
+  box-shadow: inset 0px 0px 0px white;
+  ${({ isFileHovered }) =>
+    isFileHovered &&
+    css`
+      /* background-color: #ffdbe4; */
+      box-shadow: inset 0px 0px 0px 4px #e83c77;
+    `}
 `;
 
 export default MealRegisterMain;

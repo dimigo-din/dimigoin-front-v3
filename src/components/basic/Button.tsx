@@ -2,7 +2,7 @@ import React from 'react';
 import css from '@emotion/css';
 import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 
-export interface ButtonProps {
+export interface ButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   gray?: boolean;
   active?: boolean;
   loading?: boolean;

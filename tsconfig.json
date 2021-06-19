@@ -15,7 +15,8 @@
     "noEmit": true,
     "jsx": "react",
     "types": ["@emotion/core", "node"],
-    "typeRoots": ["./src/constants/packages"]
+    "typeRoots": ["./src/constants/packages"],
+    "downlevelIteration": true
   },
   "include": ["src", "declares"]
 }
