@@ -1,6 +1,10 @@
 import loadable from '@loadable/component';
 
-export const Main = loadable(() => import('./Main'));
+export const Main = {
+  Student: loadable(() => import('./Main/Student')),
+  Teacher: loadable(() => import('./Main/Teacher'))
+};
+
 export const Login = loadable(() => import('./Login'));
 export const Notices = loadable(() => import('./Notice'));
 export const Dets = loadable(() => import('./Dets/Applier'));

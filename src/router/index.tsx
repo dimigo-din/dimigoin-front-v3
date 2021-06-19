@@ -125,7 +125,7 @@ const Router: React.FC = () => (
         <Route path="/circle" exact component={needAuthAndBranch(Circle)} />
         <Route path="/circle/new" exact component={needAuth(NewCircle)} />
         <Route path="/dets" component={needAuth(Dets)} />
-        <Route path="/" exact component={needAuth(Main)} />
+        <Route path="/" exact component={needAuthAndBranch(Main)} />
         <BottomImage src={dimigoBackgroundImage} />
       </Container>
     </Switch>
