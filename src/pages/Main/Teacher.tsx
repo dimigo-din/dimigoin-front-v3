@@ -2,6 +2,7 @@ import React from 'react'
 import { Permission } from '../../constants/types'
 import { useMyData } from '../../hooks/api'
 import EducationlTeacherMain from './EducationalTeacher'
+import MealRegisterMain from './MealRegisterMain'
 
 const TeacherMain = () => {
   const myData = useMyData()
