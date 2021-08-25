@@ -18,12 +18,27 @@ import { swal } from '../../functions/swal';
 const applyClass = (classId: string, className: string) =>
   applyAfterschoolClass(classId)
     .then(() => toast.success(`"${className}" 강의를 신청했습니다`))
-    .catch(() => toast.info(`"${className}" 강의를 신청하지 못했습니다`));
+    .catch((e) => {
+      toast.error([`"${className}" 강의를 신청하지 못했습니다`, e?.response?.data?.message].join(', '))
+    });
 
-export const unapplyClass = (classId: string, className: string) =>
+export const unapplyClass = async (classId: string, className: string) =>{
+  const alertQuestionResult = await swal({
+    title: '수강 신청을 취소하시겠어요?',
+    html: (
+      <>
+        <p>"{className}" 수강을 취소해요.</p>
+        <p>신청 기간이 지나면 재수강할 수 없으니 신중하게 생각해주세요.</p>
+      </>
+    ),
+    imageUrl: DangerIcon,
+    showCancelButton: true,
+    focusCancel: true,
+  });
+  if (!alertQuestionResult.isConfirmed) return;
   unapplyAfterschoolClass(classId)
-    .then(() => toast.success(`"${className}" 강의 신청을 취소했습니다`))
-    .catch(() => toast.info(`"${className}" 강의 신청을 취소하지 못했습니다`));
+    .then(() => toast.info(`"${className}" 강의 신청을 취소했습니다`))
+    .catch(() => toast.error(`"${className}" 강의 신청을 취소하지 못했습니다`));}
 
 export const ClassCard: React.FC<{
   afterschoolClass: Doc<AfterschoolClass>;
@@ -32,27 +47,14 @@ export const ClassCard: React.FC<{
 }> = ({ afterschoolClass, applied, refetch }) => {
   const [isLoading, setIsLoading] = useState(false);
   const submit = useCallback(async () => {
-    if (applied) {
-      const alertQuestionResult = await swal({
-        title: '수강 신청을 취소하시겠어요?',
-        html: (
-          <>
-            <p>"{afterschoolClass.name}" 수강을 취소해요.</p>
-            <p>신청 기간이 지나면 재수강할 수 없으니 신중하게 생각해주세요.</p>
-          </>
-        ),
-        imageUrl: DangerIcon,
-        showCancelButton: true,
-        focusCancel: true,
-      });
-      if (!alertQuestionResult.isConfirmed) return;
-    }
     setIsLoading(() => true);
     (applied ? unapplyClass : applyClass)(
       afterschoolClass._id,
       afterschoolClass.name,
     )
-      .then(() => setIsLoading(() => false))
+      .then(() => {
+        setTimeout(() => setIsLoading(() => false), 800)
+      })
       .finally(() => refetch());
   }, [afterschoolClass._id, afterschoolClass.name, applied, refetch]);
   return (

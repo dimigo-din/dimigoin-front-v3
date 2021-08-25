@@ -114,18 +114,18 @@ const AfterschoolApply: React.FC = () => {
             appliedClasses?.map(({ afterschool: appliedClass }) => (
               <Card
                 key={appliedClass._id}
-                onClick={() =>
-                  unapplyClass(appliedClass._id, appliedClass.name)
-                }
+                onClick={async () => {
+                  await unapplyClass(appliedClass._id, appliedClass.name);
+                  fetchData();
+                }}
               >
                 <CardHeader>{appliedClass.name}</CardHeader>
                 <CardDetailWrapper>
-                  <CardDetail>{appliedClass.teacher.name} 선생님,</CardDetail>
                   <CardDetail>
                     {appliedClass.days
                       ?.map((day) => dayEngKorMapper[day])
                       .join(' ')}
-                    요일,
+                    요일,{' '}
                   </CardDetail>
                   <CardDetail>
                     {selfStudyTimesToString(appliedClass.times)}타임
