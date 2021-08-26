@@ -27,8 +27,8 @@ const Main: React.FC = () => {
   const myData = useMyData();
 
   useEffect(() => {
-    getCurrentNotices().then((notices) => setNotice(() => notices));
     if (myData && letUserStudent(myData)) {
+      getCurrentNotices().then((notices) => setNotice(() => [...notices.filter(e => e.targetGrade.includes(myData.grade))].reverse()));
       getTimetable(myData.grade, myData.class)
         .then((table) =>
           setTimeTableData(() => table.map((day) => day.sequence)),
