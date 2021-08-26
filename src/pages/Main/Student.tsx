@@ -34,6 +34,8 @@ const Main: React.FC = () => {
           setTimeTableData(() => table.map((day) => day.sequence)),
         )
         .catch(() => setTimeTableData(() => null));
+    } else {
+      getCurrentNotices().then((notices) => setNotice(() => [...notices].reverse()))
     }
   }, [myData]);
 
