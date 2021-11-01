@@ -22,7 +22,7 @@ export const requestMentoringApplyInfoSheet = () =>
     '/mentoring-application/export',
   ).then((e) => e.exportedFile);
 
-export const registerWeeklyMeal = (meals: DailyMeal[]) => api<'registerWeeklyMeal'>('POST', '/meal/xlsxfile', {
+export const registerWeeklyMeal = (meals: DailyMeal[]) => api<'registerWeeklyMeal'>('POST', '/meal/weekly', {
   weeklyMeals: meals.map(meal => ({
     date: meal.date,
     meals: meal
