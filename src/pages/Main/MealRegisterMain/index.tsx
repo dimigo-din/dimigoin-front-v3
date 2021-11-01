@@ -10,7 +10,6 @@ import { registerMealFromBytes } from './registerMealFromBytes';
 
 const MealRegisterMain = () => {
   const [isHover, setIsHover] = useState(false);
-  const [file, setFile] = useState<File>();
 
   const dragHover: React.DragEventHandler<HTMLDivElement> = (e) => {
     setIsHover(true);
@@ -19,7 +18,6 @@ const MealRegisterMain = () => {
     setIsHover(false);
   };
   const setLoadedFile: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
-    setFile(e?.target?.files?.[0]);
     const file = e?.target?.files?.[0]
     if (!file) return
     registerMealFromBytes(file)
