@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { Button, Card, CardGroupHeader, PageWrapper } from '../../components';
-import { ReactComponent as UploadFileIcon } from '../../assets/upload-file.svg';
-import { ReactComponent as DocumentIcon } from '../../assets/document.svg';
+import { Button, Card, CardGroupHeader, MealList, PageWrapper, showModal } from '../../../components';
+import { ReactComponent as UploadFileIcon } from '../../../assets/upload-file.svg';
+import { ReactComponent as DocumentIcon } from '../../../assets/document.svg';
 import styled from '@emotion/styled';
 import css from '@emotion/css';
+import { toast } from 'react-toastify';
+import { SMALL_SCREEN_THRESHOLD } from '../../../constants';
+import { registerMealFromBytes } from './registerMealFromBytes';
 
 const MealRegisterMain = () => {
   const [isHover, setIsHover] = useState(false);
@@ -15,8 +18,27 @@ const MealRegisterMain = () => {
   const dragEnd: React.DragEventHandler<HTMLDivElement> = (e) => {
     setIsHover(false);
   };
-  const setLoadedFile: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+  const setLoadedFile: React.ChangeEventHandler<HTMLInputElement> = async (e) => {
     setFile(e?.target?.files?.[0]);
+    const file = e?.target?.files?.[0]
+    if (!file) return
+    registerMealFromBytes(file)
+    toast.success(`급식을 성공적으로 업로드했어요`)
+    showModal((close) => <MealList goBack={close} />, {
+      wrapperProps: {
+        css: css`
+          max-width: 1600px;
+          width: 100%;
+          padding: 60px 20px 20px;
+          @media screen and (max-width: 960px) {
+            padding-top: 40px;
+          }
+          @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+            padding: 0px;
+          }
+        `,
+      },
+    });
   };
 
   return (
@@ -77,7 +99,7 @@ const MaxWidthedContent = styled.div`
   align-items: center;
 `;
 
-const CardWrapper = styled(Card)<{ isFileHovered?: boolean }>`
+const CardWrapper = styled(Card) <{ isFileHovered?: boolean }>`
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -85,7 +107,6 @@ const CardWrapper = styled(Card)<{ isFileHovered?: boolean }>`
   align-items: center;
   position: relative;
   transition: 0.3s;
-  box-shadow: inset 0px 0px 0px white;
   ${({ isFileHovered }) =>
     isFileHovered &&
     css`

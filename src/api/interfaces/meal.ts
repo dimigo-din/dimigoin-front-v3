@@ -28,3 +28,23 @@ export interface WeeklyMeals {
     meals: DailyMeal[];
   };
 }
+
+interface BEDailyMeal {
+  date: string, // YYYY-MM-DD
+  meals: {
+    breakfast: string[],
+    lunch: string[],
+    dinner: string[],
+  }
+}
+
+export interface RegisterWeeklyMeal {
+  method: 'POST';
+  endpoint: '/meal/date/:date';
+  req: {
+    weeklyMeals: BEDailyMeal[]
+  }
+  res: {
+    meals: DailyMeal[]
+  }
+}

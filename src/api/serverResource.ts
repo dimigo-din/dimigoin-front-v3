@@ -56,6 +56,7 @@ import {
   GetMyCircle,
   EditCircle,
   TimelineByClass,
+  RegisterWeeklyMeal,
 } from './interfaces';
 import { Config } from './interfaces/config';
 
@@ -118,4 +119,5 @@ export interface APIResource {
   getMyCircle: GetMyCircle;
   editCircle: EditCircle;
   timelineByClass: TimelineByClass;
+  registerWeeklyMeal: RegisterWeeklyMeal;
 }
