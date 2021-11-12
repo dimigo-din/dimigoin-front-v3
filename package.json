@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.16.0",
-    "@dimigo/dimibob-parser": "https://github.com/dimigoin/dimibob-parser/",
+    "@dimigo/dimibob-parser": "https://github.com/dimigoin/dimibob-parser",
     "@emotion/core": "^10.0.28",
     "@emotion/css": "^10.0.27",
     "@emotion/styled": "^10.0.27",

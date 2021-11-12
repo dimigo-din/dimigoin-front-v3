@@ -1,4 +1,4 @@
-import { CirclePeriod } from './types';
+import { CirclePeriod, EngDay } from './types';
 
 export const days = ['월', '화', '수', '목', '금', '토', '일'];
 
@@ -48,7 +48,7 @@ export const circleApplicationStatusKorMapper = {
   final: '최종 선택',
 };
 
-export const engDays = Object.keys(dayEngKorMapper);
+export const engDays = (Object.keys(dayEngKorMapper) as EngDay[]);
 
 export const SMALL_SCREEN_THRESHOLD = 840;
 
