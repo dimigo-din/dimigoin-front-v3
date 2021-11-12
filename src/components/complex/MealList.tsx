@@ -71,7 +71,7 @@ const Label = styled.p`
   }
 `;
 
-const DailyMealWrapper = styled(ResponsiveWrapper)<{
+const DailyMealWrapper = styled(ResponsiveWrapper) <{
   highlighted?: boolean;
   greyDivision: boolean;
 }>`
@@ -174,9 +174,9 @@ export const MealList: React.FC<{ goBack(): void }> = ({ goBack }) => {
           </HeaderIconWrapper>
         )}
       </HeaderWrapper>
-      {meals?.map((meal) => (
+      {meals.length ? meals.map((meal) => (
         <DailyMeal key={meal.header} {...meal} />
-      ))}
+      )) : <NoData>등록된 급식이 없습니다</NoData>}
     </Card>
   );
 };
