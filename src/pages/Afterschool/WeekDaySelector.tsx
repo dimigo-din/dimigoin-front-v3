@@ -7,6 +7,7 @@ import { EventFunction } from '../../hooks/useInput';
 export const WeekDaySelector: React.FC<{
   onChange: EventFunction<number | null>;
   value?: number | null;
+  customLabel?: string[];
 }> = ({ value, onChange, ...props }) => {
   return (
     <Wrapper {...props}>
@@ -22,7 +23,7 @@ export const WeekDaySelector: React.FC<{
       >
         전체
       </Segment>
-      {days.slice(0, -1).map((e, i) => (
+      {(props.customLabel || days).slice(0, -1).map((e, i) => (
         <Segment
           key={e}
           selected={i === value}

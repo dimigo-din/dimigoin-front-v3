@@ -88,8 +88,12 @@ const AfterschoolApply: React.FC = () => {
             방과후
           </CardGroupHeader>
           <RegisterColumnWrapper>
-            <ResponsiveWeekDaySelector {...weekDaySelectorInput} css={sticky} />
-            <Divider small data-divider />
+            {/* <ResponsiveWeekDaySelector
+              customLabel={[...Array(7)].map((n, i) => i + 1 + '교시')}
+              {...weekDaySelectorInput}
+              css={sticky}
+            />
+            <Divider small data-divider /> */}
             <CardGridWrapper>
               {filteredClasses?.map(
                 (afterschoolClass) =>
