@@ -26,7 +26,7 @@ import {
 import useInput from '../../hooks/useInput';
 import { selfStudyTimesToString } from '../../utils';
 import { CardDetailWrapper, ClassCard, unapplyClass } from './ClassCard';
-import { WeekDaySelector } from './WeekDaySelector';
+// import { WeekDaySelector } from './WeekDaySelector';
 
 const AfterschoolApply: React.FC = () => {
   const [afterschoolClassList, setAfterschoolClassList] = useState<
@@ -186,15 +186,15 @@ const CardGridWrapper = styled(ResponsiveWrapper)`
   }
 `;
 
-const ResponsiveWeekDaySelector = styled(WeekDaySelector)`
-  align-self: stretch;
-  max-height: min(685px, 100vh - 248px);
-  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
-    display: flex;
-    /* flex: 1; */
-    & > div {
-      width: unset;
-      flex: 1;
-    }
-  }
-`;
+// const ResponsiveWeekDaySelector = styled(WeekDaySelector)`
+//   align-self: stretch;
+//   max-height: min(685px, 100vh - 248px);
+//   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+//     display: flex;
+//     /* flex: 1; */
+//     & > div {
+//       width: unset;
+//       flex: 1;
+//     }
+//   }
+// `;
