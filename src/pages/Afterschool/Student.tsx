@@ -11,9 +11,12 @@ import {
   PageWrapper,
   ResponsiveWrapper,
 } from '../../components';
-import { CardHeader, CardDetail } from '../../components/basic/CardComponent';
 import {
-  dayEngKorMapper,
+  CardHeader,
+  // CardDetail
+} from '../../components/basic/CardComponent';
+import {
+  // dayEngKorMapper,
   engDays,
   SMALL_SCREEN_THRESHOLD,
 } from '../../constants';
@@ -25,7 +28,11 @@ import {
 } from '../../constants/types';
 import useInput from '../../hooks/useInput';
 // import { selfStudyTimesToString } from '../../utils';
-import { CardDetailWrapper, ClassCard, unapplyClass } from './ClassCard';
+import {
+  // CardDetailWrapper,
+  ClassCard,
+  unapplyClass,
+} from './ClassCard';
 // import { WeekDaySelector } from './WeekDaySelector';
 
 const AfterschoolApply: React.FC = () => {
