@@ -129,7 +129,7 @@ const AfterschoolApply: React.FC = () => {
                     {appliedClass.days
                       ?.map((day) => dayEngKorMapper[day])
                       .join(' ')}
-                    요일,{' '}
+                    교시{' '}
                   </CardDetail>
                   <CardDetail>
                     {selfStudyTimesToString(appliedClass.times)}타임
