@@ -24,7 +24,7 @@ import {
   EngDay,
 } from '../../constants/types';
 import useInput from '../../hooks/useInput';
-import { selfStudyTimesToString } from '../../utils';
+// import { selfStudyTimesToString } from '../../utils';
 import { CardDetailWrapper, ClassCard, unapplyClass } from './ClassCard';
 // import { WeekDaySelector } from './WeekDaySelector';
 
@@ -131,9 +131,9 @@ const AfterschoolApply: React.FC = () => {
                       .join(' ')}
                     요일,{' '}
                   </CardDetail>
-                  <CardDetail>
+                  {/* <CardDetail>
                     {selfStudyTimesToString(appliedClass.times)}타임
-                  </CardDetail>
+                  </CardDetail> */}
                 </CardDetailWrapper>
               </Card>
             ))
