@@ -124,17 +124,17 @@ const AfterschoolApply: React.FC = () => {
                 }}
               >
                 <CardHeader>{appliedClass.name}</CardHeader>
-                <CardDetailWrapper>
+                {/* <CardDetailWrapper>
                   <CardDetail>
                     {appliedClass.days
                       ?.map((day) => dayEngKorMapper[day])
                       .join(' ')}
                     교시{' '}
                   </CardDetail>
-                  {/* <CardDetail>
+                  <CardDetail>
                     {selfStudyTimesToString(appliedClass.times)}타임
-                  </CardDetail> */}
-                </CardDetailWrapper>
+                  </CardDetail>
+                </CardDetailWrapper> */}
               </Card>
             ))
           ) : (
