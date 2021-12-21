@@ -37,6 +37,13 @@ export const dayEngKorMapper = {
   fri: '금',
   sat: '토',
   sun: '일',
+  1: '1',
+  2: '2',
+  3: '3',
+  4: '4',
+  5: '5',
+  6: '6',
+  7: '7',
 };
 
 export const circleApplicationStatusKorMapper = {
