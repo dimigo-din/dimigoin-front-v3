@@ -3,12 +3,12 @@ import styled from '@emotion/styled';
 import { Card, Loader } from '../../components';
 import { SMALL_SCREEN_THRESHOLD } from '../../constants';
 import { AfterschoolClass, Doc } from '../../constants/types';
-import { selfStudyTimesToString } from '../../utils';
+// import { selfStudyTimesToString } from '../../utils';
 import { ReactComponent as AppliedStamp } from '../../assets/stamp/applied.svg';
 import DangerIcon from '../../assets/icons/danger.svg';
 import {
   CardHeader,
-  CardDetail,
+  // CardDetail,
   CardFooterDetail,
 } from '../../components/basic/CardComponent';
 import { toast } from 'react-toastify';
@@ -19,10 +19,15 @@ const applyClass = (classId: string, className: string) =>
   applyAfterschoolClass(classId)
     .then(() => toast.success(`"${className}" 강의를 신청했습니다`))
     .catch((e) => {
-      toast.error([`"${className}" 강의를 신청하지 못했습니다`, e?.response?.data?.message].join(', '))
+      toast.error(
+        [
+          `"${className}" 강의를 신청하지 못했습니다`,
+          e?.response?.data?.message,
+        ].join(', '),
+      );
     });
 
-export const unapplyClass = async (classId: string, className: string) =>{
+export const unapplyClass = async (classId: string, className: string) => {
   const alertQuestionResult = await swal({
     title: '수강 신청을 취소하시겠어요?',
     html: (
@@ -38,7 +43,8 @@ export const unapplyClass = async (classId: string, className: string) =>{
   if (!alertQuestionResult.isConfirmed) return;
   unapplyAfterschoolClass(classId)
     .then(() => toast.info(`"${className}" 강의 신청을 취소했습니다`))
-    .catch(() => toast.error(`"${className}" 강의 신청을 취소하지 못했습니다`));}
+    .catch(() => toast.error(`"${className}" 강의 신청을 취소하지 못했습니다`));
+};
 
 export const ClassCard: React.FC<{
   afterschoolClass: Doc<AfterschoolClass>;
@@ -53,7 +59,7 @@ export const ClassCard: React.FC<{
       afterschoolClass.name,
     )
       .then(() => {
-        setTimeout(() => setIsLoading(() => false), 800)
+        setTimeout(() => setIsLoading(() => false), 800);
       })
       .finally(() => refetch());
   }, [afterschoolClass._id, afterschoolClass.name, applied, refetch]);
@@ -72,11 +78,11 @@ export const ClassCard: React.FC<{
       )}
       <div>
         <CardHeader>{afterschoolClass.name}</CardHeader>
-        <CardDetailWrapper>
+        {/* <CardDetailWrapper>
           <CardDetail>
             {selfStudyTimesToString(afterschoolClass.times)}타임
           </CardDetail>
-        </CardDetailWrapper>
+        </CardDetailWrapper> */}
         <CardFooterDetail>
           {afterschoolClass.teacher.name === '선테계'
             ? '외부강사'
