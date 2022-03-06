@@ -17,7 +17,6 @@ import {
   InputChip,
   PageWrapper,
   ResponsiveWrapper,
-  Textarea,
 } from '../../components';
 import { BriefStudent, Circle, CirclePeriod, Doc } from '../../constants/types';
 import { useConfig } from '../../hooks/api';
@@ -30,13 +29,15 @@ export const NewCircle: React.FC = () => {
   const [nameInput] = useTextInput();
   const [fullNameInput] = useTextInput();
   const [imageUrlInput] = useTextInput();
-  const [descriptionInput] = useTextInput();
+  // const [descriptionInput] = useTextInput();
+  const [notionInput] = useTextInput();
   const [categoryInput] = useTextInput();
 
   const setName = nameInput.setValue;
   const setFullName = fullNameInput.setValue;
   const setImageUrl = imageUrlInput.setValue;
-  const setDescription = descriptionInput.setValue;
+  // const setDescription = descriptionInput.setValue;
+  const setNotion = notionInput.setValue;
   const setCategory = categoryInput.setValue;
 
   const [students, setStudents] = useState<Doc<BriefStudent>[]>();
@@ -95,13 +96,15 @@ export const NewCircle: React.FC = () => {
     setName(prevCircleInfo.name);
     setFullName(prevCircleInfo.fullName);
     setImageUrl(prevCircleInfo.imageUrl);
-    setDescription(prevCircleInfo.description);
+    // setDescription(prevCircleInfo.description);
+    setNotion(prevCircleInfo.notion);
     setCategory(prevCircleInfo.category);
   }, [
     prevCircleInfo,
     setName,
     setImageUrl,
-    setDescription,
+    // setDescription,
+    setNotion,
     setCategory,
     setFullName,
   ]);
@@ -110,7 +113,8 @@ export const NewCircle: React.FC = () => {
     const checks = [
       !nameInput.value && '이름',
       !imageUrlInput.value && '이미지',
-      !descriptionInput.value && '설명',
+      // !descriptionInput.value && '설명',
+      !notionInput.value && '노션',
       !leader?._id && '동아리장',
       !subleader?._id && '부동아리장',
       !categoryInput.value && '부동아리장',
@@ -124,7 +128,7 @@ export const NewCircle: React.FC = () => {
     const data: APIRequestCircle = {
       name: nameInput.value!!,
       imageUrl: imageUrlInput.value!!,
-      description: descriptionInput.value!!,
+      notion: notionInput.value!!,
       chair: leader!._id!!,
       viceChair: subleader!._id!!,
       category: categoryInput.value!!,
@@ -151,7 +155,7 @@ export const NewCircle: React.FC = () => {
     imageUrlInput.value,
     leader,
     subleader,
-    descriptionInput.value,
+    notionInput.value,
     categoryInput.value,
     fullNameInput.value,
     prevCircleInfo,
@@ -178,11 +182,10 @@ export const NewCircle: React.FC = () => {
             </FieldInfo>
             <FormHeader>로고 URL</FormHeader>
             <Input {...imageUrlInput} />
-            <FormHeader>설명</FormHeader>
-            <Textarea
-              rows={8}
-              placeholder="마크다운을 지원합니다"
-              {...descriptionInput}
+            <FormHeader>노션 URL</FormHeader>
+            <Input
+              placeholder='"웹에서 공유" 활성화 필요'
+              {...notionInput}
             />
             <FormHeader>동아리장</FormHeader>
             <Horizontal
@@ -241,7 +244,7 @@ export const NewCircle: React.FC = () => {
             category={categoryInput.value || ''}
             name={nameInput.value || ''}
             imageUrl={imageUrlInput.value || ''}
-            description={descriptionInput.value || ''}
+            notion={notionInput.value || ''}
             css={css`
               margin: 0px;
               margin-bottom: 12px;
@@ -253,7 +256,7 @@ export const NewCircle: React.FC = () => {
             fullName={fullNameInput.value || ''}
             chair={leader?.name || ''}
             imageUrl={imageUrlInput.value || ''}
-            description={descriptionInput.value || ''}
+            notion={notionInput.value || ''}
             preview
           />
         </Col>
