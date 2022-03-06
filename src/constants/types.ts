@@ -198,7 +198,7 @@ export interface ServiceConfig {
 export interface Circle {
   name: string;
   imageUrl: string;
-  description: string;
+  notion: string;
   chair: Doc<Student>;
   viceChair: Doc<Student>;
   category: string;

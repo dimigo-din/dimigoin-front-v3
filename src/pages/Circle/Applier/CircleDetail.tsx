@@ -9,7 +9,7 @@ import {
   wrapperStyle,
 } from './atomics';
 import { ReactComponent as _CloseIcon } from '../../../assets/icons/close.svg';
-import { Markdown } from '../../../components/basic/Markdown';
+import { NotionView } from '../../../components/basic/NotionView';
 
 export const CircleDetail: React.FC<
   Merge<
@@ -25,7 +25,7 @@ export const CircleDetail: React.FC<
   >
 > = ({
   goApply,
-  description,
+  notion,
   imageUrl,
   category,
   name,
@@ -51,7 +51,7 @@ export const CircleDetail: React.FC<
       </Title>
 
       <ContentWrapper>
-        <Markdown>{description || '이곳에는 설명이 들어갑니다'}</Markdown>
+        <NotionView url={notion || ''} />
         {!preview && <SubmitButton onClick={goApply}>지원하기</SubmitButton>}
       </ContentWrapper>
     </Card>

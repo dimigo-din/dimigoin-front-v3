@@ -58,7 +58,7 @@ export const CircleCard: React.FC<
   status,
   openSideDetail,
   finalSelect,
-  description,
+  notion,
   isPreview,
   ...props
 }) => {
