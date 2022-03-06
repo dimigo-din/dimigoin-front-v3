@@ -114,7 +114,7 @@ export const NewCircle: React.FC = () => {
       !nameInput.value && '이름',
       !imageUrlInput.value && '이미지',
       // !descriptionInput.value && '설명',
-      !notionInput.value && '노션',
+      !notionInput.value && '동아리 소개 노션 주소',
       !leader?._id && '동아리장',
       !subleader?._id && '부동아리장',
       !categoryInput.value && '부동아리장',
