@@ -93,7 +93,7 @@ export const CircleCard: React.FC<
         }
       >
         {isPreview
-          ? '31일 공개'
+          ? '18:35 공개'
           : status
           ? statusLabelMap[status]
           : '자세히보기'}
