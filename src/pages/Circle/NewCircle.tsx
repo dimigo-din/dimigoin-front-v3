@@ -29,14 +29,12 @@ export const NewCircle: React.FC = () => {
   const [nameInput] = useTextInput();
   const [fullNameInput] = useTextInput();
   const [imageUrlInput] = useTextInput();
-  // const [descriptionInput] = useTextInput();
   const [notionInput] = useTextInput();
   const [categoryInput] = useTextInput();
 
   const setName = nameInput.setValue;
   const setFullName = fullNameInput.setValue;
   const setImageUrl = imageUrlInput.setValue;
-  // const setDescription = descriptionInput.setValue;
   const setNotion = notionInput.setValue;
   const setCategory = categoryInput.setValue;
 
@@ -96,14 +94,12 @@ export const NewCircle: React.FC = () => {
     setName(prevCircleInfo.name);
     setFullName(prevCircleInfo.fullName);
     setImageUrl(prevCircleInfo.imageUrl);
-    // setDescription(prevCircleInfo.description);
     setNotion(prevCircleInfo.notion);
     setCategory(prevCircleInfo.category);
   }, [
     prevCircleInfo,
     setName,
     setImageUrl,
-    // setDescription,
     setNotion,
     setCategory,
     setFullName,
@@ -113,11 +109,10 @@ export const NewCircle: React.FC = () => {
     const checks = [
       !nameInput.value && '이름',
       !imageUrlInput.value && '이미지',
-      // !descriptionInput.value && '설명',
       !notionInput.value && '동아리 소개 노션 주소',
       !leader?._id && '동아리장',
       !subleader?._id && '부동아리장',
-      !categoryInput.value && '부동아리장',
+      !categoryInput.value && '분류',
     ].filter((e): e is string => !!e);
 
     if (checks.length) {
@@ -173,21 +168,21 @@ export const NewCircle: React.FC = () => {
               flex-direction: column;
             `}
           >
-            <FormHeader>이름</FormHeader>
+            <FormHeader>이름 <Require>*</Require></FormHeader>
             <Input {...nameInput} />
             <FormHeader>전체 이름 (선택입력)</FormHeader>
             <Input {...fullNameInput} />
             <FieldInfo>
               이름은 동아리 목록 카드에, 전체 이름은 상세내용 카드에 표시돼요.
             </FieldInfo>
-            <FormHeader>로고 URL</FormHeader>
+            <FormHeader>로고 URL <Require>*</Require></FormHeader>
             <Input {...imageUrlInput} />
-            <FormHeader>노션 URL</FormHeader>
+            <FormHeader>노션 URL <Require>*</Require></FormHeader>
             <Input
               placeholder='"웹에서 공유" 활성화 필요'
               {...notionInput}
             />
-            <FormHeader>동아리장</FormHeader>
+            <FormHeader>동아리장 <Require>*</Require></FormHeader>
             <Horizontal
               css={css`
                 align-items: center;
@@ -205,7 +200,7 @@ export const NewCircle: React.FC = () => {
                 }
               />
             </Horizontal>
-            <FormHeader>부동아리장</FormHeader>
+            <FormHeader>부동아리장 <Require>*</Require></FormHeader>
             <Horizontal
               css={css`
                 align-items: center;
@@ -223,7 +218,7 @@ export const NewCircle: React.FC = () => {
                 }
               />
             </Horizontal>
-            <FormHeader>분류</FormHeader>
+            <FormHeader>분류 <Require>*</Require></FormHeader>
             {config && (
               <Input {...categoryInput} placeholder="분류를 선택해주세요" />
             )}
@@ -268,4 +263,7 @@ export default NewCircle;
 
 const FieldInfo = styled.p`
   margin-top: 12px;
+`;
+const Require = styled.span`
+  color: red;
 `;
