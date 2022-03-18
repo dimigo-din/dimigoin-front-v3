@@ -11,12 +11,9 @@ import {
   PageWrapper,
   ResponsiveWrapper,
 } from '../../components';
+import { CardHeader, CardDetail } from '../../components/basic/CardComponent';
 import {
-  CardHeader,
-  // CardDetail
-} from '../../components/basic/CardComponent';
-import {
-  // dayEngKorMapper,
+  dayEngKorMapper,
   engDays,
   SMALL_SCREEN_THRESHOLD,
 } from '../../constants';
@@ -27,13 +24,9 @@ import {
   EngDay,
 } from '../../constants/types';
 import useInput from '../../hooks/useInput';
-// import { selfStudyTimesToString } from '../../utils';
-import {
-  // CardDetailWrapper,
-  ClassCard,
-  unapplyClass,
-} from './ClassCard';
-// import { WeekDaySelector } from './WeekDaySelector';
+import { selfStudyTimesToString } from '../../utils';
+import { CardDetailWrapper, ClassCard, unapplyClass } from './ClassCard';
+import { WeekDaySelector } from './WeekDaySelector';
 
 const AfterschoolApply: React.FC = () => {
   const [afterschoolClassList, setAfterschoolClassList] = useState<
@@ -95,12 +88,8 @@ const AfterschoolApply: React.FC = () => {
             방과후
           </CardGroupHeader>
           <RegisterColumnWrapper>
-            {/* <ResponsiveWeekDaySelector
-              customLabel={[...Array(7)].map((n, i) => i + 1 + '교시')}
-              {...weekDaySelectorInput}
-              css={sticky}
-            />
-            <Divider small data-divider /> */}
+            <ResponsiveWeekDaySelector {...weekDaySelectorInput} css={sticky} />
+            <Divider small data-divider />
             <CardGridWrapper>
               {filteredClasses?.map(
                 (afterschoolClass) =>
@@ -131,17 +120,17 @@ const AfterschoolApply: React.FC = () => {
                 }}
               >
                 <CardHeader>{appliedClass.name}</CardHeader>
-                {/* <CardDetailWrapper>
+                <CardDetailWrapper>
                   <CardDetail>
                     {appliedClass.days
                       ?.map((day) => dayEngKorMapper[day])
                       .join(' ')}
-                    교시{' '}
+                    요일,{' '}
                   </CardDetail>
                   <CardDetail>
                     {selfStudyTimesToString(appliedClass.times)}타임
                   </CardDetail>
-                </CardDetailWrapper> */}
+                </CardDetailWrapper>
               </Card>
             ))
           ) : (
@@ -193,15 +182,15 @@ const CardGridWrapper = styled(ResponsiveWrapper)`
   }
 `;
 
-// const ResponsiveWeekDaySelector = styled(WeekDaySelector)`
-//   align-self: stretch;
-//   max-height: min(685px, 100vh - 248px);
-//   @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
-//     display: flex;
-//     /* flex: 1; */
-//     & > div {
-//       width: unset;
-//       flex: 1;
-//     }
-//   }
-// `;
+const ResponsiveWeekDaySelector = styled(WeekDaySelector)`
+  align-self: stretch;
+  max-height: min(685px, 100vh - 248px);
+  @media screen and (max-width: ${SMALL_SCREEN_THRESHOLD}px) {
+    display: flex;
+    /* flex: 1; */
+    & > div {
+      width: unset;
+      flex: 1;
+    }
+  }
+`;
