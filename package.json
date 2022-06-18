@@ -16,7 +16,7 @@
     "@emotion/styled": "^10.0.27",
     "@loadable/component": "^5.13.1",
     "@types/react-calendar": "^3.1.1",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "dimigoincon": "^2.5.3",
     "josa-complete": "^1.4.1",
     "react": "^16.13.1",
