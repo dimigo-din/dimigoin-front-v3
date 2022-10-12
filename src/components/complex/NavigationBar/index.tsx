@@ -54,9 +54,7 @@ const TopNavbar: React.FC<RouteComponentProps> = ({ history }) => {
     [scrollerRef],
   );
   const myLocalData = useMyData();
-  const profileImageURI = myLocalData
-    ? myLocalData.photos.slice(-1)[0]
-    : undefined;
+  const profileImageURI = undefined;
 
   return (
     <Wrapper>

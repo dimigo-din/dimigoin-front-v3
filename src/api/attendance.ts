@@ -27,7 +27,7 @@ export const getWholeClassAttendanceLog = (grade: number, clas: number) =>
     `/attendance/date/${todayString}/grade/${grade}/class/${clas}/status`,
   ).then((e) => e.status.sort((a, b) => a.student.serial - b.student.serial));
 
-export const getTimelineByStudent = (studentId: string) =>
+export const getTimelineByStudent = (studentId: number) =>
   api<'timelineByStudent'>(
     'GET',
     `/attendance/date/${todayString}/student/${studentId}`,
@@ -38,7 +38,7 @@ export const getTimelineByClass = (grade: number, clas: number) =>
     .then(e => e.logs)
 
 export const registerOtherStudentMovingHistory = (
-  studentId: string,
+  studentId: number,
   log: RegisteringAttendanceLog,
 ) =>
   api<'registerOtherStudentMovingHistory'>(

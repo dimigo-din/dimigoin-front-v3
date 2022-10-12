@@ -279,8 +279,8 @@ const Ingangsil: React.FC = () => {
               const applied =
                 myData &&
                 currentTimeAppliers
-                  ?.map((e) => e.applier._id)
-                  .includes(myData?._id);
+                  ?.map((e) => e.applier.user_id)
+                  .includes(myData?.user_id);
               return (
                 <Fragment key={`ingangsil${index}`}>
                   {index !== 0 && <Divider horizontal small data-divider />}

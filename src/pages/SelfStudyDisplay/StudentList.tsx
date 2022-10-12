@@ -63,7 +63,7 @@ export const StudentList: React.FC<{
                   (rowType && ['ABSENT', 'ETC', 'CIRCLE'].includes(rowType)) ||
                   !!student.log?.remark
                 }
-                key={student.student._id}
+                key={student.student.user_id}
                 student={student.student}
                 additionalInfo={`${student.student.name} : ${
                   student.log?.place?.name || '장소를 등록하지 않았습니다'

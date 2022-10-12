@@ -46,7 +46,7 @@ export const MyApplication: React.FC<{
         form.reduce(
           (grouped, current) => ({
             ...grouped,
-            [current._id]: current,
+            [current._id!]: current,
           }),
           {},
         ),

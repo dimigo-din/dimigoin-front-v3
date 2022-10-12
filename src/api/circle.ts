@@ -65,7 +65,7 @@ export const hasRegisteredCircle = async () => {
   }
 }
 
-export const saveCircleInfo = (id: string, data: APIRequestCircle) =>
+export const saveCircleInfo = (id: number, data: APIRequestCircle) =>
   api<'editCircle'>("PATCH", `/circle/${id}`, data)
 
 export const createCircle = (data: APIRequestCircle) =>

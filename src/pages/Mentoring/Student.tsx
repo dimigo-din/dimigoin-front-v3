@@ -48,7 +48,7 @@ const Student: React.FC = () => {
 
   const applyMentoring = useCallback(
     (mentoringSchedule: Doc<MentoringSchedule>) => {
-      _applyMentoring(mentoringSchedule._id, mentoringSchedule.date)
+      _applyMentoring(mentoringSchedule._id!, mentoringSchedule.date)
         .then(() => {
           toast.success(`${mentoringSchedule.name} 멘토링을 신청했어요`);
           fetchData();
@@ -60,7 +60,7 @@ const Student: React.FC = () => {
 
   const unapplyMentoring = useCallback(
     (mentoringSchedule: Doc<MentoringSchedule>) => {
-      _unApplyMentoring(mentoringSchedule._id, mentoringSchedule.date)
+      _unApplyMentoring(mentoringSchedule._id!, mentoringSchedule.date)
         .then(() => {
           toast.success(`멘토링 신청을 취소했어요`);
           fetchData();

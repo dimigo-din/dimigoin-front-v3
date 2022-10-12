@@ -119,10 +119,10 @@ const Outgo: React.FC = () => {
         isStudent(myData) &&
         setAppliers(() => [
           {
+            user_id: myData.user_id,
             name: myData.name,
-            studentId: myData.serial.toString(),
-            userId: myData.idx.toString(),
-            _id: myData._id,
+            studentId: myData.serial,
+            userId: myData.user_id,
             createdAt: myData.createdAt,
             updatedAt: myData.updatedAt,
           },
@@ -158,7 +158,7 @@ const Outgo: React.FC = () => {
     }
 
     const outgoRequestForm: OutgoRequestForm = {
-      applier: applierValue!!.map((e) => e._id),
+      applier: applierValue!!.map((e) => e.user_id),
       approver: applyFormValue!!.approver!!,
       reason: applyFormValue!!.outgoReason!!,
       detailReason: applyFormValue!!.detailReason,

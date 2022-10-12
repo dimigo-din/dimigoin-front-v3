@@ -49,7 +49,7 @@ export const ClassCard: React.FC<{
   const submit = useCallback(async () => {
     setIsLoading(() => true);
     (applied ? unapplyClass : applyClass)(
-      afterschoolClass._id,
+      afterschoolClass._id!,
       afterschoolClass.name,
     )
       .then(() => {

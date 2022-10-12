@@ -263,7 +263,7 @@ export const Leader: React.FC = () => {
 
       const res = await Promise.allSettled(
         selectedApplications.map((application) =>
-          setApplicationStatus(application._id, changeTo),
+          setApplicationStatus(application._id!, changeTo),
         ),
       );
 

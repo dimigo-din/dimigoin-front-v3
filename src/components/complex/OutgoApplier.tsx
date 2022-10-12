@@ -32,7 +32,7 @@ export const InputChip: React.FC<{
         ?.filter(
           (student) =>
             student.name.includes(userInput.value!!) ||
-            student.studentId.startsWith(userInput.value!!),
+            student.studentId === +userInput.value!!,
         )
         .slice(0, 5),
     );
@@ -98,7 +98,7 @@ export const OutgoApplier: React.FC<OutgoApplierProps> = ({
   const myData = useMyData();
 
   const addApplier = (d: Doc<BriefStudent>) => {
-    if (appliers?.some((applier) => applier._id === d._id)) {
+    if (appliers?.some((applier) => applier.user_id === d.user_id)) {
       toast.info('이미 선택된 학생입니다');
       return;
     }
@@ -122,10 +122,10 @@ export const OutgoApplier: React.FC<OutgoApplierProps> = ({
         .filter((e) => e.serial)
         .map<OutgoProcessingUser>((e) => ({
           name: e.name,
-          studentId: e.serial + '',
-          userId: e.idx + '',
+          studentId: e.serial,
+          userId: e.user_id,
           grade: e.grade,
-          _id: e._id,
+          user_id: e.user_id,
           createdAt: e.createdAt,
           updatedAt: e.updatedAt,
         }));

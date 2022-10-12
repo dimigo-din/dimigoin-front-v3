@@ -16,7 +16,7 @@ export interface OutgoApplyInput {
   applyType?: string;
   outgoReason?: string;
   detailReason?: string;
-  approver?: string;
+  approver?: number;
 }
 
 interface OutgoApplyProps {
@@ -39,7 +39,7 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({
       setApproversList(() =>
         teacherList.map((teacher) => ({
           name: [teacher.role, teacher.name, '선생님'].join(' '),
-          key: teacher._id,
+          key: teacher.user_id + '',
         })),
       ),
     );
@@ -60,7 +60,7 @@ export const OutgoApplyForm: React.FC<OutgoApplyProps> = ({
             applyType: applyTypeValue?.key,
             outgoReason: outgoReasonValue?.key,
             detailReason: detailReasonValue,
-            approver: approverValue?.key,
+            approver: approverValue?.key as unknown as number,
           },
         },
       });

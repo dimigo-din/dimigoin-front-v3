@@ -3,7 +3,7 @@ import { CircleApplicationStatusValues } from '.';
 export type Merge<M, N> = Omit<M, Extract<keyof M, keyof N>> & N;
 
 interface SavedDocument {
-  _id: string;
+  user_id: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -12,8 +12,8 @@ export type Doc<Obj> = Obj & SavedDocument;
 
 export interface BriefStudent {
   name: string;
-  studentId: string;
-  userId: string;
+  studentId: number;
+  userId: number;
 }
 
 export interface AuthTokens {
@@ -94,13 +94,12 @@ export enum Permission {
 }
 
 export interface User {
-  idx: number;
+  user_id: number;
   username: string;
   userType: UserType;
   gender: Gender;
   name: string;
   permissions: Permission[];
-  photos: string[];
 }
 
 export interface Student extends Doc<User> {
@@ -111,6 +110,7 @@ export interface Student extends Doc<User> {
 }
 
 export interface Notice {
+  _id?: string;
   targetGrade: Grade[];
   title: string;
   content: string;
@@ -127,6 +127,7 @@ export interface DailyMeal {
 }
 
 export interface Place {
+  _id: string;
   label: string;
   type: string;
   name: string;
@@ -162,6 +163,7 @@ export interface DownloadbleFile {
 }
 
 export interface AfterschoolClass {
+  _id?: string;
   capacity: number;
   targetClasses: number[];
   days: (keyof typeof EngDay)[];
@@ -196,6 +198,7 @@ export interface ServiceConfig {
 }
 
 export interface Circle {
+  _id?: string;
   name: string;
   imageUrl: string;
   notion: string;
@@ -207,6 +210,7 @@ export interface Circle {
 }
 
 export interface CircleApplication {
+  _id?: string;
   status: typeof CircleApplicationStatusValues[number];
   circle: Doc<Circle>;
   form: Record<string, string>;
@@ -214,11 +218,13 @@ export interface CircleApplication {
 }
 
 export interface CircleApplyQuestionItem {
+  _id?: string;
   question: string;
   maxLength: number;
 }
 
 export interface Mentoring {
+  _id?: string;
   days: EngDay[];
   targetGrade: Grade;
   name: string;
@@ -231,6 +237,7 @@ export interface Mentoring {
 }
 
 export interface MentoringSchedule extends Mentoring {
+  _id?: string;
   date: string;
   applied: boolean;
 }

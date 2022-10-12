@@ -151,7 +151,7 @@ export const Applier: React.FC = () => {
         if (!current.circle) return matched;
         return {
           ...matched,
-          [current.circle._id]: current,
+          [+current.circle._id!]: current,
         };
       },
       {} as {
@@ -165,9 +165,9 @@ export const Applier: React.FC = () => {
         ...matched.slice(0, index),
         {
           ...current,
-          status: fetchedAppliedCircles[current._id]?.status || null,
-          form: fetchedAppliedCircles[current._id]?.form || null,
-          applicationId: fetchedAppliedCircles[current._id]?._id || null,
+          status: fetchedAppliedCircles[+current._id!]?.status || null,
+          form: fetchedAppliedCircles[+current._id!]?.form || null,
+          applicationId: fetchedAppliedCircles[+current._id!]?._id || null,
         },
         ...matched.slice(index + 1),
       ],

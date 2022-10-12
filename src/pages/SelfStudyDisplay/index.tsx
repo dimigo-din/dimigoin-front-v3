@@ -309,7 +309,7 @@ const SelfStudyDisplay: React.FC<RouteComponentProps> = ({ history }) => {
           place,
           isTeacher(myData),
         );
-        await registerOtherStudentMovingHistory(student._id, {
+        await registerOtherStudentMovingHistory(student.user_id, {
           place: parsedPlace.placeId,
           remark: parsedPlace.reason,
         });

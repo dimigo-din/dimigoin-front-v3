@@ -60,7 +60,7 @@ const Main: React.FC = () => {
                     text: e.title,
                     leftBorder: true,
                     clickable: true,
-                    to: `/notices/${e._id}`,
+                    to: `/notices/${e.user_id}`,
                   })),
                   ...(notice.length > 2
                     ? [

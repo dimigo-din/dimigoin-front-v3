@@ -108,8 +108,8 @@ export interface FinalSelect {
 }
 
 export type APIRequestCircle = Merge<Circle, {
-  chair: string;
-  viceChair: string;
+  chair: number;
+  viceChair: number;
 }>
 
 export interface CreateCircle {

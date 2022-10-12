@@ -82,7 +82,7 @@ export const MentoringEditor: React.FC<{
       setTeachersList(() =>
         teacherList.map((teacher) => ({
           name: [teacher.name, '선생님'].join(' '),
-          key: teacher._id,
+          key: teacher.user_id+'',
         })),
       ),
     );
@@ -99,7 +99,7 @@ export const MentoringEditor: React.FC<{
   const teacherDropdown = useInput<DropdownItem>(
     data
       ? {
-          key: data.teacher._id,
+          key: data.teacher.user_id+'',
           name: data.teacher.name,
         }
       : undefined,
@@ -137,7 +137,7 @@ export const MentoringEditor: React.FC<{
     };
 
     (data
-      ? editMentoringInfo(data._id, newData)
+      ? editMentoringInfo(data._id!, newData)
       : createMentoringProgram(newData)
     )
       .then((e) => {
@@ -182,7 +182,7 @@ export const MentoringEditor: React.FC<{
     });
     if (!alertQuestionResult.isConfirmed) return;
     try {
-      const removeRequest = await deleteMentoringProgram(data._id);
+      const removeRequest = await deleteMentoringProgram(data._id!);
       if (removeRequest._id === data._id) toast.success('멘토링을 지웠어요');
       else toast.error('멘토링을 지우지 못했어요.');
     } catch (e) {
@@ -211,7 +211,7 @@ export const MentoringEditor: React.FC<{
       <FormHeader>선생님</FormHeader>
       <Dropdown
         initIndex={teachersList?.findIndex(
-          (teacher) => teacher.key === data?.teacher._id,
+          (teacher) => teacher.key === data?.teacher.user_id,
         )}
         placeholder="선생님을 선택해주세요"
         items={teachersList}

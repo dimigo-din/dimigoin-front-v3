@@ -48,7 +48,7 @@ const ApplierListCard: React.FC<{
           <>
             <Section>
               {students?.NSS1.map((student) => (
-                <Name key={student._id}>
+                <Name key={student.user_id}>
                   {student.serial} {student.name}
                 </Name>
               ))}

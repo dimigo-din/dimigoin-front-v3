@@ -111,11 +111,13 @@ const AfterschoolApply: React.FC = () => {
         <Appliments width={3} css={sticky}>
           <CardGroupHeader>신청 목록</CardGroupHeader>
           {appliedClasses?.length ? (
-            appliedClasses?.map(({ afterschool: appliedClass }) => (
+            appliedClasses?.map(({ afterschool: appliedClass }) => {
+              console.log(appliedClasses);
+              return (
               <Card
                 key={appliedClass._id}
                 onClick={async () => {
-                  await unapplyClass(appliedClass._id, appliedClass.name);
+                  await unapplyClass(appliedClass._id!, appliedClass.name);
                   fetchData();
                 }}
               >
@@ -132,7 +134,7 @@ const AfterschoolApply: React.FC = () => {
                   </CardDetail>
                 </CardDetailWrapper>
               </Card>
-            ))
+            )})
           ) : (
             <Card>
               <NoData>신청한 강좌가 없습니다</NoData>

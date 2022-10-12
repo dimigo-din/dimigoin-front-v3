@@ -57,5 +57,5 @@ export const getPlaceList = async (): Promise<Doc<Place>[]> => {
   return sortPlaces(fetched);
 };
 
-export const getPlaceById = (placeId: string) =>
-  getPlaceList().then((e) => e.find((p) => p._id === placeId));
+export const getPlaceById = (placeId: number) =>
+  getPlaceList().then((e) => e.find((p) => p.user_id === placeId));

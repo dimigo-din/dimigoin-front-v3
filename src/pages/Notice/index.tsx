@@ -201,7 +201,7 @@ const Notices: React.FC<
                   <NoticeListItem
                     editable={myData?.userType === UserType.T}
                     editAction={() => editNotice(e)}
-                    removeAction={() => requestRemoveNotice(e._id, e.title)}
+                    removeAction={() => requestRemoveNotice(e._id!, e.title)}
                     {...e}
                   />
                 </UnstyledLink>

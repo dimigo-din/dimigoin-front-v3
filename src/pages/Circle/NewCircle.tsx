@@ -65,8 +65,8 @@ export const NewCircle: React.FC = () => {
       const fetchedStudents = await fetchAllStudents();
       const mapped = fetchedStudents.map<Doc<BriefStudent>>((e) => ({
         ...e,
-        studentId: e.serial + '',
-        userId: e.idx + '',
+        studentId: e.serial,
+        userId: e.user_id,
       }));
       setStudents(() => mapped);
       refetchCircleInfo();
@@ -76,20 +76,20 @@ export const NewCircle: React.FC = () => {
   useEffect(() => {
     if (!prevCircleInfo) return;
     setLeader(() => ({
-      _id: prevCircleInfo.chair._id,
+      user_id: prevCircleInfo.chair.user_id,
       createdAt: prevCircleInfo.chair.createdAt,
       name: prevCircleInfo.chair.name,
-      studentId: prevCircleInfo.chair.serial + '',
+      studentId: prevCircleInfo.chair.serial,
       updatedAt: prevCircleInfo.chair.updatedAt,
-      userId: prevCircleInfo.chair.idx + '',
+      userId: prevCircleInfo.chair.user_id,
     }));
     setSubleader(() => ({
-      _id: prevCircleInfo.viceChair._id,
+      user_id: prevCircleInfo.viceChair.user_id,
       createdAt: prevCircleInfo.viceChair.createdAt,
       name: prevCircleInfo.viceChair.name,
-      studentId: prevCircleInfo.viceChair.serial + '',
+      studentId: prevCircleInfo.viceChair.serial,
       updatedAt: prevCircleInfo.viceChair.updatedAt,
-      userId: prevCircleInfo.viceChair.idx + '',
+      userId: prevCircleInfo.viceChair.user_id,
     }));
     setName(prevCircleInfo.name);
     setFullName(prevCircleInfo.fullName);
@@ -110,8 +110,8 @@ export const NewCircle: React.FC = () => {
       !nameInput.value && '이름',
       !imageUrlInput.value && '이미지',
       !notionInput.value && '동아리 소개 노션 주소',
-      !leader?._id && '동아리장',
-      !subleader?._id && '부동아리장',
+      !leader?.user_id && '동아리장',
+      !subleader?.user_id && '부동아리장',
       !categoryInput.value && '분류',
     ].filter((e): e is string => !!e);
 
@@ -124,14 +124,14 @@ export const NewCircle: React.FC = () => {
       name: nameInput.value!!,
       imageUrl: imageUrlInput.value!!,
       notion: notionInput.value!!,
-      chair: leader!._id!!,
-      viceChair: subleader!._id!!,
+      chair: leader!.user_id!!,
+      viceChair: subleader!.user_id!!,
       category: categoryInput.value!!,
       fullName: fullNameInput.value,
     };
 
     (prevCircleInfo
-      ? saveCircleInfo(prevCircleInfo._id, data)
+      ? saveCircleInfo(prevCircleInfo.user_id, data)
       : createCircle(data)
     )
       .then(() => {

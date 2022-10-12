@@ -13,7 +13,7 @@ interface TimelineRow {
   from?: string;
   to: string;
   time: string;
-  id: string;
+  id?: string;
   remark?: string;
 }
 
@@ -54,6 +54,7 @@ export const Timeline: React.FC<{
 const processAttendanceLogs = (
   timelineRowData: Doc<
     AttendanceLog & {
+      _id?: string;
       place: string;
       student: string;
     }
@@ -87,7 +88,7 @@ export const TimelineByStudent: React.FC<{
 
   useEffect(() => {
     (async () => {
-      const fetchedTimelineData = await getTimelineByStudent(student._id);
+      const fetchedTimelineData = await getTimelineByStudent(student.user_id);
       if (fetchedTimelineData.length === 0) {
         toast.info('위치 이동 기록이 없습니다');
         close();

@@ -54,7 +54,7 @@ const Content: React.FC<Doc<Circle> & { close(): void }> = ({
     })
       .then((questionResult) => {
         if (!questionResult.isConfirmed) return null;
-        return applyCircle(_id, answers as Record<string, string>);
+        return applyCircle(_id!, answers as Record<string, string>);
       })
       .then((apply) => {
         if (apply === null) return;
@@ -75,7 +75,7 @@ const Content: React.FC<Doc<Circle> & { close(): void }> = ({
           fetchedQuestions.reduce(
             (matched, current) => ({
               ...matched,
-              [current._id]: null,
+              [current._id!]: null,
             }),
             {} as Record<string, null>,
           ),
@@ -104,12 +104,12 @@ const Content: React.FC<Doc<Circle> & { close(): void }> = ({
                 onChange={({ target: { value } }) =>
                   setAnswers((beforeState) => ({
                     ...beforeState,
-                    [_id]: value,
+                    [_id!]: value,
                   }))
                 }
               />
               <LengthCounter>
-                {answers?.[_id]?.length || 0} / {maxLength}
+                {answers?.[_id!]?.length || 0} / {maxLength}
               </LengthCounter>
             </React.Fragment>
           ))}

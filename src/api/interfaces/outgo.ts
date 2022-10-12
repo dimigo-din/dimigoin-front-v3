@@ -1,6 +1,6 @@
 export interface OutgoRequestForm {
-  applier: string[];
-  approver: string;
+  applier: number[];
+  approver: number;
   reason: string;
   detailReason?: string;
   duration: {

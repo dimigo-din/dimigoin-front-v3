@@ -55,7 +55,7 @@ export const AfterschoolEditor: React.FC<{
   const placeDropdown = useInput<DropdownItem>(
     data
       ? {
-          key: data.place._id,
+          key: data.place.user_id+'',
           name: data.place.name,
         }
       : undefined,
@@ -63,7 +63,7 @@ export const AfterschoolEditor: React.FC<{
   const teacherDropdown = useInput<DropdownItem>(
     data
       ? {
-          key: data.teacher._id,
+          key: data.teacher.user_id+'',
           name: data.teacher.name,
         }
       : undefined,
@@ -110,7 +110,7 @@ export const AfterschoolEditor: React.FC<{
       setTeachersList(() =>
         teacherList.map((teacher) => ({
           name: [teacher.name, '선생님'].join(' '),
-          key: teacher._id,
+          key: teacher.user_id+'',
         })),
       ),
     );
@@ -120,7 +120,7 @@ export const AfterschoolEditor: React.FC<{
     (async () => {
       const placeList = (await getPlaceList()).map((place) => ({
         name: place.name,
-        key: place._id,
+        key: place.user_id+'',
       }));
       setPlaces(() => placeList);
     })();
@@ -178,7 +178,7 @@ export const AfterschoolEditor: React.FC<{
     };
 
     (data
-      ? editAfterschoolClassInfo(data._id, newInfo)
+      ? editAfterschoolClassInfo(data._id!, newInfo)
       : registerNewAfterschoolClass(newInfo)
     )
       .then(() => {
@@ -222,7 +222,7 @@ export const AfterschoolEditor: React.FC<{
     });
     if (!alertQuestionResult.isConfirmed) return;
     try {
-      const removeRequest = await removeAfterschoolClass(data._id);
+      const removeRequest = await removeAfterschoolClass(data._id!);
       if (removeRequest._id === data._id) toast.success('공지를 지웠어요');
       else toast.error('강좌를 지우지 못했어요.');
     } catch (e) {
@@ -261,7 +261,7 @@ export const AfterschoolEditor: React.FC<{
       <FormHeader>선생님</FormHeader>
       <Dropdown
         initIndex={teachersList?.findIndex(
-          (teacher) => teacher.key === data?.teacher._id,
+          (teacher) => teacher.key === data?.teacher.user_id,
         )}
         placeholder="선생님을 선택해주세요"
         items={teachersList}
