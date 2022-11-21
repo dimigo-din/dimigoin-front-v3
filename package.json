@@ -29,7 +29,7 @@
     "react-markdown": "^5.0.3",
     "react-notion": "^0.10.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "5.0.1",
     "react-toastify": "^6.0.8",
     "remark-gfm": "^1.0.0",
     "styled-components": "^5.1.1",
