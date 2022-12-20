@@ -195,7 +195,7 @@ const AfterschoolMangement: React.FC = () => {
                           : afterschoolClass.targetClasses.join(', ')}
                         반
                       </Data>
-                      <Data>{afterschoolClass.teacher.name}</Data>
+                      <Data>{afterschoolClass.teacher?.name}</Data>
                       <Data>
                         {afterschoolClass.days?.map(
                           (day) => dayEngKorMapper[day],
