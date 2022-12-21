@@ -78,9 +78,9 @@ export const ClassCard: React.FC<{
           </CardDetail>
         </CardDetailWrapper>
         <CardFooterDetail>
-          {afterschoolClass.teacher.name === '선테계'
+          {afterschoolClass.teacher?.name === '선테계'
             ? '외부강사'
-            : afterschoolClass.teacher.name}{' '}
+            : afterschoolClass.teacher?.name}{' '}
           선생님, 남은 인원 :{' '}
           {afterschoolClass.capacity - afterschoolClass.applierCount}
         </CardFooterDetail>
