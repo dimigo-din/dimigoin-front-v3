@@ -103,6 +103,9 @@ export const AfterschoolEditor: React.FC<{
     [SelfStudyTime.AFSC2]: useCheckbox(
       data?.times?.includes(SelfStudyTime.AFSC2),
     ),
+    [SelfStudyTime.NSS1]: useCheckbox(
+      data?.times?.includes(SelfStudyTime.NSS1),
+    ),
   };
 
   useEffect(() => {
@@ -136,6 +139,7 @@ export const AfterschoolEditor: React.FC<{
     const times = getCheckedIndex([
       timesCheckboxes.AFSC1,
       timesCheckboxes.AFSC2,
+      timesCheckboxes.NSS1,
     ]).map(
       (index) =>
         [
@@ -199,6 +203,7 @@ export const AfterschoolEditor: React.FC<{
     teacherDropdown.value,
     timesCheckboxes.AFSC1,
     timesCheckboxes.AFSC2,
+    timesCheckboxes.NSS1,
     weekdayCheckboxes,
     placeDropdown.value,
     data,
@@ -282,6 +287,10 @@ export const AfterschoolEditor: React.FC<{
         <Checkbox
           {...timesCheckboxes.AFSC2}
           text={SelfStudyTimeEngKor[SelfStudyTime.AFSC2]}
+        />
+        <Checkbox
+          {...timesCheckboxes.NSS1}
+          text={SelfStudyTimeEngKor[SelfStudyTime.NSS1]}
         />
       </Horizontal>
       <FormHeader>대상 학년</FormHeader>
