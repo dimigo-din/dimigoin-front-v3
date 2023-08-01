@@ -13,6 +13,6 @@ export interface LoginWithInfo {
 export interface LoginWithRefreshToken {
   method: 'POST';
   endpoint: '/auth/refresh';
-  req: {};
+  req: undefined | null;
   res: AuthTokens;
 }

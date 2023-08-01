@@ -17,7 +17,8 @@ export const apiWithoutAuth = axios.create({
 export const api = async <T extends keyof APIResource>(
   method: APIResource[T]['method'],
   endpoint: APIResource[T]['endpoint'] | string,
-  param?: APIResource[T]['req'] & {
+  param?: APIResource[T]['req'],
+  requestOption?: {
     withoutAuth?: boolean;
     hasAlert?: boolean;
   },
@@ -30,7 +31,7 @@ export const api = async <T extends keyof APIResource>(
         data: param,
         method,
         headers: {
-          ...(!param?.withoutAuth &&
+          ...(!requestOption?.withoutAuth &&
             token && {
             Authorization: `Bearer ${token}`,
           }),
@@ -41,7 +42,7 @@ export const api = async <T extends keyof APIResource>(
     return res
   }
   catch (error) {
-    if (!param?.hasAlert) throw error
+    if (!requestOption?.hasAlert) throw error
     const errorMessage =
       error.response?.data?.message ||
       {

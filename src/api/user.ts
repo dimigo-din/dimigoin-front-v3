@@ -15,7 +15,9 @@ export const fetchMyData = async (token?: string) => {
   if (!token && !getAccessToken()) {
     throw new Error('No Auth Data');
   }
-  const myData = await (token ? api<'getMyInfo'>('GET', '/user/me', { withoutAuth: true }, {
+  const myData = await (token ? api<'getMyInfo'>('GET', '/user/me', null, {
+    withoutAuth: true
+  }, {
     Authorization: `Bearer ${token}`,
   }) : api<'getMyInfo'>('GET', '/user/me'));
   await saveMyData(myData.identity);

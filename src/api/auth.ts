@@ -50,7 +50,7 @@ export const loginWithRefreshToken = async (refreshToken: string) => {
   try {
     const res = await api<'loginWithRefreshToken'>(
       'POST',
-      '/auth/refresh',
+      '/auth/refresh', null,
       {
         withoutAuth: true,
       },
